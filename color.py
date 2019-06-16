@@ -70,11 +70,18 @@ __all__=['RGB', 'HSV', 'Hex', 'Color', 'RGBW']
 def saturation(rgb):
     low = float(min(rgb.r, rgb.g, rgb.b))
     high = float(max(rgb.r, rgb.g, rgb.b))
-    return round(100.0*((high-low)/high))
+    ret = 0
+    if low > 0 and high > 0:
+        ret = round(100.0*((high-low)/high))
+    return ret
 
 def getWhiteColor(rgb):
-    return int(round((255.0-saturation(rgb)) / 255.0 * (float(rgb.r) + float(rgb.b) + float(rgb.g))/3.0))
-
+    ret = 0
+    try:
+        ret = int(round((255.0-saturation(rgb)) / 255.0 * (float(rgb.r) + float(rgb.b) + float(rgb.g))/3.0))
+    except:
+        print "Error", rgb
+    return ret
 
 def clamp(val, min_value, max_value):
     "Restrict a value between a minimum and a maximum value"
@@ -133,7 +140,6 @@ def RGBW(r,g,b,w):
 def RGB(r,g,b,w=0):
     "Create a new RGB color"
     t = (r,g,b,w)
-    print "HERE", t
     assert is_rgb_tuple(t)
     return Color(rgb_to_hsv(t))
 
@@ -150,28 +156,24 @@ def Hex(value):
     return RGB(*rgb_t)   #JEM -not sure what to do here
 
 class Color(object):
-    def __init__(self, hsv_tuple, recalc_w=True):
-        self.recalc_w = recalc_w
-        self._set_hsv(hsv_tuple, True)
-
+    def __init__(self, hsv_tuple, recalc=True):
+        self._set_hsv(hsv_tuple, recalc )
+        
 
     def copy(self):
         return deepcopy(self)
 
-    def _set_hsv(self, hsv_tuple,init=False):
+    def _set_hsv(self, hsv_tuple,recalc=True):
         assert is_hsv_tuple(hsv_tuple)
 
         self.hsv_t = list(hsv_tuple)
-        if self.recalc_w is True and init is False:                                           
-            print "HERE"
+#        if self.recalc_w is True and init is False:                                           
+        if recalc is True:
 #            from IPython import embed; embed()
-
-            new_w = getWhiteColor(self)
-            print new_w
+            new_w = int(getWhiteColor(self))
             l = list(hsv_tuple)
-            l[-1] = float(new_w)
+            l[-1] = new_w
             hsv_tuple = tuple(l)
-#            from IPython import embed; embed()    
             self.hsv_t = list(hsv_tuple)
 
 
@@ -273,14 +275,14 @@ class Color(object):
 
     @property
     def w(self):
-        return self.rgbw[-1]
+        return int(self.rgbw[-1])
 
     @w.setter
     def w(self,val):
         assert 0 <= val <= 255
         r,g,b, w = self.rgbw
         new = (r, g, b, val)
-        self._set_hsv(rgb_to_hsv(new),True)
+        self._set_hsv(rgb_to_hsv(new),recalc=False)
         
 if __name__=='__main__':
     import doctest

@@ -18,7 +18,7 @@ import json
 
 # map symbolic panel IDs to DMX ids
 # these are dmx base ids (red channel)
-with open('data/dmx_mapping.json', 'r') as f:
+with open('data/random_inregister_map.dat', 'r') as f:
     PANEL_MAP = json.load(f)
 
 # PANEL_MAP = {
@@ -63,6 +63,7 @@ class OLAModel(object):
             self.pixels[ix]   = color.r
             self.pixels[ix+1] = color.g
             self.pixels[ix+2] = color.b
+            self.pixels[ix+3] = color.w
 
     def set_cells(self, cells, color):
         for cell in cells:
@@ -71,6 +72,7 @@ class OLAModel(object):
     def go(self):
         data = array.array('B')
         data.extend(self.pixels)
+#        from IPython import embed; embed()       
         self.client.SendDmx(self.universe, data, callback)
 
 if __name__ == '__main__':
