@@ -65,7 +65,16 @@ For example: to gradually dim a color
 import colorsys
 from copy import deepcopy
 
-__all__=['RGB', 'HSV', 'Hex', 'Color']
+__all__=['RGB', 'HSV', 'Hex', 'Color', 'RGBW']
+
+def saturation(rgb):
+    low = float(min(rgb.r, rgb.g, rgb.b))
+    high = float(max(rgb.r, rgb.g, rgb.b))
+    return round(100.0*((high-low)/high))
+
+def getWhiteColor(rgb):
+    return int(round((255.0-saturation(rgb)) / 255.0 * (float(rgb.r) + float(rgb.b) + float(rgb.g))/3.0))
+
 
 def clamp(val, min_value, max_value):
     "Restrict a value between a minimum and a maximum value"
@@ -73,53 +82,104 @@ def clamp(val, min_value, max_value):
 
 def is_hsv_tuple(hsv):
     "check that a tuple contains 3 values between 0.0 and 1.0"
-    return len(hsv) == 3 and all([(0.0 <= t <= 1.0) for t in hsv])
+    return len(hsv) == 4 and all([(0.0 <= t <= 1.0) for t in hsv[0:3]])
 
 def is_rgb_tuple(rgb):
     "check that a tuple contains 3 values between 0 and 255"
-    return len(rgb) == 3 and all([(0 <= t <= 255) for t in rgb])
+    return len(rgb) == 4 and all([(0 <= t <= 255) for t in rgb])
+
+def is_rgbw_tuple(rgbw):
+    "check for valid RGBW tuple"
+    return len(rgbw) == 4 and all([(0 <= t <= 255) for t in rgbw])
 
 def rgb_to_hsv(rgb):
     "convert a rgb[0-255] tuple to hsv[0.0-1.0]"
     f = float(255)
-    return colorsys.rgb_to_hsv(rgb[0]/f, rgb[1]/f, rgb[2]/f)
+    ret = list(colorsys.rgb_to_hsv(rgb[0]/f, rgb[1]/f, rgb[2]/f))
+    ret.append(rgb[-1])
+    return tuple(ret)
 
-def hsv_to_rgb(hsv):
+def rgbw_to_hsv(rgbw):
+    "convert a rgbw[0:3][0-255] tuple to hsv[0.0-1.0], plus w"
+    f = float(255)
+    ret = colorsys.rgb_to_hsv(rgbw[0]/f, rgbw[1]/f, rgbw[2]/f)
+    ret.append(rgbw[-1])
+    return tuple(ret)
+
+def hsv_to_rgbw(hsv):
     assert is_hsv_tuple(hsv), "malformed hsv tuple:" + str(hsv)
-    _rgb = colorsys.hsv_to_rgb(*hsv)
+    _rgb = colorsys.hsv_to_rgb(*tuple(hsv[0:3]))
     r = int(_rgb[0] * 0xff)
     g = int(_rgb[1] * 0xff)
     b = int(_rgb[2] * 0xff)
-    return (r,g,b)
+    return (r,g,b,hsv[-1])
 
-def RGB(r,g,b):
+
+def hsv_to_rgb(hsv):
+    assert is_hsv_tuple(hsv), "malformed hsv tuple:" + str(hsv)
+#    from IPython import embed; embed() 
+    _rgb = colorsys.hsv_to_rgb(*tuple(hsv[0:3]))
+    r = int(_rgb[0] * 0xff)
+    g = int(_rgb[1] * 0xff)
+    b = int(_rgb[2] * 0xff)
+    return (r,g,b,hsv[-1])
+
+def RGBW(r,g,b,w):
+    "Create new RGBW Color"
+    t = (r,g,b,w)
+    assert is_rgbw_tuple(t)
+    return(Color(rgb_to_hsv(t)))
+
+def RGB(r,g,b,w=0):
     "Create a new RGB color"
-    t = (r,g,b)
+    t = (r,g,b,w)
+    print "HERE", t
     assert is_rgb_tuple(t)
     return Color(rgb_to_hsv(t))
 
-def HSV(h,s,v):
+def HSV(h,s,v, w=0.0):
     "Create a new HSV color"
-    return Color((h,s,v))
+    return Color((h,s,v,w))
 
 def Hex(value):
     "Create a new Color from a hex string"
     value = value.lstrip('#')
     lv = len(value)
     rgb_t = (int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
-    return RGB(*rgb_t)
+    raise Exception('HEX not supported yet in RGBW')
+    return RGB(*rgb_t)   #JEM -not sure what to do here
 
 class Color(object):
-    def __init__(self, hsv_tuple):
-        self._set_hsv(hsv_tuple)
+    def __init__(self, hsv_tuple, recalc_w=True):
+        self.recalc_w = recalc_w
+        self._set_hsv(hsv_tuple, True)
+
 
     def copy(self):
         return deepcopy(self)
 
-    def _set_hsv(self, hsv_tuple):
+    def _set_hsv(self, hsv_tuple,init=False):
         assert is_hsv_tuple(hsv_tuple)
-        # convert to a list for component reassignment
+
         self.hsv_t = list(hsv_tuple)
+        if self.recalc_w is True and init is False:                                           
+            print "HERE"
+#            from IPython import embed; embed()
+
+            new_w = getWhiteColor(self)
+            print new_w
+            l = list(hsv_tuple)
+            l[-1] = float(new_w)
+            hsv_tuple = tuple(l)
+#            from IPython import embed; embed()    
+            self.hsv_t = list(hsv_tuple)
+
+
+    @property
+    def rgbw(self):
+        "returns a rgbw[0-255] tuple"
+        return hsv_to_rgbw(self.hsv_t)
+
 
     @property
     def rgb(self):
@@ -148,6 +208,7 @@ class Color(object):
 
     @h.setter
     def h(self, val):
+        assert 0.0 <= val <= 1.0
         v = clamp(val, 0.0, 1.0)
         self.hsv_t[0] = round(v, 8)
 
@@ -157,6 +218,7 @@ class Color(object):
 
     @s.setter
     def s(self, val):
+        assert 0.0 <= val <= 1.0
         v = clamp(val, 0.0, 1.0)
         self.hsv_t[1] = round(v, 8)
 
@@ -166,6 +228,7 @@ class Color(object):
 
     @v.setter
     def v(self, val):
+        assert 0.0 <= val <= 1.0
         v = clamp(val, 0.0, 1.0) 
         self.hsv_t[2] = round(v, 8)
 
@@ -179,8 +242,8 @@ class Color(object):
     @r.setter
     def r(self, val):
         assert 0 <= val <= 255
-        r,g,b = self.rgb
-        new = (val, g, b)
+        r,g,b,w = self.rgb
+        new = (val, g, b, w)
         assert is_rgb_tuple(new)
         self._set_hsv(rgb_to_hsv(new))
 
@@ -191,8 +254,8 @@ class Color(object):
     @g.setter
     def g(self, val):
         assert 0 <= val <= 255
-        r,g,b = self.rgb
-        new = (r, val, b)
+        r,g,b,w = self.rgb
+        new = (r, val, b, w)
         assert is_rgb_tuple(new)
         self._set_hsv(rgb_to_hsv(new))
 
@@ -203,11 +266,22 @@ class Color(object):
     @b.setter
     def b(self, val):
         assert 0 <= val <= 255
-        r,g,b = self.rgb
-        new = (r, g, val)
+        r,g,b,w = self.rgb
+        new = (r, g, val, w)
         assert is_rgb_tuple(new)
         self._set_hsv(rgb_to_hsv(new))
 
+    @property
+    def w(self):
+        return self.rgbw[-1]
+
+    @w.setter
+    def w(self,val):
+        assert 0 <= val <= 255
+        r,g,b, w = self.rgbw
+        new = (r, g, b, val)
+        self._set_hsv(rgb_to_hsv(new),True)
+        
 if __name__=='__main__':
     import doctest
     doctest.testmod()
