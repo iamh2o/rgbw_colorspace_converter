@@ -88,3 +88,4 @@ if __name__ == '__main__':
     model.set_cell('16p', RGB(0,0,255))
     model.go()
 
+    data.extend(self.pixels)

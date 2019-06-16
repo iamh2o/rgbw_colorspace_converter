@@ -3,6 +3,8 @@
 * Python 2.7
   [http://www.python.org](http://www.python.org)
 
+  Create a virtual environment to work in for this repo!
+
 * Processing 2.2.1+ (for simulator only)
   [http://www.processing.org](http://www.processing.org)
 
@@ -83,4 +85,17 @@ Debian / Ubuntu:
     pip install --allow-external pybonjour --allow-unverified pybonjour pybonjour
 
 
+## Actually Running The Thing w/ DMXking LeDMX4pro
+-2)Connect your DMX4pro to a network that looks like it's configured network (console does not seem to be able to re-set the IP).  192.168.0.*, 255.255.255.0, 192.168.0.254
+-1)Power the DMX4pro on
+0) ping it to see if it is visible to your network
+1) source your ve
+2) start ola daemon ('->olad').  This should start a server who has a UI you can access at localhost:9090
+3)go to localhost:9090
+4)click 'add universe', give it universe #0 and any name you like.
+5)Add the 'Device' ArtNet [IP] Artnet Universe 0:0:0 Direction  == OUTPUT
+6) Save
+7) from sourced ve, type python ./go.py
+8)Open DMX4pro condiguration tool.  You should be able to see the OLA artnet and the DMX4pro.
+9)From localhost:9090, click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
 
