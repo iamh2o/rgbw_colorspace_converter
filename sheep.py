@@ -59,7 +59,11 @@ def load_geometry(mapfile):
             a,b = raw.split()
             return (to_ints(a.split(',')), to_ints(b.split(',')))
 
+
     dat = defaultdict(list)
+    print dat
+
+
     for line in lines:
         # print line
         (num, rest) = line.split(' ', 1)

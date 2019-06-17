@@ -6,8 +6,8 @@ import Queue
 import threading
 import signal
 
-import sheep
-import shows
+import led_strip
+import led_shows as shows
 import util
 
 # fail gracefully if cherrypy isn't available
@@ -142,7 +142,7 @@ class ShowRunner(threading.Thread):
             print "ignoring unknown msg:", str(msg)
 
     def clear(self):
-        self.model.both.clear()
+        self.model.clear()
 
 
     def next_show(self, name=None):
@@ -184,7 +184,7 @@ class ShowRunner(threading.Thread):
                 self.check_queue()
 
                 d = self.get_next_frame()
-                self.model.both.go()
+                self.model.go()
                 if d:
                     real_d = d * self.speed_x
                     time.sleep(real_d)
@@ -213,17 +213,17 @@ def osc_listener(q, port=5700):
     st.daemon = True
     return st
 
-def bonjour_server(name="Sheep", port=5700):
+def bonjour_server(name="LedStrip", port=5700):
     "Create the bonjour server, returns (thread, shutdownEvent)"
     from lib import bonjour
     shutdownEvent = threading.Event()
     st = threading.Thread(name="Bonjour broadcaster", target=bonjour.serve_forever, args=(name, port, shutdownEvent))
     return (st, shutdownEvent)
 
-class SheepServer(object):
-    def __init__(self, sheep_model, args):
+class LEDServer(object):
+    def __init__(self, led_model, args):
         self.args = args
-        self.sheep_model = sheep_model
+        self.led_model = led_model
 
         self.queue = Queue.LifoQueue()
 
@@ -238,12 +238,12 @@ class SheepServer(object):
         self._create_services()
 
     def _create_services(self):
-        "Create sheep services, trying to fail gracefully on missing dependencies"
+        "Create LED services, trying to fail gracefully on missing dependencies"
         # Bonjour advertisement
         # XXX can this also advertise the web interface?
         # XXX should it only advertise services that exist?
         try:
-            (t, flag) = bonjour_server(name="Sheep@" + util.get_hostname("unknown"))
+            (t, flag) = bonjour_server(name="LEDStrip@" + util.get_hostname("unknown"))
             self.bonjour_thread = t
             self.bonjour_exit_flag = flag
         except Exception, e:
@@ -256,14 +256,14 @@ class SheepServer(object):
             print "WARNING: Can't create OSC listener"
 
         # Show runner
-        self.runner = ShowRunner(self.sheep_model, self.queue, args.max_time)
+        self.runner = ShowRunner(self.led_model, self.queue, args.max_time)
         if args.shows:
             print "setting show:", args.shows[0]
             self.runner.next_show(args.shows[0])
 
     def start(self):
         if self.running:
-            print "start() called, but sheep is already running!"
+            print "start() called, but led_strip is already running!"
             return
 
         try:
@@ -277,7 +277,7 @@ class SheepServer(object):
 
             self.running = True
         except Exception, e:
-            print "Exception starting sheep!"
+            print "Exception starting led_strip!"
             traceback.print_exc()
 
     def stop(self):
@@ -294,7 +294,7 @@ class SheepServer(object):
 
                 self.running = False
             except Exception, e:
-                print "Exception stopping sheep!"
+                print "Exception stopping led_strip!"
                 traceback.print_exc()
 
     def go_headless(self):
@@ -358,18 +358,19 @@ if __name__=='__main__':
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
-        print "Using SheepSimulator at %s:%d" % (sim_host, sim_port)
+        print "Using LEDSimulator at %s:%d" % (sim_host, sim_port)
+        raise Exception("LED Simulator not Supported")
         from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port)
-        sheep_sides = sheep.make_sheep(model)
+        led_strip = led_strip.make_led(model)
     else:
         universe = 0
         print "Using OLA model universe=%d" % universe
         from model.ola_model import OLAModel
-        model = OLAModel(512, universe=universe, model_json="./data/dmx_mapping.json")
-        sheep_sides = sheep.make_sheep(model)
+        model = OLAModel(512, universe=universe,model_json="./data/led_strip.json")
+        led_strip_model = led_strip.make_led(model, './data/led_strip.geom')
 
-    app = SheepServer(sheep_sides, args)
+    app = LEDServer(led_strip_model, args)
     try:
         app.start() # start related service threads
 
@@ -380,7 +381,7 @@ if __name__=='__main__':
             app.go_headless()
 
     except Exception, e:
-        print "Unhandled exception running sheep!"
+        print "Unhandled exception running LED!"
         traceback.print_exc()
     finally:
         app.stop()

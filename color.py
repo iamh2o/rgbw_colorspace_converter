@@ -1,21 +1,38 @@
 """
 Color
 
-Color class that can be used interchangably as RGB or HSV with
+Color class that can be used interchangably as RGB or HSV org RGBW or HEX with
 seamless translation.  Use whichever is more convenient at the
-time - RGB for familiarity, HSV to fade colors easily
+time - RGB for familiarity, HSV to fade colors easily, RGBW as the new hotness
+
+The Color object takes rgb, hsv, rgbw, hex constructors and represents them all as hsv, doing the appropriate transformations when you wish to pull back any of the color types supported.  This meanst the core data was stored as a 3 member hsv tuple.  To enable RGBW support, I had to bolt on a 4th member of the tuple, holding the W value.  Since all of our code emits colors as RGB(W now), I accepted this bit of dirty business b/c the shows we write will expect tuples of 4 to map properly to our pixes.  The RGBW tuples will have the correct W value, even if the 4th value in HSV makes no sense (if you wish to grab the valid hsv tuple, you may still do so with tuple()[0:3]
+
+So, when constructing Color objects, beside the original constructor signature, I've added 2 optional fields:
+w=int (0 by default)
+recalculate_w = boolean (True by default)
+
+w is set to zero by default, but will be calculated for the RGB values generated during the Color object construction.  UNLESS you set recalculate_w=False, in which case it will be set to zero and remain zero even if you update the Color object
+
+This is the cool part of the Color object, once created, you have RGB & HSV values available to you interchangibly.  If you change Color.r = 255, the corresponding Color.hsv will aslo change.  If you have set recalculate_w  == True, then when you reset any color value after object creation, the new appropriate RGBW w value will be calc'd and set.  If set to False, it will remain as you set it.  If you directly change the w value, it will not trigger recalculation.  You may also at any time use Color.recalculate_w(True/False) to globally turn on/off w recalculation.
+
+So how does this all work with our models?  Our original models expected a 3 member tuple of (r,g,b) per LED.  Now, all LEDs expect a 4 member tuple(r,g,b,w).  So, all of the existing shows that use RGB/HEX/HSV native color objects will send the correct (r,g,b,w) tuple now.
+
+I DID NOT make the choice to make this module support 3 chanel LEDs at this time.
+
 
 RGB values range from 0 to 255
 HSV values range from 0.0 to 1.0
+RGBW values range from 0 to 255
 
     >>> red   = RGB(255, 0 ,0)
     >>> green = HSV(0.33, 1.0, 1.0)
+    >>> ref = RGBW(255,0,0,85) *More on how W is dealt with latter
 
 Colors may also be specified as hexadecimal string:
 
     >>> blue  = Hex('#0000ff')
 
-Both RGB and HSV components are available as attributes
+All three RGBW, RGB and HSV components are available as attributes
 and may be set.
 
     >>> red.r
@@ -50,17 +67,33 @@ For example: to gradually dim a color
     ...   print col.rgb
     ...   col.v -= 0.1
     ... 
-    (0, 255, 0)
-    (0, 229, 0)
-    (0, 204, 0)
-    (0, 178, 0)
-    (0, 153, 0)
-    (0, 127, 0)
-    (0, 102, 0)
-    (0, 76, 0)
-    (0, 51, 0)
-    (0, 25, 0)
+    (0, 255, 0, 85)
+    (0, 229, 0, 76)
+    (0, 204, 0, 68)
+    (0, 178, 0, 59)
+    (0, 153, 0, 51)
+    (0, 127, 0, 42)
+    (0, 102, 0, 34)
+    (0, 76, 0, 25)
+    (0, 51, 0, 17)
+    (0, 25, 0, 8)
+NOTE the W value is also calculated as it is expected to be used.
 
+
+RGBW Handling
+To keep the core functionality of this module, and include support for RGBW, I increased the expected tuple from 3 to 4 in length, with the last member of the tuple being the W value (in RGB space).
+
+Since the core of this module uses HSV as the reference point (THANKS GREG!), I had to do a LOT of hoop jumping to make this all work.
+
+Basically, you can instantiate any of the non-RGBW types as usual and they will automatically calculate the appropriate W value.  This recalculation can get tricky, but more on that in a moment.
+
+So, to set red:
+      r = = RGB(255,0,0)
+      ...the w value will be caluclated and appended
+      print.rgb
+      (255, 0, 0, 85)
+
+I h
 """
 import colorsys
 from copy import deepcopy
@@ -131,51 +164,57 @@ def hsv_to_rgb(hsv):
     b = int(_rgb[2] * 0xff)
     return (r,g,b,hsv[-1])
 
-def RGBW(r,g,b,w):
+def RGBW(r,g,b,w, recalculate_w=True):
     "Create new RGBW Color"
     t = (r,g,b,w)
     assert is_rgbw_tuple(t)
-    return(Color(rgb_to_hsv(t)))
+    return(Color(rgb_to_hsv(t), recalculate_w))
 
-def RGB(r,g,b,w=0):
+def RGB(r,g,b,w=0, recalculate_w=True):
     "Create a new RGB color"
     t = (r,g,b,w)
     assert is_rgb_tuple(t)
-    return Color(rgb_to_hsv(t))
+    return Color(rgb_to_hsv(t),recalculate_w)
 
-def HSV(h,s,v, w=0.0):
+def HSV(h,s,v, w=0.0, recalculate_w=True):
     "Create a new HSV color"
-    return Color((h,s,v,w))
+    return Color((h,s,v,w), recalculate_w)
 
-def Hex(value):
+def Hex(value, recalculate_w=True):
     "Create a new Color from a hex string"
     value = value.lstrip('#')
     lv = len(value)
     rgb_t = (int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
-    raise Exception('HEX not supported yet in RGBW')
-    return RGB(*rgb_t)   #JEM -not sure what to do here
+    r = rgb_t.next()
+    g = rgb_t.next()
+    b = rgb_t.next()
+    return RGB(r,g,b,0,recalculate_w=True)   #JEM -not sure what to do here
 
 class Color(object):
-    def __init__(self, hsv_tuple, recalc=True):
-        self._set_hsv(hsv_tuple, recalc )
+
+    def __init__(self, hsv_tuple, recalculate_w=True):
+        self.recalculate_w = recalculate_w
+        self._set_hsv(hsv_tuple)
         
 
     def copy(self):
         return deepcopy(self)
 
-    def _set_hsv(self, hsv_tuple,recalc=True):
+    def _set_hsv(self, hsv_tuple, preserve_w=False):
         assert is_hsv_tuple(hsv_tuple)
-
         self.hsv_t = list(hsv_tuple)
-#        if self.recalc_w is True and init is False:                                           
-        if recalc is True:
-#            from IPython import embed; embed()
+
+        #I'm trting to solve the problem of the c
+        if preserve_w is True:
+            pass
+        elif self.recalculate_w is True:
             new_w = int(getWhiteColor(self))
             l = list(hsv_tuple)
             l[-1] = new_w
             hsv_tuple = tuple(l)
             self.hsv_t = list(hsv_tuple)
-
+        else:
+            pass #all done
 
     @property
     def rgbw(self):
@@ -232,7 +271,10 @@ class Color(object):
     def v(self, val):
         assert 0.0 <= val <= 1.0
         v = clamp(val, 0.0, 1.0) 
-        self.hsv_t[2] = round(v, 8)
+        new_hsv = self.hsv_t
+        new_hsv[2] = round(v, 8)
+        self._set_hsv(new_hsv)
+
 
     """
     Properties representing individual RGB components
@@ -282,7 +324,17 @@ class Color(object):
         assert 0 <= val <= 255
         r,g,b, w = self.rgbw
         new = (r, g, b, val)
-        self._set_hsv(rgb_to_hsv(new),recalc=False)
+        self._set_hsv(rgb_to_hsv(new),preserve_w=True)
+
+    @property
+    def recalculate_w(self):
+        return self._recalculate_w
+
+    @recalculate_w.setter
+    def recalculate_w(self, val=True):
+        self._recalculate_w = val
+    
+         
         
 if __name__=='__main__':
     import doctest
