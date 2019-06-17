@@ -103,4 +103,7 @@ Each next_frame() function can yield from multiple places if you want to have di
 
 # OSC / External Input
 
-TODO
+TODO... but it works!
+
+# IMPORTANT CONSIDERATIONS
+The show runner class automatically picks up your shows when go.py is run.  Your show class must be named the same as the File, and the name must match the self.name property set in the __init__ class.  If these three don't match, the show will not appear as runnable.

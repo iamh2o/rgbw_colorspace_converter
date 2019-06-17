@@ -50,32 +50,22 @@ class LEDstrip(object):
         for f in fh:
             sl = f.rstrip().split('\t')
             panel = sl[0]
-            top = sl[1]
-            bottom = sl[2]
+            bottom = sl[1]
+            top = sl[2]
             dat[panel] = {'top':top,
                           'bottom':bottom
                           }
         return dat
 
-    def top_neighbors(self,led):
+    def top_neighbor(self,led):
         "Return the list of leds directly above"
-        rv = []
-        tn = self._neighor_map[led]['top']
-        if tn == 0:
-            pass
-        else:
-            rv.append(tn)
-        return rv
+        tn = self._neighbor_map[led]['top']
+        return tn
 
-    def bottom_neighbors(self,led):
+    def bottom_neighbor(self,led):
         "Return the LED below this one"
-        rv = []
-        bn = self._neighor_map[led]['bottom']
-        if bn == 0:
-            pass
-        else:
-            rv.append(tn)
-        return rv
+        bn = self._neighbor_map[led]['bottom']
+        return bn
     
 
 

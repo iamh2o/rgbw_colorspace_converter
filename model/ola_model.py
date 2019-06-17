@@ -15,8 +15,6 @@ from ola.ClientWrapper import ClientWrapper
 import json
 
 
-
-
 # what should we do this callback?
 def callback(state):
     print state
@@ -70,6 +68,7 @@ class OLAModel(object):
 #        from IPython import embed; embed()
         # cell is a string like "14b"
         # ignore unmapped cells
+        
         if cell in self.PANEL_MAP:
             ix = self.PANEL_MAP[cell] - 1 # dmx is 1-based, python lists are 0-based
             self.pixels[ix]   = color.g
@@ -85,7 +84,7 @@ class OLAModel(object):
         data = array.array('B')
         data.extend(self.pixels)
         self.client.SendDmx(self.universe, data, callback)
-
+#        from IPython import embed; embed()
 
 
 ###WHAT IS THIS

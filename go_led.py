@@ -142,6 +142,7 @@ class ShowRunner(threading.Thread):
             print "ignoring unknown msg:", str(msg)
 
     def clear(self):
+#        print "WE ARE GOING HERE"
         self.model.clear()
 
 
@@ -170,24 +171,31 @@ class ShowRunner(threading.Thread):
 
     def get_next_frame(self):
         "return a delay or None"
+#        print "z"
         try:
+#            print "zz"
             return self.framegen.next()
         except StopIteration:
+#            print "zzz"
             return None
 
     def run(self):
         if not (self.show and self.framegen):
             self.next_show()
-
+        print "1"
         while self.running:
             try:
                 self.check_queue()
 
                 d = self.get_next_frame()
+#                print "2"
                 self.model.go()
+#                print "3"
                 if d:
+#                    print "4"
                     real_d = d * self.speed_x
                     time.sleep(real_d)
+#                    print "5"
                     self.show_runtime += real_d
                     if self.show_runtime > self.max_show_time:
                         print "max show time elapsed, changing shows"
@@ -201,6 +209,7 @@ class ShowRunner(threading.Thread):
                 print "unexpected exception in show loop!"
                 traceback.print_exc()
                 self.next_show()
+#        print "X"
 
 def osc_listener(q, port=5700):
     "Create the OSC Listener thread"
