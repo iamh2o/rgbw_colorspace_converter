@@ -53,7 +53,7 @@ class SimulatorModel(object):
             if color.rgb == (0,0,0):
                 r,g,b = SIM_DEFAULT
             else:
-                r,g,b = color.rgb
+                r,g,b = color.rgb[0:3]
 
             num = cell[:-1]
             side = cell[-1]
