@@ -1,3 +1,6 @@
+## History
+* Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was the BAAAHS panel controling s/w: https://bitbucket.org/grgbrn/baaahs2014/src/default/
+
 ## Requirements
 
 * Python 2.7
