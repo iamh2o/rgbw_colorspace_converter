@@ -27,7 +27,7 @@ class SimpleLEDChase(object):
 
 
         led1 = str(r.randrange(len(self.cells.all_cells())))
-        print "XC", led1
+        print "XC", led1, self.cells.bottom_neighbor(led1)
         df = {"LED1": {
                 'lead_cell' : int(led1),
                 'following_cell' : int(self.cells.bottom_neighbor(led1))
@@ -38,13 +38,14 @@ class SimpleLEDChase(object):
 
         while True:
             self.cells.clear()
-            print df["LED1"]['lead_cell'], df["LED1"]['following_cell']
+            print df["LED1"]['lead_cell'], df["LED1"]['following_cell'], len(self.cells.all_cells())
           
             self.cells.set_cell(str(df["LED1"]['lead_cell']), RGBW(255,255,255,255)) 
             self.cells.set_cell(str(df["LED1"]['following_cell']), RGBW(255,0,0,0,False))
 
  
-            if df["LED1"]['lead_cell'] == len(self.cells.all_cells())-1:
+            if df["LED1"]['lead_cell'] >= len(self.cells.all_cells())-1:
+                print "HERE"
                 df["LED1"]['lead_cell'] = 2
                 df["LED1"]['following_cell'] = 1
 
