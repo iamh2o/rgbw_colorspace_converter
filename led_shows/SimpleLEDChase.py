@@ -44,7 +44,7 @@ class SimpleLEDChase(object):
             self.cells.set_cell(str(df["LED1"]['following_cell']), RGBW(255,0,0,0,False))
 
  
-            if df["LED1"]['lead_cell'] >= len(self.cells.all_cells())-1:
+            if df["LED1"]['lead_cell'] >= len(self.cells.all_cells())+50:
                 print "HERE"
                 df["LED1"]['lead_cell'] = 2
                 df["LED1"]['following_cell'] = 1
