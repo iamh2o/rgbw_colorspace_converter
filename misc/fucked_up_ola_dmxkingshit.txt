@@ -1,3 +1,5 @@
+ONLY RUN THE DMXKING BOARD ATTACHED TO A SINGLE NETWORK. IF WIFI IS ON YOU'LL GET FUCKED UP RESULTS
+
 From DMXKING setup interface, Under 'Port', set DMX OUT and LTP (lets discuss this tho).
 In UNIVERSE, ENTER 1234.  Click apply
 
