@@ -28,7 +28,6 @@ class OLAModel(object):
         self.universe = universe
         self.wrapper = ClientWrapper()
         self.client = self.wrapper.Client()
-        from IPython import embed; embed()  
         self.pixels = [0] * max_dmx
 
     def _map_panels(self,f):
@@ -83,7 +82,6 @@ class OLAModel(object):
     def go(self):
         data = array.array('B')
         data.extend(self.pixels)
-        from IPython import embed; embed()
         self.client.SendDmx(self.universe, data, callback)
 
 
