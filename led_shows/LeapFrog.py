@@ -82,7 +82,6 @@ class LEDstrip(object):
 
             ctr = ctr+1
             if ctr > 127:
-                raise
                 ctr = 0
             if ctr2 == 2:
                 ctr2 = 0

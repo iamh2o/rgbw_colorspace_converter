@@ -373,7 +373,7 @@ if __name__=='__main__':
         model = SimulatorModel(sim_host, port=sim_port)
         led_strip = led_strip.make_led(model)
     else:
-        universe = 0
+        universe = 1
         print "Using OLA model universe=%d" % universe
         from model.ola_model import OLAModel
         model = OLAModel(800, universe=universe,model_json="./data/led_strip.json")
