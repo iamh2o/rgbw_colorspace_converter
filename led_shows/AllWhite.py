@@ -16,5 +16,5 @@ class AllWhite(object):
     
     def next_frame(self):
         while (True):
-            self.led_strip.set_all_cells(RGBW(255,255,25,25))
+            self.led_strip.set_all_cells(RGBW(255,255,255,255))
             yield self.frame_delay

@@ -12,7 +12,7 @@ class LEDstrip(object):
         self.cells = led_strip
         self.led_strip = led_strip
         # number of seconds to wait between frames
-        self.frame_delay = 1.05
+        self.frame_delay = 1.5
 
 #        from IPython import embed; embed()
         

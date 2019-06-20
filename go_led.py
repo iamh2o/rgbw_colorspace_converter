@@ -14,7 +14,7 @@ import util
 _use_cherrypy = False
 try:
     import cherrypy
-    _use_cherrypy = True
+    _use_cherrypy = False
 except ImportError:
     print "WARNING: CherryPy not found; web interface disabled"
 
@@ -376,7 +376,7 @@ if __name__=='__main__':
         universe = 0
         print "Using OLA model universe=%d" % universe
         from model.ola_model import OLAModel
-        model = OLAModel(800, universe=universe,model_json="./data/led_strip.json")
+        model = OLAModel(800, universe=universe,model_json="./data/led_strip2.dat")
 
         led_strip_model = led_strip.make_led(model, './data/led_strip.geom')
 
