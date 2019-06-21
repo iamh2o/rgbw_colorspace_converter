@@ -376,7 +376,7 @@ if __name__=='__main__':
         universe = 3
         print "Using OLA model universe=%d" % universe
         from model.ola_model import OLAModel
-        model = OLAModel(800, universe=universe,model_json="./data/led_strip2.json", keys_string_int='int')
+        model = OLAModel(800, universe=universe,model_json="./data/led_strip2.json")
 
         led_strip_model = led_strip.make_led(model, './data/led_strip.geom')
 
