@@ -26,8 +26,6 @@ class OLAModel(object):
     def __init__(self, max_dmx, universe=0,model_json=None):
         # XXX any way to check if this is a valid connection?
 
-        self.keys_string_int = keys_string_int
-
         self.PANEL_MAP = None
         self.universe = universe
         self._map_panels(model_json)
