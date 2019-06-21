@@ -1,4 +1,6 @@
 #!/usr/bin/env python2.7
+
+print "\n\nIF YOU WANT TO RUN SHEEP SHOWS, THE SHEEP CODE IS TO BE FOUND HERE:  https://bitbucket.org/grgbrn/baaahs2014/src/default/\n\n\n"
 import sys
 import time
 import traceback
@@ -366,7 +368,7 @@ if __name__=='__main__':
         universe = 0
         print "Using OLA model universe=%d" % universe
         from model.ola_model import OLAModel
-        model = OLAModel(512, universe=universe, model_json="./data/dmx_mapping.json")
+        model = OLAModel(512, universe=universe, model_json="./data/sheep_dmx_mappings.json")
         sheep_sides = sheep.make_sheep(model)
 
     app = SheepServer(sheep_sides, args)

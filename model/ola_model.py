@@ -23,7 +23,7 @@ def callback(state):
     print state
 
 class OLAModel(object):
-    def __init__(self, max_dmx, universe=0,model_json=None,keys_string_int='string'):
+    def __init__(self, max_dmx, universe=0,model_json=None):
         # XXX any way to check if this is a valid connection?
 
         self.keys_string_int = keys_string_int
@@ -40,26 +40,16 @@ class OLAModel(object):
                        }
 
     def _map_panels(self,f):
-        ##Keys in this dict are still strings b/c the panels used to have string names                             
-        ##Key is device ID, value is the first of the 4 DMX addresses to send the RGBW signal for that device      
-        # PANEL_MAP = {                                                                                
-        #     '1': 1,                                                                                                 
-        #     '2': 5,                                                                                                   
-        #     '3': 9,                                                                                                    
-        #     '4': 13,                                                                                      
-        #     '5': 17,                                                                                             
-        # }             
+
+        # Loads a json file with mapping info describing your pixels.
+        # The json file is formatted as a dictionary of numbers (as strings sadly, b/c json is weird
+        #each key in the dict is a fixtureUID.
+        # each array that fixtureUID returns is of the format [universeUID, DMXstart#]
+
         ds = None
-
-        if self.keys_string_int == 'string':
-            with open(f, 'r') as json_file:
-                ds = json.load(json_file)
-        else:
-            with open(f, 'r') as json_file:
-        #        fx = "{0}{1}".format(fx, i)
-                ds = json.load(json_file, object_hook=keystoint)
+        with open(f, 'r') as json_file:
+            ds = json.load(json_file, object_hook=keystoint)
 #        from IPython import embed; embed()
-
 
         self.PANEL_MAP = ds
 
