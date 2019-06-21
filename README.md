@@ -100,6 +100,6 @@ Debian / Ubuntu:
 6) Save
 7) from sourced ve, type python ./go.py
 8)Open DMX4pro condiguration tool.  You should be able to see the OLA artnet and the DMX4pro.
-9)From localhost:9090, click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
+9)From localhost:9090 (OMG! There is a much better 'new ola UI' which you can access by clicking the tiny link to it at the obttomo of this page that loads for localhost:9090), click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
 10) IF you have cherrypy installed, you can go to the simple web interface that should have started on localhost:9990. you can shoose shows, set cycle interval,etc.
 11) simulator possibly coming!

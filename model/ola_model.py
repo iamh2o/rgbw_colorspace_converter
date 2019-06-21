@@ -31,6 +31,7 @@ class OLAModel(object):
         self._map_panels(model_json)
         self.wrapper = ClientWrapper()
         self.client = self.wrapper.Client()
+        #Keys for pixels are integers representing universes, each universe has an array of possible DMX channels
         self.pixels = {0: [0] * max_dmx,
                        1: [0] * max_dmx,
                        2: [0] * max_dmx,
@@ -46,7 +47,7 @@ class OLAModel(object):
 
         ds = None
         with open(f, 'r') as json_file:
-            ds = json.load(json_file, object_hook=keystoint)
+            ds = json.load(json_file, object_hook=keystoint) #transform json keys to int()
 #        from IPython import embed; embed()
 
         self.PANEL_MAP = ds
