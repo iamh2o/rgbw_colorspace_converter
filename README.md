@@ -1,6 +1,7 @@
 ## History
 * Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was the BAAAHS panel controling s/w: https://bitbucket.org/grgbrn/baaahs2014/src/default/
 
+
 ## Requirements
 
 * Python 2.7
@@ -32,11 +33,11 @@ The simulator lives in the 'SheepSimulator' directory.  Open the file 'SheepSimu
 
 To start the lighting software talking to the simulator:
 
-	python go.py --simulator
+	!! python go_*.py --simulator  ## broken for the moment
 
 You can also specify which show to run by using the name of the show:
 
-    python go.py --simulator MyShow
+    python go_*.py --simulator MyShow
 
 You can also choose which show is running through the web interface:
 
@@ -98,7 +99,7 @@ Debian / Ubuntu:
 4)click 'add universe', give it universe #0 and any name you like.
 5)Add the 'Device' ArtNet [IP] Artnet Universe 0:0:0 Direction  == OUTPUT
 6) Save
-7) from sourced ve, type python ./go.py
+7) from sourced ve, type python ./go_led.py
 8)Open DMX4pro condiguration tool.  You should be able to see the OLA artnet and the DMX4pro.
 9)From localhost:9090 (OMG! There is a much better 'new ola UI' which you can access by clicking the tiny link to it at the obttomo of this page that loads for localhost:9090), click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
 10) IF you have cherrypy installed, you can go to the simple web interface that should have started on localhost:9990. you can shoose shows, set cycle interval,etc.
