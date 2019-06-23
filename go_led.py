@@ -368,7 +368,7 @@ if __name__=='__main__':
         sim_host = "localhost"
         sim_port = 4444
         print "Using LEDSimulator at %s:%d" % (sim_host, sim_port)
-        raise Exception("LED Simulator not Supported")
+        #        raise Exception("LED Simulator not Supported")
         from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port, model_json="./data/led_strip2.json")
         led_strip = led_strip.make_led(model, './data/led_strip.geom')
@@ -377,9 +377,9 @@ if __name__=='__main__':
         from model.ola_model import OLAModel
         model = OLAModel(800, model_json="./data/led_strip2.json")
 
-        led_strip_model = led_strip.make_led(model, './data/led_strip.geom')
+        led_strip = led_strip.make_led(model, './data/led_strip.geom')
 
-    app = LEDServer(led_strip_model, args)
+    app = LEDServer(led_strip, args)
     try:
         app.start() # start related service threads
 

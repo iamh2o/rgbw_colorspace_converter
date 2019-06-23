@@ -62,7 +62,7 @@ class SimulatorModel(object):
         if cell  in self.CELL_MAP:
             ux = self.CELL_MAP[cell][0]
             ix = self.CELL_MAP[cell][1] - 1 #
-            sim_key = self.CELL_MAP[cell][2]
+            sim_key = cell#self.CELL_MAP[cell]
             #The simulator does not care about universes, but does care about UIDs. I'm manufacturing one by joinng the Universe and fixture ID into the key.
             self.dirty[sim_key] = color
         else:
@@ -77,9 +77,9 @@ class SimulatorModel(object):
         "Send all of the buffered commands"
 
         for num in self.dirty:
-            color = self.dirty[num]
-            
+            color = self.dirty[num]        
             msg = "%s %s %s,%s,%s" % ('b', num, color.r,color.g,color.b)
+            print msg
             if self.debug:
                 print msg
             self.sock.send(msg)
