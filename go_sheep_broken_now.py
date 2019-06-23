@@ -362,7 +362,7 @@ if __name__=='__main__':
         sim_port = 4444
         print "Using SheepSimulator at %s:%d" % (sim_host, sim_port)
         from model.simulator import SimulatorModel
-        model = SimulatorModel(sim_host, port=sim_port)
+        model = SimulatorModel(sim_host, port=sim_port, model_json="data/sheep_dmx_mappings2.json")
         sheep_sides = sheep.make_sheep(model)
     else:
         universe = 0

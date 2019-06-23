@@ -370,13 +370,12 @@ if __name__=='__main__':
         print "Using LEDSimulator at %s:%d" % (sim_host, sim_port)
         raise Exception("LED Simulator not Supported")
         from model.simulator import SimulatorModel
-        model = SimulatorModel(sim_host, port=sim_port)
-        led_strip = led_strip.make_led(model)
+        model = SimulatorModel(sim_host, port=sim_port, model_json="./data/led_strip2.json")
+        led_strip = led_strip.make_led(model, './data/led_strip.geom')
     else:
-        universe = 3
-        print "Using OLA model universe=%d" % universe
+        print "Starting OLA"
         from model.ola_model import OLAModel
-        model = OLAModel(800, universe=universe,model_json="./data/led_strip2.json")
+        model = OLAModel(800, model_json="./data/led_strip2.json")
 
         led_strip_model = led_strip.make_led(model, './data/led_strip.geom')
 

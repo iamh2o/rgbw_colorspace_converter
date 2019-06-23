@@ -2,10 +2,9 @@
 Model to communicate with OLA
 Based on ola_send_dmx.py
 
-Panels are numbered as strings of the form '12b', indicating
-'business' or 'party' side of the sheep
+Cells are representations of the addressible unit in your object. Cells in this model only have one LED each.
 
-Maps symbolic panel IDs (12b) to DMX ids
+
 
 """
 import array
@@ -23,24 +22,24 @@ def callback(state):
     print state
 
 class OLAModel(object):
-    def __init__(self, max_dmx, universe=0,model_json=None):
+    def __init__(self, max_dmx, model_json=None):
         # XXX any way to check if this is a valid connection?
 
-        self.PANEL_MAP = None
-        self.universe = universe
-        self._map_panels(model_json)
+        self.CELL_MAP = None
+        self._map_leds(model_json)
         self.wrapper = ClientWrapper()
         self.client = self.wrapper.Client()
-        #Keys for pixels are integers representing universes, each universe has an array of possible DMX channels
-        self.pixels = {0: [0] * max_dmx,
+        #Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
+        #Cells have one LED each. Each LED has 4 DMX addresses
+        self.leds = {0: [0] * max_dmx,
                        1: [0] * max_dmx,
                        2: [0] * max_dmx,
                        3: [0] * max_dmx
                        }
 
-    def _map_panels(self,f):
+    def _map_leds(self,f):
 
-        # Loads a json file with mapping info describing your pixels.
+        # Loads a json file with mapping info describing your leds.
         # The json file is formatted as a dictionary of numbers (as strings sadly, b/c json is weird
         #each key in the dict is a fixtureUID.
         # each array that fixtureUID returns is of the format [universeUID, DMXstart#]
@@ -50,43 +49,34 @@ class OLAModel(object):
             ds = json.load(json_file, object_hook=keystoint) #transform json keys to int()
 #        from IPython import embed; embed()
 
-        self.PANEL_MAP = ds
+        self.CELL_MAP = ds
+#        for i in ds:
 
+
+            
     def __repr__(self):
-        return "OLAModel(universe=%d)" % self.universe
+        raise Exception('What is going on here... universes are no longer a property of the model')
+#        return "OLAModel(universe=%d)" % self.universe
 
     # Model basics
 
     def cell_ids(self):
-        # return PANEL_IDS        
-        return self.PANEL_MAP.keys()
+        # return LED_IDS        
+        return self.CELL_MAP.keys()
 
     def set_cell(self, cell, color):
-        # !!!! BUG TO TRACK DOWN.... cell is coming in as an int....
-        #keys to the PANEL_MAP must be strings
-
-
-
-        #We are using the device/LED/panel/whatever ID to get the first and following three 
-        #DMX address we will be sending our RGBW tuple to
-        
-
-#        from IPython import embed; embed()
-        # cell is a string like "14b"
-        # ignore unmapped cells
-        
-
-        cell = int(cell)
+        print "THIS IS THE CELL ID:", cell
 #        from IPython import embed; embed()        
-        if int(cell) in self.PANEL_MAP:
+        if cell in self.CELL_MAP:            
+            ux = self.CELL_MAP[cell][0] 
+            ix = self.CELL_MAP[cell][1] - 1 # dmx is 1-based, python lists are 0-based
             
-            ux = self.PANEL_MAP[cell][0] 
-            ix = self.PANEL_MAP[cell][1] - 1 # dmx is 1-based, python lists are 0-based
-            
-            self.pixels[ux][ix]   = color.g
-            self.pixels[ux][ix+1] = color.r
-            self.pixels[ux][ix+2] = color.b
-            self.pixels[ux][ix+3] = color.w
+            self.leds[ux][ix]   = color.g
+            self.leds[ux][ix+1] = color.r
+            self.leds[ux][ix+2] = color.b
+            self.leds[ux][ix+3] = color.w
+        else:
+            print("WARNING: {0} not in cell ID MAP".format(cell))
 
     def set_cells(self, cells, color):
         for cell in cells:
@@ -94,9 +84,9 @@ class OLAModel(object):
 
     def go(self):
         data_to_send= {}
-        for ux in self.pixels:
+        for ux in self.leds:
             data = array.array('B')
-            data.extend(self.pixels[ux])
+            data.extend(self.leds[ux])
             data_to_send[ux] = data
     
         for u in data_to_send:
@@ -121,4 +111,4 @@ if __name__ == '__main__':
 #    model.set_cell('16p', RGB(0,0,255))
 #    model.go()
 #
-#    data.extend(self.pixels)
+#    data.extend(self.leds)

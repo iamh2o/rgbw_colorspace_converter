@@ -32,7 +32,7 @@ class LEDstrip(object):
         self.model = model
 #        from IPython import embed; embed()
         
-        self.cells = set(self.model.PANEL_MAP.keys())
+        self.cells = set(self.model.CELL_MAP.keys())
         self._neighbor_map = self.load_geometry(geom_file)
 #        from IPython import embed; embed()  
 
@@ -93,7 +93,7 @@ class LEDstrip(object):
         self.model.set_cells(cells, color)
 
     def set_all_cells(self, color):
-        self.set_cells(self.model.PANEL_MAP.keys(), color)
+        self.set_cells(self.model.CELL_MAP.keys(), color)
 
     def clear(self):
         ""
