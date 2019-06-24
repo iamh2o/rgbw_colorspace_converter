@@ -65,7 +65,7 @@ class OLAModel(object):
         return self.CELL_MAP.keys()
 
     def set_cell(self, cell, color):
-        print "THIS IS THE CELL ID:", cell
+
 #        from IPython import embed; embed()        
         if cell in self.CELL_MAP:            
             ux = self.CELL_MAP[cell][0] 

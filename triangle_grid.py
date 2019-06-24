@@ -2,6 +2,10 @@ from collections import defaultdict, namedtuple
 from color import RGBW
 
 
+def make_tri(model, n_rows):
+    return TriangleGrid(model,n_rows)
+
+
 ##
 ## Triangle Grid class to represent one strip
 ##
@@ -56,6 +60,7 @@ class TriangleGrid(object):
             is_btm_edge = False
 
             loop_start = True
+            row_pos = 1
             while cell_id <= end_cell_id:
                 cell_id +=1
 
@@ -83,7 +88,7 @@ class TriangleGrid(object):
                     is_btm_edge = False
                 cells_added += 1
                 print "\t\tCell ID:", cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge
-                self.cells.append(TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge))
+                self.cells.append(TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos))
 
 
                 if up_down == 'up':
@@ -93,14 +98,29 @@ class TriangleGrid(object):
                 if l_corner is True:
                     l_corner = False
                 loop_start = False
-                    
+                row_pos += 1
+
             end_cell_id += 2 + cells_added
             
             curr_row += 1
 
+    def go(self):
+        self.model.go()
 
-    def delete_cells(self):
-        self.cells = []
+    def clear(self):
+        self.set_all_cells(RGBW(0,0,0,0))
+        self.go()
+
+    def set_all_cells(self, color):
+        for i in self.cells:
+            self.set_cell(i.id,color)
+
+    def set_cell(self,cell, color):
+        from IPython import embed; embed()
+        self.model.set_cell(cell, color)
+
+    def set_cells(self, cells, color):
+        self.model.set_cells(cells,color)
 
     def all_cells(self):
         "Return the list of valid cell IDs"
@@ -124,10 +144,45 @@ class TriangleGrid(object):
         self.model.go()
 
     # convenience methods for grabbing useful parts of the triangle grid
-   
+
+    def get_left_side_cells(self):
+        cells = []
+        for i in self.cells:
+            if i.is_left_edge:
+                cells.append(i)
+        return cells
+            
+    def get_right_side_cells(self):
+        cells = []
+        for i in self.cells:
+            if i.is_right_edge:
+                cells.append(i)
+        return cells
+
+    def get_bottom_side_cells(self):
+        cells = []
+        for i in self.cells:
+            if i.is_bottom_edge:
+                cells.append(i)
+        return cells
+
+    def get_up_cells(self):
+        cells = []
+        for i in self.cells:
+            if i.is_up:
+                cells.append(i)
+        return cells
+
+    def get_down_cells(self):
+        cells = []
+        for i in self.cells:
+            if i.is_down:
+                cells.append(i)
+        return cells
+
 
 class TriangleCell(object):
-    def __init__(self,  cell_id,  row, up_down, is_top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge):
+    def __init__(self,  cell_id,  row, up_down, is_top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos):
 
         self.id = cell_id
         self.row_num = row
@@ -137,4 +192,33 @@ class TriangleCell(object):
         self.btm_right = r_corner
         self.btm_left = l_corner
         self.pointy_side = up_down
+        self.btm_side = is_btm_edge
+        self.up_down = up_down
+
+
+    def get_id(self):
+        return self.id
+    def get_row_num(self):
+        return self.row_num
+    def is_left_edge(self):
+        return self.is_l_edge
+    def is_right_edge(self):
+        return self.is_r_edge
+    def is_bottom_edge(self):
+        return self.is_btm_side
+    def is_top(self):
+        return self.is_top
+    def is_right_btm_corner(self):
+        return(self.btm_right)
+    def is_left_btm_corner(self):
+        return self.btm_left
+    def row_position(self):
+        return self.row_pos
+    def is_up(self):
+        return self.up_down in "up"
+    def is_down(self):
+        return self.up_down in "down"
+
+
+
         
