@@ -12,6 +12,7 @@ for i in fh:
     if ctr == 0:
         pass
     else:
+
         a2 = [sl[1], sl[2],sl[3],sl[4],sl[5],sl[6]]
         arr.append(a2)
 
@@ -19,7 +20,7 @@ for i in fh:
 
     ctr += 1
 a = np.array(arr)
-print a
+
 
 z = a[np.lexsort(np.transpose(a)[::-2])]
 
@@ -31,7 +32,7 @@ total_cells_added_this_row = 0
 total_cells_next_row = 1
 for i in z:
         
-    print curr_row, total_cells_added_this_row,total_cells_next_row
+
 
     if curr_row == 0:
         ds[curr_row] = [i]
@@ -48,12 +49,14 @@ for i in z:
 
         
 
-
+c=1
 for q in ds:
 #    for ii in sorted(ds[q]):
+#    print ds[q]
     for iii in np.lexsort(np.transpose(ds[q])[::-1]):
-#        print iii, ds[q][iii]
+#        print iii
         ii =ds[q][iii]
         print "triangle({0},{1},{2},{3},{4},{5});".format(ii[0],ii[1],ii[2],ii[3],ii[4],ii[5])
-#    print "triangle,{0},{1},{2},{3},{4},{5},{6}".format(i[0],i[1],i[2],i[3],i[4],i[5],c)
+        #print "triangle,{0},{1},{2},{3},{4},{5},{6}".format(ii[0],ii[1],ii[2],ii[3],ii[4],ii[5],c)
 
+        c  +=1 
