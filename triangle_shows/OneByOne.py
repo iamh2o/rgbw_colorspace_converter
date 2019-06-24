@@ -9,7 +9,7 @@ class OneByOne(object):
         # walk pixels up and downs strip
         self.tri_grid = tri_grid
 
-        self.frame_delay = 2
+        self.frame_delay = 0.5
 
 #        from IPython import embed; embed()
 
