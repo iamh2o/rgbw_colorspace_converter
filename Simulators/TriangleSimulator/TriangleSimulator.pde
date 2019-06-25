@@ -10,9 +10,9 @@ import processing.net.*;
 import java.util.regex.*;
 Table table;
 
-//boolean DRAW_LABELS = false;
+boolean DRAW_LABELS = true;
 //boolean POINTY_TOP = true;
-//boolean DARK_MODE = false;
+boolean DARK_MODE = false;
 
 
 
@@ -60,11 +60,52 @@ void setup() {
   println("server listening:" + _server);
 }
 
+void drawCheckbox(int x, int y, boolean checked) {
+  int size = 20;
+  stroke(0);
+  fill(255);  
+  rect(x,y,size,size);
+  if (checked) {    
+    line(x,y,x+size,y+size);
+    line(x+size,y,x,y+size);
+  }  
+}
 
+
+void drawBottomControls() {
+  // draw a bottom white region
+  fill(255,255,255);
+  rect(0,500,500,50);
+  
+  // draw checkboxes
+  stroke(0);
+  fill(255);
+  drawCheckbox(20,510, DRAW_LABELS); // label checkbox
+ // drawCheckbox(190,510, POINTY_TOP); // pointy-top checkbox
+  drawCheckbox(360,510, DARK_MODE); // dark mode
+    
+  // draw text labels
+  fill(0);
+  textAlign(LEFT);  
+  text("Draw Labels", 50, 525);
+  text("Pointy Top", 220, 525);
+  text("Dark Mode", 390, 525);
+}
+
+
+void mouseClicked() {  
+  //println("click! x:" + mouseX + " y:" + mouseY);
+  if (mouseX > 20 && mouseX < 40 && mouseY > 510 && mouseY < 530) {
+    // clicked draw labels button
+    DRAW_LABELS = !DRAW_LABELS;
+  } else if (mouseX > 360 && mouseX < 380 && mouseY > 510 && mouseY < 530) {
+    DARK_MODE = !DARK_MODE;
+  }  
+}
 
 void draw() {
   background(250);
-//  drawBottomControls();
+  drawBottomControls();
   honeycomb.draw();
   pollServer();
 }
@@ -239,30 +280,33 @@ class Hex {
     endShape(CLOSE);
     
     // draw text label
-//    if (DRAW_LABELS && this.id != 0) {
- //     fill(defaultHexLine());
- //     textAlign(CENTER);
-//      print(this.id, this.x1, this.y2,this.x2, this.y2,this.x3, this.y3 );
-//    }
+    if (DRAW_LABELS && this.id != 0) {
+      fill(defaultHexLine());
+    
+      if (this.id % 2 == 0) {
+        textAlign(CENTER);
+        text(this.id,this.x1,this.y1+30);
+
+      } else {
+        textAlign(BOTTOM);
+        text(this.id,this.x1+10,this.y1+18);
+
+     }
+
+  
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      print(this.id, this.x1, this.y2,this.x2, this.y2,this.x3, this.y3 );
+    }
     noFill();
     
     
-  }
-}
-
-
-void triangulate(PVector a, PVector b, PVector c, int level) {
-  if (level > 0) {
-    level--;
-    PVector ab = PVector.lerp(a, b, 0.5);
-    PVector bc = PVector.lerp(b, c, 0.5);
-    PVector ca = PVector.lerp(c, a, 0.5);
-    triangulate(a, ab, ca, level);
-    triangulate(ab, b, bc, level);
-    triangulate(ca, bc, c, level);
-    triangulate(ab, ca, bc, level);
-  } else {
-    fill(hue, 100, random(100));
-    triangle(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 }
