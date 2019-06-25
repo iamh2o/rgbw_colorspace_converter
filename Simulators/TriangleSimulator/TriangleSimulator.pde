@@ -188,7 +188,7 @@ HexForm makeSimpleGrid(int rows, int cols, int start_x, int start_y) {
     int id = row.getInt("id");
     //triangle(x1,y1,x2,y2,x3,y3); 
     print(shape);
-    form.add(new Hex(x1,y1,x2,y2,x3,y3,id));  
+    form.add(new Hex(x1,y1,x2,y2,x3,y3,id),id);  
     }
   
   return form;  
@@ -203,13 +203,14 @@ class HexForm {
     //hexesById = new HashMap<String, Hex>();
   }
   
-  void add(Hex h) {
-    int hexId = hexes.size();
-    if (labels != null) {
-      h.setId(labels.get(hexId));
-    } else {
-      h.setId(String.valueOf(hexId));
-    }
+  void add(Hex h, int hexId) {
+//    int hexId = hexes.size();
+//    if (labels != null) {
+//      h.setId(labels.get(hexId));
+//    } else {
+//      h.setId(String.valueOf(hexId));
+//    }
+    h.setId(String.valueOf(hexId))
     hexes.add(h);
   }
   
