@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python2.7
 import sys
 import time
@@ -6,8 +7,8 @@ import Queue
 import threading
 import signal
 
-import led_strip
-import led_shows as shows
+import triangle_grid
+import triangle_shows as shows
 import util
 
 # fail gracefully if cherrypy isn't available
@@ -51,11 +52,12 @@ low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
 hi_interp  = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 class ShowRunner(threading.Thread):
-    def __init__(self, model, queue, max_showtime=240):
+    def __init__(self, model, queue, max_showtime=240, fail_hard=True):
         super(ShowRunner, self).__init__(name="ShowRunner")
         self.model = model
         self.queue = queue
 
+        self.fail_hard = fail_hard
         self.running = True
         self.max_show_time = max_showtime
         self.show_runtime = 0
@@ -162,7 +164,7 @@ class ShowRunner(threading.Thread):
         self.prev_show = self.show
 
         self.show = s(self.model)
-        print "next show:" + self.show.name
+        print "next show:" + self.show.name  
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
         if self.show_params:
@@ -171,16 +173,15 @@ class ShowRunner(threading.Thread):
 
     def get_next_frame(self):
         "return a delay or None"
-#        print "z"
         try:
-#            print "zz"
             return self.framegen.next()
         except StopIteration:
-#            print "zzz"
             return None
 
     def run(self):
+        print "AAAAAAA"
         if not (self.show and self.framegen):
+            print "Next Next Next"
             self.next_show()
         print "1"
         while self.running:
@@ -188,14 +189,10 @@ class ShowRunner(threading.Thread):
                 self.check_queue()
 
                 d = self.get_next_frame()
-#                print "2"
                 self.model.go()
-#                print "3"
                 if d:
-#                    print "4"
                     real_d = d * self.speed_x
                     time.sleep(real_d)
-#                    print "5"
                     self.show_runtime += real_d
                     if self.show_runtime > self.max_show_time:
                         print "max show time elapsed, changing shows"
@@ -208,8 +205,11 @@ class ShowRunner(threading.Thread):
             except Exception:
                 print "unexpected exception in show loop!"
                 traceback.print_exc()
-                self.next_show()
-#        print "X"
+                if self.fail_hard:
+                    raise
+                else:
+                    self.next_show()
+
 
 def osc_listener(q, port=5700):
     "Create the OSC Listener thread"
@@ -222,17 +222,17 @@ def osc_listener(q, port=5700):
     st.daemon = True
     return st
 
-def bonjour_server(name="LedStrip", port=5700):
+def bonjour_server(name="TriGrid", port=5700):
     "Create the bonjour server, returns (thread, shutdownEvent)"
     from lib import bonjour
     shutdownEvent = threading.Event()
     st = threading.Thread(name="Bonjour broadcaster", target=bonjour.serve_forever, args=(name, port, shutdownEvent))
     return (st, shutdownEvent)
 
-class LEDServer(object):
-    def __init__(self, led_model, args):
+class TriangleServer(object):
+    def __init__(self, tri_model, args):
         self.args = args
-        self.led_model = led_model
+        self.tri_model = tri_model
 
         self.queue = Queue.LifoQueue()
 
@@ -247,12 +247,12 @@ class LEDServer(object):
         self._create_services()
 
     def _create_services(self):
-        "Create LED services, trying to fail gracefully on missing dependencies"
+        "Create TRI services, trying to fail gracefully on missing dependencies"
         # Bonjour advertisement
         # XXX can this also advertise the web interface?
         # XXX should it only advertise services that exist?
         try:
-            (t, flag) = bonjour_server(name="LEDStrip@" + util.get_hostname("unknown"))
+            (t, flag) = bonjour_server(name="TriGrid@" + util.get_hostname("unknown"))
             self.bonjour_thread = t
             self.bonjour_exit_flag = flag
         except Exception, e:
@@ -265,14 +265,14 @@ class LEDServer(object):
             print "WARNING: Can't create OSC listener"
 
         # Show runner
-        self.runner = ShowRunner(self.led_model, self.queue, args.max_time)
+        self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
         if args.shows:
             print "setting show:", args.shows[0]
             self.runner.next_show(args.shows[0])
 
     def start(self):
         if self.running:
-            print "start() called, but led_strip is already running!"
+            print "start() called, but tri_grid is already running!"
             return
 
         try:
@@ -286,7 +286,7 @@ class LEDServer(object):
 
             self.running = True
         except Exception, e:
-            print "Exception starting led_strip!"
+            print "Exception starting tri_grid!!"
             traceback.print_exc()
 
     def stop(self):
@@ -303,7 +303,7 @@ class LEDServer(object):
 
                 self.running = False
             except Exception, e:
-                print "Exception stopping led_strip!"
+                print "Exception stopping tri_grid!!"
                 traceback.print_exc()
 
     def go_headless(self):
@@ -356,6 +356,7 @@ if __name__=='__main__':
     parser.add_argument('--list', action='store_true', help='List available shows')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
                         help='name of show (or shows) to run')
+    parser.add_argument('--fail-hard', type=bool, default=True, help="For production runs, when shows fail, the show runner moves to the next show")
 
     args = parser.parse_args()
 
@@ -367,19 +368,19 @@ if __name__=='__main__':
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
-        print "Using LEDSimulator at %s:%d" % (sim_host, sim_port)
-        #        raise Exception("LED Simulator not Supported")
+        print "Using TriSimulator at %s:%d" % (sim_host, sim_port)
+
         from model.simulator import SimulatorModel
-        model = SimulatorModel(sim_host, port=sim_port, model_json="./data/led_strip2.json")
-        led_strip = led_strip.make_led(model, './data/led_strip.geom')
+        model = SimulatorModel(sim_host, port=sim_port, model_json='./data/6_tri.json', keys_int=True)
+        triangle_grid = triangle_grid.make_tri(model, 15)
     else:
         print "Starting OLA"
         from model.ola_model import OLAModel
-        model = OLAModel(800, model_json="./data/led_strip2.json")
+        model = OLAModel(800, model_json="./data/6_tri.json")
 
-        led_strip = led_strip.make_led(model, './data/led_strip.geom')
+        triangle_grid = triangle_grid.make_tri(model, 6)
 
-    app = LEDServer(led_strip, args)
+    app = TriangleServer(triangle_grid, args)
     try:
         app.start() # start related service threads
 
@@ -390,7 +391,7 @@ if __name__=='__main__':
             app.go_headless()
 
     except Exception, e:
-        print "Unhandled exception running LED!"
+        print "Unhandled exception running TRI!"
         traceback.print_exc()
     finally:
         app.stop()

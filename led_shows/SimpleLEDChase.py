@@ -51,6 +51,10 @@ class SimpleLEDChase(object):
 
             df["LED1"]['lead_cell'] += r.randrange(0,5)
             df["LED1"]['following_cell'] += r.randrange(0,5)   
-
+            
+#            if df["LED1"]['lead_cell'] > 63:
+#                df["LED1"]['lead_cell'] = 1
+#            if df["LED1"]['following_cell'] > 63:
+#                df["LED1"]['following_cell'] = 1
             # then wait to draw the next frame
             yield self.frame_delay
