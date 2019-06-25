@@ -52,11 +52,12 @@ low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
 hi_interp  = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 class ShowRunner(threading.Thread):
-    def __init__(self, model, queue, max_showtime=240):
+    def __init__(self, model, queue, max_showtime=240, fail_hard=True):
         super(ShowRunner, self).__init__(name="ShowRunner")
         self.model = model
         self.queue = queue
 
+        self.fail_hard = fail_hard
         self.running = True
         self.max_show_time = max_showtime
         self.show_runtime = 0
@@ -172,16 +173,15 @@ class ShowRunner(threading.Thread):
 
     def get_next_frame(self):
         "return a delay or None"
-#        print "z"
         try:
-#            print "zz"
             return self.framegen.next()
         except StopIteration:
-#            print "zzz"
             return None
 
     def run(self):
+        print "AAAAAAA"
         if not (self.show and self.framegen):
+            print "Next Next Next"
             self.next_show()
         print "1"
         while self.running:
@@ -189,14 +189,10 @@ class ShowRunner(threading.Thread):
                 self.check_queue()
 
                 d = self.get_next_frame()
-#                print "2"
                 self.model.go()
-#                print "3"
                 if d:
-#                    print "4"
                     real_d = d * self.speed_x
                     time.sleep(real_d)
-#                    print "5"
                     self.show_runtime += real_d
                     if self.show_runtime > self.max_show_time:
                         print "max show time elapsed, changing shows"
@@ -209,8 +205,11 @@ class ShowRunner(threading.Thread):
             except Exception:
                 print "unexpected exception in show loop!"
                 traceback.print_exc()
-                self.next_show()
-#        print "X"
+                if self.fail_hard:
+                    raise
+                else:
+                    self.next_show()
+
 
 def osc_listener(q, port=5700):
     "Create the OSC Listener thread"
@@ -266,7 +265,7 @@ class TriangleServer(object):
             print "WARNING: Can't create OSC listener"
 
         # Show runner
-        self.runner = ShowRunner(self.tri_model, self.queue, args.max_time)
+        self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
         if args.shows:
             print "setting show:", args.shows[0]
             self.runner.next_show(args.shows[0])
@@ -357,6 +356,7 @@ if __name__=='__main__':
     parser.add_argument('--list', action='store_true', help='List available shows')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
                         help='name of show (or shows) to run')
+    parser.add_argument('--fail-hard', type=bool, default=True, help="For production runs, when shows fail, the show runner moves to the next show")
 
     args = parser.parse_args()
 
@@ -372,7 +372,7 @@ if __name__=='__main__':
 
         from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/6_tri.json', keys_int=True)
-        triangle_grid = triangle_grid.make_tri(model, 6)
+        triangle_grid = triangle_grid.make_tri(model, 15)
     else:
         print "Starting OLA"
         from model.ola_model import OLAModel

@@ -76,9 +76,9 @@ class SimulatorModel(object):
                 self.dirty[sim_key] = color
             else:
                 print("WARNING: {0} not in cell ID MAP".format(cell))
-                raise
+#                raise
         except:
-            from IPython import embed; embed() 
+#            from IPython import embed; embed() 
             print "YYY"
 
     def set_cells(self, cells, color):

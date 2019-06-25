@@ -14,8 +14,7 @@ class TriangleGrid(object):
     def __init__(self, model, n_rows):
 
         self.model = model
-#        from IPython import embed; embed()
-        
+        self.n_rows = n_rows
         self.build_triangle_grid(n_rows)
 
     def __str__(self):
@@ -42,8 +41,7 @@ class TriangleGrid(object):
 
         curr_row = 0
         while curr_row <= n_rows:
-            print "Curr Row:", curr_row
-
+#            print "Curr Row:", curr_row
             left_set = False
             cells_added = 0
             up_down = 'up'
@@ -78,16 +76,19 @@ class TriangleGrid(object):
                 else:
                     is_l_edge = False
                 
-                if cell_id == end_cell_id:
+                if cell_id == end_cell_id+1:
                     is_r_edge = True
                 else:
                     is_r_edge = False
                 if curr_row == n_rows:
-                    is_btm_edge = True
+                    if up_down in 'up':
+                        is_btm_edge = True
+                    else:
+                        is_btm_edge = False
                 else:
                     is_btm_edge = False
                 cells_added += 1
-                print "\t\tCell ID:", cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge
+#                print "\t\tCell ID:", cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge
                 self.cells.append(TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos))
 
 
@@ -111,12 +112,18 @@ class TriangleGrid(object):
         self.set_all_cells(RGBW(0,0,0,0))
         self.go()
 
+    def get_cell_by_id(self, cell_id):
+        return self.cells[cell_id+1]
+
+    def get_cell_by_array_posn(self,arr_pos):
+        return self.cells[arr_pos]
+
     def set_all_cells(self, color):
         for i in self.cells:
             self.set_cell(i.id,color)
 
     def set_cell(self,cell, color):
-        from IPython import embed; embed()
+        #from IPython import embed; embed()
         self.model.set_cell(cell, color)
 
     def set_cells(self, cells, color):
@@ -148,46 +155,55 @@ class TriangleGrid(object):
     def get_left_side_cells(self):
         cells = []
         for i in self.cells:
-            if i.is_left_edge:
+            if i.is_left_edge():
                 cells.append(i)
         return cells
             
     def get_right_side_cells(self):
         cells = []
         for i in self.cells:
-            if i.is_right_edge:
+            if i.is_right_edge():
                 cells.append(i)
         return cells
 
     def get_bottom_side_cells(self):
         cells = []
         for i in self.cells:
-            if i.is_bottom_edge:
+            if i.is_bottom_edge():
                 cells.append(i)
         return cells
 
     def get_up_cells(self):
         cells = []
         for i in self.cells:
-            if i.is_up:
+            if i.is_up():
                 cells.append(i)
         return cells
 
     def get_down_cells(self):
         cells = []
         for i in self.cells:
-            if i.is_down:
+            if i.is_down():
                 cells.append(i)
         return cells
 
+    def is_edge(self):
+        if self.l_edge: return True
+        if self.r_edge: return True
+        if self.btm_side: return True
 
 class TriangleCell(object):
     def __init__(self,  cell_id,  row, up_down, is_top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos):
 
         self.id = cell_id
-        self.row_num = row
-        self.left_edge_cell = is_l_edge
-        self.right_edge_cell = is_r_edge
+        self.row_n = row
+        self.row_pos = row_pos
+        self.l_edge = is_l_edge
+        if cell_id in [1,3]:
+            self.l_edge = True
+        self.r_edge = is_r_edge
+        if cell_id in [1,3]:
+            self.r_edge= True
         self.top_cell = is_top
         self.btm_right = r_corner
         self.btm_left = l_corner
@@ -199,21 +215,25 @@ class TriangleCell(object):
     def get_id(self):
         return self.id
     def get_row_num(self):
+        return self.row_n
+    def get_row_pos(self):
+        return self.row_pos
+    def get_row_num(self):
         return self.row_num
     def is_left_edge(self):
-        return self.is_l_edge
+        return self.l_edge
     def is_right_edge(self):
-        return self.is_r_edge
+        return self.r_edge
     def is_bottom_edge(self):
-        return self.is_btm_side
+        return self.btm_side
     def is_top(self):
-        return self.is_top
+        return self.top_cell
     def is_right_btm_corner(self):
-        return(self.btm_right)
+        return self.btm_right
     def is_left_btm_corner(self):
         return self.btm_left
-    def row_position(self):
-        return self.row_pos
+    def row_num(self):
+        return self.row_n
     def is_up(self):
         return self.up_down in "up"
     def is_down(self):
