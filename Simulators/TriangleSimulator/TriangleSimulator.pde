@@ -187,7 +187,7 @@ HexForm makeSimpleGrid(int rows, int cols, int start_x, int start_y) {
     int y3 = row.getInt("y3");
     int id = row.getInt("id");
     //triangle(x1,y1,x2,y2,x3,y3); 
-    print(shape);
+   // print(shape);
     form.add(new Hex(x1,y1,x2,y2,x3,y3,id),id);  
     }
   
@@ -210,7 +210,8 @@ class HexForm {
 //    } else {
 //      h.setId(String.valueOf(hexId));
 //    }
-    h.setId(String.valueOf(hexId))
+    print("HEXID:", hexId);
+    h.setId(hexId);
     hexes.add(h);
   }
   
@@ -245,6 +246,7 @@ class Hex {
   int y2;
   int x3;
   int y3;
+  int cell;
  
   Integer c; // can store color/int or null
   
@@ -258,10 +260,11 @@ class Hex {
     this.y3 = y3;
     this.c = null;
     this.id = id;
+    this.cell = 0;
   }
 
-  void setId(String id) {
-    //this.id = id;
+  void setId(int id) {
+    this.id = id;
     print("pass");
   }
   
@@ -282,29 +285,36 @@ class Hex {
     
     // draw text label
     if (DRAW_LABELS && this.id != 0) {
-      fill(defaultHexLine());
-    
-      if (this.id % 2 == 0) {
-        textAlign(CENTER);
-        text(this.id,this.x1,this.y1+30);
+//      fill(defaultHexLine());
+//      if (this.cell == 0) {
+        fill(defaultHexLine());
+         
+        if (this.y1 == this.y2) {
+          textAlign(CENTER); 
+          print(this.id,"pointy");
+          text(this.id,this.x1+12,this.y1+10);
+        } else {
+          textAlign(BOTTOM); 
+          print(this.id,"flat");
+          text(this.id,this.x1,this.y1+30);
+        }
+//        this.cell = 1;
+//      } else {
+//        textAlign(BOTTOM);
+//        text(this.id,this.x1+20,this.y3);
+//        this.cell = 0;
+  //    }
+  //    if (this.id % 2 == 0) {
+   //     textAlign(CENTER);
+    //    text(this.id,this.x1,this.y1);/
+//
+  //    } else {
+    //    textAlign(CENTER);
+      //  text(this.id,this.x3+5,this.y3);
+//
+  //   }
 
-      } else {
-        textAlign(BOTTOM);
-        text(this.id,this.x1+10,this.y1+18);
-
-     }
-
-  
-    
-    
-      
-      
-      
-      
-      
-      
-      
-      print(this.id, this.x1, this.y2,this.x2, this.y2,this.x3, this.y3 );
+ //     print(this.id, this.x1, this.y2,this.x2, this.y2,this.x3, this.y3 );
     }
     noFill();
     

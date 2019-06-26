@@ -93,6 +93,7 @@ class LEDstrip(object):
         self.model.set_cells(cells, color)
 
     def set_all_cells(self, color):
+        print 'XXXXXX', color.rgbw
         self.set_cells(self.model.CELL_MAP.keys(), color)
 
     def clear(self):
