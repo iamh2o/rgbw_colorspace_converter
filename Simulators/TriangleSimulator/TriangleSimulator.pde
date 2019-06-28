@@ -176,7 +176,7 @@ HashMap<Integer,String> loadLabels(String labelFile) {
 
 HexForm makeSimpleGrid(int rows, int cols, int start_x, int start_y) {
   HexForm form = new HexForm();
-  table = loadTable("/Users/jmajor/projects/pyramidtriangles/Simulators/TriangleSimulator/triangleCellMapping.csv", "header");
+  table = loadTable("triangleCellMapping.csv", "header");
   for (TableRow row : table.rows()) {
     String shape = row.getString("shape");
     int x1 = row.getInt("x1");
