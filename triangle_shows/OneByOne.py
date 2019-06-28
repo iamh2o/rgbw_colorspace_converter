@@ -35,8 +35,8 @@ class OneByOne(object):
             
             cell_n += 1
 
-            if cell_n > ncells:
-                self.cells.clear()   
+            if cell_n > ncells-1:
+                #self.tri_grid.cells.clear()   
                 cell_n = 0
             if col == 255:
                 col = 0
