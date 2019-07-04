@@ -1,10 +1,22 @@
 from collections import defaultdict, namedtuple
 from color import RGBW
+from array import *
 
 
 def make_tri(model, n_rows):
     return TriangleGrid(model,n_rows)
 
+def calc_last_row_len(max_row):
+    row_len = 1
+    curr_row = 1
+
+    while curr_row < max_row:
+        if max_row == 1:
+            row_len = 1            
+        else:
+            row_len += 2
+        curr_row += 1
+    return row_len
 
 ##
 ## Triangle Grid class to represent one strip
@@ -15,6 +27,9 @@ class TriangleGrid(object):
 
         self.model = model
         self.n_rows = n_rows
+        self.len_of_last_row = calc_last_row_len(n_rows)
+        
+        self.triangle_grid = [[None for i in range(self.len_of_last_row)] for j in range(self.n_rows)]  #B/C this way of building a 2d array give you buggy garbage where setting [0][0] assigns all rows at posn [0] the value you are seetting[[None]*self.len_of_last_row]*self.n_rows
         self.build_triangle_array(n_rows)
 #        self.build_triangle_grid()
 #        from IPython import embed; embed()
@@ -65,6 +80,9 @@ class TriangleGrid(object):
             raise Exception('row num must be <15')
         if len(self.cells) > 0:
             raise Exception('You have already built a triangle grid, clear this one first')
+
+        grid_y_start_pos = (int(self.len_of_last_row)-1)/2
+        grid_y_curr_pos = grid_y_start_pos
 
         row_len = 0
         end_cell_id = 0
@@ -120,19 +138,27 @@ class TriangleGrid(object):
                     is_btm_edge = False
                 cells_added += 1
 
+                tco = None #triagnel cell object
                 print "XXXX", cell_id, top_pixel, btm_pixel, curr_row
                 if up_down == 'up':
-                    self.cells.append(TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [top_pixel, top_pixel-1, top_pixel-2, top_pixel-3, top_pixel-4, top_pixel-5]))
+                    tco = TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [top_pixel, top_pixel-1, top_pixel-2, top_pixel-3, top_pixel-4, top_pixel-5])
+                    self.cells.append(tco)
                     top_pixel -= 6                
                     up_down = 'down'
                 else:
                     if curr_row >1:
-                        self.cells.append(TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [btm_pixel, btm_pixel+1, btm_pixel+2, btm_pixel+3, btm_pixel+4, btm_pixel+5]))
+                        tco = TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [btm_pixel, btm_pixel+1, btm_pixel+2, btm_pixel+3, btm_pixel+4, btm_pixel+5])
+                        self.cells.append(tco)
                         btm_pixel +=6
                     else:
-                        self.cells.append(TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [btm_pixel, btm_pixel-1, btm_pixel-2, btm_pixel-3, btm_pixel-4, btm_pixel-5]))
+                        tco = TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [btm_pixel, btm_pixel-1, btm_pixel-2, btm_pixel-3, btm_pixel-4, btm_pixel-5])
+                        self.cells.append(tco)
                         btm_pixel -= 6
                     up_down = 'up' 
+
+                #Add Cell To Triangle Grid!
+                self.triangle_grid[curr_row][grid_y_curr_pos] = tco
+                grid_y_curr_pos += 1
 
 
                 if l_corner is True:
@@ -142,19 +168,23 @@ class TriangleGrid(object):
                 row_pos += 1
 
                 cell_id +=1
+            
             if cell_id == end_cell_id:
                 up_down = 'up'
-                
             end_cell_id += 2 + cells_added
             
+            grid_y_curr_pos = grid_y_start_pos - curr_row-1 
+
             curr_row += 1
             btm_pixel -= 2 #(curr_row*6)+7
             if curr_row >1:
                 btm_pixel -=  (curr_row*6)+9+9
                 
             top_pixel -= (curr_row*6)+9
-#        from IPython import embed; embed()
-#        raise
+            
+
+        from IPython import embed; embed()
+        raise
 
     def go(self):
         self.model.go()
