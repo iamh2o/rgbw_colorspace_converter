@@ -371,14 +371,14 @@ if __name__=='__main__':
         print "Using TriSimulator at %s:%d" % (sim_host, sim_port)
 
         from model.simulator import SimulatorModel
-        model = SimulatorModel(sim_host, port=sim_port, model_json='./data/6_tri.json', keys_int=True)
-        triangle_grid = triangle_grid.make_tri(model, 15)
+        model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json', keys_int=True)
+        triangle_grid = triangle_grid.make_tri(model, 3)
     else:
         print "Starting OLA"
         from model.ola_model import OLAModel
-        model = OLAModel(800, model_json="./data/6_tri.json")
+        model = OLAModel(800, model_json="./data/pixel_map.json")
 
-        triangle_grid = triangle_grid.make_tri(model, 6)
+        triangle_grid = triangle_grid.make_tri(model, 3)
 
     app = TriangleServer(triangle_grid, args)
     try:

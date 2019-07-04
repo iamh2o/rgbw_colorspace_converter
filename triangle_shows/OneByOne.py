@@ -9,7 +9,7 @@ class OneByOne(object):
         # walk pixels up and downs strip
         self.tri_grid = tri_grid
 
-        self.frame_delay = 0.1
+        self.frame_delay = 1.5
 
 #        from IPython import embed; embed()
 
@@ -24,20 +24,19 @@ class OneByOne(object):
         """
 
 #        from IPython import embed; embed() 
-        ncells = len(self.tri_grid.cells)
+        ncells = len(self.tri_grid.cells)-1
         self.tri_grid.clear()
         cell_n = 0
         col = 0
         while True:
 #            from IPython import embed; embed()    
             self.tri_grid.clear()
-            self.tri_grid.set_cell(self.tri_grid.cells[cell_n].get_id(), RGBW(col,255,25,25)) 
+            print cell_n
+            self.tri_grid.set_cell(self.tri_grid.cells[cell_n].get_id(), RGBW(255,255,25,25)) 
             
+
+            if cell_n >= ncells:
+                cell_n = -1
             cell_n += 1
 
-            if cell_n > ncells-1:
-                #self.tri_grid.cells.clear()   
-                cell_n = 0
-            if col == 255:
-                col = 0
             yield self.frame_delay

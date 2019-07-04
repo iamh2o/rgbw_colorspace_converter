@@ -2,7 +2,7 @@
 Model to communicate with OLA
 Based on ola_send_dmx.py
 
-Cells are representations of the addressible unit in your object. Cells in this model only have one LED each.
+Pixels are representations of the addressible unit in your object. Cells can have multiple pixels in this model only have one LED each.
 
 
 
@@ -25,16 +25,19 @@ class OLAModel(object):
     def __init__(self, max_dmx, model_json=None):
         # XXX any way to check if this is a valid connection?
 
-        self.CELL_MAP = None
+        self.PIXEL_MAP = None
         self._map_leds(model_json)
         self.wrapper = ClientWrapper()
         self.client = self.wrapper.Client()
         #Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
-        #Cells have one LED each. Each LED has 4 DMX addresses
+        #Pixels are an LED represented by 4 DMX addresses
+        
+        #initilizing just 4 universes!!! Need to make this more configurable.
         self.leds = {0: [0] * max_dmx,
                        1: [0] * max_dmx,
                        2: [0] * max_dmx,
-                       3: [0] * max_dmx
+                       3: [0] * max_dmx,
+                       4: [0] * max_dmx
                        }
 
     def _map_leds(self,f):
@@ -49,7 +52,7 @@ class OLAModel(object):
             ds = json.load(json_file, object_hook=keystoint) #transform json keys to int()
 #        from IPython import embed; embed()
 
-        self.CELL_MAP = ds
+        self.PIXEL_MAP = ds
 #        for i in ds:
 
 
@@ -60,27 +63,27 @@ class OLAModel(object):
 
     # Model basics
 
-    def cell_ids(self):
+    def pixel_ids(self):
         # return LED_IDS        
-        return self.CELL_MAP.keys()
+        return self.PIXEL_MAP.keys()
 
-    def set_cell(self, cell, color):
+    def set_pixel(self, pixel, color):
 
 #        from IPython import embed; embed()        
-        if cell in self.CELL_MAP:            
-            ux = self.CELL_MAP[cell][0] 
-            ix = self.CELL_MAP[cell][1] - 1 # dmx is 1-based, python lists are 0-based
+        if pixel in self.PIXEL_MAP:            
+            ux = self.PIXEL_MAP[pixel][0] 
+            ix = self.PIXEL_MAP[pixel][1] - 1 # dmx is 1-based, python lists are 0-based
             
             self.leds[ux][ix]   = color.g
             self.leds[ux][ix+1] = color.r
             self.leds[ux][ix+2] = color.b
             self.leds[ux][ix+3] = color.w
         else:
-            print("WARNING: {0} not in cell ID MAP".format(cell))
+            print("WARNING: {0} not in pixel ID MAP".format(pixel))
 
-    def set_cells(self, cells, color):
-        for cell in cells:
-            self.set_cell(cell, color)
+    def set_pixelss(self, pixels, color):
+        for pixel in pixels:
+            self.set_pixel(pixel, color)
 
     def go(self):
         data_to_send= {}
@@ -88,27 +91,13 @@ class OLAModel(object):
             data = array.array('B')
             data.extend(self.leds[ux])
             data_to_send[ux] = data
-    
-        for u in data_to_send:
 
+        for u in data_to_send:
             self.client.SendDmx(int(u), data_to_send[u], callback)
 
+        
 
-###WHAT IS THIS
+
 if __name__ == '__main__':
     raise Exception('mysterious code I did not understand so commented out')
-#    class RGB(object):
-#        def __init__(self, r,g,b):
-#            self.r = r
-#            self.g = g
-#            self.b = b
-#        def __str__(self):
-#            return "RGB(%d,%d,%d)" % (self.r, self.g, self.b)
-#
-#    model = OLAModel(128, universe=0)
-#
-#    model.set_cell('13p', RGB(255,0,0))
-#    model.set_cell('16p', RGB(0,0,255))
-#    model.go()
-#
-#    data.extend(self.leds)
+
