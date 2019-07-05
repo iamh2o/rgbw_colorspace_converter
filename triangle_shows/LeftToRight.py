@@ -23,8 +23,6 @@ class LeftToRight(object):
         frame.  Delay numbers are in seconds.
         """
 
-#        from IPython import embed; embed() 
-
         xlen = len(self.tri_grid._triangle_grid)
         ylen = len(self.tri_grid._triangle_grid[0])
         x =0
