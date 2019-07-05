@@ -27,17 +27,17 @@ Don't worry too much if you can't get some of the dependencies to install - you'
 
 First, check out the repository:
 
-	hg clone ssh://hg@bitbucket.org/grgbrn/baaahs2014
+       	hg clone THISREPO
 
-The simulator lives in the 'SheepSimulator' directory.  Open the file 'SheepSimulator.pde' in Processing, and run it.
+The simulator lives in the 'Simulators/TriangleSimulator/' directory.  Open the file 'TriangleSimulator.pde' in Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-	!! python go_*.py --simulator  ## broken for the moment
+	!! python go_tri.py --simulator 
 
 You can also specify which show to run by using the name of the show:
 
-    python go_*.py --simulator MyShow
+    python go_Tri.py --simulator UpDown
 
 You can also choose which show is running through the web interface:
 
@@ -94,7 +94,7 @@ Debian / Ubuntu:
 -1)Power the DMX4pro on
 0) ping it to see if it is visible to your network
 1) source your ve
-2) start ola daemon ('->olad').  This should start a server who has a UI you can access at localhost:9090
+2) start ola daemon ('olad').  This should start a server who has a UI you can access at localhost:9090
 3)go to localhost:9090
 4)click 'add universe', give it universe #0 and any name you like.
 5)Add the 'Device' ArtNet [IP] Artnet Universe 0:0:0 Direction  == OUTPUT
