@@ -67,7 +67,7 @@ class OLAModel(object):
         # return LED_IDS        
         return self.PIXEL_MAP.keys()
 
-    def set_pixel(self, pixel, color):
+    def set_pixel(self, pixel, color, cellid=None):
 
 #        from IPython import embed; embed()        
         if pixel in self.PIXEL_MAP:            

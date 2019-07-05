@@ -372,13 +372,13 @@ if __name__=='__main__':
 
         from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json', keys_int=True)
-        triangle_grid = triangle_grid.make_tri(model, 3)
+        triangle_grid = triangle_grid.make_tri(model, 5)
     else:
         print "Starting OLA"
         from model.ola_model import OLAModel
         model = OLAModel(800, model_json="./data/pixel_map.json")
 
-        triangle_grid = triangle_grid.make_tri(model, 3)
+        triangle_grid = triangle_grid.make_tri(model, 5)
 
     app = TriangleServer(triangle_grid, args)
     try:

@@ -64,22 +64,28 @@ class SimulatorModel(object):
     def cell_ids(self):
         return self.CELL_IDS.keys()
 
+
+    
     def set_cell(self, cell, color):
 
-#        from IPython import embed; embed()
+        cell = cell +1 #Simulator cells not 0 based
         try:
             if cell  in self.CELL_MAP:
                 ux = self.CELL_MAP[cell][0]
                 ix = self.CELL_MAP[cell][1] - 1 #
-                sim_key = cell#self.CELL_MAP[cell]
+                sim_key = cell
             #The simulator does not care about universes, but does care about UIDs. I'm manufacturing one by joinng the Universe and fixture ID into the key.
                 self.dirty[sim_key] = color
             else:
                 print("WARNING: {0} not in cell ID MAP".format(cell))
-#                raise
+
         except:
-#            from IPython import embed; embed() 
-            print "YYY"
+            pass
+
+
+    def set_pixel(self,pixel,color, cellid):
+
+        self.set_cell(cellid,color)
 
     def set_cells(self, cells, color):
         for cell in cells:

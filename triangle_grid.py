@@ -200,11 +200,11 @@ class TriangleGrid(object):
             print "WARNING: Skipping 'Nonetype' cell"
         else:
             for pixel in cell.get_pixels():
-                self._model.set_pixel(pixel, color)
+                self._model.set_pixel(pixel, color, cell.get_id())
 
     def set_cell_by_cellid(self,cell, color):
         for pixel in self._cells[cell].get_pixels():
-            self._model.set_pixel(pixel, color)
+            self._model.set_pixel(pixel, color, cell)
 
 
     def get_all_cells(self):
@@ -214,7 +214,7 @@ class TriangleGrid(object):
     def set_cells_by_cellid(self, cells, color):
         for cell in cells:
             for pixel in self._cells[cell].get_pixels():
-                self._model.set_pixel(pixel, color)
+                self._model.set_pixel(pixel, color, cell.get_id())
                 
     def set_cells(self, cells, color):
         for cell in cells:
@@ -222,15 +222,16 @@ class TriangleGrid(object):
                 print "WARNING: Skipping 'Nonetype' cell"
             else:
                 for pixel in cell.get_pixels():
-                    self._model.set_pixel(pixel, color)
+                    self._model.set_pixel(pixel, color, cell.get_id())
 
     def set_all_cells(self, color):
         for cell in self._cells:
             for pixel in cell.get_pixels():
-                self._model.set_pixel(pixel, color)
+                self._model.set_pixel(pixel, color, cell.get_id())
 
-    def set_pixel(self, pixel, color):
-        self._model.set_pixel(pixel, color)
+
+    def set_pixel(self, pixel, color, cellid):
+        self._model.set_pixel(pixel, color, cellid)  ###Have to pass the cellid through b/c the simulator does not understand pixels
 
 
     def clear(self):
