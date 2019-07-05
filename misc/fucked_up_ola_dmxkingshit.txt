@@ -23,3 +23,11 @@ Repet these steps for the next 3 universes.
 From the DMX console of each universe, you can send all white or all black to the universe to make sure mappings are correct.
 
 NEXT UP-  how do we manage multiple universes via the curren OLAmodel?
+
+
+
+MODEL GEOM MAPPING JSON CHANGED TO
+{ UNIVERSEID : pixel# : [universe#,dmxstart#]}
+
+You need to set up 4 universes in OLAD.  Starting at universe 0 and going thru 3.
+All artnetout.
