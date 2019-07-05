@@ -378,7 +378,7 @@ if __name__=='__main__':
         from model.ola_model import OLAModel
         model = OLAModel(800, model_json="./data/pixel_map.json")
 
-        triangle_grid = triangle_grid.make_tri(model, 5)
+        triangle_grid = triangle_grid.make_tri(model, 3)
 
     app = TriangleServer(triangle_grid, args)
     try:
