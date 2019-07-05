@@ -35,13 +35,13 @@ class UpDown(object):
             if a in "up":
                 print 'up'
                 for i in self.cells.get_up_cells():
-                    print "Up", i.id
-                    self.cells.set_cell(i.id, RGBW(col,25,255,25)) 
+                    print "Up", i.get_id()
+                    self.cells.set_cell(i.get_id(), RGBW(col,25,255,25)) 
             else:
                 print 'down'
                 for i in self.cells.get_down_cells():
-                    print "down",i.id
-                    self.cells.set_cell(i.id, RGBW(col,222,0,205))
+                    print "down",i.get_id()
+                    self.cells.set_cell(i.get_id(), RGBW(col,222,0,205))
 
 
             if a in "up":

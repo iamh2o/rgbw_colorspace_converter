@@ -24,16 +24,15 @@ class OneByOne(object):
         """
 
 #        from IPython import embed; embed() 
-        ncells = len(self.tri_grid.cells)-1
+        ncells = len(self.tri_grid.get_cells())-1
         self.tri_grid.clear()
         cell_n = 0
         col = 0
         while True:
-#            from IPython import embed; embed()    
+
             self.tri_grid.clear()
             print cell_n
-            self.tri_grid.set_cell(self.tri_grid.cells[cell_n].get_id(), RGBW(255,255,25,25)) 
-            
+            self.tri_grid.set_cell(self.tri_grid.get_cells()[cell_n].get_id(), RGBW(255,255,25,25)) 
 
             if cell_n >= ncells:
                 cell_n = -1

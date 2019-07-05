@@ -13,7 +13,7 @@ class Random(object):
 
 #        from IPython import embed; embed()
 
-        self.n_cells = len(self.tri_grid.cells)
+        self.n_cells = len(self.tri_grid.get_cells())
 
     def next_frame(self):
         """

@@ -18,6 +18,7 @@ def calc_last_row_len(max_row):
         curr_row += 1
     return row_len
 
+
 ##
 ## Triangle Grid class to represent one strip
 ##
@@ -25,13 +26,13 @@ def calc_last_row_len(max_row):
 class TriangleGrid(object):
     def __init__(self, model, n_rows):
 
-        self.model = model
-        self.n_rows = n_rows
-        self.len_of_last_row = calc_last_row_len(n_rows)
+        self._model = model
+        self._n_rows = n_rows
+        self._len_of_last_row = calc_last_row_len(n_rows)
         
-        self.triangle_grid = [[None for i in range(self.len_of_last_row)] for j in range(self.n_rows)]  #B/C this way of building a 2d array give you buggy garbage where setting [0][0] assigns all rows at posn [0] the value you are seetting[[None]*self.len_of_last_row]*self.n_rows
-        self.build_triangle_array(n_rows)
-#        self.build_triangle_grid()
+        self._triangle_grid = [[None for i in range(self._len_of_last_row)] for j in range(self._n_rows)]  #B/C this way of building a 2d array give you buggy garbage where setting [0][0] assigns all rows at posn [0] the value you are seetting[[None]*self.len_of_last_row]*self.n_rows
+        self._build_triangle_array_and_grid(n_rows)
+
 #        from IPython import embed; embed()
 
     def __str__(self):
@@ -39,49 +40,19 @@ class TriangleGrid(object):
 
     def __repr__(self):
         print "what is this for?"
-#        raise Exception('what is this for?')
-
-    def build_triangle_grid(self):
-#        from IPython import embed; embed()  
-
-        self.model_grid = [[None]*self.last_row_len]*self.n_rows
-
-        row_len = len(self.model_grid[0])
-        bottom_row_idx = self.n_rows-1
-
-        last_cell = len(self.cells)-1
-
-        row_idx = bottom_row_idx
-
-        next_row_len = row_len -2
-        row_pos = row_len-1
-        row_pos_offset = 2
 
 
-        while last_cell >=0:
-#            from IPython import embed; embed()
-
-            print self.cells[last_cell]
-            self.model_grid[row_idx][row_pos] = self.cells[last_cell]
-                       
-            row_pos -= 1
-            last_cell -= 1
-            
-            if row_pos == next_row_len:
-                row_pos = row_len - row_pos_offset
-            
-                
-
-    def build_triangle_array(self,n_rows):
-        self.cells = []
+        #OMG, this is such a nighmare... but it works...
+    def _build_triangle_array_and_grid(self,n_rows):
+        self._cells = []
         if n_rows < 1:
             raise Exception('row num must be 1+', n_rows)
         if n_rows > 16:
             raise Exception('row num must be <15')
-        if len(self.cells) > 0:
+        if len(self._cells) > 0:
             raise Exception('You have already built a triangle grid, clear this one first')
 
-        grid_y_start_pos = (int(self.len_of_last_row)-1)/2
+        grid_y_start_pos = (int(self._len_of_last_row)-1)/2
         grid_y_curr_pos = grid_y_start_pos
 
         row_len = 0
@@ -139,32 +110,31 @@ class TriangleGrid(object):
                 cells_added += 1
 
                 tco = None #triagnel cell object
-                print "XXXX", cell_id, top_pixel, btm_pixel, curr_row
                 if up_down == 'up':
                     tco = TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [top_pixel, top_pixel-1, top_pixel-2, top_pixel-3, top_pixel-4, top_pixel-5])
-                    self.cells.append(tco)
+                    self._cells.append(tco)
                     top_pixel -= 6                
                     up_down = 'down'
                 else:
                     if curr_row >1:
                         tco = TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [btm_pixel, btm_pixel+1, btm_pixel+2, btm_pixel+3, btm_pixel+4, btm_pixel+5])
-                        self.cells.append(tco)
+                        self._cells.append(tco)
                         btm_pixel +=6
                     else:
                         tco = TriangleCell(cell_id,  curr_row, up_down, top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, [btm_pixel, btm_pixel-1, btm_pixel-2, btm_pixel-3, btm_pixel-4, btm_pixel-5])
-                        self.cells.append(tco)
+                        self._cells.append(tco)
                         btm_pixel -= 6
                     up_down = 'up' 
 
                 #Add Cell To Triangle Grid!
-                self.triangle_grid[curr_row][grid_y_curr_pos] = tco
+                self._triangle_grid[curr_row][grid_y_curr_pos] = tco
                 grid_y_curr_pos += 1
 
 
                 if l_corner is True:
                     l_corner = False
                 loop_start = False
-                self.last_row_len = row_pos
+##                self.last_row_len = row_pos
                 row_pos += 1
 
                 cell_id +=1
@@ -183,54 +153,59 @@ class TriangleGrid(object):
             top_pixel -= (curr_row*6)+9
             
 
-        from IPython import embed; embed()
-        raise
+#        from IPython import embed; embed()
+#        raise
 
     def go(self):
-        self.model.go()
+        self._model.go()
 
     def clear(self):
         self.set_all_cells(RGBW(0,0,0,0))
         self.go()
 
+        
+    def get_cells(self):
+        return self._cells
+    def get_triangle_grid(self):
+        return self._triangle_grid
+
     def get_cell_by_id(self, cell_id):
-        return self.cells[cell_id+1]
+        return self._cells[cell_id+1]
 
     def get_cell_by_array_posn(self,arr_pos):
-        return self.cells[arr_pos]
+        return self._cells[arr_pos]
 
     def set_all_cells(self, color):
-        for i in self.cells:
+        for i in self._cells:
             for ii in i.get_pixels():
                 self.set_cell(ii,color)
 
     def set_cell(self,cell, color):
-        #from IPython import embed; embed()
-#        try:
-        for pixel in self.cells[cell].get_pixels():
-            print cell, pixel
-            self.model.set_pixel(pixel, color)
-#        except:
-#            from IPython import embed; embed()     
+        for pixel in self._cells[cell].get_pixels():
+            self._model.set_pixel(pixel, color)
 
     def set_cells(self, cells, color):
         for cell in cells:
-            for pixel  in self.cells[cell].get_pixels():
-                self.model.set_pixel(pixel,color)
+            for pixel  in self._cells[cell].get_pixels():
+                self._model.set_pixel(pixel,color)
 
     def all_cells(self):
         "Return the list of valid cell IDs"
-        return self.cells
+        return self._cells
 
     def set_cells(self, cells, color):
         for cell in cells:
-            for pixel in self.cells[cell].get_pixels():
-                self.model.set_pixel(pixel, color)
+            for pixel in self._cells[cell].get_pixels():
+                self._model.set_pixel(pixel, color)
 
     def set_all_cells(self, color):
-        for cell in self.cells:
+        for cell in self._cells:
             for pixel in cell.get_pixels():
-                self.model.set_pixel(pixel, color)
+                self._model.set_pixel(pixel, color)
+
+    def set_pixel(self, pixel, color):
+        self._model.set_pixel(pixel, color)
+
 
     def clear(self):
         ""
@@ -238,49 +213,54 @@ class TriangleGrid(object):
         self.go()
 
     def go(self):
-        self.model.go()
+        self._model.go()
 
     # convenience methods for grabbing useful parts of the triangle grid
 
     def get_left_side_cells(self):
         cells = []
-        for i in self.cells:
+        for i in self._cells:
             if i.is_left_edge():
                 cells.append(i)
         return cells
             
     def get_right_side_cells(self):
         cells = []
-        for i in self.cells:
+        for i in self._cells:
             if i.is_right_edge():
                 cells.append(i)
         return cells
 
     def get_bottom_side_cells(self):
         cells = []
-        for i in self.cells:
+        for i in self._cells:
             if i.is_bottom_edge():
                 cells.append(i)
         return cells
 
     def get_up_cells(self):
         cells = []
-        for i in self.cells:
+        for i in self._cells:
             if i.is_up():
                 cells.append(i)
         return cells
 
     def get_down_cells(self):
         cells = []
-        for i in self.cells:
+        for i in self._cells:
             if i.is_down():
                 cells.append(i)
         return cells
 
-    def is_edge(self):
-        if self.l_edge: return True
-        if self.r_edge: return True
-        if self.btm_side: return True
+    def is_edge(self,cell):
+        if cell._l_edge:
+            return True
+        elif cell._r_edge: 
+            return True
+        elif cell._btm_side: 
+            return True
+        else:
+            return False
 
 
 class TriangleCellGrid(object):
@@ -292,59 +272,59 @@ class TriangleCellGrid(object):
 class TriangleCell(object):
     def __init__(self,  cell_id,  row, up_down, is_top, l_corner, r_corner, is_l_edge, is_r_edge, is_btm_edge, row_pos, pixels=[]):
 
-        self.id = cell_id
-        self.row_n = row
-        self.row_pos = row_pos
-        self.l_edge = is_l_edge
+        self._id = cell_id
+        self._row_n = row
+        self._row_pos = row_pos
+        self._l_edge = is_l_edge
         if cell_id in [1,3]:
-            self.l_edge = True
-        self.r_edge = is_r_edge
+            self._l_edge = True
+        self._r_edge = is_r_edge
         if cell_id in [1,3]:
-            self.r_edge= True
-        self.top_cell = is_top
-        self.btm_right = r_corner
-        self.btm_left = l_corner
-        self.pointy_side = up_down
-        self.btm_side = is_btm_edge
-        self.up_down = up_down
-        self.pixels = pixels #do we really need a pixel class?
+            self._r_edge= True
+        self._top_cell = is_top
+        self._btm_right = r_corner
+        self._btm_left = l_corner
+        self._pointy_side = up_down
+        self._btm_side = is_btm_edge
+        self._up_down = up_down
+        self._pixels = pixels #do we really need a pixel class?
 
     def get_id(self):
-        return self.id
+        return self._id
 
     def get_pixels(self,oriented=True):
         if oriented:
-            if self.up_down is 'up':
-                return self.pixels
+            if self._up_down is 'up':
+                return self._pixels
             else:
-                return self.pixels[::-1]
+                return self._pixels[::-1]
         else:
-            return self.pixels
+            return self._pixels
 
     def get_row_num(self):
-        return self.row_n
+        return self._row_n
     def get_row_pos(self):
-        return self.row_pos
+        return self._row_pos
     def get_row_num(self):
-        return self.row_num
+        return self._row_num
     def is_left_edge(self):
-        return self.l_edge
+        return self._l_edge
     def is_right_edge(self):
-        return self.r_edge
+        return self._r_edge
     def is_bottom_edge(self):
-        return self.btm_side
+        return self._btm_side
     def is_top(self):
-        return self.top_cell
+        return self._top_cell
     def is_right_btm_corner(self):
-        return self.btm_right
+        return self._btm_right
     def is_left_btm_corner(self):
-        return self.btm_left
+        return self._btm_left
     def row_num(self):
-        return self.row_n
+        return self._row_n
     def is_up(self):
-        return self.up_down in "up"
+        return self._up_down in "up"
     def is_down(self):
-        return self.up_down in "down"
+        return self._up_down in "down"
 
 
 
