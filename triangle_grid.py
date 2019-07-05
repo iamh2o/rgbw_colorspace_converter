@@ -134,7 +134,7 @@ class TriangleGrid(object):
                 if l_corner is True:
                     l_corner = False
                 loop_start = False
-##                self.last_row_len = row_pos
+
                 row_pos += 1
 
                 cell_id +=1
@@ -153,8 +153,7 @@ class TriangleGrid(object):
             top_pixel -= (curr_row*6)+9
             
 
-#        from IPython import embed; embed()
-#        raise
+
 
     def go(self):
         self._model.go()
@@ -297,7 +296,10 @@ class TriangleCell(object):
             if self._up_down is 'up':
                 return self._pixels
             else:
-                return self._pixels[::-1]
+                if self._row_n == 2:   ####FIXME  Something wrrong with bottom cells in row 2 and maybe deeper
+                    return self._pixels
+                else:
+                    return self._pixels[::-1]
         else:
             return self._pixels
 

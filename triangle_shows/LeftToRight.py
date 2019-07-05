@@ -25,8 +25,8 @@ class LeftToRight(object):
 
 #        from IPython import embed; embed() 
 
-        xlen = len(self.tri_grid.triangle_grid)
-        ylen = len(self.tri_grid.triangle_grid[0])
+        xlen = len(self.tri_grid._triangle_grid)
+        ylen = len(self.tri_grid._triangle_grid[0])
         x =0
         y = 0
         while True:
@@ -34,8 +34,8 @@ class LeftToRight(object):
 
             print "XY", x, y
             if y < ylen:
-                for rows in self.tri_grid.triangle_grid:
-                    cell = self.tri_grid.triangle_grid[x][y]
+                for rows in self.tri_grid._triangle_grid:
+                    cell = self.tri_grid._triangle_grid[x][y]
                     print "AAA", x , y, rows
                     if cell is None:
                         pass
