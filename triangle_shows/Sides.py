@@ -34,17 +34,17 @@ class Sides(object):
 
 
             for i in self.cells.get_left_side_cells():
-                self.cells.set_cell(i.get_id(), RGBW(C[1][0],C[1][1],C[1][2],C[1][3]))
+                self.cells.set_cell_by_cellid(i.get_id(), RGBW(C[1][0],C[1][1],C[1][2],C[1][3]))
                 
             np.random.shuffle(C)
             for i in self.cells.get_right_side_cells():
-                    self.cells.set_cell(i.get_id(), RGBW(C[1][0],C[1][1],C[1][2],C[1][3]))
+                    self.cells.set_cell_by_cellid(i.get_id(), RGBW(C[1][0],C[1][1],C[1][2],C[1][3]))
 
 
 
             np.random.shuffle(C)
             for i in self.cells.get_bottom_side_cells():
-                self.cells.set_cell(i.get_id(), RGBW(C[1][0],C[1][1],C[1][2],C[1][3]))
+                self.cells.set_cell_by_cellid(i.get_id(), RGBW(C[1][0],C[1][1],C[1][2],C[1][3]))
 
             np.random.shuffle(C)
 
