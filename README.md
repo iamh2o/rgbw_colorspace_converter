@@ -36,11 +36,11 @@ Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-	python go_tri.py --simulator
+    ./go_tri.py --simulator
 
 You can also specify which show to run by using the name of the show:
 
-    python go_Tri.py --simulator UpDown
+    ./go_tri.py --simulator UpDown
 
 You can also choose which show is running through the web interface:
 
