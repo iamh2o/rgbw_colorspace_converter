@@ -1,10 +1,13 @@
+import argparse
 import faulthandler
+import logging
 import sys
 import time
 import traceback
 import queue
 import threading
 
+import osc_serve
 import triangle_grid
 import triangle_shows as shows
 import util
@@ -201,15 +204,11 @@ class ShowRunner(threading.Thread):
 
 
 def osc_listener(q, port=5700):
-    "Create the OSC Listener thread"
-    import osc_serve
+    """Create the OSC Listener thread"""
 
-    listen_address=('0.0.0.0', port)
-    print("Starting OSC Listener on %s:%d" % listen_address)
-    osc = osc_serve.create_server(listen_address, q)
-    st = threading.Thread(name="OSC Listener", target=osc.serve_forever)
-    st.daemon = True
-    return st
+    listen_address = ('0.0.0.0', port)
+    logging.info("Starting OSC Listener on %s:%d", listen_address)
+    osc_serve.create_server(listen_address, q)
 
 
 class TriangleServer(object):
@@ -221,21 +220,20 @@ class TriangleServer(object):
 
         self.runner = None
 
-        self.osc_thread = None
-
         self.running = False
         self._create_services()
 
     def _create_services(self):
-        "Create TRI services, trying to fail gracefully on missing dependencies"
+        """Create TRI services, trying to fail gracefully on missing dependencies"""
+
         # XXX can this also advertise the web interface?
         # XXX should it only advertise services that exist?
 
         # OSC listener
         try:
-            self.osc_thread = osc_listener(self.queue)
+            osc_listener(self.queue)
         except Exception as e:
-            print("WARNING: Can't create OSC listener")
+            logging.warning("Can't create OSC listener")
 
         # Show runner
         self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
@@ -249,11 +247,7 @@ class TriangleServer(object):
             return
 
         try:
-            if self.osc_thread:
-                self.osc_thread.start()
-
             self.runner.start()
-
             self.running = True
         except Exception as e:
             print("Exception starting tri_grid!!")
@@ -310,9 +304,11 @@ class TriangleServer(object):
                             '/',
                             config=config)
 
-if __name__=='__main__':
-    import argparse
-    parser = argparse.ArgumentParser(description='Baaahs Light Control')
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG, format='%(levelname)s - %(message)s')
+
+    parser = argparse.ArgumentParser(description='Triangle Light Control')
 
     parser.add_argument('--max-time', type=float, default=float(60),
                         help='Maximum number of seconds a show will run (default 60)')
@@ -322,25 +318,25 @@ if __name__=='__main__':
     parser.add_argument('--list', action='store_true', help='List available shows')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
                         help='name of show (or shows) to run')
-    parser.add_argument('--fail-hard', type=bool, default=True, help="For production runs, when shows fail, the show runner moves to the next show")
+    parser.add_argument('--fail-hard', type=bool, default=True,
+                        help="For production runs, when shows fail, the show runner moves to the next show")
 
     args = parser.parse_args()
 
     if args.list:
-        print("Available shows:")
-        print(', '.join([name for (name, klass) in shows.load_shows()]))
+        logging.info("Available shows: %s", ', '.join([name for (name, klass) in shows.load_shows()]))
         sys.exit(0)
 
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
-        print("Using TriSimulator at %s:%d" % (sim_host, sim_port))
+        logging.info("Using TriSimulator at %s:%d", sim_host, sim_port)
 
         from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json', keys_int=True)
         triangle_grid = triangle_grid.make_tri(model, 5)
     else:
-        print("Starting OLA")
+        logging.info("Starting OLA")
         from model.ola_model import OLAModel
         model = OLAModel(800, model_json="./data/pixel_map.json")
 
@@ -357,7 +353,6 @@ if __name__=='__main__':
             app.go_headless()
 
     except Exception as e:
-        print("Unhandled exception running TRI!")
-        traceback.print_exc()
+        logging.exception("Unhandled exception running TRI!: %s", e)
     finally:
         app.stop()

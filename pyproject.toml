@@ -8,6 +8,7 @@ authors = []
 python = "^3.7"
 typing-extensions = "^3.7"
 cherrypy = "^18.1"
+osc4py3 = "^1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
