@@ -1,6 +1,7 @@
 ## History
-* Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was the BAAAHS panel controling s/w: https://bitbucket.org/grgbrn/baaahs2014/src/default/
 
+Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was
+the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/default/)
 
 ## Requirements
 
@@ -21,19 +22,21 @@ Install python modules with *easy_install* (You can also use *pip* if you have a
 
     easy_install cherrypy
 
-Don't worry too much if you can't get some of the dependencies to install - you'll still be able to run the software, just with some features missing.  Python and Processing are the most important parts if you just want to write shows.
+Don't worry too much if you can't get some of the dependencies to install - you'll still be able to run the software,
+just with some features missing.  Python and Processing are the most important parts if you just want to write shows.
 
 ## Getting Started
 
 First, check out the repository:
 
-       	hg clone THISREPO
+    git clone git@github.com:pyramidscheme/pyramidtriangles.git
 
-The simulator lives in the 'Simulators/TriangleSimulator/' directory.  Open the file 'TriangleSimulator.pde' in Processing, and run it.
+The simulator lives in the `Simulators/TriangleSimulator/` directory.  Open the file `TriangleSimulator.pde` in
+Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-	!! python go_tri.py --simulator 
+	python go_tri.py --simulator
 
 You can also specify which show to run by using the name of the show:
 
@@ -45,13 +48,16 @@ You can also choose which show is running through the web interface:
 
 ## Writing Shows
 
-See the files in 'doc'
+See the files in `doc/`
 
 ## OSC Control
 
-Lighting can be controlled wirelessly over OSC. We're using [TouchOSC](http://hexler.net/software/touchosc), which is available for [iOS](https://itunes.apple.com/app/touchosc/id288120394) and [Android](https://play.google.com/store/apps/details?id=net.hexler.touchosc_a).  (It costs $4.99, but it's worth it, we promise!)
+Lighting can be controlled wirelessly over OSC. We're using [TouchOSC](http://hexler.net/software/touchosc), which is
+available for [iOS](https://itunes.apple.com/app/touchosc/id288120394) and
+[Android](https://play.google.com/store/apps/details?id=net.hexler.touchosc_a).  (It costs $4.99, but it's worth it,
+we promise!)
 
-You'll need to install the app on your phone or tablet, then intall a layout.
+You'll need to install the app on your phone or tablet, then install a layout.
 
 	1. Download the TouchOSC Editor from the TouchOSC page (scroll down to 'Downloads') 
 	2. Open the show control layout from the baaahs repository (misc/ShowControl.touchosc)
@@ -88,8 +94,8 @@ Debian / Ubuntu:
 
     pip install --allow-external pybonjour --allow-unverified pybonjour pybonjour
 
-
 ## Actually Running The Thing w/ DMXking LeDMX4pro
+
 -2)Connect your DMX4pro to a network that looks like it's configured network (console does not seem to be able to re-set the IP).  192.168.0.*, 255.255.255.0, 192.168.0.254
 -1)Power the DMX4pro on
 0) ping it to see if it is visible to your network
