@@ -5,11 +5,21 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 
 ## Requirements
 
-* [Python 3](https://www.python.org)
+* [Python 3]((https://www.python.org)), [poetry](https://poetry.eustace.io/)
 
-  Create a virtual environment to work in for this repo!
+```sh
+# Install Python 3 (any method will do)
+brew install python
+export PATH="$(brew --prefix python)/libexec/bin:${PATH}"
 
-* [Processing 2.2.1+](https://www.processing.org/) (for simulator only)
+# Install Poetry
+curl -fsSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+
+# Install dependencies
+poetry install
+```
+
+* [Processing 2.2.1+](https://www.processing.org) (for simulator only)
 
 There are a few 3rd party python modules that need to be installed:
 

@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "pyramidtriangles"
+version = "0.1.0"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.7"
+typing-extensions = "^3.7"
+cherrypy = "^18.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
