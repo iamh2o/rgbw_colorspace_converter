@@ -67,11 +67,11 @@ For more details on controlling shows with OSC, check the 'doc' directory in thi
 
 ## Hardware Support
 
-Communicating with the hardware requires [OLA.](http://www.opendmx.net)
+Communicating with the hardware requires [OLA.](https://www.openlighting.org/ola/)
 
 OS X:
 
-    brew install ola --with-python
+    brew install ola
 
 Debian / Ubuntu:
 
