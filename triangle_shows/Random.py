@@ -1,6 +1,6 @@
 
 from color import RGBW
-from . import random as rnd
+import random as rnd
 
 class Random(object):
     def __init__(self, tri_grid):

@@ -8,7 +8,6 @@ Pixels are representations of the addressible unit in your object. Cells can hav
 
 """
 import array
-import sys
 from ola.ClientWrapper import ClientWrapper
 import json
 

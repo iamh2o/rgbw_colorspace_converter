@@ -1,9 +1,9 @@
+import faulthandler
 import sys
 import time
 import traceback
 import queue
 import threading
-import signal
 
 import triangle_grid
 import triangle_shows as shows
@@ -17,18 +17,9 @@ try:
 except ImportError:
     print("WARNING: CherryPy not found; web interface disabled")
 
-def _stacktraces(signum, frame):
-    txt = []
-    for threadId, stack in sys._current_frames().items():
-        txt.append("\n# ThreadID: %s" % threadId)
-        for filename, lineno, name, line in traceback.extract_stack(stack):
-            txt.append('File: "%s", line %d, in %s' % (filename, lineno, name))
-            if line:
-                txt.append("  %s" % (line.strip()))
+# Prints stack trace on failure
+faulthandler.enable()
 
-    print("\n".join(txt))
-
-signal.signal(signal.SIGQUIT, _stacktraces)
 
 def speed_interpolation(val):
     """

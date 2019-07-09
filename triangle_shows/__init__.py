@@ -2,7 +2,7 @@ import os
 import importlib
 import inspect
 from operator import itemgetter
-from . import random
+import random
 
 from util import memoized
 

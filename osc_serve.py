@@ -1,11 +1,6 @@
-import sys
-import optparse
-import threading
-
 from collections import defaultdict
 
 from lib.OSC import *
-from lib.OSC import _readString, _readFloat, _readInt
 
 # define a message-handler function for the server to call.
 def printing_handler(addr, tags, stuff, source):

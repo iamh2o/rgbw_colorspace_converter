@@ -1,7 +1,4 @@
-from collections import defaultdict, namedtuple
 from color import RGBW
-from array import *
-
 
 def make_tri(model, n_rows):
     return TriangleGrid(model, n_rows)

@@ -27,7 +27,6 @@ animations
 
 
 import itertools
-import colorsys
 
 from math import ceil
 
