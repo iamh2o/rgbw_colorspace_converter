@@ -30,15 +30,15 @@ class LeftToRight(object):
         while True:
             self.tri_grid.clear()
 
-            print "XY", x, y
+            print("XY", x, y)
             if y < ylen:
                 for rows in self.tri_grid._triangle_grid:
                     cell = self.tri_grid._triangle_grid[x][y]
-                    print "AAA", x , y, rows
+                    print("AAA", x, y, rows)
                     if cell is None:
                         pass
                     else:
-                        self.tri_grid.set_cell_by_cellid(cell.get_id(), RGBW(255,255,25,25))
+                        self.tri_grid.set_cell_by_cellid(cell.get_id(), RGBW(255, 255, 25, 25))
                     x += 1
                 x = 0
                 y += 1

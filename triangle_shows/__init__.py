@@ -2,7 +2,7 @@ import os
 import importlib
 import inspect
 from operator import itemgetter
-import random
+from . import random
 
 from util import memoized
 
@@ -31,15 +31,15 @@ def load_shows(path=None):
                 _shows.extend(mod.__triangle_shows__)
             else:
                 # we have go to rooting around for things that look like shows
-                for (name,t) in inspect.getmembers(mod):
+                for (name, t) in inspect.getmembers(mod):
                     if inspect.isclass(t) and hasattr(t, 'next_frame'):
                         # print "likely show:", name, type(t)
 
                         ctor = getattr(mod, name)
                         _shows.append( (name, ctor) )
 
-        except Exception, e:
-            print "exception loading module from %s, skipping" % m
+        except Exception as e:
+            print("exception loading module from %s, skipping" % m)
             import traceback
             traceback.print_exc()
     # sort show tuples by name before returning them
@@ -51,7 +51,7 @@ def random_shows(path=None, norepeat=None):
     Remembers the last 'norepeat' items to avoid replaying shows too soon
     Norepeat defaults to 1/3 the size of the sequence
     """
-    seq = [ctor for (name,ctor) in load_shows(path)]
+    seq = [ctor for (name, ctor) in load_shows(path)]
 
     if not norepeat:
         norepeat=int(len(seq)/3)

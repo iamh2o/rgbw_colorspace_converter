@@ -19,7 +19,7 @@ def printing_handler(addr, tags, stuff, source):
 
 def server_test(_threading=False, _forking=False):
     # Now an OSCServer...
-    print "\nInstantiating OSCServer:"
+    print("\nInstantiating OSCServer:")
 
     listen_address=('0.0.0.0', 5700)
 
@@ -33,7 +33,7 @@ def server_test(_threading=False, _forking=False):
         # s = OSCServer(listen_address, c, return_port=listen_address[1])
         s = OSCServer(listen_address)
 
-    print s
+    print(s)
 
     # Set Server to return errors as OSCMessages to "/error"
     s.setSrvErrorPrefix("/error")
@@ -53,11 +53,11 @@ def server_test(_threading=False, _forking=False):
 
     # setupServerHandlers(s)
 
-    print "Registered Callback-functions:"
+    print("Registered Callback-functions:")
     for addr in s.getOSCAddressSpace():
-        print addr
+        print(addr)
 
-    print "\nStarting OSCServer. Use ctrl-C to quit."
+    print("\nStarting OSCServer. Use ctrl-C to quit.")
     st = threading.Thread(target=s.serve_forever)
     st.start()
 
@@ -65,7 +65,7 @@ def server_test(_threading=False, _forking=False):
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
-        print "Interrupted!"
+        print("Interrupted!")
         s.close()
         # s.shutdown()
 
@@ -80,7 +80,7 @@ def create_server(listen_address, queue, debug=False):
 
         if sincelast >= THROTTLE_TIME:
             if debug:
-                print "%s [%s] %s" % (addr, tags, str(data))
+                print("%s [%s] %s" % (addr, tags, str(data)))
 
             last_msg[addr] = now
             queue.put( (addr, data) )

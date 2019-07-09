@@ -1,7 +1,7 @@
 import sys
 import time
 import traceback
-import Queue
+import queue
 import threading
 import signal
 
@@ -15,7 +15,7 @@ try:
     import cherrypy
     _use_cherrypy = True
 except ImportError:
-    print "WARNING: CherryPy not found; web interface disabled"
+    print("WARNING: CherryPy not found; web interface disabled")
 
 def _stacktraces(signum, frame):
     txt = []
@@ -26,7 +26,7 @@ def _stacktraces(signum, frame):
             if line:
                 txt.append("  %s" % (line.strip()))
 
-    print "\n".join(txt)
+    print("\n".join(txt))
 
 signal.signal(signal.SIGQUIT, _stacktraces)
 
@@ -89,7 +89,7 @@ class ShowRunner(threading.Thread):
                 if m:
                     msgs.append(m)
 
-        except Queue.Empty:
+        except queue.Empty:
             pass
 
         if msgs:
@@ -97,10 +97,10 @@ class ShowRunner(threading.Thread):
                 self.process_command(m)
 
     def process_command(self, msg):
-        if isinstance(msg,basestring):
+        if isinstance(msg, str):
             if msg == "shutdown":
                 self.running = False
-                print "ShowRunner shutting down"
+                print("ShowRunner shutting down")
             elif msg == "clear":
                 self.clear()
                 time.sleep(2)
@@ -114,9 +114,9 @@ class ShowRunner(threading.Thread):
         elif isinstance(msg, tuple):
             # osc message
             # ('/1/command', [value])
-            print "OSC:", msg
+            print("OSC:", msg)
 
-            (addr,val) = msg
+            (addr, val) = msg
             addr = addr.split('/z')[0]
             val = val[0]
             assert addr[0] == '/'
@@ -130,7 +130,7 @@ class ShowRunner(threading.Thread):
                         self.next_show(self.prev_show.name)
                 elif cmd == 'speed':
                     self.speed_x = speed_interpolation(val)
-                    print "setting speed_x to:", self.speed_x
+                    print("setting speed_x to:", self.speed_x)
 
                 pass
             elif ns == '2':
@@ -139,7 +139,7 @@ class ShowRunner(threading.Thread):
                     self.show.set_param(cmd, val)
 
         else:
-            print "ignoring unknown msg:", str(msg)
+            print("ignoring unknown msg:", str(msg))
 
     def clear(self):
 #        print "WE ARE GOING HERE"
@@ -152,36 +152,36 @@ class ShowRunner(threading.Thread):
             if name in self.shows:
                 s = self.shows[name]
             else:
-                print "unknown show:", name
+                print("unknown show:", name)
 
         if not s:
-            print "choosing random show"
-            s = self.randseq.next()
+            print("choosing random show")
+            s = next(self.randseq)
 
         self.clear()
         self.prev_show = self.show
 
         self.show = s(self.model)
-        print "next show:" + self.show.name  
+        print("next show:" + self.show.name)
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
         if self.show_params:
-            print "Show can accept OSC params!"
+            print("Show can accept OSC params!")
         self.show_runtime = 0
 
     def get_next_frame(self):
         "return a delay or None"
         try:
-            return self.framegen.next()
+            return next(self.framegen)
         except StopIteration:
             return None
 
     def run(self):
-        print "AAAAAAA"
+        print("AAAAAAA")
         if not (self.show and self.framegen):
-            print "Next Next Next"
+            print("Next Next Next")
             self.next_show()
-        print "1"
+        print("1")
         while self.running:
             try:
                 self.check_queue()
@@ -193,15 +193,15 @@ class ShowRunner(threading.Thread):
                     time.sleep(real_d)
                     self.show_runtime += real_d
                     if self.show_runtime > self.max_show_time:
-                        print "max show time elapsed, changing shows"
+                        print("max show time elapsed, changing shows")
                         self.next_show()
                 else:
-                    print "show is out of frames, waiting..."
+                    print("show is out of frames, waiting...")
                     time.sleep(2)
                     self.next_show()
 
             except Exception:
-                print "unexpected exception in show loop!"
+                print("unexpected exception in show loop!")
                 traceback.print_exc()
                 if self.fail_hard:
                     raise
@@ -214,7 +214,7 @@ def osc_listener(q, port=5700):
     import osc_serve
 
     listen_address=('0.0.0.0', port)
-    print "Starting OSC Listener on %s:%d" % listen_address
+    print("Starting OSC Listener on %s:%d" % listen_address)
     osc = osc_serve.create_server(listen_address, q)
     st = threading.Thread(name="OSC Listener", target=osc.serve_forever)
     st.daemon = True
@@ -226,7 +226,7 @@ class TriangleServer(object):
         self.args = args
         self.tri_model = tri_model
 
-        self.queue = Queue.LifoQueue()
+        self.queue = queue.LifoQueue()
 
         self.runner = None
 
@@ -243,18 +243,18 @@ class TriangleServer(object):
         # OSC listener
         try:
             self.osc_thread = osc_listener(self.queue)
-        except Exception, e:
-            print "WARNING: Can't create OSC listener"
+        except Exception as e:
+            print("WARNING: Can't create OSC listener")
 
         # Show runner
         self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
         if args.shows:
-            print "setting show:", args.shows[0]
+            print("setting show:", args.shows[0])
             self.runner.next_show(args.shows[0])
 
     def start(self):
         if self.running:
-            print "start() called, but tri_grid is already running!"
+            print("start() called, but tri_grid is already running!")
             return
 
         try:
@@ -264,8 +264,8 @@ class TriangleServer(object):
             self.runner.start()
 
             self.running = True
-        except Exception, e:
-            print "Exception starting tri_grid!!"
+        except Exception as e:
+            print("Exception starting tri_grid!!")
             traceback.print_exc()
 
     def stop(self):
@@ -277,18 +277,18 @@ class TriangleServer(object):
                 self.queue.put("shutdown")
 
                 self.running = False
-            except Exception, e:
-                print "Exception stopping tri_grid!!"
+            except Exception as e:
+                print("Exception stopping tri_grid!!")
                 traceback.print_exc()
 
     def go_headless(self):
         "Run without the web interface"
-        print "Running without web interface"
+        print("Running without web interface")
         try:
             while True:
                 time.sleep(999) # control-c breaks out of time.sleep
         except KeyboardInterrupt:
-            print "Exiting on keyboard interrupt"
+            print("Exiting on keyboard interrupt")
 
         self.stop()
 
@@ -298,16 +298,16 @@ class TriangleServer(object):
         from web import SheepyWeb
 
         # XXX clean up who manages the canonical show list
-        show_names = dict(shows.load_shows()).keys()
-        print show_names
+        show_names = [name for (name, klass) in shows.load_shows()]
+        print(show_names)
 
         cherrypy.engine.subscribe('stop', self.stop)
 
         port = 9990
         config = {
             'global': {
-                'server.socket_host' : '0.0.0.0',
-                'server.socket_port' : port,
+                'server.socket_host': '0.0.0.0',
+                'server.socket_port': port,
                 # 'engine.timeout_monitor.on' : True,
                 # 'engine.timeout_monitor.frequency' : 240,
                 # 'response.timeout' : 60*15
@@ -326,7 +326,7 @@ if __name__=='__main__':
     parser.add_argument('--max-time', type=float, default=float(60),
                         help='Maximum number of seconds a show will run (default 60)')
 
-    parser.add_argument('--simulator',dest='simulator',action='store_true')
+    parser.add_argument('--simulator', dest='simulator', action='store_true')
 
     parser.add_argument('--list', action='store_true', help='List available shows')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
@@ -336,20 +336,20 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     if args.list:
-        print "Available shows:"
-        print ', '.join([s[0] for s in shows.load_shows()])
+        print("Available shows:")
+        print(', '.join([name for (name, klass) in shows.load_shows()]))
         sys.exit(0)
 
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
-        print "Using TriSimulator at %s:%d" % (sim_host, sim_port)
+        print("Using TriSimulator at %s:%d" % (sim_host, sim_port))
 
         from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json', keys_int=True)
         triangle_grid = triangle_grid.make_tri(model, 5)
     else:
-        print "Starting OLA"
+        print("Starting OLA")
         from model.ola_model import OLAModel
         model = OLAModel(800, model_json="./data/pixel_map.json")
 
@@ -365,8 +365,8 @@ if __name__=='__main__':
         else:
             app.go_headless()
 
-    except Exception, e:
-        print "Unhandled exception running TRI!"
+    except Exception as e:
+        print("Unhandled exception running TRI!")
         traceback.print_exc()
     finally:
         app.stop()

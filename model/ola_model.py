@@ -15,11 +15,11 @@ import json
 
 
 def keystoint(x):                        
-    return {int(k): v for k, v in x.items()}
+    return {int(k): v for k, v in list(x.items())}
 
 # what should we do this callback?
 def callback(state):
-    print state
+    print(state)
 
 class OLAModel(object):
     def __init__(self, max_dmx, model_json=None):
@@ -40,7 +40,7 @@ class OLAModel(object):
                        4: [0] * max_dmx
                        }
 
-    def _map_leds(self,f):
+    def _map_leds(self, f):
 
         # Loads a json file with mapping info describing your leds.
         # The json file is formatted as a dictionary of numbers (as strings sadly, b/c json is weird
@@ -65,7 +65,7 @@ class OLAModel(object):
 
     def pixel_ids(self):
         # return LED_IDS        
-        return self.PIXEL_MAP.keys()
+        return list(self.PIXEL_MAP.keys())
 
     def set_pixel(self, pixel, color, cellid=None):
 

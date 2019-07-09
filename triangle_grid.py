@@ -4,7 +4,7 @@ from array import *
 
 
 def make_tri(model, n_rows):
-    return TriangleGrid(model,n_rows)
+    return TriangleGrid(model, n_rows)
 
 def calc_last_row_len(max_row):
     row_len = 1
@@ -41,11 +41,11 @@ class TriangleGrid(object):
         return str("ME")
 
     def __repr__(self):
-        print "what is this for?"
+        print("what is this for?")
 
 
         #OMG, this is such a nighmare... but it works...
-    def _build_triangle_array_and_grid(self,n_rows):
+    def _build_triangle_array_and_grid(self, n_rows):
         self._cells = []
         if n_rows < 1:
             raise Exception('row num must be 1+', n_rows)
@@ -130,7 +130,7 @@ class TriangleGrid(object):
                     up_down = 'up' 
 
                 #Add Cell To Triangle Grid!
-                tco.add_row_col(curr_row,grid_y_curr_pos)
+                tco.add_row_col(curr_row, grid_y_curr_pos)
                 self._triangle_grid[curr_row][grid_y_curr_pos] = tco
                 grid_y_curr_pos += 1
 
@@ -163,7 +163,7 @@ class TriangleGrid(object):
         self._model.go()
 
     def clear(self):
-        self.set_all_cells(RGBW(0,0,0,0))
+        self.set_all_cells(RGBW(0, 0, 0, 0))
         self.go()
 
         
@@ -173,7 +173,7 @@ class TriangleGrid(object):
     def get_triangle_grid(self):
         return self._triangle_grid
 
-    def get_cell_by_grid_coords(self,rown, coln):
+    def get_cell_by_grid_coords(self, rown, coln):
         "RETURNS cell object or None if no cell is mapped to the coord"
 
         if rown > self._n_rows:
@@ -187,22 +187,22 @@ class TriangleGrid(object):
     def get_cell_by_id(self, cell_id):
         return self._cells[cell_id+1]
 
-    def get_cell_by_array_posn(self,arr_pos):
+    def get_cell_by_array_posn(self, arr_pos):
         return self._cells[arr_pos]
 
     def set_all_cells(self, color):
         for i in self._cells:
             for ii in i.get_pixels():
-                self.set_cell(ii,color)
+                self.set_cell(ii, color)
 
-    def set_cell(self,cell, color):
+    def set_cell(self, cell, color):
         if cell == None:
-            print "WARNING: Skipping 'Nonetype' cell"
+            print("WARNING: Skipping 'Nonetype' cell")
         else:
             for pixel in cell.get_pixels():
                 self._model.set_pixel(pixel, color, cell.get_id())
 
-    def set_cell_by_cellid(self,cell, color):
+    def set_cell_by_cellid(self, cell, color):
         for pixel in self._cells[cell].get_pixels():
             self._model.set_pixel(pixel, color, cell)
 
@@ -219,7 +219,7 @@ class TriangleGrid(object):
     def set_cells(self, cells, color):
         for cell in cells:
             if cell == None:
-                print "WARNING: Skipping 'Nonetype' cell"
+                print("WARNING: Skipping 'Nonetype' cell")
             else:
                 for pixel in cell.get_pixels():
                     self._model.set_pixel(pixel, color, cell.get_id())
@@ -236,7 +236,7 @@ class TriangleGrid(object):
 
     def clear(self):
         ""
-        self.set_all_cells(RGBW(0,0,0,0))
+        self.set_all_cells(RGBW(0, 0, 0, 0))
         self.go()
 
     def go(self):
@@ -279,7 +279,7 @@ class TriangleGrid(object):
                 cells.append(i)
         return cells
 
-    def is_edge(self,cell):
+    def is_edge(self, cell):
         if cell._l_edge:
             return True
         elif cell._r_edge: 
@@ -291,7 +291,7 @@ class TriangleGrid(object):
 
     #Triangle Grid Helper Functions                                                              
 
-    def get_edge_neighbors_by_coord(self,row,col):
+    def get_edge_neighbors_by_coord(self, row, col):
         "returned in a tuple of (left neighbor, middle neighbor, right neighbor)"
         "Where left is the edge directly to the left of the cell, regardless of up/down orientation"
         "Where middle is either the top or bottom neighbor depending where the edge is. the cell knows its up/down orientation"
@@ -304,17 +304,17 @@ class TriangleGrid(object):
             m = None
             r = None
             if cell.is_up():
-                l = self.get_cell_by_grid_coords(row,col-1)
-                m = self.get_cell_by_grid_coords(row+1,col)
-                r = self.get_cell_by_grid_coords(row,col+1)
+                l = self.get_cell_by_grid_coords(row, col-1)
+                m = self.get_cell_by_grid_coords(row+1, col)
+                r = self.get_cell_by_grid_coords(row, col+1)
             else:
-                l = self.get_cell_by_grid_coords(row,col-1)
-                m = self.get_cell_by_grid_coords(row-1,col)
-                r = self.get_cell_by_grid_coords(row,col+1)
-        return (l,m,r)
+                l = self.get_cell_by_grid_coords(row, col-1)
+                m = self.get_cell_by_grid_coords(row-1, col)
+                r = self.get_cell_by_grid_coords(row, col+1)
+        return (l, m, r)
             
             
-    def  get_edge_neighbors_by_cell(self,cell):
+    def  get_edge_neighbors_by_cell(self, cell):
         return self.get_edge_neighbors_by_coord(cell.get_row_num(), cell.get_col_pos())
 
     def get_vertex_neighbors_by_coord(self, row, col):
@@ -328,22 +328,22 @@ class TriangleGrid(object):
             m = None
             r = None
             if cell.is_up():
-                l = self.get_cell_by_grid_coords(row+1,col-1)
-                m = self.get_cell_by_grid_coords(row-1,col)
-                r = self.get_cell_by_grid_coords(row+1,col+1)
+                l = self.get_cell_by_grid_coords(row+1, col-1)
+                m = self.get_cell_by_grid_coords(row-1, col)
+                r = self.get_cell_by_grid_coords(row+1, col+1)
             else:
-                l = self.get_cell_by_grid_coords(row-1,col-1)
-                m = self.get_cell_by_grid_coords(row+1,col)
-                r = self.get_cell_by_grid_coords(row-1,col+1)
+                l = self.get_cell_by_grid_coords(row-1, col-1)
+                m = self.get_cell_by_grid_coords(row+1, col)
+                r = self.get_cell_by_grid_coords(row-1, col+1)
             
-            return (l,m,r)
+            return (l, m, r)
         
-    def get_vertex_neighbors_by_cell(self,cell):
+    def get_vertex_neighbors_by_cell(self, cell):
         return self.get_vertex_neighbors_by_coord(cell.get_row_num(), cell.get_col_pos())
 
 
 
-    def get_hexagon_from_btm_cell_by_coords(self,row, col):
+    def get_hexagon_from_btm_cell_by_coords(self, row, col):
         "Given the coordinates of an up facing cell, return the surrounding cells which will make "
         "A hexagon with the specified cell as the base"
         "the tuple will begin with the upper left cell, then it's upper neighbor, then its upper right"
@@ -353,14 +353,14 @@ class TriangleGrid(object):
         if cell == None:
             return None
         else:
-            a = self.get_cell_by_grid_coords(row,col-1)
-            b =self.get_cell_by_grid_coords(row-1,col-1)
-            c =self.get_cell_by_grid_coords(row-1,col)
-            d =self.get_cell_by_grid_coords(row-1,col+1)
-            e =self.get_cell_by_grid_coords(row,col+1)
-            return (cell,a,b,c,d,e)
+            a = self.get_cell_by_grid_coords(row, col-1)
+            b =self.get_cell_by_grid_coords(row-1, col-1)
+            c =self.get_cell_by_grid_coords(row-1, col)
+            d =self.get_cell_by_grid_coords(row-1, col+1)
+            e =self.get_cell_by_grid_coords(row, col+1)
+            return (cell, a, b, c, d, e)
 
-    def get_hexagon_from_btm_cell_by_cell(self,cell):
+    def get_hexagon_from_btm_cell_by_cell(self, cell):
         return self.get_hexagon_from_btm_cell_by_coords(cell.get_row_num(), cell.get_col_pos())
 
 
@@ -375,10 +375,10 @@ class TriangleCell(object):
         self._row_n = row
         self._row_pos = row_pos
         self._l_edge = is_l_edge
-        if cell_id in [1,3]:
+        if cell_id in [1, 3]:
             self._l_edge = True
         self._r_edge = is_r_edge
-        if cell_id in [1,3]:
+        if cell_id in [1, 3]:
             self._r_edge= True
         self._top_cell = is_top
         self._btm_right = r_corner
@@ -388,7 +388,7 @@ class TriangleCell(object):
         self._up_down = up_down
         self._pixels = pixels #do we really need a pixel class?
 
-    def add_row_col(self,r,c):
+    def add_row_col(self, r, c):
         self._grid_row_n = r
         self._grid_col_n = c
 

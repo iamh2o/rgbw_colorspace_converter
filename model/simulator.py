@@ -11,10 +11,10 @@ import socket
 import json
 
 def keystoint(x):
-    return {int(k): v for k, v in x.items()}
+    return {int(k): v for k, v in list(x.items())}
 
 # "off" color for simulator
-SIM_DEFAULT = (188,210,229) # BCD2E5
+SIM_DEFAULT = (188, 210, 229) # BCD2E5
 
 class SimulatorModel(object):
     def __init__(self, hostname, port=4444, debug=False, model_json=None, keys_int=False):
@@ -41,7 +41,7 @@ class SimulatorModel(object):
         return "SimulatorModel(%s, port=%d, debug=%s)" % (self.server[0], self.server[1], self.debug)
 
     # Loaders
-    def _map_leds(self,f):
+    def _map_leds(self, f):
         # Loads a json file with mapping info describing your leds.                                           
         # The json file is formatted as a dictionary of numbers (as strings sadly, b/c json is weird  
         #each key in the dict is a fixtureUID.                                      
@@ -62,7 +62,7 @@ class SimulatorModel(object):
     # Model basics
 
     def cell_ids(self):
-        return self.CELL_IDS.keys()
+        return list(self.CELL_IDS.keys())
 
 
     
@@ -83,9 +83,9 @@ class SimulatorModel(object):
             pass
 
 
-    def set_pixel(self,pixel,color, cellid):
+    def set_pixel(self, pixel, color, cellid):
 
-        self.set_cell(cellid,color)
+        self.set_cell(cellid, color)
 
     def set_cells(self, cells, color):
         for cell in cells:
@@ -96,10 +96,10 @@ class SimulatorModel(object):
 
         for num in self.dirty:
             color = self.dirty[num]        
-            msg = "%s %s %s,%s,%s" % ('b', num, color.r,color.g,color.b)
+            msg = "%s %s %s,%s,%s" % ('b', num, color.r, color.g, color.b)
 #            print msg
             if self.debug:
-                print msg
+                print(msg)
             self.sock.send(msg)
             self.sock.send('\n')
 

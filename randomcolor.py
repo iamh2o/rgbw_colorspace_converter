@@ -24,7 +24,7 @@ Luminosity can be: 'bright', 'light', 'dark', 'random'
     c = random_color(luminosity='light')
 
 """
-from __future__ import division
+
 
 from collections import namedtuple
 from numbers import Number
@@ -50,20 +50,20 @@ def define_color(hue_range, lower_bounds):
 
     return ColorDef(hue_range=hue_range,
                     lower_bounds=lower_bounds,
-                    saturation_range=(s_min,s_max),
-                    brightness_range=(b_min,b_max))
+                    saturation_range=(s_min, s_max),
+                    brightness_range=(b_min, b_max))
 
 def make_color_bounds():
     COLOR_BOUNDS = [
         # name,   hue_range, lower_bounds
-        ('monochrome', None, [[0,0],[100,0]]),
-        ('red',    [-26,18], [[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]),
-        ('orange', [19,46],  [[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]),
-        ('yellow', [47,62],  [[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]),
-        ('green',  [63,178], [[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]),
-        ('blue',   [179,257],[[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]),
-        ('purple', [258,282],[[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]),
-        ('pink',   [283,334],[[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]])
+        ('monochrome', None, [[0, 0], [100, 0]]),
+        ('red',    [-26, 18], [[20, 100], [30, 92], [40, 89], [50, 85], [60, 78], [70, 70], [80, 60], [90, 55], [100, 50]]),
+        ('orange', [19, 46],  [[20, 100], [30, 93], [40, 88], [50, 86], [60, 85], [70, 70], [100, 70]]),
+        ('yellow', [47, 62],  [[25, 100], [40, 94], [50, 89], [60, 86], [70, 84], [80, 82], [90, 80], [100, 75]]),
+        ('green',  [63, 178], [[30, 100], [40, 90], [50, 85], [60, 81], [70, 74], [80, 64], [90, 50], [100, 40]]),
+        ('blue',   [179, 257], [[20, 100], [30, 86], [40, 80], [50, 74], [60, 60], [70, 52], [80, 44], [90, 39], [100, 35]]),
+        ('purple', [258, 282], [[20, 100], [30, 87], [40, 79], [50, 70], [60, 65], [70, 59], [80, 52], [90, 45], [100, 42]]),
+        ('pink',   [283, 334], [[20, 100], [30, 90], [40, 86], [60, 84], [80, 80], [90, 75], [100, 73]])
     ]
 
     dat = {}
@@ -80,7 +80,7 @@ def get_color_info(hue):
     if 334 <= hue <= 360:
         hue -= 360
 
-    for (name, color) in COLOR_DICT.items():
+    for (name, color) in list(COLOR_DICT.items()):
         if color.hue_range and hue >= color.hue_range[0] and hue <= color.hue_range[1]:
             return color
 
@@ -91,9 +91,9 @@ def get_saturation_range(hue):
     # XXX what's the valid range for saturation values?
     try:
         return get_color_info(hue).saturation_range # XXX
-    except Exception, e:
-        print "exception in get_saturation_range for hue=", hue
-        return (0,100)
+    except Exception as e:
+        print("exception in get_saturation_range for hue=", hue)
+        return (0, 100)
 
 def get_hue_range(cin):
     # XXX what format is this?
@@ -101,19 +101,19 @@ def get_hue_range(cin):
     if isinstance(cin, Number):
         i = int(cin)
         if 0 > i > 360:
-            return (i,i)
+            return (i, i)
 
-    if isinstance(cin, basestring):
+    if isinstance(cin, str):
         if cin in COLOR_DICT:
             return COLOR_DICT[cin].hue_range
 
-    return (0,360)
+    return (0, 360)
 
 def pairwise(iterable): # from the itertools documentation
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = itertools.tee(iterable)
     next(b, None)
-    return itertools.izip(a, b)
+    return zip(a, b)
 
 def get_minimum_brightness(h, s):
     # h is int[0,360]
@@ -121,8 +121,8 @@ def get_minimum_brightness(h, s):
     lower_bounds = get_color_info(h).lower_bounds
 
     for (sv1, sv2) in pairwise(lower_bounds):
-        s1,v1 = sv1
-        s2,v2 = sv2
+        s1, v1 = sv1
+        s2, v2 = sv2
 
         if s1 <= s <= s2:
             m = (v2-v1)/(s2-s1)
@@ -132,7 +132,7 @@ def get_minimum_brightness(h, s):
     return 0
 
 def pick_brightness(h, s, luminosity=None):
-    b_min = get_minimum_brightness(h,s)
+    b_min = get_minimum_brightness(h, s)
     b_max = 100
 
     if luminosity == 'dark':
@@ -149,7 +149,7 @@ def pick_brightness(h, s, luminosity=None):
 
 def pick_saturation(h, hue=None, luminosity=None):
     if luminosity == 'random':
-        return random_within(0,100)
+        return random_within(0, 100)
 
     if hue == 'monochrome':
         return 0
@@ -190,4 +190,4 @@ def random_color(hue=None, luminosity=None):
     s = s / 100
     v = v / 100
 
-    return HSV(h,s,v)
+    return HSV(h, s, v)
