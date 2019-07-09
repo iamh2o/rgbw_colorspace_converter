@@ -5,7 +5,7 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 
 ## Requirements
 
-* [Python 2.7](https://www.python.org/)
+* [Python 3](https://www.python.org)
 
   Create a virtual environment to work in for this repo!
 

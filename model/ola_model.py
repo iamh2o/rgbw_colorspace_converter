@@ -9,7 +9,6 @@ Pixels are representations of the addressible unit in your object. Cells can hav
 """
 import array
 import sys
-sys.path.append('/usr/local/lib/python2.7/site-packages/')
 from ola.ClientWrapper import ClientWrapper
 import json
 
