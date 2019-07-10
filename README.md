@@ -5,13 +5,11 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 
 ## Requirements
 
-* Python 2.7
-  [http://www.python.org](http://www.python.org)
+* [Python 2.7](https://www.python.org/)
 
   Create a virtual environment to work in for this repo!
 
-* Processing 2.2.1+ (for simulator only)
-  [http://www.processing.org](http://www.processing.org)
+* [Processing 2.2.1+](https://www.processing.org/) (for simulator only)
 
 There are a few 3rd party python modules that need to be installed:
 
@@ -36,11 +34,11 @@ Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-    ./go_tri.py --simulator
+    python go_tri.py --simulator
 
 You can also specify which show to run by using the name of the show:
 
-    ./go_tri.py --simulator UpDown
+    python go_tri.py --simulator UpDown
 
 You can also choose which show is running through the web interface:
 
@@ -62,7 +60,7 @@ You'll need to install the app on your phone or tablet, then install a layout.
 	1. Download the TouchOSC Editor from the TouchOSC page (scroll down to 'Downloads') 
 	2. Open the show control layout from the baaahs repository (misc/ShowControl.touchosc)
 	3. Click 'Sync' in the TouchOSC Editor menubar and follow the on-screen instructions
-	
+
 For more details on controlling shows with OSC, check the 'doc' directory in this repository.
 
 ## Hardware Support
