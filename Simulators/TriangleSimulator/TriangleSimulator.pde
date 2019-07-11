@@ -43,7 +43,7 @@ float hue;
  
 
 void setup() {
-  size(5000,5000);
+  size(800,700);
   rotate(radians(0));
   frameRate(30);
 
