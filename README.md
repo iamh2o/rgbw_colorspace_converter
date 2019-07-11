@@ -5,7 +5,7 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 
 ## Requirements
 
-* [Python 3]((https://www.python.org)), [poetry](https://poetry.eustace.io/)
+* [Python 3](https://www.python.org), [poetry](https://poetry.eustace.io/)
 
 ```sh
 # Install Python 3 (any method will do)
