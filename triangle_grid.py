@@ -52,7 +52,7 @@ class TriangleGrid(object):
             raise Exception('You have already built a triangle grid, clear this one first')
 
         #By 'Y' I mean column..... sorry
-        grid_y_start_pos = (int(self._len_of_last_row)-1)/2
+        grid_y_start_pos = (int(self._len_of_last_row)-1)//2
         grid_y_curr_pos = grid_y_start_pos
 
         row_len = 0
@@ -143,7 +143,7 @@ class TriangleGrid(object):
             if cell_id == end_cell_id:
                 up_down = 'up'
             end_cell_id += 2 + cells_added
-            
+
             grid_y_curr_pos = grid_y_start_pos - curr_row-1 
 
             curr_row += 1

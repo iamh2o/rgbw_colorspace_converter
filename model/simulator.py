@@ -96,11 +96,10 @@ class SimulatorModel(object):
 
         for num in self.dirty:
             color = self.dirty[num]        
-            msg = "%s %s %s,%s,%s" % ('b', num, color.r, color.g, color.b)
+            msg = "%s %s %s,%s,%s\n" % ('b', num, color.r, color.g, color.b)
 #            print msg
             if self.debug:
                 print(msg)
-            self.sock.send(msg)
-            self.sock.send('\n')
+            self.sock.send(msg.encode())
 
         self.dirty = {}
