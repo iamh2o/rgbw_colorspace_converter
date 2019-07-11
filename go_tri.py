@@ -220,12 +220,6 @@ def osc_listener(q, port=5700):
     st.daemon = True
     return st
 
-def bonjour_server(name="TriGrid", port=5700):
-    "Create the bonjour server, returns (thread, shutdownEvent)"
-    from lib import bonjour
-    shutdownEvent = threading.Event()
-    st = threading.Thread(name="Bonjour broadcaster", target=bonjour.serve_forever, args=(name, port, shutdownEvent))
-    return (st, shutdownEvent)
 
 class TriangleServer(object):
     def __init__(self, tri_model, args):
@@ -238,23 +232,13 @@ class TriangleServer(object):
 
         self.osc_thread = None
 
-        self.bonjour_thread = None
-        self.bonjour_exit_flag = None
-
         self.running = False
         self._create_services()
 
     def _create_services(self):
         "Create TRI services, trying to fail gracefully on missing dependencies"
-        # Bonjour advertisement
         # XXX can this also advertise the web interface?
         # XXX should it only advertise services that exist?
-        try:
-            (t, flag) = bonjour_server(name="TriGrid@" + util.get_hostname("unknown"))
-            self.bonjour_thread = t
-            self.bonjour_exit_flag = flag
-        except Exception, e:
-            print "WARNING: Can't create bonjour service"
 
         # OSC listener
         try:
@@ -274,9 +258,6 @@ class TriangleServer(object):
             return
 
         try:
-            if self.bonjour_thread:
-                self.bonjour_thread.start()
-
             if self.osc_thread:
                 self.osc_thread.start()
 
@@ -290,10 +271,6 @@ class TriangleServer(object):
     def stop(self):
         if self.running: # should be safe to call multiple times
             try:
-                if self.bonjour_thread:
-                    print "Setting bonjour exit flag"
-                    self.bonjour_exit_flag.set()
-
                 # OSC listener is a daemon thread so it will clean itself up
 
                 # ShowRunner is shut down via the message queue

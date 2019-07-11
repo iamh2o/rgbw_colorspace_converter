@@ -14,7 +14,6 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 There are a few 3rd party python modules that need to be installed:
 
   * cherrypy
-  * pybonjour
 
 Install python modules with *easy_install* (You can also use *pip* if you have a preference)  For example:
 
@@ -83,14 +82,9 @@ OS X:
 
     pip install --no-use-wheel CherryPy
 
-    pip install setuptools-git
-    pip install --allow-external pybonjour pybonjour
-
 Debian / Ubuntu:
 
     apt-get install libavahi-compat-libdnssd1
-
-    pip install --allow-external pybonjour --allow-unverified pybonjour pybonjour
 
 ## Actually Running The Thing w/ DMXking LeDMX4pro
 
