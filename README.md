@@ -8,7 +8,15 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 * [Python 3](https://www.python.org), [poetry](https://poetry.eustace.io/)
 
 ```sh
+
 # Install Python 3 (any method will do)
+## Ideally, use a virtual env
+virtualenv --python=python3 ve
+...
+source ve/bin/activate
+
+.. or ..
+
 brew install python
 export PATH="$(brew --prefix python)/libexec/bin:${PATH}"
 

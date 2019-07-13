@@ -193,6 +193,22 @@ version = "3.7.4"
 
 [[package]]
 category = "main"
+description = "Google Protobuf Lib"
+name = "protobuf"
+optional = false
+python-version = "*"
+version = "*"
+
+[[package]]
+category = "main"
+description = "Ipython"
+description = "ipython"
+optional = false
+python-version = "*"
+version = "*"
+
+[[package]]
+category = "main"
 description = "Backported and Experimental Type Hints for Python 3.5+"
 name = "typing-extensions"
 optional = false
