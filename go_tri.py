@@ -106,8 +106,7 @@ class ShowRunner(threading.Thread):
                 self.max_show_time = int(msg.split(':')[1])
 
         elif isinstance(msg, tuple):
-            # osc message
-            # ('/1/command', [value])
+
             print("OSC:", msg)
 
             (addr, val) = msg
@@ -171,11 +170,10 @@ class ShowRunner(threading.Thread):
             return None
 
     def run(self):
-        print("AAAAAAA")
         if not (self.show and self.framegen):
             print("Next Next Next")
             self.next_show()
-        print("1")
+
         while self.running:
             try:
                 self.check_queue()
@@ -336,9 +334,9 @@ if __name__ == '__main__':
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json', keys_int=True)
         triangle_grid = triangle_grid.make_tri(model, 5)
     else:
-        logging.info("Starting OLA")
-        from model.ola_model import OLAModel
-        model = OLAModel(800, model_json="./data/pixel_map.json")
+        logging.info("Starting SACN")
+        from model.sacn_model import sACN
+        model = sACN(800, model_json="./data/pixel_map.json")
 
         triangle_grid = triangle_grid.make_tri(model, 3)
 
