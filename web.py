@@ -16,11 +16,11 @@ class SheepyWeb(object):
     @cherrypy.expose
     def change_run_time(self, run_time=None):
         try:
-            print "RUNTIME XXXXX:::: %s" % run_time
+            print("RUNTIME XXXXX:::: %s" % run_time)
             run_time = int(run_time)
             self.queue.put("inc runtime:%s"%run_time)
         except Exception as e:
-            print "\n\nCRASH\n\n", e
+            print("\n\nCRASH\n\n", e)
             #probably a string... do nothing!
             pass
         return "<a href='.'/>Back</a>"
@@ -47,9 +47,9 @@ Seconds:<input type=text name=run_time value=60><input type=submit></form>
     def run_show(self, show_name=None):
         if show_name:
             self.queue.put("run_show:"+show_name)
-            print "setting show to:", show_name
+            print("setting show to:", show_name)
         else:
-            print "didn't get a show name"
+            print("didn't get a show name")
 
         # XXX otherwise the runner.status() method
         # hasn't had time to update

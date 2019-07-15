@@ -31,8 +31,8 @@ class OneByOne(object):
         while True:
 
             self.tri_grid.clear()
-            print cell_n
-            self.tri_grid.set_cell_by_cellid(self.tri_grid.get_cells()[cell_n].get_id(), RGBW(255,255,25,25)) 
+            print(cell_n)
+            self.tri_grid.set_cell_by_cellid(self.tri_grid.get_cells()[cell_n].get_id(), RGBW(255, 255, 25, 25))
 
             if cell_n >= ncells:
                 cell_n = -1
