@@ -1,4 +1,3 @@
-import os
 import sys
 import numpy as np
 
@@ -56,7 +55,7 @@ for q in ds:
     for iii in np.lexsort(np.transpose(ds[q])[::-1]):
 #        print iii
         ii =ds[q][iii]
-        print "triangle({0},{1},{2},{3},{4},{5});".format(ii[0],ii[1],ii[2],ii[3],ii[4],ii[5])
+        print("triangle({0},{1},{2},{3},{4},{5});".format(ii[0],ii[1],ii[2],ii[3],ii[4],ii[5]))
         #print "triangle,{0},{1},{2},{3},{4},{5},{6}".format(ii[0],ii[1],ii[2],ii[3],ii[4],ii[5],c)
 
         c  +=1 

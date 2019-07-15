@@ -5,22 +5,29 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 
 ## Requirements
 
-* [Python 2.7](https://www.python.org/)
+* [Python 3](https://www.python.org), [poetry](https://poetry.eustace.io/)
 
-  Create a virtual environment to work in for this repo!
+```sh
 
-* [Processing 2.2.1+](https://www.processing.org/) (for simulator only)
+# Install Python 3 (any method will do)
+## Ideally, use a virtual env
+virtualenv --python=python3 ve
+...
+source ve/bin/activate
 
-There are a few 3rd party python modules that need to be installed:
+.. or ..
 
-  * cherrypy
+brew install python
+export PATH="$(brew --prefix python)/libexec/bin:${PATH}"
 
-Install python modules with *easy_install* (You can also use *pip* if you have a preference)  For example:
+# Install Poetry
+curl -fsSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
 
-    easy_install cherrypy
+# Install dependencies
+poetry install
+```
 
-Don't worry too much if you can't get some of the dependencies to install - you'll still be able to run the software,
-just with some features missing.  Python and Processing are the most important parts if you just want to write shows.
+* [Processing 2.2.1+](https://www.processing.org) (for simulator only)
 
 ## Getting Started
 
@@ -33,11 +40,11 @@ Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-    python go_tri.py --simulator
+    poetry run python go_tri.py --simulator
 
 You can also specify which show to run by using the name of the show:
 
-    python go_tri.py --simulator UpDown
+    poetry run python go_tri.py --simulator UpDown
 
 You can also choose which show is running through the web interface:
 
@@ -73,18 +80,6 @@ OS X:
 Debian / Ubuntu:
 
     sudo apt-get install ola ola-python ola-rdm-tests
-
-## Tips
-
-Trouble installing python dependencies?  Try some of these magic incantations:
-
-OS X:
-
-    pip install --no-use-wheel CherryPy
-
-Debian / Ubuntu:
-
-    apt-get install libavahi-compat-libdnssd1
 
 ## Actually Running The Thing w/ DMXking LeDMX4pro
 

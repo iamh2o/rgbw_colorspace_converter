@@ -113,7 +113,7 @@ def getWhiteColor(rgb):
     try:
         ret = int(round((255.0-saturation(rgb)) / 255.0 * (float(rgb.r) + float(rgb.b) + float(rgb.g))/3.0))
     except:
-        print "Error", rgb
+        print("Error", rgb)
     return ret
 
 def clamp(val, min_value, max_value):
@@ -152,7 +152,7 @@ def hsv_to_rgbw(hsv):
     r = int(_rgb[0] * 0xff)
     g = int(_rgb[1] * 0xff)
     b = int(_rgb[2] * 0xff)
-    return (r,g,b,hsv[-1])
+    return (r, g, b, hsv[-1])
 
 
 def hsv_to_rgb(hsv):
@@ -162,33 +162,33 @@ def hsv_to_rgb(hsv):
     r = int(_rgb[0] * 0xff)
     g = int(_rgb[1] * 0xff)
     b = int(_rgb[2] * 0xff)
-    return (r,g,b,hsv[-1])
+    return (r, g, b, hsv[-1])
 
 def RGBW(r,g,b,w, recalculate_w=True):
     "Create new RGBW Color"
-    t = (r,g,b,w)
+    t = (r, g, b, w)
     assert is_rgbw_tuple(t)
     return(Color(rgb_to_hsv(t), recalculate_w))
 
 def RGB(r,g,b,w=0, recalculate_w=True):
     "Create a new RGB color"
-    t = (r,g,b,w)
+    t = (r, g, b, w)
     assert is_rgb_tuple(t)
-    return Color(rgb_to_hsv(t),recalculate_w)
+    return Color(rgb_to_hsv(t), recalculate_w)
 
 def HSV(h,s,v, w=0.0, recalculate_w=True):
     "Create a new HSV color"
-    return Color((h,s,v,w), recalculate_w)
+    return Color((h, s, v, w), recalculate_w)
 
 def Hex(value, recalculate_w=True):
     "Create a new Color from a hex string"
     value = value.lstrip('#')
     lv = len(value)
     rgb_t = (int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
-    r = rgb_t.next()
-    g = rgb_t.next()
-    b = rgb_t.next()
-    return RGB(r,g,b,0,recalculate_w=True)   #JEM -not sure what to do here
+    r = next(rgb_t)
+    g = next(rgb_t)
+    b = next(rgb_t)
+    return RGB(r, g, b, 0, recalculate_w=True)   #JEM -not sure what to do here
 
 class Color(object):
 
@@ -286,7 +286,7 @@ class Color(object):
     @r.setter
     def r(self, val):
         assert 0 <= val <= 255
-        r,g,b,w = self.rgb
+        r, g, b, w = self.rgb
         new = (val, g, b, w)
         assert is_rgb_tuple(new)
         self._set_hsv(rgb_to_hsv(new))
@@ -298,7 +298,7 @@ class Color(object):
     @g.setter
     def g(self, val):
         assert 0 <= val <= 255
-        r,g,b,w = self.rgb
+        r, g, b, w = self.rgb
         new = (r, val, b, w)
         assert is_rgb_tuple(new)
         self._set_hsv(rgb_to_hsv(new))
@@ -310,7 +310,7 @@ class Color(object):
     @b.setter
     def b(self, val):
         assert 0 <= val <= 255
-        r,g,b,w = self.rgb
+        r, g, b, w = self.rgb
         new = (r, g, val, w)
         assert is_rgb_tuple(new)
         self._set_hsv(rgb_to_hsv(new))
@@ -320,11 +320,11 @@ class Color(object):
         return int(self.rgbw[-1])
 
     @w.setter
-    def w(self,val):
+    def w(self, val):
         assert 0 <= val <= 255
-        r,g,b, w = self.rgbw
+        r, g, b, w = self.rgbw
         new = (r, g, b, val)
-        self._set_hsv(rgb_to_hsv(new),preserve_w=True)
+        self._set_hsv(rgb_to_hsv(new), preserve_w=True)
 
     @property
     def recalculate_w(self):
