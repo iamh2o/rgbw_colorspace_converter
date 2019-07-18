@@ -66,7 +66,7 @@ def is_rgbw_tuple(rgbw):
 def test_rgb2hsi2rgb(r,g,b):
     (h,s,i) = rgb2hsi(r,g,b)
     print("ORIGRGB: {0} / {1} / {2} ||| HSI: {3} / {4} / {5} ".format(r,g,b,h,s,i))
-    (rr,gg,bb) = hsi2rgb(h,s,i)
+    (rr,gg,bb) = hsi2rgbA(h,s,i)
     print("CONV RGB: {0} / {1} / {2} ||| HSI: {3} / {4} / {5} ".format(rr,gg,bb,h,s,i))
 
 
@@ -96,41 +96,74 @@ def rgb_hsi_tests():
         print("EXPECTED:: R: {0} / G: {1} / B: {2} || H: {3} / S: {4} / I: {5}".format(R,G,B,h,s,i))
         print("Calculated: ..........................................h= {0} / s= {1} / i  {2}".format(round(H2,4),round(S2,4),round(I2,4)))
 
-def  hsi2rgb(h,s,i):
-    h = constrain(float(h), 0.0,1.0)
-    s = constrain(float(s), 0.0,1.0)
-    i = constrain(float(i), 0.0,1.0)
-    x = 0.0
-    y = 0.0
-    z = 0.0
+
+#https://www.neltnerlabs.com/saikoled/how-to-convert-from-hsi-to-rgb-white
+def hsi2rgbA(H,S,I):
     r = 0.0
     g = 0.0
     b = 0.0
-    
-    x = i * (1.0-s)
-    if h < (2.0 * math.pi/3.0):
-        y = i  *( 1.0 + (s * math.cos(h)) /  (math.cos(math.pi/3.0 - h)))
-        z = 3.0 * i - (x + y)
-        b  = x
-        r = y
-        g = z
-    elif h < (4.0*math.pi/3.0):
-        y = i * (1.0 + (s * math.cos(h - 2.0 * math.pi / 3.0)) / (math.cos(math.pi/3.0 - (h- 2.0 * math.pi/3.0))))
-        z = 3.0 * i - (x+y)
-        r = x
-        g = y
-        b = z
+
+    H = math.fmod(H,360.0)
+    H = 3.14159*H/180.0
+    S = constrain(S, 0.0,1.0)
+    I = constrain(I, 0.0,1.0)
+
+    if H < 2.09439:
+        r = 255.0*I/3.0*(1.0+S*math.cos(H)/math.cos(1.047196667-H))
+        g = 255.0*I/3.0*(1.0+S*(1.0-math.cos(H)/math.cos(1.047196667-H)))
+        b = 255.0*I/3.0*(1.0-S)
+    elif H < 4.188787:
+        H = H - 2.09439
+        g = 255.0*I/3.0*(1.0+S*math.cos(H)/math.cos(1.047196667-H))
+        b = 255.0*I/3.0*(1.0+S*(1.0-math.cos(H)/math.cos(1.047196667-H)))
+        r = 255.0*I/3.0*(1.0-S)
     else:
-        y = i * (1.0 + (s * math.cos(h-4.0 * math.pi / 3.0)) / (math.cos(math.pi / 3.0 - (h - 4.0 * math.pi / 3.0))))
-        z = 3.0 * i - (x+y)
-        r = z
-        g = x
-        b = y
-    return(r*255,g*255,b*255)
+        H = H - 4.188787
+        b = 255.0*I/3.0*(1.0+S*math.cos(H)/math.cos(1.047196667-H))
+        r = 255.0*I/3.0*(1.0+S*(1.0-math.cos(H)/math.cos(1.047196667-H)))
+        g = 255.0*I/3.0*(1.0-S)
+
+    return ( constrain(int(r*3.0),0,255), constrain(int(g*3.0),0,255), constrain(int(b*3.0),0,255 ))
+
+void hsi2rgbw(float H, float S, float I, int* rgbw) {
+  int r, g, b, w;
+  float cos_h, cos_1047_h;
+  H = fmod(H,360); // cycle H around to 0-360 degrees
+  H = 3.14159*H/(float)180; // Convert to radians.
+  S = S>0?(S<1?S:1):0; // clamp S and I to interval [0,1]
+  I = I>0?(I<1?I:1):0;
+  
+  if(H < 2.09439) {
+    cos_h = cos(H);
+    cos_1047_h = cos(1.047196667-H);
+    r = S*255*I/3*(1+cos_h/cos_1047_h);
+    g = S*255*I/3*(1+(1-cos_h/cos_1047_h));
+    b = 0;
+    w = 255*(1-S)*I;
+  } else if(H < 4.188787) {
+    H = H - 2.09439;
+    cos_h = cos(H);
+    cos_1047_h = cos(1.047196667-H);
+    g = S*255*I/3*(1+cos_h/cos_1047_h);
+    b = S*255*I/3*(1+(1-cos_h/cos_1047_h));
+    r = 0;
+    w = 255*(1-S)*I;
+  } else {
+    H = H - 4.188787;
+    cos_h = cos(H);
+    cos_1047_h = cos(1.047196667-H);
+    b = S*255*I/3*(1+cos_h/cos_1047_h);
+    r = S*255*I/3*(1+(1-cos_h/cos_1047_h));
+    g = 0;
+    w = 255*(1-S)*I;
+  }
+  
+  rgbw[0]=r;
+  rgbw[1]=g;
+  rgbw[2]=b;
+  rgbw[3]=w;
 
 
-
-#https://en.wikipedia.org/wiki/HSL_and_HSV#Saturation                                                           
 def rgb2hsi(red,green,blue):
     r = constrain(float(red)/255.0,0.0,1.0)
     g = constrain(float(green)/255.0, 0.0,1.0)
