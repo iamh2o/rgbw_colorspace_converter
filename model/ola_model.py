@@ -8,8 +8,8 @@ Pixels are representations of the addressible unit in your object. Cells can hav
 
 """
 import array
-from ola.ClientWrapper import ClientWrapper
 import json
+import ola
 
 
 def keystoint(x):                        
@@ -25,7 +25,7 @@ class OLAModel(object):
 
         self.PIXEL_MAP = None
         self._map_leds(model_json)
-        self.wrapper = ClientWrapper()
+        self.wrapper = ola.ClientWrapper()
         self.client = self.wrapper.Client()
         #Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
         #Pixels are an LED represented by 4 DMX addresses
