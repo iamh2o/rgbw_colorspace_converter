@@ -8,10 +8,12 @@ import queue
 import threading
 
 import cherrypy
+from model.simulator import SimulatorModel
 import osc_serve
 import triangle_grid
 import shows
 import util
+from web import TriangleWeb
 
 # Prints stack trace on failure
 faulthandler.enable()
@@ -51,10 +53,12 @@ class ShowRunner(threading.Thread):
         # map of names -> show ctors
         self.shows = dict(shows.load_shows())
         self.randseq = shows.random_shows()
+        self.show_params = False
 
         # current show object & frame generator
         self.show = None
         self.framegen = None
+        self.prev_show = None
 
         # current show parameters
 
@@ -65,8 +69,7 @@ class ShowRunner(threading.Thread):
 
     def status(self):
         if self.running:
-            # TODO(justin): Replace self.show with NamedTuple use .name here
-            return "Running: %s (%d seconds left)" % (type(self.show), self.max_show_time - self.show_runtime)
+            return "Running: %s (%d seconds left)" % (self.show.name, self.max_show_time - self.show_runtime)
         else:
             return "Stopped"
 
@@ -89,7 +92,7 @@ class ShowRunner(threading.Thread):
         if isinstance(msg, str):
             if msg == "shutdown":
                 self.running = False
-                print("ShowRunner shutting down")
+                logging.info("ShowRunner shutting down")
             elif msg == "clear":
                 self.clear()
                 time.sleep(2)
@@ -101,8 +104,7 @@ class ShowRunner(threading.Thread):
                 self.max_show_time = int(msg.split(':')[1])
 
         elif isinstance(msg, tuple):
-
-            print("OSC:", msg)
+            logging.debug(f'OSC: {msg}')
 
             (addr, val) = msg
             addr = addr.split('/z')[0]
@@ -130,25 +132,25 @@ class ShowRunner(threading.Thread):
             print("ignoring unknown msg:", str(msg))
 
     def clear(self):
-#        print "WE ARE GOING HERE"
+        """Clears contained model."""
         self.model.clear()
 
     def next_show(self, name=None):
-        s = None
+        show = None
         if name:
             if name in self.shows:
-                s = self.shows[name]
+                show = self.shows[name]
             else:
-                print(f'unknown show: {name}')
+                logging.warning(f'unknown show: {name}')
 
-        if not s:
-            print("choosing random show")
-            (name, s) = next(self.randseq)
+        if not show:
+            logging.info("choosing random show")
+            (name, show) = next(self.randseq)
 
         self.clear()
         self.prev_show = self.show
 
-        self.show = s(self.model)
+        self.show = show(self.model)
         print(f'next show: {name}')
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
@@ -187,8 +189,7 @@ class ShowRunner(threading.Thread):
                     self.next_show()
 
             except Exception:
-                print("unexpected exception in show loop!")
-                traceback.print_exc()
+                logging.exception("unexpected exception in show loop!")
                 if self.fail_hard:
                     raise
                 else:
@@ -224,8 +225,8 @@ class TriangleServer(object):
         # OSC listener
         try:
             osc_listener(self.queue)
-        except Exception as e:
-            logging.warning("Can't create OSC listener")
+        except Exception:
+            logging.warning("Can't create OSC listener", exc_info=True)
 
         # Show runner
         self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
@@ -235,18 +236,17 @@ class TriangleServer(object):
 
     def start(self):
         if self.running:
-            print("start() called, but tri_grid is already running!")
+            logging.warning("start() called, but tri_grid is already running!")
             return
 
         try:
             self.runner.start()
             self.running = True
-        except Exception as e:
-            print("Exception starting tri_grid!!")
-            traceback.print_exc()
+        except Exception:
+            logging.exception("Exception starting tri_grid!!")
 
     def stop(self):
-        if self.running: # should be safe to call multiple times
+        if self.running:  # should be safe to call multiple times
             try:
                 # OSC listener is a daemon thread so it will clean itself up
 
@@ -254,37 +254,33 @@ class TriangleServer(object):
                 self.queue.put("shutdown")
 
                 self.running = False
-            except Exception as e:
-                print("Exception stopping tri_grid!!")
-                traceback.print_exc()
+            except Exception:
+                logging.exception("Exception stopping tri_grid!!")
 
     def go_headless(self):
-        "Run without the web interface"
-        print("Running without web interface")
+        """Run without the web interface"""
+        logging.info("Running without web interface")
         try:
             while True:
-                time.sleep(999) # control-c breaks out of time.sleep
+                time.sleep(999)  # control-c breaks out of time.sleep
         except KeyboardInterrupt:
             print("Exiting on keyboard interrupt")
 
         self.stop()
 
     def go_web(self):
-        "Run with the web interface"
-        import cherrypy
-        from web import SheepyWeb
+        """Run with the web interface"""
+        logging.info("Running with web interface")
 
-        # XXX clean up who manages the canonical show list
-        show_names = [name for (name, klass) in shows.load_shows()]
-        print(show_names)
+        show_names = [name for (name, cls) in shows.load_shows()]
+        print(f'shows: {show_names}')
 
         cherrypy.engine.subscribe('stop', self.stop)
 
-        port = 9990
         config = {
             'global': {
                 'server.socket_host': '0.0.0.0',
-                'server.socket_port': port,
+                'server.socket_port': 9990,
                 # 'engine.timeout_monitor.on' : True,
                 # 'engine.timeout_monitor.frequency' : 240,
                 # 'response.timeout' : 60*15
@@ -292,7 +288,7 @@ class TriangleServer(object):
         }
 
         # this method blocks until KeyboardInterrupt
-        cherrypy.quickstart(SheepyWeb(self.queue, self.runner, show_names),
+        cherrypy.quickstart(TriangleWeb(self.queue, self.runner, show_names),
                             '/',
                             config=config)
 
@@ -316,32 +312,28 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.list:
-        logging.info("Available shows: %s", ', '.join([name for (name, klass) in shows.load_shows()]))
+        logging.info("Available shows: %s", ', '.join([name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
 
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
-        logging.info("Using TriSimulator at %s:%d", sim_host, sim_port)
+        logging.info(f'Using TriSimulator at {sim_host}:{sim_port}')
 
-        from model.simulator import SimulatorModel
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json')
         triangle_grid = triangle_grid.make_tri(model, 5)
     else:
         logging.info("Starting SACN")
         from model.sacn_model import sACN
-        model = sACN(800, model_json="./data/pixel_map.json")
+        model = sACN(max_dmx=800, model_json="./data/pixel_map.json")
 
         triangle_grid = triangle_grid.make_tri(model, 3)
 
     app = TriangleServer(triangle_grid, args)
     try:
         app.start()  # start related service threads
-
-        # enter main blocking event loop
-        app.go_web()
-
-    except Exception as e:
-        logging.exception("Unhandled exception running TRI!: %s", e)
+        app.go_web()  # enter main blocking event loop
+    except Exception:
+        logging.exception("Unhandled exception running TRI!")
     finally:
         app.stop()

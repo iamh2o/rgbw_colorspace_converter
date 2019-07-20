@@ -1,11 +1,16 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
 from random import choice
-from typing import Iterator, List, Tuple
+from typing import Iterator, List, Tuple, Type
 
 
 class ShowBase(ABC):
     """Abstract base class to register Shows"""
+
+    @property
+    def name(self):
+        """Returns the name of the show."""
+        return type(self).__name__
 
     @abstractmethod
     def next_frame(self):
@@ -16,13 +21,12 @@ class ShowBase(ABC):
 
 
 @lru_cache(maxsize=None)
-def load_shows() -> List[Tuple[str, type]]:
+def load_shows() -> List[Tuple[str, Type[ShowBase]]]:
     """Return a sorted list of tuples (name, class) of ShowBase subclasses."""
-    shows = [(cls.__name__, cls) for cls in ShowBase.__subclasses__()]
-    return sorted(shows, key=lambda x: x[0])  # sort show tuples by name before returning them
+    return sorted([(cls.__name__, cls) for cls in ShowBase.__subclasses__()])
 
 
-def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, type]]:
+def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]:
     """
     Return an infinite sequence of randomized shows.
 

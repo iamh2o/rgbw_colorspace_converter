@@ -1,7 +1,9 @@
 import cherrypy
 import time
 
-class SheepyWeb(object):
+
+class TriangleWeb(object):
+    """Web interface for running triangle shows."""
     def __init__(self, queue, runner, show_names):
         self.queue = queue
         self.runner = runner
