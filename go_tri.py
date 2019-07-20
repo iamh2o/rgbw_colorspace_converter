@@ -65,7 +65,8 @@ class ShowRunner(threading.Thread):
 
     def status(self):
         if self.running:
-            return "Running: %s (%d seconds left)" % (self.show.name, self.max_show_time - self.show_runtime)
+            # TODO(justin): Replace self.show with NamedTuple use .name here
+            return "Running: %s (%d seconds left)" % (type(self.show), self.max_show_time - self.show_runtime)
         else:
             return "Stopped"
 
@@ -132,24 +133,23 @@ class ShowRunner(threading.Thread):
 #        print "WE ARE GOING HERE"
         self.model.clear()
 
-
     def next_show(self, name=None):
         s = None
         if name:
             if name in self.shows:
                 s = self.shows[name]
             else:
-                print("unknown show:", name)
+                print(f'unknown show: {name}')
 
         if not s:
             print("choosing random show")
-            s = next(self.randseq)
+            (name, s) = next(self.randseq)
 
         self.clear()
         self.prev_show = self.show
 
         self.show = s(self.model)
-        print("next show:" + self.show.name)
+        print(f'next show: {name}')
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
         if self.show_params:
@@ -199,7 +199,7 @@ def osc_listener(q, port=5700):
     """Create the OSC Listener thread"""
 
     listen_address = ('0.0.0.0', port)
-    logging.info("Starting OSC Listener on %s:%d", listen_address)
+    logging.info(f'Starting OSC Listener on {listen_address}')
     osc_serve.create_server(listen_address, q)
 
 
@@ -336,13 +336,10 @@ if __name__ == '__main__':
 
     app = TriangleServer(triangle_grid, args)
     try:
-        app.start() # start related service threads
+        app.start()  # start related service threads
 
         # enter main blocking event loop
-        if _use_cherrypy:
-            app.go_web()
-        else:
-            app.go_headless()
+        app.go_web()
 
     except Exception as e:
         logging.exception("Unhandled exception running TRI!: %s", e)
