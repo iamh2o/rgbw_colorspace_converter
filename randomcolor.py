@@ -37,7 +37,7 @@ __all__ = ['random_color']
 
 def random_within(_min, _max):
     "Return a random number within two values, inclusive of those values"
-    return random.randrange(int(_min), int(_max)+1)
+    return random.randrange(int(_min), int(_max) + 1)
 
 ColorDef = namedtuple('ColorDef', ['hue_range', 'lower_bounds', 'saturation_range', 'brightness_range'])
 

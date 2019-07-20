@@ -7,18 +7,11 @@ import traceback
 import queue
 import threading
 
+import cherrypy
 import osc_serve
 import triangle_grid
-import triangle_shows as shows
+import shows
 import util
-
-# fail gracefully if cherrypy isn't available
-_use_cherrypy = False
-try:
-    import cherrypy
-    _use_cherrypy = True
-except ImportError:
-    print("WARNING: CherryPy not found; web interface disabled")
 
 # Prints stack trace on failure
 faulthandler.enable()
@@ -42,6 +35,7 @@ def speed_interpolation(val):
 
 low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
 hi_interp  = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
+
 
 class ShowRunner(threading.Thread):
     def __init__(self, model, queue, max_showtime=240, fail_hard=True):

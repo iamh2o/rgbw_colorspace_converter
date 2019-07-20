@@ -1,36 +1,21 @@
-
+from .showbase import ShowBase
 from color import RGBW
 
 
-class LeftToRight(object):
-    def __init__(self, tri_grid):
-        self.name = "LeftToRight"
-
-        # walk pixels up and downs strip
+class LeftToRight(ShowBase):
+    def __init__(self, tri_grid, frame_delay=1.0):
         self.tri_grid = tri_grid
+        self.frame_delay = frame_delay
 
-        self.frame_delay = 1.0
-
-#        from IPython import embed; embed()
-
-
-    col = 0
     def next_frame(self):
-        """
-        Draw the next step of the animation.  This is the main loop
-        of the show.  Set some pixels and then 'yield' a number to
-        indicate how long you'd like to wait before drawing the next
-        frame.  Delay numbers are in seconds.
-        """
-
         xlen = len(self.tri_grid._triangle_grid)
         ylen = len(self.tri_grid._triangle_grid[0])
-        x =0
+        x = 0
         y = 0
         while True:
             self.tri_grid.clear()
 
-            print("XY", x, y)
+            print(f"x={x} y={y}")
             if y < ylen:
                 for rows in self.tri_grid._triangle_grid:
                     cell = self.tri_grid._triangle_grid[x][y]
@@ -45,6 +30,5 @@ class LeftToRight(object):
             else:
                 x = 0
                 y = 0
-        
-        
+
             yield self.frame_delay

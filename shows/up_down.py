@@ -1,38 +1,19 @@
-
+from .showbase import ShowBase
 from color import RGBW
 
 
-class UpDown(object):
-    def __init__(self, tri_grid):
-        self.name = "UpDown"
-
-        # walk pixels up and downs strip
+class UpDown(ShowBase):
+    def __init__(self, tri_grid, frame_delay=2):
         self.cells = tri_grid
+        self.frame_delay = frame_delay
 
-        self.frame_delay = 2
-
-#        from IPython import embed; embed()
-
-
-    col = 0
     def next_frame(self):
-        """
-        Draw the next step of the animation.  This is the main loop
-        of the show.  Set some pixels and then 'yield' a number to
-        indicate how long you'd like to wait before drawing the next
-        frame.  Delay numbers are in seconds.
-        """
-
-#        from IPython import embed; embed() 
-        self.cells.clear()
-
-        col = 255
         a = "up"
+
         while True:
             self.cells.clear()
-#            from IPython import embed; embed()    
 
-            if a in "up":
+            if a == "up":
                 print('up')
                 for i in self.cells.get_up_cells():
                     print("Up", i.get_id())
@@ -43,9 +24,9 @@ class UpDown(object):
                     print("down", i.get_id())
                     self.cells.set_cell_by_cellid(i.get_id(), RGBW(255, 0, 0, 0))
 
-
-            if a in "up":
+            if a == "up":
                 a = "down"
             else:
                 a = "up"
+
             yield self.frame_delay
