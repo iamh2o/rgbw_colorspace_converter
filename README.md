@@ -1,7 +1,9 @@
-## History
+# Pyramid Triangles
 
-Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was
-the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/default/)
+Codebase to drive pyramid triangle art.
+
+![Build
+Status](https://travis-ci.com/pyramidscheme/pyramidtriangles.svg?branch=master)
 
 ## Requirements
 
@@ -80,6 +82,11 @@ OS X:
 Debian / Ubuntu:
 
     sudo apt-get install ola ola-python ola-rdm-tests
+
+## History
+
+Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was
+the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/default/)
 
 ## Actually Running The Thing w/ DMXking LeDMX4pro
 
