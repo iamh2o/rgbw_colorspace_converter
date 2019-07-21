@@ -3,7 +3,6 @@ import faulthandler
 import logging
 import sys
 import time
-import traceback
 import queue
 import threading
 
@@ -13,7 +12,7 @@ import osc_serve
 import triangle_grid
 import shows
 import util
-from web import TriangleWeb
+from web.web import TriangleWeb
 
 # Prints stack trace on failure
 faulthandler.enable()
@@ -69,7 +68,7 @@ class ShowRunner(threading.Thread):
 
     def status(self):
         if self.running:
-            return "Running: %s (%d seconds left)" % (self.show.name, self.max_show_time - self.show_runtime)
+            return "Running %s (%d seconds left)" % (self.show.name, self.max_show_time - self.show_runtime)
         else:
             return "Stopped"
 
