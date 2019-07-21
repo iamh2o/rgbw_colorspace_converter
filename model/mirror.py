@@ -1,11 +1,12 @@
 """
-Proof of concept that dealing with mirroring across
-multiple backend models is best done at this layer.
+Proof of concept that dealing with mirroring across multiple backend models is best done at this layer.
 
-Completely agnostic as to what the cell ids look like,
-they are just passed through to the underlying model
+Completely agnostic as to what the cell ids look like, they are just passed through to the underlying model.
 """
-class MirrorModel(object):
+from .modelbase import ModelBase
+
+
+class MirrorModel(ModelBase):
     def __init__(self, *models):
         self.models = []
         if models:
@@ -16,19 +17,9 @@ class MirrorModel(object):
         self.models.append(model)
 
     # Model basics
-    def cell_ids(self):
-        if len(self.models) > 0:
-            return self.models[0].cell_ids()
-        else:
-            return []
-    
-    def set_cell(self, cell, color):
+    def set_pixel(self, pixel, color, cellid=None):
         for m in self.models:
-            m.set_cell(cell, color)
-
-    def set_cells(self, cells, color):
-        for m in self.models:
-            m.set_cells(cells, color)
+            m.set_pixel(pixel, color, cellid)
 
     def go(self):
         for m in self.models:
