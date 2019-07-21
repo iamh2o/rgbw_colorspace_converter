@@ -32,17 +32,19 @@ class TriangleWeb(object):
 
     @cherrypy.expose
     def change_run_time(self, run_time=None):
-        if isinstance(run_time, int) and run_time > 0:
-            print(f'changing run_time to: {run_time}')
-            self.queue.put(f'inc runtime:{run_time}')
-            raise cherrypy.HTTPRedirect('/')
+        try:
+            run_time = int(run_time)
+        except ValueError:
+            raise cherrypy.HTTPError(400)
 
-        raise cherrypy.HTTPError(400)
+        print(f'changing run_time to: {run_time}')
+        self.queue.put(f'inc runtime:{run_time}')
+        raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
     def run_show(self, show_name=None):
-        if show_name is None:
-            return
+        if show_name is None or show_name not in self.shows:
+            raise cherrypy.HTTPError(400)
 
         self.queue.put(f'run_show:{show_name}')
         print(f'setting show to: {show_name}')
