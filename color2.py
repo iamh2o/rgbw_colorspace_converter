@@ -8,37 +8,6 @@ from copy import deepcopy
 
 __all__=['RGB', 'HSV', 'Hex', 'Color', 'RGBW']
 
-#https://blog.saikoled.com/post/44677718712/how-to-convert-from-hsi-to-rgb-white
-def D_calc_white_via_hsi():
-    pass
-
-
-#this
-#https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html
-
-#https://stackoverflow.com/questions/40312216/converting-rgb-to-rgbw   
-def C_calc_white_from_rgb(r,g,b):
-    pass
-
-def B_calc_white_from_rgb(r,g,b):
-    M = float(max(r,g,b))
-    m = float(min(r,g,b))
-    Wo = 0
-    if M == 0.0 and m == 0.0:
-        pass
-    else:
-        if float(m)/float(M) < 0.5:
-            Wo = ((m*M)/ (M-m))
-        else:
-            Wo = M
-    Q = 255
-    K = (Wo+M) / m
-    Ro = floor(  ( (K * float(r))  - Wo) / Q)
-    Go = floor(  ( (K * float(g))  - Wo) / Q)
-    Bo = floor(  ( (K * float(b))  - Wo) / Q)
-    return(Ro,Go,Bo,Wo)
-#https://2sn.org/python/color.py
-
 
 def constrain(val, min, max):
     ret = val
@@ -53,14 +22,20 @@ def is_hsv_tuple(hsv):
     "check that a tuple contains 3 values between 0.0 and 1.0"
     return len(hsv) == 4 and all([(0.0 <= t <= 1.0) for t in hsv[0:3]])
 
+
 def is_rgb_tuple(rgb):
     "check that a tuple contains 3 values between 0 and 255"
     return len(rgb) == 4 and all([(0 <= t <= 255) for t in rgb])
+
 
 def is_rgbw_tuple(rgbw):
     "check for valid RGBW tuple"
     return len(rgbw) == 4 and all([(0 <= t <= 255) for t in rgbw])
 
+
+def test_hsi2rgbw(h,s,i):
+    (r,g,b,w) = hsi2rgbw(h,s,i)
+    print("ORIG-HSI: {0} / {1} / {2} ||| HSI: {3} / {4} / {5} ".format(h,s,i,r,g,b,w))
 
 
 def test_rgb2hsi2rgb(r,g,b):
@@ -70,11 +45,10 @@ def test_rgb2hsi2rgb(r,g,b):
     print("CONV RGB: {0} / {1} / {2} ||| HSI: {3} / {4} / {5} ".format(rr,gg,bb,h,s,i))
 
 
-
 def rgb_hsi_tests():
     colors = {
-        'white' : ((1,1,1),(1.0,1.0,1.0)),
-        'olive' : ((.75,.75,0),(60.0,1.0,.5)), #okk
+        'white' : ((1,1,1),(1.0,1.0,1.0)), #ok
+        'olive' : ((.75,.75,0),(60.0,1.0,.5)), #ok
         'teal' : ((.5,1.0,1.0),(180.0,.4,.833)), #ok
         'purple' : ((.75,.25,.75),(300.0, .571, .583)), #ok
         'blue2' : ((.255,.104, .918),(251.1,.756,.426)), #ok
@@ -82,14 +56,15 @@ def rgb_hsi_tests():
         'orange' : ((.931,.463,.316),(14.3, .446, .570)), #ok
         'yellow' : ((.998,.974,.532),(56.9, .363 ,.835)), #ok
         'dusty_blue' : ((.495,.493,.721),(240.5, .135, .570 )), #ok
-        'dark' : ((0.0,0.0,0.0),(0.0,0.0,0.0))
+        'dark' : ((0.0,0.0,0.0),(0.0,0.0,0.0)) #ok
         }
+
     for i in colors:
         print(i)
         r,g,b = colors[i][0]
-        R = r*255.0
-        G = g*255.0
-        B = b*255.0
+        R = constrin(r*255.0,0,255)
+        G = constrain(g*255.0,0,255)
+        B = constrain(b*255.0,0,255)
         
         (h,s,i) = colors[i][1]
         (H2,S2,I2) = rgb2hsi(R,G,B)
@@ -98,7 +73,7 @@ def rgb_hsi_tests():
 
 
 #https://www.neltnerlabs.com/saikoled/how-to-convert-from-hsi-to-rgb-white
-def hsi2rgbA(H,S,I):
+def hsi2rgb(H,S,I):
     r = 0.0
     g = 0.0
     b = 0.0
@@ -123,47 +98,51 @@ def hsi2rgbA(H,S,I):
         r = 255.0*I/3.0*(1.0+S*(1.0-math.cos(H)/math.cos(1.047196667-H)))
         g = 255.0*I/3.0*(1.0-S)
 
-    return ( constrain(int(r*3.0),0,255), constrain(int(g*3.0),0,255), constrain(int(b*3.0),0,255 ))
-
-void hsi2rgbw(float H, float S, float I, int* rgbw) {
-  int r, g, b, w;
-  float cos_h, cos_1047_h;
-  H = fmod(H,360); // cycle H around to 0-360 degrees
-  H = 3.14159*H/(float)180; // Convert to radians.
-  S = S>0?(S<1?S:1):0; // clamp S and I to interval [0,1]
-  I = I>0?(I<1?I:1):0;
-  
-  if(H < 2.09439) {
-    cos_h = cos(H);
-    cos_1047_h = cos(1.047196667-H);
-    r = S*255*I/3*(1+cos_h/cos_1047_h);
-    g = S*255*I/3*(1+(1-cos_h/cos_1047_h));
-    b = 0;
-    w = 255*(1-S)*I;
-  } else if(H < 4.188787) {
-    H = H - 2.09439;
-    cos_h = cos(H);
-    cos_1047_h = cos(1.047196667-H);
-    g = S*255*I/3*(1+cos_h/cos_1047_h);
-    b = S*255*I/3*(1+(1-cos_h/cos_1047_h));
-    r = 0;
-    w = 255*(1-S)*I;
-  } else {
-    H = H - 4.188787;
-    cos_h = cos(H);
-    cos_1047_h = cos(1.047196667-H);
-    b = S*255*I/3*(1+cos_h/cos_1047_h);
-    r = S*255*I/3*(1+(1-cos_h/cos_1047_h));
-    g = 0;
-    w = 255*(1-S)*I;
-  }
-  
-  rgbw[0]=r;
-  rgbw[1]=g;
-  rgbw[2]=b;
-  rgbw[3]=w;
+    return ( constrain(int(r*3.0),0,255), constrain(int(g*3.0),0,255), constrain(int(b*3.0),0,255 ))  #for some reason, the rgb numbers need to be X3...    
 
 
+#https://www.neltnerlabs.com/saikoled/how-to-convert-from-hsi-to-rgb-white                                                                      
+def hsi2rgbw(H,S,I):
+    r = 0
+    g = 0
+    b = 0
+    w = 0
+    cos_h = 0.0 
+    cos_1047_h = 0.0
+
+    H = float(math.fmod(H,360)) # cycle H around to 0-360 degrees
+    H = 3.14159*H/180.0 # Convert to radians.
+    S = constrain(S,0.0,1.0)
+    I = constrain(I,0.0,1.0)
+    
+    if(H < 2.09439):
+        cos_h = math.cos(H)
+        cos_1047_h = math.cos(1.047196667-H)
+        r = S*255.0*I/3.0*(1.0+cos_h/cos_1047_h)
+        g = S*255.0*I/3.0*(1.0+(1.0-cos_h/cos_1047_h))
+        b = 0.0
+        w = 255.0*(1.0-S)*I
+    elif(H < 4.188787):
+        H = H - 2.09439
+        cos_h = math.cos(H)
+        cos_1047_h = math.cos(1.047196667-H)
+        g = S*255.0*I/3.0*(1.0+cos_h/cos_1047_h)
+        b = S*255.0*I/3.0*(1.0+(1.0-cos_h/cos_1047_h))
+        r = 0.0
+        w = 255.0*(1.0-S)*I
+    else: 
+        H = H - 4.188787
+        cos_h = math.cos(H)
+        cos_1047_h = math.cos(1.047196667-H)
+        b = S*255.0*I/3.0*(1.0+cos_h/cos_1047_h)
+        r = S*255.0*I/3.0*(1.0+(1.0-cos_h/cos_1047_h))
+        g = 0.0
+        w = 255.0*(1.0-S)*I
+
+    return (r*3,g*3,b*3,w)  #for some reason, the rgb numbers need to be X3...
+
+
+    
 def rgb2hsi(red,green,blue):
     r = constrain(float(red)/255.0,0.0,1.0)
     g = constrain(float(green)/255.0, 0.0,1.0)
