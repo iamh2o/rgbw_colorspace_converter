@@ -5,17 +5,9 @@ def make_tri(model, n_rows):
     return TriangleGrid(model, n_rows)
 
 
-def calc_last_row_len(max_row):
-    row_len = 1
-    curr_row = 1
-
-    while curr_row < max_row:
-        if max_row == 1:
-            row_len = 1
-        else:
-            row_len += 2
-        curr_row += 1
-    return row_len
+def row_len(row):
+    """Returns count of elements in nth row of equilateral triangle."""
+    return row * 2 - 1
 
 ##
 ## Triangle Grid class to represent one strip
@@ -27,7 +19,7 @@ class TriangleGrid(object):
     def __init__(self, model, n_rows):
         self._model = model
         self._n_rows = n_rows
-        self._len_of_last_row = calc_last_row_len(n_rows)
+        self._len_of_last_row = row_len(n_rows)
 
         # B/C this way of building a 2d array give you buggy garbage where setting [0][0] assigns all rows at posn [0]
         # the value you are setting[[None]*self.len_of_last_row]*self.n_rows
@@ -217,39 +209,19 @@ class TriangleGrid(object):
     # Convenience methods for grabbing useful parts of the triangle grid.
 
     def get_left_side_cells(self):
-        cells = []
-        for i in self._cells:
-            if i.is_left_edge():
-                cells.append(i)
-        return cells
+        return [cell for cell in self._cells if cell.is_left_edge()]
 
     def get_right_side_cells(self):
-        cells = []
-        for i in self._cells:
-            if i.is_right_edge():
-                cells.append(i)
-        return cells
+        return [cell for cell in self._cells if cell.is_right_edge()]
 
     def get_bottom_side_cells(self):
-        cells = []
-        for i in self._cells:
-            if i.is_bottom_edge():
-                cells.append(i)
-        return cells
+        return [cell for cell in self._cells if cell.is_bottom_edge()]
 
     def get_up_cells(self):
-        cells = []
-        for i in self._cells:
-            if i.is_up():
-                cells.append(i)
-        return cells
+        return [cell for cell in self._cells if cell.is_up()]
 
     def get_down_cells(self):
-        cells = []
-        for i in self._cells:
-            if i.is_down():
-                cells.append(i)
-        return cells
+        return [cell for cell in self._cells if cell.is_down()]
 
     @staticmethod
     def is_edge(cell):
@@ -267,18 +239,18 @@ class TriangleGrid(object):
         cell = self.get_cell_by_grid_coords(row, col)
         if cell is None:
             return None
+
+        l = None
+        m = None
+        r = None
+        if cell.is_up():
+            l = self.get_cell_by_grid_coords(row, col-1)
+            m = self.get_cell_by_grid_coords(row+1, col)
+            r = self.get_cell_by_grid_coords(row, col+1)
         else:
-            l = None
-            m = None
-            r = None
-            if cell.is_up():
-                l = self.get_cell_by_grid_coords(row, col-1)
-                m = self.get_cell_by_grid_coords(row+1, col)
-                r = self.get_cell_by_grid_coords(row, col+1)
-            else:
-                l = self.get_cell_by_grid_coords(row, col-1)
-                m = self.get_cell_by_grid_coords(row-1, col)
-                r = self.get_cell_by_grid_coords(row, col+1)
+            l = self.get_cell_by_grid_coords(row, col-1)
+            m = self.get_cell_by_grid_coords(row-1, col)
+            r = self.get_cell_by_grid_coords(row, col+1)
         return (l, m, r)
 
     def get_edge_neighbors_by_cell(self, cell):
@@ -292,20 +264,19 @@ class TriangleGrid(object):
         cell = self.get_cell_by_grid_coords(row, col)
         if cell is None:
             return None
-        else:
-            l = None
-            m = None
-            r = None
-            if cell.is_up():
-                l = self.get_cell_by_grid_coords(row+1, col-1)
-                m = self.get_cell_by_grid_coords(row-1, col)
-                r = self.get_cell_by_grid_coords(row+1, col+1)
-            else:
-                l = self.get_cell_by_grid_coords(row-1, col-1)
-                m = self.get_cell_by_grid_coords(row+1, col)
-                r = self.get_cell_by_grid_coords(row-1, col+1)
 
-            return (l, m, r)
+        l = None
+        m = None
+        r = None
+        if cell.is_up():
+            l = self.get_cell_by_grid_coords(row+1, col-1)
+            m = self.get_cell_by_grid_coords(row-1, col)
+            r = self.get_cell_by_grid_coords(row+1, col+1)
+        else:
+            l = self.get_cell_by_grid_coords(row-1, col-1)
+            m = self.get_cell_by_grid_coords(row+1, col)
+            r = self.get_cell_by_grid_coords(row-1, col+1)
+        return (l, m, r)
 
     def get_vertex_neighbors_by_cell(self, cell):
         return self.get_vertex_neighbors_by_coord(cell.get_row_num(), cell.get_col_pos())
@@ -320,13 +291,13 @@ class TriangleGrid(object):
         cell = self.get_cell_by_grid_coords(row, col)
         if cell is None:
             return None
-        else:
-            a = self.get_cell_by_grid_coords(row, col-1)
-            b = self.get_cell_by_grid_coords(row-1, col-1)
-            c = self.get_cell_by_grid_coords(row-1, col)
-            d = self.get_cell_by_grid_coords(row-1, col+1)
-            e = self.get_cell_by_grid_coords(row, col+1)
-            return (cell, a, b, c, d, e)
+
+        a = self.get_cell_by_grid_coords(row, col-1)
+        b = self.get_cell_by_grid_coords(row-1, col-1)
+        c = self.get_cell_by_grid_coords(row-1, col)
+        d = self.get_cell_by_grid_coords(row-1, col+1)
+        e = self.get_cell_by_grid_coords(row, col+1)
+        return (cell, a, b, c, d, e)
 
     def get_hexagon_from_btm_cell_by_cell(self, cell):
         return self.get_hexagon_from_btm_cell_by_coords(cell.get_row_num(), cell.get_col_pos())
