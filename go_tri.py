@@ -320,7 +320,7 @@ if __name__ == '__main__':
         logging.info(f'Using TriSimulator at {sim_host}:{sim_port}')
 
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json')
-        triangle_grid = triangle_grid.make_tri(model, 5)
+        triangle_grid = triangle_grid.make_tri(model, 11)
     else:
         logging.info("Starting SACN")
         from model.sacn_model import sACN
