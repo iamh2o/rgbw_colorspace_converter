@@ -164,19 +164,19 @@ def hsv_to_rgb(hsv):
     b = int(_rgb[2] * 0xff)
     return (r, g, b, hsv[-1])
 
-def RGBW(r,g,b,w, recalculate_w=True):
+def RGBW(r,g,b,w, recalculate_w=False):
     "Create new RGBW Color"
     t = (r, g, b, w)
     assert is_rgbw_tuple(t)
     return(Color(rgb_to_hsv(t), recalculate_w))
 
-def RGB(r,g,b,w=0, recalculate_w=True):
+def RGB(r,g,b,w=0, recalculate_w=False):
     "Create a new RGB color"
     t = (r, g, b, w)
     assert is_rgb_tuple(t)
     return Color(rgb_to_hsv(t), recalculate_w)
 
-def HSV(h,s,v, w=0.0, recalculate_w=True):
+def HSV(h,s,v, w=0.0, recalculate_w=False):
     "Create a new HSV color"
     return Color((h, s, v, w), recalculate_w)
 
@@ -184,11 +184,11 @@ def Hex(value, recalculate_w=True):
     "Create a new Color from a hex string"
     value = value.lstrip('#')
     lv = len(value)
-    rgb_t = (int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
+    rgb_t = (int(value[i:i+int(lv/3)], 16) for i in range(0, lv, int(lv/3)))
     r = next(rgb_t)
     g = next(rgb_t)
     b = next(rgb_t)
-    return RGB(r, g, b, 0, recalculate_w=True)   #JEM -not sure what to do here
+    return RGB(r, g, b, 0, recalculate_w=False)   #JEM -not sure what to do here
 
 class Color(object):
 
