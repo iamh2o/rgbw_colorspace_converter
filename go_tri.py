@@ -7,7 +7,7 @@ import queue
 import threading
 
 import cherrypy
-from model.simulator import SimulatorModel
+from model import SimulatorModel, sACN
 import osc_serve
 import triangle_grid
 import shows
@@ -327,7 +327,6 @@ if __name__ == '__main__':
         triangle_grid = triangle_grid.make_tri(model, 11) #Our panels will only have 11 rows
     else:
         logger.info("Starting SACN")
-        from model.sacn_model import sACN
         model = sACN(max_dmx=800, model_json="./data/pixel_map.json")
 
         triangle_grid = triangle_grid.make_tri(model, 3)

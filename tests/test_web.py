@@ -3,7 +3,7 @@ import cherrypy
 from jinja2 import escape
 from cherrypy.test import helper
 
-from web.web import TriangleWeb
+from web import TriangleWeb
 
 command_queue = queue.LifoQueue()
 
