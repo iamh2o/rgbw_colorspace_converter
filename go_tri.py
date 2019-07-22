@@ -17,6 +17,8 @@ from web.web import TriangleWeb
 # Prints stack trace on failure
 faulthandler.enable()
 
+logger = logging.getLogger("pyramidtriangles")
+
 
 def speed_interpolation(val):
     """
@@ -91,7 +93,7 @@ class ShowRunner(threading.Thread):
         if isinstance(msg, str):
             if msg == "shutdown":
                 self.running = False
-                logging.info("ShowRunner shutting down")
+                logger.info("ShowRunner shutting down")
             elif msg == "clear":
                 self.clear()
                 time.sleep(2)
@@ -103,7 +105,7 @@ class ShowRunner(threading.Thread):
                 self.max_show_time = int(msg.split(':')[1])
 
         elif isinstance(msg, tuple):
-            logging.debug(f'OSC: {msg}')
+            logger.debug(f'OSC: {msg}')
 
             (addr, val) = msg
             addr = addr.split('/z')[0]
@@ -140,10 +142,10 @@ class ShowRunner(threading.Thread):
             if name in self.shows:
                 show = self.shows[name]
             else:
-                logging.warning(f'unknown show: {name}')
+                logger.warning(f'unknown show: {name}')
 
         if not show:
-            logging.info("choosing random show")
+            logger.info("choosing random show")
             (name, show) = next(self.randseq)
 
         self.clear()
@@ -188,7 +190,7 @@ class ShowRunner(threading.Thread):
                     self.next_show()
 
             except Exception:
-                logging.exception("unexpected exception in show loop!")
+                logger.exception("unexpected exception in show loop!")
                 if self.fail_hard:
                     raise
                 else:
@@ -199,7 +201,7 @@ def osc_listener(q, port=5700):
     """Create the OSC Listener thread"""
 
     listen_address = ('0.0.0.0', port)
-    logging.info(f'Starting OSC Listener on {listen_address}')
+    logger.info(f'Starting OSC Listener on {listen_address}')
     osc_serve.create_server(listen_address, q)
 
 
@@ -225,7 +227,7 @@ class TriangleServer(object):
         try:
             osc_listener(self.queue)
         except Exception:
-            logging.warning("Can't create OSC listener", exc_info=True)
+            logger.warning("Can't create OSC listener", exc_info=True)
 
         # Show runner
         self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
@@ -235,14 +237,14 @@ class TriangleServer(object):
 
     def start(self):
         if self.running:
-            logging.warning("start() called, but tri_grid is already running!")
+            logger.warning("start() called, but tri_grid is already running!")
             return
 
         try:
             self.runner.start()
             self.running = True
         except Exception:
-            logging.exception("Exception starting tri_grid!!")
+            logger.exception("Exception starting tri_grid!!")
 
     def stop(self):
         if self.running:  # should be safe to call multiple times
@@ -254,11 +256,11 @@ class TriangleServer(object):
 
                 self.running = False
             except Exception:
-                logging.exception("Exception stopping tri_grid!!")
+                logger.exception("Exception stopping tri_grid!!")
 
     def go_headless(self):
         """Run without the web interface"""
-        logging.info("Running without web interface")
+        logger.info("Running without web interface")
         try:
             while True:
                 time.sleep(999)  # control-c breaks out of time.sleep
@@ -269,7 +271,7 @@ class TriangleServer(object):
 
     def go_web(self):
         """Run with the web interface"""
-        logging.info("Running with web interface")
+        logger.info("Running with web interface")
 
         show_names = [name for (name, cls) in shows.load_shows()]
         print(f'shows: {show_names}')
@@ -293,10 +295,9 @@ class TriangleServer(object):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, format='%(levelname)s - %(message)s')
-    # Particularly noisy packages
-    logging.getLogger("parso").setLevel(logging.WARNING)
-    logging.getLogger("sacn").setLevel(logging.WARNING)
+    console = logging.StreamHandler()
+    console.setFormatter(logging.Formatter('%(levelname)s - %(message)s'))
+    logger.addHandler(console)
 
     parser = argparse.ArgumentParser(description='Triangle Light Control')
 
@@ -314,18 +315,18 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.list:
-        logging.info("Available shows: %s", ', '.join([name for (name, cls) in shows.load_shows()]))
+        logger.info("Available shows: %s", ', '.join([name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
 
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
-        logging.info(f'Using TriSimulator at {sim_host}:{sim_port}')
+        logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
 
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json')
         triangle_grid = triangle_grid.make_tri(model, 5)
     else:
-        logging.info("Starting SACN")
+        logger.info("Starting SACN")
         from model.sacn_model import sACN
         model = sACN(max_dmx=800, model_json="./data/pixel_map.json")
 
@@ -336,6 +337,6 @@ if __name__ == '__main__':
         app.start()  # start related service threads
         app.go_web()  # enter main blocking event loop
     except Exception:
-        logging.exception("Unhandled exception running TRI!")
+        logger.exception("Unhandled exception running TRI!")
     finally:
         app.stop()
