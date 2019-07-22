@@ -14,10 +14,13 @@ class sACN(ModelBase):
     def __init__(self, max_dmx, model_json=None):
         # XXX any way to check if this is a valid connection?
 
-        self.sender = sacn.sACNsender(bind_address="192.168.1.210", universeDiscovery=False)  # Must supply an IP address to bind to that is in the same subnet as the devices routiung the universes.  Might haave to assign a second IP to the eth adapter to get this to work (this is what I had to do on my mac)
+        # Must supply an IP address to bind to that is in the same subnet as the devices routing the universes.  Might
+        # have to assign a second IP to the eth adapter to get this to work (this is what I had to do on my mac)
+        self.sender = sacn.sACNsender(bind_address="192.168.1.210", universeDiscovery=False)
         self.sender.start()
         self.PIXEL_MAP = None
-        self.leds = {}  # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
+        # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
+        self.leds = {}
         self._map_leds(model_json)
 
         # Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
@@ -27,7 +30,7 @@ class sACN(ModelBase):
         self.sender.stop()  # If the object is destructing, close the sender connection
 
     def _map_leds(self, f):
-        # Loads a json file with mapping info describing your leds.
+        # Loads a json file with mapping info describing your LEDs.
         # The json file is formatted as a dictionary of numbers (as strings sadly, b/c json is weird
         # each key in the dict is a fixtureUID.
         # each array that fixtureUID returns is of the format [universeUID, DMXstart#]
