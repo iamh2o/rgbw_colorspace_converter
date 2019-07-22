@@ -30,7 +30,7 @@ import itertools
 
 from math import ceil
 
-from color import Color, HSV
+from color1 import Color, HSV
 
 __all__ = ['color_transition', 'multistep_color_transition']
 
