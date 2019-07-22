@@ -9,6 +9,7 @@ class Random(ShowBase):
         self.frame_delay = frame_delay
 
         self.n_cells = len(self.tri_grid.get_cells())
+        from IPython import embed; embed()
 
     def next_frame(self):
         while True:
