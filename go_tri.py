@@ -294,6 +294,9 @@ class TriangleServer(object):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(levelname)s - %(message)s')
+    # Particularly noisy packages
+    logging.getLogger("parso").setLevel(logging.WARNING)
+    logging.getLogger("sacn").setLevel(logging.WARNING)
 
     parser = argparse.ArgumentParser(description='Triangle Light Control')
 
