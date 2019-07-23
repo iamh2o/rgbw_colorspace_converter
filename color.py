@@ -258,10 +258,10 @@ def hsl2hsv(h,s,l):
                 
 
 #https://en.wikipedia.org/wiki/HSL_and_HSV                                                                        
-def rgb2hsi(red,green,blue):
-    r = constrain(float(red)/255.0,0.0,1.0)
-    g = constrain(float(green)/255.0, 0.0,1.0)
-    b = constrain(float(blue)/255.0,0.0,1.0)
+def rgb2hsi(r, g, b):
+    r = constrain(float(r)/255.0,0.0,1.0)
+    g = constrain(float(g)/255.0, 0.0,1.0)
+    b = constrain(float(b)/255.0,0.0,1.0)
     intensity = 0.33333*(r+g+b)
 
     M = max(r,g,b)
