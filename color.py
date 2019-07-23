@@ -1,20 +1,22 @@
 """
 Color
 
-Color class that allows you to initialize a color in any of HSV, RGB, Hex, HSI color spaces.  Once initialized, the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting any component of HSV or RGB (ie, just resetting the R value) and all RGB/HSV/RGBW values will be recalculated.
+Color class that allows you to initialize a color in any of HSV, HSL, HSI, RGB, Hex color spaces.  Once initialized, the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting any component of HSV or RGB (ie, just resetting the R value) and all RGB/HSV/RGBW values will be recalculated.  As of now, you can not work in RGBW directly as we have not written the conversions from RGBW back to one of the standard color spaces. (annoying, but so it goes).
 
 
 The main goal of this class is to translate various color spaces into RGBW for use in RGBW pixels.
 NOTE! this package will not control 3 channel RGB LEDs properly.
 
-The color representation is maintained in HSV interanlly and translates to RGB (and RGBW, but not interactively).  
+The color representation is maintained in HSV interanlly and translated to RGB (and RGBW, but only for retrieval).  
 Use whichever is more convenient at the time - RGB for familiarity, HSV to fade colors easily.
 
 RGB values range from 0 to 255
-HSV values range from 0.0 to 1.0
+HSV values range from 0.0 to 1.0 *Note the H value has been normalized to range between 0-1 in instead of 0-360 to allow for easier cycling of values.
+HSL/HSI values range from 0-360 for H, 0-1 for S/[L|I]
 
-    >>> red   = RGB(255, 0 ,0)  (RGBW = )
-    >>> green = HSV(0.33, 1.0, 1.0) (RGBW = )
+    >>> red   = RGB(255, 0 ,0)  (RGBW = 255,0,0,0)
+    >>> green = HSV(0.33, 1.0, 1.0) (RGBW = 5, 254, 0, 0)
+    >>> fuschia = RGB(180, 48, 229) (RGBW = 130, 0 , 182, 47)
 
 Colors may also be specified as hexadecimal string:
 
@@ -85,7 +87,7 @@ def is_hsv_tuple(hsv):
     "check that a tuple contains 3 values between 0.0 and 1.0"
     return len(hsv) == 3 and all([(0.0 <= t <= 1.0) for t in hsv])
 
-def is_hsi_tuple(hsi):
+def is_hsi_hsl_tuple(hsi):
     ret = True
     if len(hsi) != 3:
         ret = False
@@ -297,13 +299,16 @@ def rgb2hsi(r, g, b):
 
     return(hue,abs(saturation),intensity)
 
+def RGBW(r, g, b, w):
+    "Create RGBW color"
+    raise Exception("Gotcha!  We can't yet reverse calculate RGBW back to any other color spaces.... work in one of the other spaces and get your RGBW values back from Color.rgbw.  Sorry.")
+
 
 def HSI(h,s,i):
     "Create new HSI color"
     t = (h,s,i)
-    assert is_hsi_tuple(t)
+    assert is_hsi_hsl_tuple(t)
     return RGB( hsi2rgb(h,s,i) )
-
 
 def RGB(r,g,b):
     "Create a new RGB color"
@@ -317,8 +322,11 @@ def HSV(h,s,v):
 
 def HSL(h,s,l):
     "Create new HSL color"
-    (h,s,v) = hsl2hsv(h,s,l)
-    return Color(h,s,v)
+    t = (h,s,l)
+    assert is_hsi_hsl_tuple(t)
+    (h,s,v) = hsl2hsv(t[0], t[1], t[2])
+    print(h,s,v)
+    return Color((constrain(h/360.0,0.0,1.0),s,v))
 
 def Hex(value):
     "Create a new Color from a hex string"
@@ -362,6 +370,13 @@ class Color(object):
     def hex(self):
         "returns a hexadecimal string"
         return '#%02x%02x%02x' % self.rgb
+    
+    @property
+    def hsl(self):
+        "returns HSL tuple"
+        (h,s,l) = hsv2hsl(self.hsv_t[0], self.hsv_t[1], self.hsv_t[2])
+        h = constrain(h*360.0, 0.0,360.0)
+        return (h,s,l)
 
     """
     Properties representing individual HSV compnents
@@ -460,3 +475,5 @@ class Color(object):
 if __name__=='__main__':
     import doctest
     doctest.testmod()
+
+

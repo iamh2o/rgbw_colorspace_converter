@@ -55,8 +55,10 @@ class SimulatorModel(ModelBase):
 
     def go(self):
         for num in self.dirty:
-            color = self.dirty[num]
-            msg = f'b {num} {color.r},{color.g},{color.b}\n'
+            r = self.dirty[num].rgb[0]
+            g = self.dirty[num].rgb[1]
+            b = self.dirty[num].rgb[2]
+            msg = f'b {num} {r},{g},{b}\n'
 
             logger.debug(msg)
             self.sock.send(msg.encode())

@@ -3,7 +3,7 @@ from color import RGB
 
 
 class OneByOne(ShowBase):
-    def __init__(self, tri_grid, frame_delay=1.5):
+    def __init__(self, tri_grid, frame_delay=0.25):
         self.tri_grid = tri_grid
         self.frame_delay = frame_delay
 

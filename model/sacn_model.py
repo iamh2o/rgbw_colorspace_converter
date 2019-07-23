@@ -51,8 +51,8 @@ class sACN(ModelBase):
             ux = self.PIXEL_MAP[pixel][0] 
             ix = self.PIXEL_MAP[pixel][1] - 1  # dmx is 1-based, python lists are 0-based
 
-            self.leds[ux][ix]   = color.g
-            self.leds[ux][ix+1] = color.r
+            self.leds[ux][ix]   = color.r
+            self.leds[ux][ix+1] = color.g
             self.leds[ux][ix+2] = color.b
             self.leds[ux][ix+3] = color.w
         else:

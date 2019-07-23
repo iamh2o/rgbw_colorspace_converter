@@ -1,6 +1,5 @@
 from .showbase import ShowBase
 from color import HSV as hsv
-from color1 import HSV as hsv1
 
 import random as rnd
 import time
@@ -20,7 +19,6 @@ class CycleHSV(ShowBase):
 
         while True:
             self.ca= hsv(0.0,0.0,0.0)
-            self.cb= hsv1(0.0,0.0,0.0)
             while self.ca.v < 1.0:
                 self.ca.v += 0.0008
                 self.tri_grid.set_all_cells(self.ca)
@@ -45,30 +43,5 @@ class CycleHSV(ShowBase):
             self.tri_grid.clear()
             time.sleep(3)
 
-            while self.cb.v < 1.0:
-                self.cb.v += 0.0008
-                self.tri_grid.set_all_cells(self.cb)
-                self.tri_grid.go()
-                time.sleep(.01)
-                print('CB', self.cb.hsv)
-
-            while self.cb.s < 1.0:
-                self.cb.s += 0.0008
-                self.tri_grid.set_all_cells(self.cb)
-                self.tri_grid.go()
-                time.sleep(.01)
-                print('CB', self.cb.hsv)
-
-            while self.cb.h < 1.0:
-                self.cb.h += 0.0008
-                self.tri_grid.set_all_cells(self.cb)
-                self.tri_grid.go()
-                time.sleep(.01)
-                print('CB', self.cb.hsv)
-
-            self.tri_grid.clear()
-            self.tri_grid.set_all_cells(hsv(1.0,1.0,1.0))
-            time.sleep(3)
-            self.tri_grid.clear()
 
             yield self.frame_delay
