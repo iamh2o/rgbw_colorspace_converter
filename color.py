@@ -315,6 +315,10 @@ def HSV(h,s,v):
     "Create a new HSV color"
     return Color((h,s,v))
 
+def HSL(h,s,l):
+    "Create new HSL color"
+    (h,s,v) = hsl2hsv(h,s,l)
+    return Color(h,s,v)
 
 def Hex(value):
     "Create a new Color from a hex string"
