@@ -67,7 +67,7 @@ class CycleHSV(ShowBase):
                 print('CB', self.cb.hsv)
 
             self.tri_grid.clear()
-            self.tri_grid.set_all_cells(RGBW(0,0,0,255))
+            self.tri_grid.set_all_cells(hsv(1.0,1.0,1.0))
             time.sleep(3)
             self.tri_grid.clear()
 
