@@ -1,4 +1,4 @@
-from color import RGBW
+from color import RGB
 
 
 def make_tri(model, n_rows):
@@ -153,7 +153,7 @@ class TriangleGrid(object):
         self._model.go()
 
     def clear(self):
-        self.set_all_cells(RGBW(0, 0, 0, 0))
+        self.set_all_cells(RGB( 0, 0, 0))
         self.go()
 
     def get_cells(self):
@@ -215,7 +215,7 @@ class TriangleGrid(object):
         self._model.set_pixel(pixel, color, cellid)  ###Have to pass the cellid through b/c the simulator does not understand pixels
 
     def clear(self):
-        self.set_all_cells(RGBW(0, 0, 0, 0))
+        self.set_all_cells(RGB( 0, 0, 0))
         self.go()
 
     def go(self):
