@@ -93,7 +93,6 @@ So, to set red:
       print.rgb
       (255, 0, 0, 85)
 
-I h
 """
 import colorsys
 from copy import deepcopy
