@@ -100,21 +100,6 @@ from copy import deepcopy
 
 __all__=['RGB', 'HSV', 'Hex', 'Color', 'RGBW']
 
-def saturation(rgb):
-    low = float(min(rgb.r, rgb.g, rgb.b))
-    high = float(max(rgb.r, rgb.g, rgb.b))
-    ret = 0
-    if low > 0 and high > 0:
-        ret = round(100.0*((high-low)/high))
-    return ret
-
-def getWhiteColor(rgb):
-    ret = 0
-    try:
-        ret = int(round((255.0-saturation(rgb)) / 255.0 * (float(rgb.r) + float(rgb.b) + float(rgb.g))/3.0))
-    except:
-        print("Error", rgb)
-    return ret
 
 def clamp(val, min_value, max_value):
     "Restrict a value between a minimum and a maximum value"
@@ -139,12 +124,6 @@ def rgb_to_hsv(rgb):
     ret.append(rgb[-1])
     return tuple(ret)
 
-def rgbw_to_hsv(rgbw):
-    "convert a rgbw[0:3][0-255] tuple to hsv[0.0-1.0], plus w"
-    f = float(255)
-    ret = colorsys.rgb_to_hsv(rgbw[0]/f, rgbw[1]/f, rgbw[2]/f)
-    ret.append(rgbw[-1])
-    return tuple(ret)
 
 def hsv_to_rgbw(hsv):
     assert is_hsv_tuple(hsv), "malformed hsv tuple:" + str(hsv)
@@ -157,7 +136,7 @@ def hsv_to_rgbw(hsv):
 
 def hsv_to_rgb(hsv):
     assert is_hsv_tuple(hsv), "malformed hsv tuple:" + str(hsv)
-#    from IPython import embed; embed() 
+
     _rgb = colorsys.hsv_to_rgb(*tuple(hsv[0:3]))
     r = int(_rgb[0] * 0xff)
     g = int(_rgb[1] * 0xff)
