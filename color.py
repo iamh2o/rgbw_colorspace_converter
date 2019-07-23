@@ -228,7 +228,36 @@ def hsi2rgbw(H,S,I):
     return (int(constrain(r*3,0,255)), int(constrain(g*3,0,255)), int(constrain(b*3,0,255)) , int(constrain(w,0,255)))  #for some reason, the rgb numbers need to be X3...              
 
 
-#https://en.wikipedia.org/wiki/HSL_and_HSV                                                                          
+#https://en.wikipedia.org/wiki/HSL_and_HSV                                                                     
+def hsv2hsl(h,s,v):
+    h = constrain(h,0.0,360.0)
+    s = constrain(s,0.0,1.0)
+    v = constrain(v,0.0,1.0)
+
+    Hhsl = h
+    Lhsl = v-(v*s/2.0)
+    Shsl = 0
+    if Lhsl > 0.0 and Lhsl < 1.0:
+        Shsl = (v-Lhsl)/min(Lhsl, 1.0-Lhsl)
+    
+    return(Hhsl,Lhsl,Shsl)
+
+
+#https://en.wikipedia.org/wiki/HSL_and_HSV                                                      
+def hsl2hsv(h,s,l):
+    h =constrain(h,0.0,360.0)
+    s =constrain(s,0.0,1.0)
+    l =constrain(l,0.0,1.0)
+
+    Hhsv = h
+    Vhsv = l + (s*min(l, 1.0-l))
+    Shsv = 0
+    if Vhsv > 0.0:
+        Shsv = 2.0-(2.0*l/Vhsv)
+    return(Hhsv,Shsv,Vhsv)
+                
+
+#https://en.wikipedia.org/wiki/HSL_and_HSV                                                                        
 def rgb2hsi(red,green,blue):
     r = constrain(float(red)/255.0,0.0,1.0)
     g = constrain(float(green)/255.0, 0.0,1.0)
@@ -373,7 +402,7 @@ class Color(object):
     def rgb_r(self):
         return self.rgb[0]
 
-    @r.setter
+    @rgb_r.setter
     def rgb_r(self, val):
         assert 0 <= val <= 255
         r,g,b = self.rgb
@@ -385,7 +414,7 @@ class Color(object):
     def rgb_g(self):
         return self.rgb[1]
 
-    @g.setter
+    @rgb_g.setter
     def rgb_g(self, val):
         assert 0 <= val <= 255
         r,g,b = self.rgb
@@ -397,7 +426,7 @@ class Color(object):
     def rgb_b(self):
         return self.rgb[2]
 
-    @b.setter
+    @rgb_b.setter
     def rgb_b(self, val):
         assert 0 <= val <= 255
         r,g,b = self.rgb
