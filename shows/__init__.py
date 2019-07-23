@@ -6,4 +6,4 @@ from .random_cells import Random
 from .showbase import ShowBase, load_shows, random_shows
 from .up_down import UpDown
 from .cycle_hsv import CycleHSV
-
+from .strobe import Strobe

@@ -16,7 +16,7 @@ class sACN(ModelBase):
 
         # Must supply an IP address to bind to that is in the same subnet as the devices routing the universes.  Might
         # have to assign a second IP to the eth adapter to get this to work (this is what I had to do on my mac)
-        self.sender = sacn.sACNsender(bind_address="192.168.1.210", universeDiscovery=False)
+        self.sender = sacn.sACNsender(bind_address="192.168.1.113", universeDiscovery=False)
         self.sender.start()
         self.PIXEL_MAP = None
         # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
