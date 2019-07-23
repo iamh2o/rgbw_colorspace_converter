@@ -29,8 +29,8 @@ class LeftToRightAndBack(ShowBase):
                         else:
                             r=255
                             g = 0
-                            for pix in range(6):
-                                self.tri_grid.set_pixel(cell.get_pixels()[pix], RGB(r, g, 0), cell.get_id())
+                            for pixel in self.tri_grid.get_pixels(cell.id):
+                                pixel.set_color(RGB(r, g, 0))
                                 time.sleep(.2)
                                 self.tri_grid.go()
                                 g += 40
@@ -55,8 +55,8 @@ class LeftToRightAndBack(ShowBase):
                         else:
                             g = 255
                             b = 0
-                            for pix in range(6):
-                                self.tri_grid.set_pixel(cell.get_pixels()[5-pix], RGB(0, g, b), cell.get_id())
+                            for pixel in self.tri_grid.get_pixels(cell.id):
+                                pixel.set_color(RGB(0, g, b))
                                 time.sleep(.2)
                                 self.tri_grid.go()
                                 g -= 40

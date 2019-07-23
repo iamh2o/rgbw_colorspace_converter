@@ -6,8 +6,9 @@ have one LED each.
 """
 import json
 import sacn
+from typing import Iterator, Type
 
-from .modelbase import ModelBase
+from .modelbase import ModelBase, PixelBase
 
 
 class sACN(ModelBase):
@@ -45,7 +46,11 @@ class sACN(ModelBase):
                 self.sender[universe].multicast = True
                 self.leds[universe] = [0] * 512
 
-    # Model basics
+    def get_pixels(self, cell_id) -> Iterator[Type[PixelBase]]:
+        # TODO: Need to map cell_id to series of pixels
+        return None
+
+    # TODO: Delete this
     def set_pixel(self, pixel, color, cellid=None):
         if pixel in self.PIXEL_MAP:
             ux = self.PIXEL_MAP[pixel][0] 
@@ -57,10 +62,6 @@ class sACN(ModelBase):
             self.leds[ux][ix+3] = color.w
         else:
             print(f'WARNING: {pixel} not in pixel ID MAP')
-
-    def set_pixels(self, pixels, color):
-        for pixel in pixels:
-            self.set_pixel(pixel, color)
 
     def go(self):
         for ux in self.leds:
