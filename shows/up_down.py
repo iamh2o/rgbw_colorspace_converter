@@ -1,5 +1,5 @@
 from color import RGB
-from triangle_grid import TriangleGrid
+from grid import TriangleGrid
 from .showbase import ShowBase
 
 

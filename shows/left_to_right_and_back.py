@@ -2,7 +2,7 @@ import time
 
 from color import RGB
 from .showbase import ShowBase
-from triangle_grid import TriangleGrid, row_length
+from grid import TriangleGrid, row_length
 
 
 class LeftToRightAndBack(ShowBase):

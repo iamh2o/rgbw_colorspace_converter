@@ -1,7 +1,7 @@
 import time
 
 from color import HSV as hsv
-from triangle_grid import TriangleGrid
+from grid import TriangleGrid
 from .showbase import ShowBase
 
 
