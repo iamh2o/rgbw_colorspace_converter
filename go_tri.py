@@ -7,12 +7,12 @@ import queue
 import threading
 
 import cherrypy
-from model.simulator import SimulatorModel
+import grid
+from model import SimulatorModel, sACN, demo_triangle_mapping
 import osc_serve
-import triangle_grid
 import shows
 import util
-from web.web import TriangleWeb
+from web import TriangleWeb
 
 # Prints stack trace on failure
 faulthandler.enable()
@@ -324,13 +324,12 @@ if __name__ == '__main__':
         logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
 
         model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json')
-        triangle_grid = triangle_grid.make_tri(model, 11) #Our panels will only have 11 rows
+        triangle_grid = grid.make_triangle(model, 11)  # Our panels will only have 11 rows
     else:
         logger.info("Starting SACN")
-        from model.sacn_model import sACN
-        model = sACN(max_dmx=800, model_json="./data/pixel_map.json")
+        model = sACN(model_json="./data/pixel_map.json", pixelmap=demo_triangle_mapping())
 
-        triangle_grid = triangle_grid.make_tri(model, 3)
+        triangle_grid = grid.make_triangle(model, 3)
 
     app = TriangleServer(triangle_grid, args)
     try:

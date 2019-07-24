@@ -6,7 +6,9 @@ XXX Should this class be able to do range checks on cell ids?
 import logging
 import socket
 import json
+from typing import Callable, Iterator
 
+from color import Color
 from .modelbase import ModelBase
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
@@ -38,7 +40,12 @@ class SimulatorModel(ModelBase):
             self.CELL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
 
     # Model basics
-    def set_cell(self, cell, color):
+    def get_pixels(self, cell_id: int) -> Iterator[Callable[[Color], None]]:
+        def set_color(color: Color):
+            self.set_cell(cell_id, color)
+        return iter([set_color])
+
+    def set_cell(self, cell: int, color: Color):
         cell += 1  # Simulator cells not 0 based
         if cell not in self.CELL_MAP:
             raise ValueError(f'Cell {cell} not in CELL_MAP')
@@ -49,9 +56,6 @@ class SimulatorModel(ModelBase):
         # The simulator does not care about universes, but does care about UIDs. I'm manufacturing one by joining the
         # Universe and fixture ID into the key.
         self.dirty[sim_key] = color
-
-    def set_pixel(self, pixel, color, cellid):
-        self.set_cell(cellid, color)
 
     def go(self):
         for num in self.dirty:
