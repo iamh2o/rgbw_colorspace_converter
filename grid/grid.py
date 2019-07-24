@@ -8,7 +8,6 @@ from model import ModelBase
 logger = logging.getLogger('pyramidtriangles')
 
 
-@lru_cache(maxsize=128)
 def triangular_number(n: int) -> int:
     """Returns the number of elements in an equilateral triangle of n rows."""
     # Typically the triangle number is (n(n+1))/2 but our triangle has rows of 1, 3, 5...
