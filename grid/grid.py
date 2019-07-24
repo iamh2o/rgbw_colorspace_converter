@@ -1,8 +1,9 @@
 from functools import lru_cache
 import logging
-from typing import Callable, Iterator, List, NamedTuple, Tuple
+from typing import Callable, Iterator, List, NamedTuple, Tuple, Type
 
 from color import Color, RGB
+from model import ModelBase
 
 logger = logging.getLogger('pyramidtriangles')
 
@@ -20,7 +21,7 @@ def row_length(n: int) -> int:
 
 
 class TriangleGrid(object):
-    def __init__(self, model, row_count):
+    def __init__(self, model: Type[ModelBase], row_count: int):
         if row_count < 1:
             raise ValueError(f'n_rows={row_count} must be positive')
 
@@ -263,6 +264,6 @@ class TriangleCell(NamedTuple):
         return not self.is_up
 
 
-def make_triangle(model, row_count) -> TriangleGrid:
+def make_triangle(model: Type[ModelBase], row_count: int) -> TriangleGrid:
     """Helper function to build a Triangle with row_count rows."""
     return TriangleGrid(model, row_count)
