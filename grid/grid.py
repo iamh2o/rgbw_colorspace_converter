@@ -1,6 +1,6 @@
 from functools import lru_cache
 import logging
-from typing import List, NamedTuple, Tuple
+from typing import Callable, Iterator, List, NamedTuple, Tuple
 
 from color import Color, RGB
 
@@ -88,15 +88,35 @@ class TriangleGrid(object):
         """Returns Cell for cell ID, or None if cell ID out of bounds."""
         if not 0 <= cell_id < len(self._cells):
             return None
+
         return self._cells[cell_id]
 
-    def get_pixels(self, cell_id):
+    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+        """Returns iterator of functions to set each Pixel's color."""
+        if not 0 <= cell_id < len(self._cells):
+            return []
+
         return self._model.get_pixels(cell_id)
 
+    def set_cell_by_coordinates(self, row: int, column: int, color: Color):
+        """Sets cell pixels to color for given coordinates."""
+        cell = self.get_cell_by_coordinates(row, column)
+        if cell is None:
+            logger.warning(f'cell coordinates (row={row}, column={column}) invalid')
+            return
+
+        [pixel(color) for pixel in self._model.get_pixels(cell.id)]
+
     def set_cell_by_id(self, cell_id: int, color: Color):
+        """Sets cell pixels to color for given ID."""
+        if not 0 <= cell_id < len(self._cells):
+            logger.warning(f'cell ID {cell_id} invalid')
+            return
+
         [pixel(color) for pixel in self._model.get_pixels(cell_id)]
 
     def set_all_cells(self, color: Color):
+        """Sets all cell to color."""
         for cell in self.cells:
             self.set_cell_by_id(cell.id, color)
 

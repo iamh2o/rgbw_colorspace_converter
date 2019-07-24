@@ -7,12 +7,12 @@ import queue
 import threading
 
 import cherrypy
+import grid
 from model import SimulatorModel, sACN, demo_triangle_mapping
 import osc_serve
-import grid
 import shows
 import util
-from web.web import TriangleWeb
+from web import TriangleWeb
 
 # Prints stack trace on failure
 faulthandler.enable()

@@ -1,5 +1,3 @@
-import time
-
 from color import RGB
 from .showbase import ShowBase
 from grid import TriangleGrid, row_length
@@ -11,39 +9,33 @@ class LeftToRightAndBack(ShowBase):
         self.frame_delay = frame_delay
 
     def next_frame(self):
+        row_count = self.tri_grid.row_count
         fwd = True
+
         while True:
-            if fwd:
+            # Forward sequence:
+            # [[(row-1, 0)],
+            #  [(row-2, 0), (row-1, 1)],
+            #  [(row-3, 0), (row-2, 1), (row-1, 2)]], ...
+            bottom_column_sequence = range(row_length(row_count))
+            if not fwd:
+                bottom_column_sequence = reversed(bottom_column_sequence)
+
+            for bottom_column in bottom_column_sequence:
                 self.tri_grid.clear()
+                row_to_start = row_count - 1 - bottom_column
 
-                for row in range(self.tri_grid.row_count):
-                    for column in range(row_length(row)):
-                        cell = self.tri_grid.get_cell_by_coordinates(row, column)
+                for curr_column in range(bottom_column + 1):
+                    curr_row = row_to_start + curr_column
+                    if not 0 <= curr_row < row_count:
+                        continue
+                    if curr_column >= row_length(curr_row + 1):
+                        continue
 
-                        r = 255
-                        g = 0
-                        for pixel in self.tri_grid.get_pixels(cell.id):
-                            pixel(RGB(r, g, 0))
-                            time.sleep(.2)
-                            self.tri_grid.go()
-                            g += 40
-                            r -= 3
+                    print(f'row={curr_row} column={curr_column}')
+                    self.tri_grid.set_cell_by_coordinates(curr_row, curr_column, RGB(255, 255, 25))
+                    self.tri_grid.go()
 
-                fwd = False
+                yield self.frame_delay
 
-            else:
-                for row in reversed(range(self.tri_grid.row_count)):
-                    for column in range(row_length(row)):
-                        cell = self.tri_grid.get_cell_by_coordinates(row, column)
-
-                        g = 255
-                        b = 0
-                        for pixel in self.tri_grid.get_pixels(cell.id):
-                            pixel(RGB(0, g, b))
-                            time.sleep(.2)
-                            self.tri_grid.go()
-                            g -= 40
-                            b += 40
-                fwd = True
-
-            yield self.frame_delay
+            fwd = not fwd  # Flips direction
