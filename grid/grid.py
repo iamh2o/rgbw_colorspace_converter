@@ -214,31 +214,27 @@ class TriangleCell(NamedTuple):
     num_rows: int
 
     @property
-    def row(self) -> int:
-        """Returns zero-indexed row containing of the cell."""
-        (row, column) = TriangleGrid.id_to_coordinates(self.id)
-        return row
-
-    @property
-    def row_position(self) -> int:
-        """Returns zero-indexed position of the cell within a triangle row."""
-        (row, column) = TriangleGrid.id_to_coordinates(self.id)
-        return column
+    def coordinates(self) -> Tuple[int, int]:
+        """Returns zero-indexed (row, column) containing the cell."""
+        return TriangleGrid.id_to_coordinates(self.id)
 
     @property
     def is_left_edge(self) -> bool:
         """Returns True if cell is along the left edge of the greater triangle."""
-        return self.row_position == 0
+        (row, column) = TriangleGrid.id_to_coordinates(self.id)
+        return column == 0
 
     @property
     def is_right_edge(self) -> bool:
         """Returns True if cell is along the right edge of the greater triangle."""
-        return self.row_position == row_length(self.row + 1) - 1
+        (row, column) = self.coordinates
+        return column + 1 == row_length(row + 1)
 
     @property
     def is_bottom_edge(self) -> bool:
         """Returns True if cell is along the bottom edge of the greater triangle."""
-        return self.row + 1 == self.num_rows and self.is_up
+        (row, column) = self.coordinates
+        return row + 1 == self.num_rows and self.is_up
 
     @property
     def is_top_corner(self) -> bool:
@@ -258,7 +254,8 @@ class TriangleCell(NamedTuple):
     @property
     def is_up(self) -> bool:
         """Returns True if triangle shaped cell orients with a corner upward."""
-        return self.row_position % 2 == 0
+        (row, column) = TriangleGrid.id_to_coordinates(self.id)
+        return column % 2 == 0
 
     @property
     def is_down(self) -> bool:
