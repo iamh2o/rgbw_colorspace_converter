@@ -7,17 +7,24 @@ have one LED each.
 """
 import array
 import json
-import ola
+import logging
+from typing import Iterator, Callable
 
+from color import Color
+import ola
+from .mapping import PixelMap
 from .modelbase import ModelBase
+
+logger = logging.getLogger("pyramidtriangles")
 
 
 class OLAModel(ModelBase):
-    def __init__(self, max_dmx, model_json=None):
+    def __init__(self, max_dmx, model_json: str, pixelmap: PixelMap):
         # XXX any way to check if this is a valid connection?
 
         self.PIXEL_MAP = None
         self._map_leds(model_json)
+        self._pixelmap = pixelmap
         self.wrapper = ola.ClientWrapper()
         self.client = self.wrapper.Client()
         # Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
@@ -41,17 +48,21 @@ class OLAModel(ModelBase):
             self.PIXEL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
 
     # Model basics
-    def set_pixel(self, pixel, color, cellid=None):
-        if pixel in self.PIXEL_MAP:
-            ux = self.PIXEL_MAP[pixel][0] 
+    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+        for pixel in self._pixelmap[cell_id]:
+            if pixel not in self.PIXEL_MAP:
+                logger.warning(f'{pixel} not in sACN pixel ID map')
+
+            ux = self.PIXEL_MAP[pixel][0]
             ix = self.PIXEL_MAP[pixel][1] - 1  # dmx is 1-based, python lists are 0-based
 
-            self.leds[ux][ix]   = color.r
-            self.leds[ux][ix+1] = color.g
-            self.leds[ux][ix+2] = color.b
-            self.leds[ux][ix+3] = color.w
-        else:
-            print(f'WARNING: {pixel} not in pixel ID MAP')
+            def set_color(color):
+                self.leds[ux][ix] = color.r
+                self.leds[ux][ix + 1] = color.g
+                self.leds[ux][ix + 2] = color.b
+                self.leds[ux][ix + 3] = color.w
+
+            yield set_color
 
     def go(self):
         data_to_send = {}

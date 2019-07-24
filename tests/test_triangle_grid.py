@@ -1,12 +1,12 @@
-from typing import Iterator, Type
+from typing import Callable, Iterator
 
+from color import Color
 import triangle_grid
 from model import ModelBase
-from modelbase import PixelBase
 
 
 class FakeModel(ModelBase):
-    def get_pixels(self, cell_id) -> Iterator[Type[PixelBase]]:
+    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
         pass
 
     def go(self):

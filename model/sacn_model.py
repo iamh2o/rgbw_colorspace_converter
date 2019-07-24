@@ -5,14 +5,19 @@ Pixels are representations of the addressable unit in your object. Cells can hav
 have one LED each.
 """
 import json
-import sacn
-from typing import Iterator, Type
+import logging
+from typing import Callable, Iterator
 
-from .modelbase import ModelBase, PixelBase
+from color import Color
+import sacn
+from .mapping import PixelMap
+from .modelbase import ModelBase
+
+logger = logging.getLogger("pyramidtriangles")
 
 
 class sACN(ModelBase):
-    def __init__(self, max_dmx, model_json=None):
+    def __init__(self, model_json: str, pixelmap: PixelMap):
         # XXX any way to check if this is a valid connection?
 
         # Must supply an IP address to bind to that is in the same subnet as the devices routing the universes.  Might
@@ -23,6 +28,7 @@ class sACN(ModelBase):
         # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
         self.leds = {}
         self._map_leds(model_json)
+        self._pixelmap = pixelmap
 
         # Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
         # Pixels are an LED represented by 4 DMX addresses
@@ -46,22 +52,20 @@ class sACN(ModelBase):
                 self.sender[universe].multicast = True
                 self.leds[universe] = [0] * 512
 
-    def get_pixels(self, cell_id) -> Iterator[Type[PixelBase]]:
-        # TODO: Need to map cell_id to series of pixels
-        return None
+    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+        for pixel in self._pixelmap[cell_id]:
+            if pixel not in self.PIXEL_MAP:
+                logger.warning(f'{pixel} not in sACN pixel ID map')
 
-    # TODO: Delete this
-    def set_pixel(self, pixel, color, cellid=None):
-        if pixel in self.PIXEL_MAP:
-            ux = self.PIXEL_MAP[pixel][0] 
+            ux = self.PIXEL_MAP[pixel][0]
             ix = self.PIXEL_MAP[pixel][1] - 1  # dmx is 1-based, python lists are 0-based
 
-            self.leds[ux][ix]   = color.r
-            self.leds[ux][ix+1] = color.g
-            self.leds[ux][ix+2] = color.b
-            self.leds[ux][ix+3] = color.w
-        else:
-            print(f'WARNING: {pixel} not in pixel ID MAP')
+            def set_color(color):
+                self.leds[ux][ix] = color.r
+                self.leds[ux][ix + 1] = color.g
+                self.leds[ux][ix + 2] = color.b
+                self.leds[ux][ix + 3] = color.w
+            yield set_color
 
     def go(self):
         for ux in self.leds:
