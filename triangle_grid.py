@@ -66,7 +66,7 @@ class TriangleGrid(object):
     def clear(self):
         """Clears grid by setting all cells to 0."""
         for cell in self._cells:
-            self.set_cell_by_id(cell, RGB(0, 0, 0))
+            self.set_cell_by_id(cell.id, RGB(0, 0, 0))
         self.go()
 
     def get_cell_by_coordinates(self, row, column):
@@ -80,8 +80,11 @@ class TriangleGrid(object):
         return self._cells[cell_id]
 
     def set_cell_by_id(self, cell_id, color):
-        for pixel in self._model.get_pixels(cell_id):
-            pixel.set_color(color)
+        [pixel(color) for pixel in self._model.get_pixels(cell_id)]
+
+    def set_all_cells(self, color):
+        for cell in self.cells:
+            self.set_cell_by_id(cell.id, color)
 
     def get_pixels(self, cell_id):
         return self._model.get_pixels(cell_id)

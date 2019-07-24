@@ -40,12 +40,12 @@ class SimulatorModel(ModelBase):
             self.CELL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
 
     # Model basics
-    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+    def get_pixels(self, cell_id: int) -> Iterator[Callable[[Color], None]]:
         def set_color(color: Color):
             self.set_cell(cell_id, color)
         return iter([set_color])
 
-    def set_cell(self, cell, color):
+    def set_cell(self, cell: int, color: Color):
         cell += 1  # Simulator cells not 0 based
         if cell not in self.CELL_MAP:
             raise ValueError(f'Cell {cell} not in CELL_MAP')

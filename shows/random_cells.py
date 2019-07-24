@@ -14,7 +14,7 @@ class Random(ShowBase):
 
         while True:
             self.tri_grid.clear()
-            self.tri_grid.set_cell_by_id(rnd.randint(1, self.n_cells - 2), RGB(200, 255, 25))
-            self.tri_grid.set_cell_by_id(rnd.randint(1, self.n_cells - 2), RGB(200, 10, 25))
+            self.tri_grid.set_cell_by_id(rnd.randint(0, self.n_cells - 2), RGB(200, 255, 25))
+            self.tri_grid.set_cell_by_id(rnd.randint(0, self.n_cells - 2), RGB(200, 10, 25))
 
             yield self.frame_delay

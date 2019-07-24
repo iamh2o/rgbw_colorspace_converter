@@ -1,9 +1,10 @@
-from .showbase import ShowBase
 from color import RGB
+from triangle_grid import TriangleGrid
+from .showbase import ShowBase
 
 
 class UpDown(ShowBase):
-    def __init__(self, tri_grid, frame_delay=2):
+    def __init__(self, tri_grid: TriangleGrid, frame_delay: float = 2.0):
         self.tri_grid = tri_grid
         self.frame_delay = frame_delay
 
@@ -15,14 +16,14 @@ class UpDown(ShowBase):
 
             if a == "up":
                 print('up')
-                for i in self.tri_grid.cells.up_cells:
-                    print("Up", i.id)
-                    self.tri_grid.cells.set_cell_by_id(i.id, RGB(0, 255, 255))
+                for cell in self.tri_grid.up_cells:
+                    print("Up", cell.id)
+                    self.tri_grid.set_cell_by_id(cell.id, RGB(0, 255, 255))
             else:
                 print('down')
-                for i in self.tri_grid.cells.down_cells:
-                    print("down", i.id)
-                    self.tri_grid.cells.set_cell_by_id(i.id, RGB(255, 0, 200))
+                for cell in self.tri_grid.down_cells:
+                    print("down", cell.id)
+                    self.tri_grid.set_cell_by_id(cell.id, RGB(255, 0, 200))
 
             if a == "up":
                 a = "down"

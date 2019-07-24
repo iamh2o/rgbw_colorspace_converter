@@ -1,9 +1,10 @@
-from .showbase import ShowBase
 from color import RGB
+from triangle_grid import TriangleGrid
+from .showbase import ShowBase
 
 
 class OneByOne(ShowBase):
-    def __init__(self, tri_grid, frame_delay=0.25):
+    def __init__(self, tri_grid: TriangleGrid, frame_delay: float = 0.25):
         self.tri_grid = tri_grid
         self.frame_delay = frame_delay
 
@@ -15,7 +16,7 @@ class OneByOne(ShowBase):
         while True:
             self.tri_grid.clear()
             print(cell_n)
-            self.tri_grid.set_cell_by_id(self.tri_grid.cells[cell_n].id, RGB(255, 255, 25))
+            self.tri_grid.set_cell_by_id(cell_n, RGB(255, 255, 25))
 
             if cell_n >= ncells:
                 cell_n = -1
