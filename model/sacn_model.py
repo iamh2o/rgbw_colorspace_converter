@@ -29,7 +29,7 @@ class sACN(ModelBase):
         self.leds = {}
         self._map_leds(model_json)
         self._pixelmap = pixelmap
-
+#        from IPython import embed; embed()
         # Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
         # Pixels are an LED represented by 4 DMX addresses
 
@@ -58,7 +58,7 @@ class sACN(ModelBase):
                 logger.warning(f'{pixel} not in sACN pixel ID map')
 
             ux = self.PIXEL_MAP[pixel][0]
-            ix = self.PIXEL_MAP[pixel][1] - 1  # dmx is 1-based, python lists are 0-based
+            ix = self.PIXEL_MAP[pixel][1] -1  # dmx is 1-based, python lists are 0-based
 
             def set_color(color):
                 self.leds[ux][ix] = color.r
