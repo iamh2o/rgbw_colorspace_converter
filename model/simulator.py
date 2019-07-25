@@ -6,10 +6,10 @@ XXX Should this class be able to do range checks on cell ids?
 import logging
 import socket
 import json
-from typing import Callable, Iterator
+from typing import Iterator
 
 from color import Color
-from .modelbase import ModelBase
+from .modelbase import ModelBase, SetColorFunc
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
 logger = logging.getLogger("pyramidtriangles")
@@ -40,9 +40,10 @@ class SimulatorModel(ModelBase):
             self.CELL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
 
     # Model basics
-    def get_pixels(self, cell_id: int) -> Iterator[Callable[[Color], None]]:
+    def set_pixels_by_cellid(self, cell_id: int) -> Iterator[SetColorFunc]:
         def set_color(color: Color):
             self.set_cell(cell_id, color)
+        # Iterator of one for the simulator, which doesn't have pixels within a cell.
         return iter([set_color])
 
     def set_cell(self, cell: int, color: Color):

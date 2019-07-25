@@ -1,9 +1,9 @@
 from functools import lru_cache
 import logging
-from typing import Callable, Iterator, List, NamedTuple, Tuple, Type
+from typing import Iterator, List, NamedTuple, Tuple, Type
 
 from color import Color, RGB
-from model import ModelBase
+from model import ModelBase, SetColorFunc
 
 logger = logging.getLogger('pyramidtriangles')
 
@@ -91,12 +91,19 @@ class TriangleGrid(object):
 
         return self._cells[cell_id]
 
-    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
-        """Returns iterator of functions to set each Pixel's color."""
+    def set_pixels_by_cellid(self, cell_id) -> Iterator[SetColorFunc]:
+        """
+        Returns an iterator to set each Pixel's color within the given cell ID.
+
+        Example:
+            for pixel in grid.set_pixels_by_cell_id(0):
+                pixel(color)
+                time.sleep(0.1)
+        """
         if not 0 <= cell_id < len(self._cells):
             return []
 
-        return self._model.get_pixels(cell_id)
+        return self._model.set_pixels_by_cellid(cell_id)
 
     def set_cell_by_coordinates(self, row: int, column: int, color: Color):
         """Sets cell pixels to color for given coordinates."""
@@ -105,14 +112,14 @@ class TriangleGrid(object):
             logger.warning(f'cell coordinates (row={row}, column={column}) invalid')
             return
 
-        [pixel(color) for pixel in self._model.get_pixels(cell.id)]
+        [pixel(color) for pixel in self._model.set_pixels_by_cellid(cell.id)]
 
     def set_cell_by_id(self, cell_id: int, color: Color):
         """Sets cell pixels to color for given ID."""
         if not 0 <= cell_id < len(self._cells):
             logger.warning(f'cell ID {cell_id} invalid')
             return
-        [pixel(color) for pixel in self._model.get_pixels(cell_id)]
+        [pixel(color) for pixel in self._model.set_pixels_by_cellid(cell_id)]
 
 
     def set_cell(self, cell, color: Color):
@@ -121,7 +128,7 @@ class TriangleGrid(object):
             if not 0 <= cell.id < len(self._cells):
                 logger.warning(f'cell ID {cell_id} invalid')
                 return
-            [pixel(color) for pixel in self._model.get_pixels(cell.id)]
+            [pixel(color) for pixel in self._model.set_pixels_by_cellid(cell.id)]
 
         
     def set_cells(self, cells: List['TriangleCell'], color: Color):

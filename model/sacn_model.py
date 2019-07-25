@@ -6,12 +6,11 @@ have one LED each.
 """
 import json
 import logging
-from typing import Callable, Iterator
+from typing import Iterator
 
-from color import Color
 import sacn
 from .mapping import PixelMap
-from .modelbase import ModelBase
+from .modelbase import ModelBase, SetColorFunc
 
 logger = logging.getLogger("pyramidtriangles")
 
@@ -52,7 +51,7 @@ class sACN(ModelBase):
                 self.sender[universe].multicast = True
                 self.leds[universe] = [0] * 512
 
-    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+    def set_pixels_by_cellid(self, cell_id) -> Iterator[SetColorFunc]:
         for pixel in self._pixelmap[cell_id]:
             if pixel not in self.PIXEL_MAP:
                 logger.warning(f'{pixel} not in sACN pixel ID map')

@@ -4,10 +4,10 @@ Proof of concept that dealing with mirroring across multiple backend models is b
 Completely agnostic as to what the cell ids look like, they are just passed through to the underlying model.
 """
 from itertools import zip_longest
-from typing import Callable, Iterator
+from typing import Iterator
 
 from color import Color
-from .modelbase import ModelBase
+from .modelbase import ModelBase, SetColorFunc
 
 
 class MirrorModel(ModelBase):
@@ -20,8 +20,8 @@ class MirrorModel(ModelBase):
     def add_model(self, model):
         self.models.append(model)
 
-    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
-        generators = zip_longest([model.get_pixels(cell_id) for model in self.models])
+    def set_pixels_by_cellid(self, cell_id) -> Iterator[SetColorFunc]:
+        generators = zip_longest([model.set_pixels_by_cellid(cell_id) for model in self.models])
 
         def set_color(color: Color):
             pixels = next(generators)

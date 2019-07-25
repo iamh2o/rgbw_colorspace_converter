@@ -8,12 +8,11 @@ have one LED each.
 import array
 import json
 import logging
-from typing import Iterator, Callable
+from typing import Iterator
 
-from color import Color
 import ola
 from .mapping import PixelMap
-from .modelbase import ModelBase
+from .modelbase import ModelBase, SetColorFunc
 
 logger = logging.getLogger("pyramidtriangles")
 
@@ -48,7 +47,7 @@ class OLAModel(ModelBase):
             self.PIXEL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
 
     # Model basics
-    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+    def set_pixels_by_cellid(self, cell_id) -> Iterator[SetColorFunc]:
         for pixel in self._pixelmap[cell_id]:
             if pixel not in self.PIXEL_MAP:
                 logger.warning(f'{pixel} not in sACN pixel ID map')

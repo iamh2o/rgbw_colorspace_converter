@@ -6,7 +6,7 @@ from model import ModelBase
 
 
 class FakeModel(ModelBase):
-    def get_pixels(self, cell_id) -> Iterator[Callable[[Color], None]]:
+    def set_pixels_by_cellid(self, cell_id) -> Iterator[Callable[[Color], None]]:
         pass
 
     def go(self):
