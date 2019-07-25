@@ -112,8 +112,23 @@ class TriangleGrid(object):
         if not 0 <= cell_id < len(self._cells):
             logger.warning(f'cell ID {cell_id} invalid')
             return
-
         [pixel(color) for pixel in self._model.get_pixels(cell_id)]
+
+
+    def set_cell(self, cell, color: Color):
+        "Set cell pixels to a color"
+        if cell is not None:
+            if not 0 <= cell.id < len(self._cells):
+                logger.warning(f'cell ID {cell_id} invalid')
+                return
+            [pixel(color) for pixel in self._model.get_pixels(cell.id)]
+
+        
+    def set_cells(self, cells: List['TriangleCell'], color: Color):
+        "set a list of cells to a color"
+        for cell in cells:
+            self.set_cell(cell, color)
+
 
     def set_all_cells(self, color: Color):
         """Sets all cell to color."""
@@ -206,6 +221,46 @@ class TriangleGrid(object):
         Right neighbor is the cell opposite the right vertex of the given cell.
         """
         return self.vertex_neighbors_by_coord(*self.id_to_coordinates(cell_id))
+
+
+    def hexagon_from_btm_cell_by_coords(self, row: int, col: int) -> Tuple['TriangleCell','TriangleCell','TriangleCell','TriangleCell','TriangleCell','TriangleCell']:
+        "Given the coordinates of an up facing cell, return the surrounding cells which will make "
+        "A hexagon with the specified cell as the base"
+        "the tuple will begin with the btm upward facing triangle at the base of the hex"
+        "the next cell in the tuple will be the next triangle in the hexagon moving counterclockwise"
+        "None will be entered for cells off the grid"
+        
+        btm_cell = self.get_cell_by_coordinates(row, col)
+        a,b,c,d,e,f  = btm_cell, None, None, None, None, None
+        if a.is_left_edge:
+            b = self.edge_neighbors_by_cell(a.id)[2]
+            if b is not None:
+                c = self.edge_neighbors_by_cell(b.id)[1]
+            if c is not None:
+                d = self.edge_neighbors_by_cell(c.id)[0]
+            if d is not None:
+                e = self.edge_neighbors_by_cell(d.id)[0]
+            if e is not None:
+                f = self.edge_neighbors_by_cell(e.id)[1]
+        elif a.is_right_edge:
+            f = self.edge_neighbors_by_cell(a.id)[0]
+            if f is not None:
+                e = self.edge_neighbors_by_cell(f.id)[1]
+            if e is not None:
+                d = self.edge_neighbors_by_cell(e.id)[2]
+            if d is not None:
+                c  = self.edge_neighbors_by_cell(d.id)[2]
+            if c is not None:
+                b = self.edge_neighbors_by_cell(c.id)[1]
+        else:
+            b = self.edge_neighbors_by_cell(a.id)[2]
+            c = self.edge_neighbors_by_cell(b.id)[1]
+            d = self.edge_neighbors_by_cell(c.id)[0]
+            e = self.edge_neighbors_by_cell(d.id)[0]
+            f = self.edge_neighbors_by_cell(e.id)[1]
+            
+        return (a,b,c,d,e,f)
+
 
 
 class TriangleCell(NamedTuple):

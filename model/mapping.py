@@ -6,10 +6,10 @@ PixelMap = Dict[int, List[int]]
 def demo_triangle_mapping() -> PixelMap:
     return {
         #Wiring coming in from the bottom left, this is the order of cells following the pixels
-        1: [ 2, 3, 4, 5, 6, 7, 8],  
-        3: [ 9, 10, 11, 12, 13, 14, 15, 16],
-        2: [ 26, 27, 28, 29, 30, 31, 32, 33],   
-        0: [ 34, 35, 36, 37, 38, 39, 40, 41]  # the last cell should the the top most cell of the triangle grid
+        1: [  2, 3, 4, 5, 6, 7, 8, 9],  
+        3: [ 10, 11, 12, 13, 14, 15, 16, 17],
+        2: [ 27, 28, 29, 30, 31, 32, 33, 34],   
+        0: [ 35, 36, 37, 38, 39, 40, 41, 42]  # the last cell should the the top most cell of the triangle grid
         }
 
         
