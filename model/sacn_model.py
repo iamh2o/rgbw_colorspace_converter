@@ -29,7 +29,7 @@ class sACN(ModelBase):
         self.leds = {}
         self._map_leds(model_json)
         self._pixelmap = pixelmap
-
+#        from IPython import embed; embed()
         # Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
         # Pixels are an LED represented by 4 DMX addresses
 

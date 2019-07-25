@@ -4,7 +4,7 @@ from .showbase import ShowBase
 
 
 class OneByOne(ShowBase):
-    def __init__(self, tri_grid: TriangleGrid, frame_delay: float = 0.25):
+    def __init__(self, tri_grid: TriangleGrid, frame_delay: float = 0.9):
         self.tri_grid = tri_grid
         self.frame_delay = frame_delay
 
