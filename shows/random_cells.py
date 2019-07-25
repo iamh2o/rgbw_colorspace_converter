@@ -10,7 +10,7 @@ class Random(ShowBase):
 
         self.n_cells = len(self.tri_grid.cells)
 
-        from IPython import embed; embed()
+#        from IPython import embed; embed()
 
     def next_frame(self):
 
