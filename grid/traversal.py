@@ -57,15 +57,31 @@ def concentric(row_count: int) -> Iterator[Iterable[Tuple[int, int]]]:
     if not row_count > 0:
         raise ValueError(f'traversal requires row_count({row_count}) > 0')
 
-    for i in range(row_count):
-        # Accumulate for bottom row
+    for i in range(row_count // 2):
         bottom_row = row_count - 1 - i
-        bottoms = {(bottom_row, col) for col in range(row_length(bottom_row))}
+        # Increases 0, 2, 4,...
+        left_column = i * 2
+
+        # Accumulate for bottom row
+        bottoms = []
+        for col in range(left_column, row_length(bottom_row + 1) - left_column):
+            bottoms.append((bottom_row, col))
 
         # Accumulate i-th column of each row
-        lefts = {(row, i) for row in range(row_count)}
-
+        lefts = []
         # Accumulate (n-i)th column of each row
-        rights = {(row, bottom_row) for row in range(row_count)}
+        rights = []
+
+        for row in range(left_column, bottom_row):
+            # Decreases last, last - 2, last - 4,...
+            right_column = row_length(row + 1) - 1 - left_column
+
+            if left_column <= right_column:
+                lefts.append((row, left_column))
+                rights.append((row, right_column))
+
+            if left_column + 1 <= right_column:
+                lefts.append((row, left_column + 1))
+                rights.append((row, right_column - 1))
 
         yield set().union(bottoms, lefts, rights)
