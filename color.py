@@ -310,15 +310,15 @@ def HSI(h,s,i):
     assert is_hsi_hsl_tuple(t)
     return RGB( hsi2rgb(h,s,i) )
 
-def RGB(r,g,b):
+def RGB(r,g,b, x=False):
     "Create a new RGB color"
     t = (r,g,b)
     assert is_rgb_tuple(t)
-    return Color(rgb_to_hsv(t))
+    return Color(rgb_to_hsv(t), x)
 
-def HSV(h,s,v):
+def HSV(h,s,v, x=False):
     "Create a new HSV color"
-    return Color((h,s,v))
+    return Color((h,s,v),x)
 
 def HSL(h,s,l):
     "Create new HSL color"
@@ -336,8 +336,9 @@ def Hex(value):
     return RGB(*rgb_t)
 
 class Color(object):
-    def __init__(self, hsv_tuple):
+    def __init__(self, hsv_tuple, only_rgb=False):
         self._set_hsv(hsv_tuple)
+        self.only_rgb = only_rgb
 
     def __repr__(self):
         return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
@@ -458,19 +459,31 @@ class Color(object):
     """
     @property
     def r(self):
-        return self.rgbw[0]
+        if self.only_rgb:
+            return self.rgb[0]
+        else:
+            return self.rgbw[0]
 
     @property
     def g(self):
-        return self.rgbw[1]
+        if self.only_rgb:
+            return self.rgb[1]
+        else:
+            return self.rgbw[1]
 
     @property
     def b(self):
-        return self.rgbw[2]
+        if self.only_rgb:
+            return self.rgb[2]
+        else:
+            return self.rgbw[2]
 
     @property
     def w(self):
-        return self.rgbw[3]
+        if self.only_rgb:
+            return 0
+        else:
+            return self.rgbw[3]
 
 if __name__=='__main__':
     import doctest

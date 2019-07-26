@@ -11,7 +11,7 @@ class MarchingHexes(ShowBase):
         self.n_cells = len(self.tri_grid.cells)
 
     def next_frame(self):
-        hsv = HSV(1.0,.9,.5)
+        hsv = HSV(1.0,1,1)
         while True:
             self.tri_grid.clear()
             for cell in self.tri_grid.cells:

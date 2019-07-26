@@ -9,7 +9,7 @@ class OneByOne(ShowBase):
         self.frame_delay = frame_delay
 
     def next_frame(self):
-        ncells = len(self.tri_grid.cells) - 1
+        ncells = len(self.tri_grid.cells)
         self.tri_grid.clear()
 
         while True:
@@ -17,6 +17,7 @@ class OneByOne(ShowBase):
                 self.tri_grid.clear()
                 print(cell)
                 for pixel in self.tri_grid.set_pixels_by_cellid(cell):
+                    print(pixel)
                     pixel(RGB(255, 255, 25))
 
-                yield self.frame_delay
+                    yield self.frame_delay
