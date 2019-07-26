@@ -8,3 +8,4 @@ from .up_down import UpDown
 from .cycle_hsv import CycleHSV
 from .strobe import Strobe
 from .marching_hexes import MarchingHexes
+from .warp import Warp

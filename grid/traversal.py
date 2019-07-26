@@ -1,10 +1,11 @@
-from typing import Iterator, List, Tuple
+from typing import Iterable, Iterator, List, Tuple
 
 from .grid import row_length
 
 
 def left_to_right(row_count: int) -> Iterator[List[Tuple[int, int]]]:
     """Generates a left-to-right vertical sequence of coordinates."""
+
     if not row_count > 0:
         raise ValueError(f'traversal requires row_count({row_count}) > 0')
 
@@ -30,6 +31,7 @@ def left_to_right(row_count: int) -> Iterator[List[Tuple[int, int]]]:
 
 def right_to_left(row_count: int) -> Iterator[List[Tuple[int, int]]]:
     """Generates a right-to-left vertical sequence of coordinates."""
+
     if not row_count > 0:
         raise ValueError(f'traversal requires row_count({row_count}) > 0')
 
@@ -47,3 +49,23 @@ def right_to_left(row_count: int) -> Iterator[List[Tuple[int, int]]]:
             coordinates.append((curr_row, curr_column))
 
         yield coordinates
+
+
+def concentric(row_count: int) -> Iterator[Iterable[Tuple[int, int]]]:
+    """Concentric traversal out to in."""
+
+    if not row_count > 0:
+        raise ValueError(f'traversal requires row_count({row_count}) > 0')
+
+    for i in range(row_count):
+        # Accumulate for bottom row
+        bottom_row = row_count - 1 - i
+        bottoms = {(bottom_row, col) for col in range(row_length(bottom_row))}
+
+        # Accumulate i-th column of each row
+        lefts = {(row, i) for row in range(row_count)}
+
+        # Accumulate (n-i)th column of each row
+        rights = {(row, bottom_row) for row in range(row_count)}
+
+        yield set().union(bottoms, lefts, rights)
