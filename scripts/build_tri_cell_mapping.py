@@ -1,7 +1,7 @@
 import os
 import sys
 
-curr_cell = 1
+curr_cell = 0
 end_led = 1059
 n = end_led
 
