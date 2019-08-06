@@ -17,14 +17,14 @@ logger = logging.getLogger("pyramidtriangles")
 
 class sACN(ModelBase):
     def __init__(self, bind_address: str, row_count: int):
-        self.sender = sacn.sACNsender(bind_address, universeDiscovery=False)
+        self.sender = sacn.sACNsender(
+            bind_address=bind_address,
+            universeDiscovery=False,
+        )
         self.sender.start()
 
         # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
         self.leds = map_leds(row_count)
-        for ux in sorted(self.leds):
-            print(f'{ux}: {len(self.leds[ux])}')
-        print(f'Universes: {len(self.leds)}')
         for universe_index in self.leds:
             self.sender.activate_output(universe_index)
             self.sender[universe_index].multicast = True
