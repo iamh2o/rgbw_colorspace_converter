@@ -1,29 +1,30 @@
+import time
+
 from .showbase import ShowBase
 from color import RGB
-import time
+from grid import every
 
 
 class Strobe(ShowBase):
-    def __init__(self, tri_grid, frame_delay = 0.02):
-        self.tri_grid = tri_grid
+    def __init__(self, grid, frame_delay=0.02):
+        self.grid = grid
         self.frame_delay = frame_delay
-        self.n_cells = len(self.tri_grid._cells)
+        self.n_cells = len(self.grid._cells)
 
     def next_frame(self):
-
         while True:
-            self.tri_grid.clear()
-            self.tri_grid.set_all_cells(RGB(200, 5, 5))
-            self.tri_grid.go()
+            self.grid.clear()
+            self.grid.set(every, RGB(200, 5, 5))
+            self.grid.go()
             time.sleep(0.02)
-            self.tri_grid.set_all_cells(RGB(100, 100, 100))
-            self.tri_grid.go()
+            self.grid.set(every, RGB(100, 100, 100))
+            self.grid.go()
             time.sleep(0.02)
-            self.tri_grid.set_all_cells(RGB(5, 5, 255))
-            self.tri_grid.go()
+            self.grid.set(every, RGB(5, 5, 255))
+            self.grid.go()
             time.sleep(0.02)
-            self.tri_grid.set_all_cells(RGB(100, 100, 100))
-            self.tri_grid.go()
+            self.grid.set(every, RGB(100, 100, 100))
+            self.grid.go()
             time.sleep(0.02)
 
             yield self.frame_delay

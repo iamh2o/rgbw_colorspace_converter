@@ -1,31 +1,27 @@
 from color import RGB
 from .showbase import ShowBase
-from grid import TriangleGrid, traversal
+from grid import Grid, Direction, sweep
 
 
 class LeftToRightAndBack(ShowBase):
-    def __init__(self, tri_grid: TriangleGrid, frame_delay: float = 1.0):
-        self.tri_grid = tri_grid
+    def __init__(self, grid: Grid, frame_delay: float = 1.0):
+        self.grid = grid
         self.frame_delay = frame_delay
 
     def next_frame(self):
-        row_count = self.tri_grid.row_count
         fwd = True
 
         while True:
-            if fwd:
-                sequence = traversal.left_to_right(row_count)
-            else:
-                sequence = traversal.right_to_left(row_count)
+            direction = Direction.LEFT_TO_RIGHT if fwd else Direction.RIGHT_TO_LEFT
+            sequence = sweep(direction, self.grid.row_count)
 
             for points in sequence:
-                self.tri_grid.clear()
+                self.grid.clear()
 
-                for (row, column) in points:
-                    print(f'row={row} column={column}')
-                    self.tri_grid.set_cell_by_coordinates(row, column, RGB(255, 255, 25))
+                for pos in points:
+                    self.grid.set(pos, RGB(255, 255, 25))
 
-                self.tri_grid.go()
+                self.grid.go()
                 yield self.frame_delay
 
             fwd = not fwd  # Flips direction

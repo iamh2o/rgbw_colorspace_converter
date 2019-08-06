@@ -9,12 +9,14 @@ import json
 from typing import Iterator
 
 from color import Color
-from .modelbase import ModelBase, SetColorFunc
+from .base import ModelBase, SetColorFunc
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
 logger = logging.getLogger("pyramidtriangles")
 
 
+# XXX(lyra): not yet updated! the simulator doesn't (yet) work with individual
+# LEDs; all cells are uniform.
 class SimulatorModel(ModelBase):
     def __init__(self, hostname, port=4444, model_json=None):
         self.hostname = hostname
@@ -37,7 +39,8 @@ class SimulatorModel(ModelBase):
         # The json file is formatted as a dictionary of numbers each key in the dict is a fixtureUID.
         # Each array that fixtureUID returns is of the format [universeUID, DMXstart#].
         with open(f, 'r') as json_file:
-            self.CELL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
+            self.CELL_MAP = json.load(json_file, object_hook=lambda d: {
+                                      int(k): v for (k, v) in d.items()})
 
     # Model basics
     def set_pixels_by_cellid(self, cell_id: int) -> Iterator[SetColorFunc]:
