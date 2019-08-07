@@ -11,12 +11,13 @@ import logging
 from typing import Iterator
 
 import ola
+from .base import ModelBase, SetColorFunc
 from .mapping import PixelMap
-from .modelbase import ModelBase, SetColorFunc
 
 logger = logging.getLogger("pyramidtriangles")
 
 
+# XXX(lyra): this is no longer a valid ModelBase
 class OLAModel(ModelBase):
     def __init__(self, max_dmx, model_json: str, pixelmap: PixelMap):
         # XXX any way to check if this is a valid connection?

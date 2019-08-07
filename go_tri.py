@@ -7,8 +7,9 @@ import queue
 import threading
 
 import cherrypy
-import grid
-from model import SimulatorModel, sACN, demo_triangle_mapping
+from grid import Grid
+from model import sACN
+import netifaces
 import osc_serve
 import shows
 import util
@@ -36,14 +37,15 @@ def speed_interpolation(val):
     else:
         return hi_interp(val)
 
+
 low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
-hi_interp  = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
+hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 
 class ShowRunner(threading.Thread):
-    def __init__(self, model, queue, max_showtime=240, fail_hard=True):
+    def __init__(self, grid, queue, max_showtime=240, fail_hard=True):
         super(ShowRunner, self).__init__(name="ShowRunner")
-        self.model = model
+        self.grid = grid
         self.queue = queue
 
         self.fail_hard = fail_hard
@@ -133,8 +135,8 @@ class ShowRunner(threading.Thread):
             print("ignoring unknown msg:", str(msg))
 
     def clear(self):
-        """Clears contained model."""
-        self.model.clear()
+        """Clears contained grid."""
+        self.grid.clear()
 
     def next_show(self, name=None):
         show = None
@@ -151,7 +153,7 @@ class ShowRunner(threading.Thread):
         self.clear()
         self.prev_show = self.show
 
-        self.show = show(self.model)
+        self.show = show(self.grid)
         print(f'next show: {name}')
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
@@ -176,7 +178,7 @@ class ShowRunner(threading.Thread):
                 self.check_queue()
 
                 d = self.get_next_frame()
-                self.model.go()
+                self.grid.go()
                 if d:
                     real_d = d * self.speed_x
                     time.sleep(real_d)
@@ -206,9 +208,9 @@ def osc_listener(q, port=5700):
 
 
 class TriangleServer(object):
-    def __init__(self, tri_model, args):
+    def __init__(self, grid, args):
         self.args = args
-        self.tri_model = tri_model
+        self.grid = grid
 
         self.queue = queue.LifoQueue()
 
@@ -230,7 +232,8 @@ class TriangleServer(object):
             logger.warning("Can't create OSC listener", exc_info=True)
 
         # Show runner
-        self.runner = ShowRunner(self.tri_model, self.queue, args.max_time, fail_hard=args.fail_hard)
+        self.runner = ShowRunner(
+            self.grid, self.queue, args.max_time, fail_hard=args.fail_hard)
         if args.shows:
             print("setting show:", args.shows[0])
             self.runner.next_show(args.shows[0])
@@ -301,12 +304,16 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Triangle Light Control')
 
+    parser.add_argument('-r', '--rows', type=int,
+                        default=11, help='Rows per panel')
     parser.add_argument('--max-time', type=float, default=float(60),
                         help='Maximum number of seconds a show will run (default 60)')
 
+    parser.add_argument('--bind', help='Local address to use for sACN')
     parser.add_argument('--simulator', dest='simulator', action='store_true')
 
-    parser.add_argument('--list', action='store_true', help='List available shows')
+    parser.add_argument('--list', action='store_true',
+                        help='List available shows')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
                         help='name of show (or shows) to run')
     parser.add_argument('--fail-hard', type=bool, default=True,
@@ -315,23 +322,41 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.list:
-        logger.info("Available shows: %s", ', '.join([name for (name, cls) in shows.load_shows()]))
+        logger.info("Available shows: %s", ', '.join(
+            [name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
 
     if args.simulator:
-        sim_host = "localhost"
-        sim_port = 4444
-        logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
+        parser.error('The simulator is broken')
 
-        model = SimulatorModel(sim_host, port=sim_port, model_json='./data/pixel_map.json')
-        triangle_grid = grid.make_triangle(model, 11)  # Our panels will only have 11 rows
+        # sim_host = "localhost"
+        # sim_port = 4444
+        # logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
+
+        # model = SimulatorModel(sim_host, port=sim_port,
+        #                        model_json='./data/pixel_map.json')
     else:
-        logger.info("Starting SACN")
-        model = sACN(model_json="./data/pixel_map.json", pixelmap=demo_triangle_mapping())
+        bind = args.bind
+        if not bind:
+            gateways = netifaces.gateways()[netifaces.AF_INET]
 
-        triangle_grid = grid.make_triangle(model, 2)
+            for _, interface, _ in gateways:
+                for a in netifaces.ifaddresses(interface).get(netifaces.AF_INET, []):
+                    if a['addr'].startswith('192.168'):
+                        logger.info(f"Auto-detected local IP: {a['addr']}")
+                        bind = a.addr
+                        break
+                if bind:
+                    break
 
-    app = TriangleServer(triangle_grid, args)
+            if not bind:
+                parser.error('Failed to auto-detect local IP; use --bind')
+
+        logger.info("Starting sACN")
+        model = sACN(bind, args.rows)
+
+    app = TriangleServer(Grid(model, args.rows), args)
+
     try:
         app.start()  # start related service threads
         app.go_web()  # enter main blocking event loop

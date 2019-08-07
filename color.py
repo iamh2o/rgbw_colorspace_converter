@@ -335,7 +335,7 @@ def Hex(value):
     rgb_t = (int(value[i:i+int(lv/3)], 16) for i in range(0, lv, int(lv/3)))
     return RGB(*rgb_t)
 
-class Color(object):
+class Color:
     def __init__(self, hsv_tuple, only_rgb=False):
         self._set_hsv(hsv_tuple)
         self.only_rgb = only_rgb

@@ -1,30 +1,28 @@
 from .showbase import ShowBase
 from color import HSV
+from grid import hexagon, pointed_up
 import random as rnd
 import time
 
+
 class MarchingHexes(ShowBase):
-    def __init__(self, tri_grid, frame_delay=0.1):
-        self.tri_grid = tri_grid
+    def __init__(self, grid, frame_delay=0.1):
+        self.grid = grid
         self.frame_delay = frame_delay
 
-        self.n_cells = len(self.tri_grid.cells)
+        self.n_cells = len(self.grid.cells)
 
     def next_frame(self):
-        hsv = HSV(1.0,1,1)
-        while True:
-            self.tri_grid.clear()
-            for cell in self.tri_grid.cells:
-                if cell.is_up:
-                    self.tri_grid.set_cells(self.tri_grid.hexagon_from_btm_cell_by_coords(cell.coordinates[0], cell.coordinates[1]), hsv) 
-                    self.tri_grid.go()
-                    time.sleep(1)
-                    
-                    if hsv.h >= 1.0:
-                        hsv.h = 0.0
-                    else:
-                        hsv.h += 0.2
+        hsv = HSV(1.0, 1, 1)
 
-                    
+        while True:
+            self.grid.clear()
+
+            for cell in self.grid.select(pointed_up):
+                self.grid.set(hexagon(cell.coordinates), hsv)
+                self.grid.go()
+                time.sleep(1)
+
+                hsv.h = 0.0 if hsv.h >= 1.0 else hsv.h + 0.2
 
             yield self.frame_delay
