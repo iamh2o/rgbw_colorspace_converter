@@ -344,7 +344,7 @@ if __name__ == '__main__':
                 for a in netifaces.ifaddresses(interface).get(netifaces.AF_INET, []):
                     if a['addr'].startswith('192.168'):
                         logger.info(f"Auto-detected local IP: {a['addr']}")
-                        bind = a.addr
+                        bind = a['addr']
                         break
                 if bind:
                     break
