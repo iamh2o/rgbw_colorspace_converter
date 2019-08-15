@@ -1,18 +1,18 @@
 from abc import ABC, abstractmethod
 from color import Color
 from grid.cell import Address, universe_count, universe_size
-from typing import Callable, List, Mapping
-
-SetColorFunc = Callable[[Color], None]
+from typing import List, Mapping, Union
 
 
 class ModelBase(ABC):
     """Abstract base class for simulators."""
 
     @abstractmethod
-    def set(self, addr: Address, color: Color):
+    def set(self, addr: Union[Address, int], color: Color):
         """
         Set one pixel to a particular color.
+
+        addr is an Address, except in the case of the simulator it is a cell ID.
         """
 
     @abstractmethod

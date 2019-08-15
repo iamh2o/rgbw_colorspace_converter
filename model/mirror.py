@@ -1,10 +1,8 @@
-
-from itertools import zip_longest
-from typing import Iterator
+from typing import Union
 
 from color import Color
 from grid.cell import Address
-from .base import ModelBase, SetColorFunc
+from .base import ModelBase
 
 
 class MirrorModel(ModelBase):
@@ -18,7 +16,7 @@ class MirrorModel(ModelBase):
     def add_model(self, model):
         self.models.append(model)
 
-    def set(self, addr: Address, color: Color):
+    def set(self, addr: Union[Address, int], color: Color):
         for m in self.models:
             m.set(addr, color)
 
