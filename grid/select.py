@@ -1,7 +1,7 @@
 
-from typing import Iterable, List, NamedTuple, Sequence, Tuple
+from typing import Iterable, List, NamedTuple, Sequence
 
-from .cell import Cell, Orientation, row_length
+from .cell import Cell, Orientation
 from .grid import Grid, Position, Query, Location
 
 

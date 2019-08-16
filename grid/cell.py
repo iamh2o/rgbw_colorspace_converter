@@ -28,11 +28,6 @@ class Direction(IntEnum):
         return self is Direction.NATURAL or self == orientation
 
 
-def row_length(n: int) -> int:
-    """Returns count of elements in nth row of equilateral triangle."""
-    return n * 2 - 1
-
-
 class Cell(NamedTuple):
     """
     A Cell stores the properties of a "cell" (mini-triangle) within one of
@@ -127,12 +122,6 @@ class Cell(NamedTuple):
         return hash((type(self), self.position))
 
 
-def triangular_number(n: int) -> int:
-    """Returns the number of elements in an equilateral triangle of n rows."""
-    # Typically the triangle number is (n(n+1))/2 but our triangle has rows of 1, 3, 5...
-    return n ** 2
-
-
 class Position(NamedTuple):
     row: int
     col: int
@@ -141,16 +130,16 @@ class Position(NamedTuple):
     @lru_cache(maxsize=512)
     def from_id(cls, id: int) -> "Position":
         row_below = 1
-        while triangular_number(row_below) <= id:
+        while Geometry.triangular_number(row_below) <= id:
             row_below += 1
 
         row = row_below - 1
-        col = id - triangular_number(row)
+        col = id - Geometry.triangular_number(row)
         return cls(row, col)
 
     @property
     def id(self) -> int:
-        return triangular_number(self.row) + self.col
+        return Geometry.triangular_number(self.row) + self.col
 
     @property
     def x(self) -> int:
