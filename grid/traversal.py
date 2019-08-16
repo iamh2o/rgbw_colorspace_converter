@@ -1,4 +1,3 @@
-import enum
 from typing import Iterator, Sequence
 
 from .cell import Direction, Position, row_length

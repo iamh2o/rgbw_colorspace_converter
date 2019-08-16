@@ -9,8 +9,7 @@ from .showbase import ShowBase, load_shows, random_shows
 from .stargate import Stargate
 from .strobe import Strobe
 from .up_down import UpDown
+from .warp import Warp
 
 from .index_debug import IndexDebug
 from .universe_debug import UniverseDebug
-
-# from .warp import Warp # XXX: missing traversal.concentric()
