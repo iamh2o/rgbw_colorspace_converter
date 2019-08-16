@@ -1,7 +1,9 @@
 from enum import IntEnum
 from functools import lru_cache
 from itertools import chain
-from typing import List, Mapping, NamedTuple
+from typing import List, Mapping, Optional, NamedTuple
+
+from .geom import Geometry
 
 
 class Orientation(IntEnum):
@@ -40,8 +42,7 @@ class Cell(NamedTuple):
     position: "Position"
     orientation: Orientation
     addresses: List["Address"]
-
-    row_count = 11
+    geom: Geometry
 
     def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> List["Address"]:
         return (self.addresses
@@ -65,12 +66,32 @@ class Cell(NamedTuple):
         return self.position.id
 
     @property
+    def above(self) -> Optional["Position"]:
+        return self.position.adjust(row=-1, col=-1) if self.row > 0 else None
+
+    @property
+    def below(self) -> Optional["Position"]:
+        return self.position.adjust(row=1, col=1) if self.row + 1 < self.geom.rows else None
+
+    @property
+    def left(self) -> Optional["Position"]:
+        return self.position.adjust(col=-1) if self.col > 0 else None
+
+    @property
+    def right(self) -> Optional["Position"]:
+        return self.position.adjust(col=1) if self.col + 1 < self.geom.row_length(self.row) else None
+
+    @property
     def is_up(self) -> bool:
         return self.orientation is Orientation.POINT_UP
 
     @property
     def is_down(self) -> bool:
         return self.orientation is Orientation.POINT_DOWN
+
+    @property
+    def is_edge(self) -> bool:
+        return self.is_left_edge or self.is_right_edge or self.is_bottom_edge
 
     @property
     def is_left_edge(self) -> bool:
@@ -80,13 +101,12 @@ class Cell(NamedTuple):
     @property
     def is_right_edge(self) -> bool:
         """Returns True if cell is along the right edge of the greater triangle."""
-        (row, column) = self.position
-        return column + 1 == row_length(row + 1)
+        return self.col + 1 == self.geom.row_length(self.row)
 
     @property
     def is_bottom_edge(self) -> bool:
         """Returns True if cell is along the bottom edge of the greater triangle."""
-        return self.row + 1 == self.row_count and self.is_up
+        return self.row + 1 == self.geom.rows and self.is_up
 
     @property
     def is_top_corner(self) -> bool:
@@ -102,6 +122,9 @@ class Cell(NamedTuple):
     def is_left_corner(self) -> bool:
         """Returns True if cell is the left corner of the greater triangle."""
         return self.is_bottom_edge and self.is_left_edge
+
+    def __hash__(self):
+        return hash((type(self), self.position))
 
 
 def triangular_number(n: int) -> int:
@@ -137,7 +160,7 @@ class Position(NamedTuple):
     def y(self) -> int:
         return self.row
 
-    def adjust(self, row: int, col: int) -> "Position":
+    def adjust(self, row: int = 0, col: int = 0) -> "Position":
         return type(self)(self.row + row, self.col + col)
 
 
@@ -188,10 +211,10 @@ def universe_size(universe_id: int) -> int:
     return 512 if universe_id % 3 != 0 else (44 * 4)
 
 
-def generate(rows: int = 11, start: Address = Address(1, 4)) -> Mapping[Position, Cell]:
+def generate(geom: Geometry, start: Address = Address(1, 4)) -> Mapping[Position, Cell]:
     cells = {}
-    for row in range(rows - 1, -1, -1):
-        row_mapping = mouth(row, start)
+    for row in range(geom.rows - 1, -1, -1):
+        row_mapping = mouth(geom, row, start)
         cells.update(row_mapping)
 
         end_address = max(chain.from_iterable(
@@ -201,30 +224,30 @@ def generate(rows: int = 11, start: Address = Address(1, 4)) -> Mapping[Position
     return cells
 
 
-def mouth(row: int, start: Address) -> Mapping[Position, Cell]:
-    up = up_teeth(row, start, row + 1)
+def mouth(geom: Geometry, row: int, start: Address) -> Mapping[Position, Cell]:
+    up = up_teeth(geom, row, start, row + 1)
     last_up_address = up[max(up)].addresses[-1]
     first_after_gap = last_up_address.range(11)[-1]
-    down = down_teeth(row, first_after_gap, row)
+    down = down_teeth(geom, row, first_after_gap, row)
 
     return {**up, **down}
 
 
-def up_teeth(row: int, start: Address, length: int, pixels_per_cell: int = 8) -> Mapping[Position, Cell]:
+def up_teeth(geom: Geometry, row: int, start: Address, length: int, pixels_per_cell: int = 8) -> Mapping[Position, Cell]:
     cells = {}
     addr = start
 
     for i in range(length):
         pos = Position(row, i * 2)
         addrs = addr.range(pixels_per_cell)
-        cells[pos] = Cell(pos, Orientation.POINT_UP, addrs)
+        cells[pos] = Cell(pos, Orientation.POINT_UP, addrs, geom)
 
         addr = addrs[-1].next
 
     return cells
 
 
-def down_teeth(row: int, start: Address, length: int, pixels_per_cell: int = 8) -> Mapping[Position, Cell]:
+def down_teeth(geom: Geometry, row: int, start: Address, length: int, pixels_per_cell: int = 8) -> Mapping[Position, Cell]:
     cells = {}
     addr = start
 
@@ -232,12 +255,9 @@ def down_teeth(row: int, start: Address, length: int, pixels_per_cell: int = 8) 
     for _ in range(length):
         pos = Position(row, col)
         addrs = addr.range(pixels_per_cell)
-        cells[pos] = Cell(pos, Orientation.POINT_DOWN, addrs)
+        cells[pos] = Cell(pos, Orientation.POINT_DOWN, addrs, geom)
 
         col -= 2
         addr = addrs[-1].next
 
     return cells
-
-
-CELLS = generate()

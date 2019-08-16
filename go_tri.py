@@ -7,7 +7,7 @@ import queue
 import threading
 
 import cherrypy
-from grid import Grid
+from grid import Geometry, Grid
 from model import sACN, SimulatorModel
 import netifaces
 import osc_serve
@@ -354,7 +354,7 @@ if __name__ == '__main__':
         logger.info("Starting sACN")
         model = sACN(bind, args.rows)
 
-    app = TriangleServer(Grid(model, args.rows), args)
+    app = TriangleServer(Grid(model, Geometry(args.rows)), args)
 
     try:
         app.start()  # start related service threads

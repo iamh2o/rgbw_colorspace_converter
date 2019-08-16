@@ -38,7 +38,7 @@ def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]
 
     while True:
         show = choice(seq)
-        while show[0] in seen:
+        while show[0] in seen or 'Debug' in show[0]:
             show = choice(seq)
 
         seen.append(show[0])
