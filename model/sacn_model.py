@@ -39,7 +39,7 @@ class sACN(ModelBase):
             raise IndexError(
                 f'attempt to set channel in undefined universe {addr.universe}')
 
-        # our the Color tuples have their channels in the same order as sACN
+        # our Color tuples have their channels in the same order as sACN
         for i, c in enumerate(color.rgbw):
             try:
                 channels[addr.offset + i] = c

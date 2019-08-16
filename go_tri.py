@@ -342,15 +342,17 @@ if __name__ == '__main__':
 
             for _, interface, _ in gateways:
                 for a in netifaces.ifaddresses(interface).get(netifaces.AF_INET, []):
-                    if a['addr'].startswith('192.168'):
-                        logger.info(f"Auto-detected local IP: {a['addr']}")
+                    if a['addr'].startswith('192.168.0'):
+                        logger.info(
+                            f"Auto-detected Pyramid local IP: {a['addr']}")
                         bind = a['addr']
                         break
                 if bind:
                     break
 
             if not bind:
-                parser.error('Failed to auto-detect local IP; use --bind')
+                parser.error(
+                    'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
         model = sACN(bind, args.rows)
