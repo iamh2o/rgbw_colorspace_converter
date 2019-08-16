@@ -39,7 +39,10 @@ class Grid(Mapping[Location, Cell]):
 
         self.row_count = row_count
         self._model = model
-        self._cells = list(generate(rows=row_count).values())
+
+        cells_by_id = {cell.id: cell
+                       for cell in generate(rows=row_count).values()}
+        self._cells = [cells_by_id[i] for i in range(len(cells_by_id))]
 
     @property
     def cells(self) -> List[Cell]:
@@ -84,7 +87,16 @@ class Grid(Mapping[Location, Cell]):
 
     def __getitem__(self, loc: Location) -> Cell:
         cell_id = loc if isinstance(loc, int) else loc.id
-        return self._cells[cell_id]
+
+        try:
+            cell = self._cells[cell_id]
+        except IndexError:
+            raise KeyError(cell_id)
+        else:
+            if isinstance(loc, Position) and loc != cell.position:
+                logger.warn('got wrong cell: expected %r, got %r',
+                            loc, cell.position)
+            return cell
 
     def __iter__(self):
         return (cell.position for cell in self._cells)

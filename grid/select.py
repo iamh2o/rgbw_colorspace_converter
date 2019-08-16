@@ -29,6 +29,8 @@ def pointed(orientation: Orientation) -> Query:
     def query(grid: Grid) -> List[Cell]:
         return [cell for cell in grid.cells if cell.orientation is orientation]
 
+    return query
+
 
 def pointed_up(grid: Grid) -> List[Cell]:
     return [cell for cell in grid.cells if cell.is_up]
@@ -104,7 +106,7 @@ def vertex_neighbors(loc: Location) -> Query:
 def hexagon(base_loc: Location) -> Query:
     def hexagon_query(grid: Grid) -> Sequence[Cell]:
         def neighbors(cell) -> Neighbors:
-            return Neighbors(query(grid, edge_neighbors(cell.id)))
+            return Neighbors(*query(grid, edge_neighbors(cell.id)))
 
         btm_cell = grid[base_loc]
         a, b, c, d, e, f = btm_cell, None, None, None, None, None
@@ -135,6 +137,7 @@ def hexagon(base_loc: Location) -> Query:
             e = neighbors(d).left
             f = neighbors(e).middle
 
-        return (a, b, c, d, e, f)
+        hexa = list(filter(None, [a, b, c, d, e, f]))
+        return hexa
 
     return hexagon_query

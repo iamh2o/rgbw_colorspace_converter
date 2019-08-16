@@ -8,4 +8,8 @@ from .up_down import UpDown
 from .cycle_hsv import CycleHSV
 from .strobe import Strobe
 from .marching_hexes import MarchingHexes
+
+from .index_debug import IndexDebug
+from .universe_debug import UniverseDebug
+
 # from .warp import Warp # XXX: missing traversal.concentric()
