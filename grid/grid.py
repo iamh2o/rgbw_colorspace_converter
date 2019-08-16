@@ -22,11 +22,7 @@ class Pixel(NamedTuple):
     model: Type[ModelBase]
 
     def set(self, color: Color):
-        # For ease, we set by cell ID in the simulator
-        if isinstance(self.model, SimulatorModel):
-            self.model.set(self.cell.id, color)
-        else:
-            self.model.set(self.address, color)
+        self.model.set(self.cell, self.address, color)
 
     def __call__(self, color: Color):
         self.set(color)

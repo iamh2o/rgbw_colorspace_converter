@@ -9,7 +9,7 @@ from typing import Union
 
 import sacn
 from color import Color
-from grid.cell import Address
+from grid.cell import Address, Cell
 from .base import ModelBase, map_leds
 
 logger = logging.getLogger("pyramidtriangles")
@@ -32,10 +32,7 @@ class sACN(ModelBase):
     def __del__(self):
         self.sender.stop()  # If the object is destructing, close the sender connection
 
-    def set(self, addr: Union[Address, int], color: Color):
-        if not isinstance(addr, Address):
-            raise TypeError('Expected set() with DMX address')
-
+    def set(self, cell: Cell, addr: Address, color: Color):
         try:
             channels = self.leds[addr.universe]
         except KeyError:

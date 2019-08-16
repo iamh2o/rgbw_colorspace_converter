@@ -4,10 +4,9 @@ Model to communicate with a Simulator over a TCP socket.
 import logging
 import queue
 import socket
-from typing import Union
 
 from color import Color
-from grid import Address
+from grid import Address, Cell
 from .base import ModelBase
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
@@ -28,12 +27,9 @@ class SimulatorModel(ModelBase):
     def __repr__(self):
         return f'{__class__.__name__} (hostname={self.hostname}, port={self.port})'
 
-    def set(self, addr: Union[Address, int], color: Color):
-        if not isinstance(addr, int):
-            raise TypeError('Cannot set DMX addresses in Simulator')
-
+    def set(self, cell: Cell, addr: Address, color: Color):
         # Enqueue a message to simulator, sets address
-        msg = f"{str(addr)} {','.join(map(str, color.rgb))}\n"
+        msg = f"{str(cell.id)} {','.join(map(str, color.rgb))}\n"
         self.message_queue.put(msg)
 
     def go(self):
