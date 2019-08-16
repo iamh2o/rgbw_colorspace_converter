@@ -2,8 +2,8 @@ import logging
 from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Union, Type
 
 from color import Color, RGB
-from model import ModelBase
-from .cell import generate, Address, Cell, Direction, Position, Orientation
+from model import ModelBase, SimulatorModel
+from .cell import generate, Address, Cell, Direction, Position
 
 logger = logging.getLogger('pyramidtriangles')
 
@@ -22,7 +22,7 @@ class Pixel(NamedTuple):
     model: Type[ModelBase]
 
     def set(self, color: Color):
-        self.model.set(self.address, color)
+        self.model.set(self.cell, self.address, color)
 
     def __call__(self, color: Color):
         self.set(color)
