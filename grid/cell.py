@@ -41,7 +41,7 @@ class Cell(NamedTuple):
     orientation: Orientation
     addresses: List["Address"]
 
-    row_count = 11
+    row_count = 11  #why is this hard coded? (jem)
 
     def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> List["Address"]:
         return (self.addresses
