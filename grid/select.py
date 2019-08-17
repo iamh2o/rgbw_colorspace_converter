@@ -104,12 +104,30 @@ def vertex_neighbors(loc: Location) -> Query:
 
 
 def hexagon(base_loc: Location) -> Query:
+    """
+    Selector for hexagon pattern of cells surrounding a starting cell.
+
+    Given a starting location, returns a function
+        func(Grid) -> [Neighbor, Neighbor, Neighbor, Neighbor, Neighbor, Neighbor]
+    The neighbors, surrounding cells, make a hexagon with the starting location cell as the base. For neighbor cells
+    off the grid, 'None' is returned.
+
+    For example, starting with an up-facing cell, numbered with 1's here, there would be a total of 6 neighbors in the
+    hexagon (including cell 1), in a clock-wise order. Here's an attempt at a drawing of neighbors 1, 2, 3, 4, 5, and 6:
+
+      5 444 3
+     555 4 333
+     666 1 222
+      6 111 2
+    """
     def hexagon_query(grid: Grid) -> Sequence[Cell]:
+        # Helper function that returns edge neighbors (sharing a wall with) of a given cell.
         def neighbors(cell) -> Neighbors:
             return Neighbors(*query(grid, edge_neighbors(cell.id)))
 
         btm_cell = grid[base_loc]
         a, b, c, d, e, f = btm_cell, None, None, None, None, None
+
         if a.is_left_edge:
             b = neighbors(a).right
             if b is not None:
@@ -120,6 +138,7 @@ def hexagon(base_loc: Location) -> Query:
                 e = neighbors(d).left
             if e is not None:
                 f = neighbors(e).middle
+
         elif a.is_right_edge:
             f = neighbors(a).left
             if f is not None:
