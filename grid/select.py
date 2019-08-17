@@ -109,16 +109,16 @@ def hexagon(base_loc: Location) -> Query:
 
     Given a starting location, returns a function
         func(Grid) -> [Neighbor, Neighbor, Neighbor, Neighbor, Neighbor, Neighbor]
+    The neighbors, surrounding cells, make a hexagon with the starting location cell as the base. For neighbor cells
+    off the grid, 'None' is returned.
 
     For example, starting with an up-facing cell, numbered with 1's here, there would be a total of 6 neighbors in the
-    hexagon (including cell 1). Here's an attempt at a drawing of neighbors 1, 2, 3, 4, 5, and 6:
+    hexagon (including cell 1), in a clock-wise order. Here's an attempt at a drawing of neighbors 1, 2, 3, 4, 5, and 6:
 
-      3 444 5
-     333 4 555
-     222 1 666
-      2 111 6
-
-    There will be fewer neighbors if on an edge of the greater triangle.
+      5 444 3
+     555 4 333
+     666 1 222
+      6 111 2
     """
     def hexagon_query(grid: Grid) -> Sequence[Cell]:
         # Helper function that returns edge neighbors (sharing a wall with) of a given cell.
