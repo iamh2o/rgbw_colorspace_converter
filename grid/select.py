@@ -2,7 +2,7 @@
 from typing import Iterable, List, NamedTuple, Sequence, Tuple
 
 from .cell import Cell, Orientation, row_length
-from .grid import Grid, Query, Location
+from .grid import Grid, Position, Query, Location
 
 
 def query(grid: Grid, q: Query) -> Iterable[Cell]:
@@ -11,6 +11,10 @@ def query(grid: Grid, q: Query) -> Iterable[Cell]:
 
 def every(grid: Grid) -> List[Cell]:
     return grid.cells
+
+
+def on_edge(grid: Grid) -> List[Cell]:
+    return [cell for cell in grid.cells if cell.is_edge]
 
 
 def left_edge(grid: Grid) -> List[Cell]:
@@ -23,6 +27,45 @@ def right_edge(grid: Grid) -> List[Cell]:
 
 def bottom_edge(grid: Grid) -> List[Cell]:
     return [cell for cell in grid.cells if cell.is_bottom_edge]
+
+
+def inset(distance: int) -> Query:
+    """
+    Selects an inner triangle, `distance` cells away from the edges.
+    """
+
+    def query(grid: Grid) -> List[Cell]:
+        # find the top point
+        top_row = distance * 2
+        top_col = grid.geom.midpoint(top_row)
+        cells = {grid[Position(top_row, top_col)]}
+        edge_cells = set()
+
+        bottom_row = grid.row_count - distance - 1
+        for prev_row in range(top_row, bottom_row):
+            prev_cells = [c for c in cells if c.row == prev_row]
+            edge_cells = {min(prev_cells), max(prev_cells)}
+            midpoint = grid.geom.midpoint(prev_row)
+
+            for cell in edge_cells:
+                below = cell.below
+                if below is None:
+                    continue
+
+                # TODO(lyra): grid[grid[]] ugh
+                if cell.col <= midpoint:
+                    cells.add(grid[below])
+                    cells.add(grid[grid[below].left])
+                if cell.col >= midpoint:
+                    cells.add(grid[below])
+                    cells.add(grid[grid[below].right])
+
+        for col in range(min(edge_cells).col, max(edge_cells).col + 1):
+            cells.add(grid[Position(bottom_row, col)])
+
+        return list(cells)
+
+    return query
 
 
 def pointed(orientation: Orientation) -> Query:
