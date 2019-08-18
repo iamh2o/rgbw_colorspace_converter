@@ -1,4 +1,3 @@
-
 from typing import Iterable, List, NamedTuple, Sequence
 
 from .cell import Cell, Orientation
@@ -59,6 +58,9 @@ def inset(distance: int) -> Query:
                 if cell.col >= midpoint:
                     cells.add(grid[below])
                     cells.add(grid[grid[below].right])
+
+        if not edge_cells:
+            return []
 
         for col in range(min(edge_cells).col, max(edge_cells).col + 1):
             cells.add(grid[Position(bottom_row, col)])

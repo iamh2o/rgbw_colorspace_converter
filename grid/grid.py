@@ -2,7 +2,7 @@ import logging
 from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Union, Type
 
 from color import Color, RGB
-from model import ModelBase, SimulatorModel
+from model import ModelBase
 from .cell import generate, Address, Cell, Direction, Position
 from .geom import Geometry
 

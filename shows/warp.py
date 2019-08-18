@@ -1,6 +1,6 @@
-from color import HSV
+from randomcolor import random_color
 from .showbase import ShowBase
-from grid import Grid, concentric
+from grid import Grid, inset
 
 
 class Warp(ShowBase):
@@ -8,13 +8,17 @@ class Warp(ShowBase):
         self.grid = grid
         self.frame_delay = frame_delay
 
+        # Not sure of the proper formula for this, but allows running on normal or mega triangle.
+        self.max_distance = 0
+        while grid.select(inset(self.max_distance)):
+            self.max_distance += 1
+
     def next_frame(self):
+        color = random_color(hue='purple')
+
         while True:
-            for points in concentric(self.grid.row_count):
+            for distance in range(self.max_distance):
                 self.grid.clear()
-
-                for pos in points:
-                    self.grid.set(pos, HSV(.1, .5, .9))
-
+                self.grid.set(inset(distance), color)
                 self.grid.go()
                 yield self.frame_delay
