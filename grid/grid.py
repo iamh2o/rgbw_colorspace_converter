@@ -92,6 +92,8 @@ class Grid(Mapping[Location, Cell]):
 
     def __getitem__(self, loc: Location) -> Cell:
         cell_id = loc if isinstance(loc, int) else loc.id
+        if cell_id < 0:
+            raise KeyError(cell_id)
 
         try:
             cell = self._cells[cell_id]
@@ -99,8 +101,9 @@ class Grid(Mapping[Location, Cell]):
             raise KeyError(cell_id)
         else:
             if isinstance(loc, Position) and loc != cell.position:
-                logger.warn('got wrong cell: expected %r, got %r',
+                logger.warning('got wrong cell: expected %r, got %r',
                             loc, cell.position)
+                raise KeyError(loc)
             return cell
 
     def __iter__(self):
