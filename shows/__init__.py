@@ -10,6 +10,7 @@ from .strobe import Strobe
 from .marching_hexes import MarchingHexes
 from .top_down import TopDown
 from .two_hexes import TwoHexes
+from .tendrils import Tendrils
 
 from .index_debug import IndexDebug
 from .universe_debug import UniverseDebug
