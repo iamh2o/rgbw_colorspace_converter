@@ -1,5 +1,6 @@
 # These imports include submodules under the `shows` namespace (e.g. shows.UpDown is available).
 from .cycle_hsv import CycleHSV
+from .fuck_your_burn import FuckYourBurn
 from .left_to_right import LeftToRight
 from .left_to_right_and_back import LeftToRightAndBack
 from .marching_hexes import MarchingHexes
