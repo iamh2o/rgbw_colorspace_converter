@@ -45,8 +45,8 @@ class Cell(NamedTuple):
                 else reversed(self.addresses))
 
     @property
-    def coordinates(self) -> "Position":
-        return self.position
+    def coordinate(self) -> "Coordinate":
+        return Coordinate.from_pos(self.position, self.geom)
 
     @property
     def row(self) -> int:
@@ -123,6 +123,11 @@ class Cell(NamedTuple):
 
 
 class Position(NamedTuple):
+    """
+    Position is (row, column) where the top row is 0, and every row begins with column 0.
+
+    Position(0, 0) is the apex of the triangle.
+    """
     row: int
     col: int
 
@@ -141,16 +146,33 @@ class Position(NamedTuple):
     def id(self) -> int:
         return Geometry.triangular_number(self.row) + self.col
 
-    @property
-    def x(self) -> int:
-        return self.col
-
-    @property
-    def y(self) -> int:
-        return self.row
-
     def adjust(self, row: int = 0, col: int = 0) -> "Position":
         return type(self)(self.row + row, self.col + col)
+
+
+class Coordinate(NamedTuple):
+    """
+    Coordinate is (x, y) such that the left-most, bottom triangle is (0, 0).
+
+    For Coordinate(x, y), the triangle above is Coordinate(x, y + 1), left is Coordinate(x - 1, y), below is
+    Coordinate(x, y - 1), and right is Coordinate(x + 1, y).
+
+    Coordinate differs from `Position`. Position(0, 0) is the apex of the whole triangle, whereas Coordinate(0, 0)
+    refers to the left corner.
+
+    Coordinates are a different way to spatially reason than Position.
+    """
+    x: int
+    y: int
+
+    @classmethod
+    def from_pos(cls, pos: Position, geom: Geometry) -> "Coordinate":
+        y = geom.rows - 1 - pos.row
+        x = pos.col + y
+        return cls(x, y)
+
+    def pos(self, geom: Geometry):
+        return Position(geom.rows - 1 - self.y, self.x - self.y)
 
 
 class Address(NamedTuple):
