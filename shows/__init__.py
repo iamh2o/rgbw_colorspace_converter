@@ -14,6 +14,7 @@ from .tendrils import Tendrils
 from .warp import Warp
 from .roar import Roar
 from .sparkles import Sparkles
+from .gears import Gears
 
 from .index_debug import IndexDebug
 from .universe_debug import UniverseDebug
