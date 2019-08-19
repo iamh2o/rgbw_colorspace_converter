@@ -17,8 +17,10 @@ class MarchingHexes(ShowBase):
 
         while True:
             self.grid.clear()
+            up = self.grid.select(pointed_up)
+            rnd.shuffle(up)
 
-            for cell in self.grid.select(pointed_up):
+            for cell in up:
                 self.grid.set(hexagon(cell.position), hsv)
                 self.grid.go()
                 time.sleep(1)

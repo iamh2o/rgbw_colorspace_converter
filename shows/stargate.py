@@ -33,5 +33,9 @@ class Stargate(ShowBase):
             yield self.frame_delay
 
             colors.insert(0, self.generate_color())
-            if len(colors) > 4:
+            if len(colors) > self.bands:
                 colors.pop()
+
+    @property
+    def bands(self):
+        return 10  # TODO(lyra): function of geometry

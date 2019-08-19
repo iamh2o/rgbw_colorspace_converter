@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from color import Color
-from grid.cell import Address, universe_count, universe_size, Cell
-from typing import List, Mapping
+from grid.cell import Address, Cell
+from typing import Iterable, List, Mapping
 
 
 class ModelBase(ABC):
@@ -14,13 +14,29 @@ class ModelBase(ABC):
 
         addr is an Address, except in the case of the simulator it is a cell ID.
         """
+        raise NotImplementedError
 
     @abstractmethod
     def go(self):
         """Flush all buffered data out to devices."""
+        raise NotImplementedError
 
 
-def map_leds(row_count: int) -> Mapping[int, List[int]]:
-    count = universe_count(row_count)
+class NullModel(ModelBase):
+    """
+    Discards all set's and go's.
+    """
 
-    return {i + 1: [0] * universe_size(i + 1) for i in range(count)}
+    def set(self, cell: Cell, addr: Address, color: Color):
+        pass
+
+    def go(self):
+        pass
+
+
+def allocate_universes(cells: Iterable[Cell]) -> Mapping[int, List[int]]:
+    universes = set()
+    for cell in cells:
+        universes |= cell.universes
+
+    return {universe.id: [0] * universe.size for universe in universes}

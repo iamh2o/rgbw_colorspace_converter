@@ -1,5 +1,5 @@
 from color import RGB
-from grid import Grid, Orientation, pointed
+from grid import Grid, Orientation, every, pointed
 from .showbase import ShowBase
 
 
@@ -12,7 +12,8 @@ class UpDown(ShowBase):
         orientation = Orientation.POINT_UP
 
         while True:
-            self.grid.clear()
+            self.grid.set(every, RGB(0, 0, 0))
+
             color = (RGB(0, 255, 255)
                      if orientation is Orientation.POINT_UP
                      else RGB(255, 0, 200))

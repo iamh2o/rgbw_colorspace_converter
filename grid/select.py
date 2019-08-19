@@ -34,38 +34,32 @@ def inset(distance: int) -> Query:
     """
 
     def query(grid: Grid) -> List[Cell]:
-        # find the top point
-        top_row = distance * 2
-        top_col = grid.geom.midpoint(top_row)
-        cells = {grid[Position(top_row, top_col)]}
-        edge_cells = set()
+        def at_distance(cell: Cell, row_length: int) -> bool:
+            horiz = distance * 2
 
-        bottom_row = grid.row_count - distance - 1
-        for prev_row in range(top_row, bottom_row):
-            prev_cells = [c for c in cells if c.row == prev_row]
-            edge_cells = {min(prev_cells), max(prev_cells)}
-            midpoint = grid.geom.midpoint(prev_row)
+            # out of bounds
+            if cell.y < distance or cell.row < distance:
+                return False
+            if cell.col < horiz:
+                return False
+            if (row_length - cell.col - 1) < horiz:
+                return False
 
-            for cell in edge_cells:
-                below = cell.below
-                if below is None:
-                    continue
+            # bottom row
+            if cell.y == distance:
+                return True
 
-                # TODO(lyra): grid[grid[]] ugh
-                if cell.col <= midpoint:
-                    cells.add(grid[below])
-                    cells.add(grid[grid[below].left])
-                if cell.col >= midpoint:
-                    cells.add(grid[below])
-                    cells.add(grid[grid[below].right])
+            # left side
+            if cell.col in (horiz, horiz + 1):
+                return True
+            # right side
+            if (row_length - cell.col - 1) in (horiz, horiz + 1):
+                return True
 
-        if not edge_cells:
-            return []
+            return False
 
-        for col in range(min(edge_cells).col, max(edge_cells).col + 1):
-            cells.add(grid[Position(bottom_row, col)])
-
-        return list(cells)
+        return [cell for cell in grid.cells
+                if at_distance(cell, grid.geom.row_length(cell.row))]
 
     return query
 
@@ -168,7 +162,7 @@ def hexagon(base_loc: Location) -> Query:
     def hexagon_query(grid: Grid) -> Sequence[Cell]:
         # Helper function that returns edge neighbors (sharing a wall with) of a given cell.
         def neighbors(cell) -> Neighbors:
-            return Neighbors(*query(grid, edge_neighbors(cell.id)))
+            return Neighbors(*query(grid, edge_neighbors(cell.coordinate)))
 
         btm_cell = grid[base_loc]
         a, b, c, d, e, f = btm_cell, None, None, None, None, None
