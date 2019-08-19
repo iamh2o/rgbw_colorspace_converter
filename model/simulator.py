@@ -1,74 +1,39 @@
 """
 Model to communicate with a Simulator over a TCP socket.
-
-XXX Should this class be able to do range checks on cell ids?
 """
 import logging
+import queue
 import socket
-import json
-from typing import Iterator
 
 from color import Color
-from .base import ModelBase, SetColorFunc
+from grid import Address, Cell
+from .base import ModelBase
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
 logger = logging.getLogger("pyramidtriangles")
 
 
-# XXX(lyra): not yet updated! the simulator doesn't (yet) work with individual
-# LEDs; all cells are uniform.
 class SimulatorModel(ModelBase):
-    def __init__(self, hostname, port=4444, model_json=None):
+    def __init__(self, hostname: str, port: int):
         self.hostname = hostname
         self.port = port
-
-        self._map_leds(model_json)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((self.hostname, self.port))
 
-        # map of cells to be set on the next call to go
-        self.dirty = {}
+        # queue of 'dirty' messages to send
+        self.message_queue = queue.SimpleQueue()
 
     def __repr__(self):
         return f'{__class__.__name__} (hostname={self.hostname}, port={self.port})'
 
-    # Loaders
-    def _map_leds(self, f):
-        # Loads a json file with mapping info describing your LEDs.
-        # The json file is formatted as a dictionary of numbers each key in the dict is a fixtureUID.
-        # Each array that fixtureUID returns is of the format [universeUID, DMXstart#].
-        with open(f, 'r') as json_file:
-            self.CELL_MAP = json.load(json_file, object_hook=lambda d: {
-                                      int(k): v for (k, v) in d.items()})
-
-    # Model basics
-    def set_pixels_by_cellid(self, cell_id: int) -> Iterator[SetColorFunc]:
-        def set_color(color: Color):
-            self.set_cell(cell_id, color)
-        # Iterator of one for the simulator, which doesn't have pixels within a cell.
-        return iter([set_color])
-
-    def set_cell(self, cell: int, color: Color):
-        cell += 1  # Simulator cells not 0 based
-        if cell not in self.CELL_MAP:
-            raise ValueError(f'Cell {cell} not in CELL_MAP')
-
-        ux = self.CELL_MAP[cell][0]
-        ix = self.CELL_MAP[cell][1] - 1
-        sim_key = cell
-        # The simulator does not care about universes, but does care about UIDs. I'm manufacturing one by joining the
-        # Universe and fixture ID into the key.
-        self.dirty[sim_key] = color
+    def set(self, cell: Cell, addr: Address, color: Color):
+        # Enqueue a message to simulator, sets address
+        msg = f"{str(cell.id)} {','.join(map(str, color.rgb))}\n"
+        self.message_queue.put(msg)
 
     def go(self):
-        for num in self.dirty:
-            r = self.dirty[num].rgb[0]
-            g = self.dirty[num].rgb[1]
-            b = self.dirty[num].rgb[2]
-            msg = f'b {num} {r},{g},{b}\n'
-
+        while not self.message_queue.empty():
+            msg = self.message_queue.get()
             logger.debug(msg)
             self.sock.send(msg.encode())
-
-        self.dirty = {}

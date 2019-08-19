@@ -7,8 +7,8 @@ import queue
 import threading
 
 import cherrypy
-from grid import Grid
-from model import sACN
+from grid import Geometry, Grid
+from model import sACN, SimulatorModel
 import netifaces
 import osc_serve
 import shows
@@ -327,14 +327,11 @@ if __name__ == '__main__':
         sys.exit(0)
 
     if args.simulator:
-        parser.error('The simulator is broken')
+        sim_host = "localhost"
+        sim_port = 4444
+        logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
 
-        # sim_host = "localhost"
-        # sim_port = 4444
-        # logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
-
-        # model = SimulatorModel(sim_host, port=sim_port,
-        #                        model_json='./data/pixel_map.json')
+        model = SimulatorModel(sim_host, port=sim_port)
     else:
         bind = args.bind
         if not bind:
@@ -357,7 +354,7 @@ if __name__ == '__main__':
         logger.info("Starting sACN")
         model = sACN(bind, args.rows)
 
-    app = TriangleServer(Grid(model, args.rows), args)
+    app = TriangleServer(Grid(model, Geometry(args.rows)), args)
 
     try:
         app.start()  # start related service threads
