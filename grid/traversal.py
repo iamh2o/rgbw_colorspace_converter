@@ -1,7 +1,8 @@
-import enum
+
 from typing import Iterator, Sequence
 
-from .cell import Direction, Position, row_length
+from .cell import Direction, Position
+from .grid import Geometry
 
 
 def sweep(direction: Direction, row_count: int) -> Iterator[Sequence[Position]]:
@@ -14,7 +15,9 @@ def sweep(direction: Direction, row_count: int) -> Iterator[Sequence[Position]]:
     if not row_count > 0:
         raise ValueError(f'traversal requires row_count({row_count}) > 0')
 
-    row_lengths = range(row_length(row_count))
+    geom = Geometry(rows=row_count)
+
+    row_lengths = range(geom.row_length(row_count - 1))
     if direction == Direction.RIGHT_TO_LEFT:
         row_lengths = reversed(row_lengths)
 
@@ -26,7 +29,7 @@ def sweep(direction: Direction, row_count: int) -> Iterator[Sequence[Position]]:
             curr_row = row_to_start + curr_column
             if not 0 <= curr_row < row_count:
                 continue
-            if curr_column >= row_length(curr_row + 1):
+            if curr_column >= geom.row_length(curr_row):
                 continue
 
             coordinates.append(Position(curr_row, curr_column))

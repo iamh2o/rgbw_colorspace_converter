@@ -3,11 +3,12 @@ from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Unio
 
 from color import Color, RGB
 from model import ModelBase
-from .cell import generate, Address, Cell, Direction, Position, Orientation
+from .cell import generate, Address, Cell, Direction, Position, Coordinate
+from .geom import Geometry
 
 logger = logging.getLogger('pyramidtriangles')
 
-Location = Union[Position, int]
+Location = Union[Coordinate, Position, int]
 
 Query = Callable[['Grid'], Iterable[Cell]]
 Selector = Union[Location,
@@ -22,38 +23,42 @@ class Pixel(NamedTuple):
     model: Type[ModelBase]
 
     def set(self, color: Color):
-        self.model.set(self.address, color)
+        self.model.set(self.cell, self.address, color)
 
     def __call__(self, color: Color):
         self.set(color)
 
 
 class Grid(Mapping[Location, Cell]):
-    row_count: int
+    geom: Geometry
     _model: Type[ModelBase]
     _cells: List[Cell]
 
-    def __init__(self, model: Type[ModelBase], row_count: int = 11):
-        if row_count < 1:
-            raise ValueError(f'Grid(row_count={row_count}) is invalid')
+    def __init__(self, model: Type[ModelBase], geom: Geometry = Geometry(rows=11)):
+        if geom.rows < 1:
+            raise ValueError(f'Geometry(rows={geom.rows}) is invalid')
 
-        self.row_count = row_count
+        self.geom = geom
         self._model = model
 
         cells_by_id = {cell.id: cell
-                       for cell in generate(rows=row_count).values()}
+                       for cell in generate(geom).values()}
         self._cells = [cells_by_id[i] for i in range(len(cells_by_id))]
+
+    @property
+    def row_count(self) -> int:
+        return self.geom.rows
 
     @property
     def cells(self) -> List[Cell]:
         return list(self._cells)
 
     def select(self, sel: Selector) -> Iterable[Cell]:
-        if isinstance(sel, (int, Position)):
+        if isinstance(sel, (int, Coordinate, Position)):
             cells = [self[sel]]
         elif isinstance(sel, Cell):
             cells = [sel]
-        elif isinstance(sel, Iterable):
+        elif isinstance(sel, Iterable) and not isinstance(self, str):
             cells = sel
         elif callable(sel):
             cells = sel(self)
@@ -86,7 +91,15 @@ class Grid(Mapping[Location, Cell]):
         self.go()
 
     def __getitem__(self, loc: Location) -> Cell:
-        cell_id = loc if isinstance(loc, int) else loc.id
+        if isinstance(loc, Position):
+            cell_id = loc.id
+        elif isinstance(loc, Coordinate):
+            cell_id = loc.pos(self.geom).id
+        else:
+            cell_id = loc
+
+        if cell_id < 0:
+            raise KeyError(cell_id)
 
         try:
             cell = self._cells[cell_id]
@@ -94,8 +107,13 @@ class Grid(Mapping[Location, Cell]):
             raise KeyError(cell_id)
         else:
             if isinstance(loc, Position) and loc != cell.position:
-                logger.warn('got wrong cell: expected %r, got %r',
-                            loc, cell.position)
+                logger.warning('got wrong cell: expected %r, got %r',
+                               loc, cell.position)
+                raise KeyError(loc)
+            elif isinstance(loc, Coordinate) and loc != cell.coordinate:
+                logger.warning('got wrong cell: expected %r, got %r',
+                               loc, cell.coordinate)
+                raise KeyError(loc)
             return cell
 
     def __iter__(self):

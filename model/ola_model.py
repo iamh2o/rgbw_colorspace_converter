@@ -11,7 +11,7 @@ import logging
 from typing import Iterator
 
 import ola
-from .base import ModelBase, SetColorFunc
+from .base import ModelBase
 from .mapping import PixelMap
 
 logger = logging.getLogger("pyramidtriangles")
