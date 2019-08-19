@@ -17,10 +17,3 @@ def make_interpolater(in_min, in_max, out_min, out_max):
     scaleFactor = float(outSpan) / float(inSpan)
 
     return lambda value: out_min + (value - in_min) * scaleFactor
-
-from color import HSV
-import random
-
-def choose_random_hsv():
-
-    return(HSV(random.uniform(0.0,1.0), random.uniform(0.0,1.0), random.uniform(0.0,1.0)))
