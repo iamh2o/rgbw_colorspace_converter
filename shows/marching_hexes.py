@@ -19,7 +19,7 @@ class MarchingHexes(ShowBase):
             self.grid.clear()
 
             for cell in self.grid.select(pointed_up):
-                self.grid.set(hexagon(cell.coordinates), hsv)
+                self.grid.set(hexagon(cell.position), hsv)
                 self.grid.go()
                 time.sleep(1)
 

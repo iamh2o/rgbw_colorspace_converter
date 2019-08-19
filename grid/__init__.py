@@ -1,5 +1,5 @@
 
-from .cell import Address, Cell, Direction, Position, Orientation
+from .cell import Address, Cell, Direction, Position, Orientation, Coordinate
 from .geom import Geometry
 from .grid import Grid, Location, Pixel, Query, Selector
 from .select import (every, on_edge, left_edge, right_edge, bottom_edge, inset, pointed,

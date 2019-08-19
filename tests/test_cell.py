@@ -1,5 +1,5 @@
 from color import Color
-from grid import Grid, Position, Geometry, Cell, Address
+from grid import Grid, Position, Geometry, Cell, Address, Coordinate
 from model import ModelBase
 
 
@@ -11,9 +11,30 @@ class FakeModel(ModelBase):
         pass
 
 
-def test_coordinate_symmetry():
+def test_position_symmetry():
     for curr_id in range(256):
         assert Position.from_id(curr_id).id == curr_id
+
+
+def test_coordinate_symmetry():
+    geom = Geometry(rows=3)
+    values = (
+        ((0, 0), (2, 2)),
+        ((1, 0), (1, 1)),
+        ((1, 1), (2, 1)),
+        ((1, 2), (3, 1)),
+        ((2, 0), (0, 0)),
+        ((2, 1), (1, 0)),
+        ((2, 2), (2, 0)),
+        ((2, 3), (3, 0)),
+        ((2, 4), (4, 0)),
+    )
+
+    for ((row, col), (x, y)) in values:
+        pos = Position(row, col)
+        coord = Coordinate(x, y)
+        assert Coordinate.from_pos(pos, geom) == coord
+        assert coord.pos(geom) == pos
 
 
 def test_cell_attributes():

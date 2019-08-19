@@ -3,12 +3,12 @@ from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Unio
 
 from color import Color, RGB
 from model import ModelBase
-from .cell import generate, Address, Cell, Direction, Position
+from .cell import generate, Address, Cell, Direction, Position, Coordinate
 from .geom import Geometry
 
 logger = logging.getLogger('pyramidtriangles')
 
-Location = Union[Position, int]
+Location = Union[Coordinate, Position, int]
 
 Query = Callable[['Grid'], Iterable[Cell]]
 Selector = Union[Location,
@@ -54,7 +54,7 @@ class Grid(Mapping[Location, Cell]):
         return list(self._cells)
 
     def select(self, sel: Selector) -> Iterable[Cell]:
-        if isinstance(sel, (int, Position)):
+        if isinstance(sel, (int, Coordinate, Position)):
             cells = [self[sel]]
         elif isinstance(sel, Cell):
             cells = [sel]
@@ -91,7 +91,13 @@ class Grid(Mapping[Location, Cell]):
         self.go()
 
     def __getitem__(self, loc: Location) -> Cell:
-        cell_id = loc if isinstance(loc, int) else loc.id
+        if isinstance(loc, Position):
+            cell_id = loc.id
+        elif isinstance(loc, Coordinate):
+            cell_id = loc.pos(self.geom).id
+        else:
+            cell_id = loc
+
         if cell_id < 0:
             raise KeyError(cell_id)
 
@@ -102,7 +108,11 @@ class Grid(Mapping[Location, Cell]):
         else:
             if isinstance(loc, Position) and loc != cell.position:
                 logger.warning('got wrong cell: expected %r, got %r',
-                            loc, cell.position)
+                               loc, cell.position)
+                raise KeyError(loc)
+            elif isinstance(loc, Coordinate) and loc != cell.coordinate:
+                logger.warning('got wrong cell: expected %r, got %r',
+                               loc, cell.coordinate)
                 raise KeyError(loc)
             return cell
 
