@@ -8,7 +8,10 @@ from .random_cells import Random
 from .showbase import ShowBase, load_shows, random_shows
 from .stargate import Stargate
 from .strobe import Strobe
-from .up_down import UpDown
+from .marching_hexes import MarchingHexes
+from .top_down import TopDown
+from .two_hexes import TwoHexes
+from .tendrils import Tendrils
 from .warp import Warp
 from .tendrils import Tendrils
 

@@ -37,7 +37,9 @@ class Cell(NamedTuple):
     position: "Position"
     orientation: Orientation
     addresses: List["Address"]
-    geom: Geometry
+
+    row_count = 11  #why is this hard coded? (jem)
+    
 
     def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> List["Address"]:
         return (self.addresses

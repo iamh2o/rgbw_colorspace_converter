@@ -1,7 +1,9 @@
-from color import RGB
+from color import HSV
 from .showbase import ShowBase
 from grid import Grid, Direction, sweep
-
+from grid.cell import Direction, Position, row_length
+from grid import traversal
+import time
 
 class LeftToRightAndBack(ShowBase):
     def __init__(self, grid: Grid, frame_delay: float = 1.0):
@@ -9,19 +11,41 @@ class LeftToRightAndBack(ShowBase):
         self.frame_delay = frame_delay
 
     def next_frame(self):
-        fwd = True
+        n_rows = self.grid.row_count
+        hsv = HSV(0.0,0.9,.5)
+
+        pix_arr = []
+        a_ctr = 0
+        for points in traversal.left_to_right(n_rows):
+            for (row, col) in points:
+                cell = self.grid.select(Position(row=row,col=col))
+                b_ctr = 0
+                for pixel_address in cell[0].pixel_addresses():
+                    if len(pix_arr) <= a_ctr+b_ctr:
+                        pix_arr.append([])
+                    pix_arr[a_ctr+b_ctr].append(pixel_address)
+                    b_ctr += 1
+            a_ctr += 4
+        self.grid.clear()
+
+
 
         while True:
-            direction = Direction.LEFT_TO_RIGHT if fwd else Direction.RIGHT_TO_LEFT
-            sequence = sweep(direction, self.grid.row_count)
 
-            for points in sequence:
-                self.grid.clear()
-
-                for pos in points:
-                    self.grid.set(pos, RGB(255, 255, 25))
-
+            for i in pix_arr:  #yes, i
+                for ii in i:  #yes, ii!
+                    self.grid._model.set(ii, hsv) 
                 self.grid.go()
-                yield self.frame_delay
+                hsv.h += .09
+                if hsv.h >= 1.0:
+                    hsv.h = 0.0
+                time.sleep(0.8)
 
-            fwd = not fwd  # Flips direction
+            for i in reversed(pix_arr):
+                for ii in reversed(i):
+                    self.grid._model.set(ii, hsv)
+                self.grid.go()
+                hsv.h += .09
+                if hsv.h >= 1.0:
+                    hsv.h = 0.0
+                time.sleep(0.8)
