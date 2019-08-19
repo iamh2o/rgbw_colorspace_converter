@@ -1,9 +1,10 @@
 from color import HSV
 from .showbase import ShowBase
 from grid import Grid, Direction, sweep
-from grid.cell import Direction, Position, row_length
+from grid.cell import Direction, Position
 from grid import traversal
 import time
+
 
 class LeftToRightAndBack(ShowBase):
     def __init__(self, grid: Grid, frame_delay: float = 1.0):
@@ -12,13 +13,13 @@ class LeftToRightAndBack(ShowBase):
 
     def next_frame(self):
         n_rows = self.grid.row_count
-        hsv = HSV(0.0,0.9,.5)
+        hsv = HSV(0.0, 0.9, .5)
 
         pix_arr = []
         a_ctr = 0
         for points in traversal.left_to_right(n_rows):
             for (row, col) in points:
-                cell = self.grid.select(Position(row=row,col=col))
+                cell = self.grid.select(Position(row=row, col=col))
                 b_ctr = 0
                 for pixel_address in cell[0].pixel_addresses():
                     if len(pix_arr) <= a_ctr+b_ctr:
@@ -28,13 +29,11 @@ class LeftToRightAndBack(ShowBase):
             a_ctr += 4
         self.grid.clear()
 
-
-
         while True:
 
-            for i in pix_arr:  #yes, i
-                for ii in i:  #yes, ii!
-                    self.grid._model.set(ii, hsv) 
+            for i in pix_arr:  # yes, i
+                for ii in i:  # yes, ii!
+                    self.grid._model.set(ii, hsv)
                 self.grid.go()
                 hsv.h += .09
                 if hsv.h >= 1.0:

@@ -5,7 +5,7 @@ from color import HSV
 from grid import hexagon, pointed_up
 import random as rnd
 import time
-from grid.cell import Direction, Position, row_length
+from grid.cell import Direction, Position
 
 
 class TopDown(ShowBase):
@@ -23,9 +23,10 @@ class TopDown(ShowBase):
         while True:
             hsv = HSV(1.0, 1, 1)
 
-            for row in range (0,11):
-                for col in range (0, row_length(row+1)): ### row+1 b/c the row_length function expects 1 indexed row nums
-                    self.grid.set(self.grid.select(Position(row=row, col=col)), hsv)
+            for row in range(0, 11):
+                # row+1 b/c the row_length function expects 1 indexed row nums
+                for col in range(0, self.grid.geom.row_length(row+1)):
+                    self.grid.set(Position(row=row, col=col), hsv)
                 self.grid.go()
                 time.sleep(1.5)
 
