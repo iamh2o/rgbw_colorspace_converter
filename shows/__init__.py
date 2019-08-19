@@ -10,6 +10,7 @@ from .stargate import Stargate
 from .strobe import Strobe
 from .up_down import UpDown
 from .warp import Warp
+from .tendrils import tendrils
 
 from .index_debug import IndexDebug
 from .universe_debug import UniverseDebug
