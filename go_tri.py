@@ -38,8 +38,8 @@ def speed_interpolation(val):
         return hi_interp(val)
 
 
-low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
-hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
+low_interp = util.util.make_interpolater(0.0, 0.5, 2.0, 1.0)
+hi_interp = util.util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 
 class ShowRunner(threading.Thread):
