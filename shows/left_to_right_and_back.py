@@ -19,12 +19,12 @@ class LeftToRightAndBack(ShowBase):
         a_ctr = 0
         for points in traversal.left_to_right(n_rows):
             for (row, col) in points:
-                cell = self.grid.select(Position(row=row, col=col))
+                cell_pixels = self.grid.pixels(Position(row=row, col=col), Direction.LEFT_TO_RIGHT)
                 b_ctr = 0
-                for pixel_address in cell[0].pixel_addresses():
+                for pixel in cell_pixels:
                     if len(pix_arr) <= a_ctr+b_ctr:
                         pix_arr.append([])
-                    pix_arr[a_ctr+b_ctr].append(pixel_address)
+                    pix_arr[a_ctr+b_ctr].append(pixel)
                     b_ctr += 1
             a_ctr += 4
         self.grid.clear()
@@ -33,7 +33,7 @@ class LeftToRightAndBack(ShowBase):
 
             for i in pix_arr:  # yes, i
                 for ii in i:  # yes, ii!
-                    self.grid._model.set(ii, hsv)
+                    ii(hsv)
                 self.grid.go()
                 hsv.h += .09
                 if hsv.h >= 1.0:
@@ -42,7 +42,7 @@ class LeftToRightAndBack(ShowBase):
 
             for i in reversed(pix_arr):
                 for ii in reversed(i):
-                    self.grid._model.set(ii, hsv)
+                    ii(hsv)
                 self.grid.go()
                 hsv.h += .09
                 if hsv.h >= 1.0:
