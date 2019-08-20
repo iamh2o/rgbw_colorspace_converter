@@ -7,7 +7,7 @@ import queue
 import threading
 
 import cherrypy
-from grid import Address, Coordinate, Face, Geometry, Grid, Panel, Universe
+from grid import Pyramid
 from model.sacn_model import sACN
 from model.simulator import SimulatorModel
 import netifaces
@@ -44,9 +44,9 @@ hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 
 class ShowRunner(threading.Thread):
-    def __init__(self, grid, queue, max_showtime=240, fail_hard=True):
+    def __init__(self, pyramid, queue, max_showtime=240, fail_hard=True):
         super(ShowRunner, self).__init__(name="ShowRunner")
-        self.grid = grid
+        self.pyramid = pyramid
         self.queue = queue
 
         self.fail_hard = fail_hard
@@ -136,8 +136,8 @@ class ShowRunner(threading.Thread):
             print("ignoring unknown msg:", str(msg))
 
     def clear(self):
-        """Clears contained grid."""
-        self.grid.clear()
+        """Clears all panels."""
+        self.pyramid.clear()
 
     def next_show(self, name=None):
         show = None
@@ -154,7 +154,7 @@ class ShowRunner(threading.Thread):
         self.clear()
         self.prev_show = self.show
 
-        self.show = show(self.grid)
+        self.show = show(self.pyramid)
         print(f'next show: {name}')
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
@@ -179,7 +179,7 @@ class ShowRunner(threading.Thread):
                 self.check_queue()
 
                 d = self.get_next_frame()
-                self.grid.go()
+                self.pyramid.go()
                 if d:
                     real_d = d * self.speed_x
                     time.sleep(real_d)
@@ -209,9 +209,9 @@ def osc_listener(q, port=5700):
 
 
 class TriangleServer(object):
-    def __init__(self, grid, args):
+    def __init__(self, pyramid, args):
         self.args = args
-        self.grid = grid
+        self.pyramid = pyramid
 
         self.queue = queue.LifoQueue()
 
@@ -234,7 +234,7 @@ class TriangleServer(object):
 
         # Show runner
         self.runner = ShowRunner(
-            self.grid, self.queue, args.max_time, fail_hard=args.fail_hard)
+            self.pyramid, self.queue, args.max_time, fail_hard=args.fail_hard)
         if args.shows:
             print("setting show:", args.shows[0])
             self.runner.next_show(args.shows[0])
@@ -298,34 +298,16 @@ class TriangleServer(object):
                             config=config)
 
 
-def build_grid(layout: str) -> Face:
-    ROWS_PER_PANEL = 11
+def dump_panels(pyramid: Pyramid):
+    for i, face in enumerate(pyramid.faces):
+        print(f'Face {i + 1}:')
 
-    if layout == 'one':
-        geom = Geometry(origin=Coordinate(0, 0), rows=ROWS_PER_PANEL)
-        panels = [
-            Panel(
-                Geometry(origin=Coordinate(0, 0), rows=ROWS_PER_PANEL),
-                Address(Universe(1, 1), 4),
-            ),
-        ]
-    elif layout == 'two':
-        geom = Geometry(origin=Coordinate(0, 0), rows=(2 * ROWS_PER_PANEL))
-        first = Panel(
-            Geometry(origin=Coordinate(0, 0), rows=ROWS_PER_PANEL),
-            Address(Universe(1, 1), 4),
-        )
-        x_max = max(cell.x for cell in first.cells(geom) if cell.y == 0)
-        second = Panel(
-            Geometry(origin=Coordinate(x_max + 2, 0), rows=ROWS_PER_PANEL),
-            Address(Universe(12, 12), 4),
-        )
-        panels = [first, second]
-    else:
-        raise NotImplementedError
+        for j, panel in enumerate(sorted(face.panels, key=lambda panel: panel.start)):
+            print(f'  Panel {j + 1}:')
+            print(f'    origin: {panel.geom.origin}')
+            print(f'    start:  {panel.start}')
 
-    # FIXME(lyra): catch-22
-    return Face(None, geom, panels)
+        print()
 
 
 if __name__ == '__main__':
@@ -335,9 +317,6 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Triangle Light Control')
 
-    parser.add_argument('-l', '--layout', type=str,
-                        choices=('one', 'two', 'side', 'full'),
-                        default='full')
     parser.add_argument('--max-time', type=float, default=float(60),
                         help='Maximum number of seconds a show will run (default 60)')
 
@@ -346,6 +325,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--list', action='store_true',
                         help='List available shows')
+    parser.add_argument('--panels', action='store_true',
+                        help='Show face and panel attributes')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
                         help='name of show (or shows) to run')
     parser.add_argument('--fail-hard', type=bool, default=True,
@@ -358,12 +339,7 @@ if __name__ == '__main__':
             [name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
 
-    grid = build_grid(args.layout)
-
     if args.simulator:
-        if args.layout != "one":
-            parser.error("--simulator requires --layout one")
-
         sim_host = "localhost"
         sim_port = 4444
         logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
@@ -389,11 +365,16 @@ if __name__ == '__main__':
                     'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
-        model = sACN(bind, grid.cells)
+        model = sACN(bind)
 
-    grid.model = model  # FIXME(lyra)
+    pyramid = Pyramid.build(model)
+    if args.panels:
+        dump_panels(pyramid)
+        sys.exit(0)
 
-    app = TriangleServer(grid, args)
+    model.activate(pyramid.cells)
+
+    app = TriangleServer(pyramid, args)
 
     try:
         app.start()  # start related service threads

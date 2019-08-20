@@ -1,14 +1,16 @@
 from color import HSV
 from .showbase import ShowBase
-from grid import Grid, Direction, sweep
+from grid import Grid, Pyramid, Direction, sweep
 from grid.cell import Direction, Position
 from grid import traversal
 import time
 
 
 class LeftToRightAndBack(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 1.0):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 1.0):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
 
     def next_frame(self):

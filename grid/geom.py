@@ -65,6 +65,9 @@ class Coordinate(NamedTuple):
     def adjust(self, x: int = 0, y: int = 0) -> "Coordinate":
         return type(self)(self.x + x, self.y + y)
 
+    def __str__(self) -> str:
+        return f'<{self.x}, {self.y}>'
+
 
 CHANNELS_PER_PIXEL: int = 4
 
@@ -95,6 +98,9 @@ class Universe(NamedTuple):
     def next(self) -> "Universe":
         return Universe(self.base, self.id + 1)
 
+    def __str__(self) -> str:
+        return f'{self.id}'
+
 
 class Address(NamedTuple):
     """
@@ -104,6 +110,10 @@ class Address(NamedTuple):
 
     universe: Universe
     offset: int
+
+    @classmethod
+    def first(cls, universe: Universe = Universe(1, 1), offset: int = 4):
+        return cls(universe=universe, offset=offset)
 
     @property
     def next(self) -> "Address":
@@ -126,6 +136,9 @@ class Address(NamedTuple):
             addrs.append(addrs[-1].next)
 
         return addrs
+
+    def __str__(self) -> str:
+        return f'{self.universe}:{self.offset}'
 
 
 class Geometry(NamedTuple):
@@ -179,6 +192,14 @@ class Geometry(NamedTuple):
     @property
     def cell_count(self) -> int:
         return sum(self.row_length(i) for i in range(self.rows))
+
+    @property
+    def apex(self) -> Coordinate:
+        """
+        The <x, y> coordinate of the top of the triangle.
+        """
+        return Coordinate(self.origin.x + self.midpoint(self.rows - 1),
+                          self.origin.y + (self.rows - 1))
 
     @staticmethod
     def triangular_number(n: int) -> int:

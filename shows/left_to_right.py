@@ -1,12 +1,14 @@
 from color import HSV
 from .showbase import ShowBase
-from grid import Grid, left_to_right
+from grid import Grid, Pyramid, left_to_right
 import time
 
 
 class LeftToRight(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 0.2):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.2):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
 
     def next_frame(self):

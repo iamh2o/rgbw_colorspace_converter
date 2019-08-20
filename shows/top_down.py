@@ -2,15 +2,14 @@
 
 from .showbase import ShowBase
 from color import HSV
-from grid import hexagon, pointed_up
+from grid import Direction, Position, hexagon, pointed_up
 import random as rnd
 import time
-from grid.cell import Direction, Position
 
 
 class TopDown(ShowBase):
-    def __init__(self, grid, frame_delay=1.0):
-        self.grid = grid
+    def __init__(self, pyramid, frame_delay=1.0):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
 
     def next_frame(self):
