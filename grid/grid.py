@@ -1,14 +1,15 @@
+from abc import abstractmethod
 import logging
-from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Union, Type
+from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union, Type
 
 from color import Color, RGB
 from model import ModelBase
-from .cell import generate, Address, Cell, Direction, Position, Coordinate
-from .geom import Geometry
+from .cell import Cell, Direction
+from .geom import Address, Coordinate, Geometry, Position
 
 logger = logging.getLogger('pyramidtriangles')
 
-Location = Union[Coordinate, Position, int]
+Location = Union[Coordinate, Position]
 
 Query = Callable[['Grid'], Iterable[Cell]]
 Selector = Union[Location,
@@ -30,40 +31,51 @@ class Pixel(NamedTuple):
 
 
 class Grid(Mapping[Location, Cell]):
+    """
+    Grid represents our trianglular cells in a coordinate system.
+
+    A Grid may correspond to a single panel, or an entire side of
+    the pyramid.
+    """
+
     geom: Geometry
-    _model: Type[ModelBase]
-    _cells: List[Cell]
-
-    def __init__(self, model: Type[ModelBase], geom: Geometry = Geometry(rows=11)):
-        if geom.rows < 1:
-            raise ValueError(f'Geometry(rows={geom.rows}) is invalid')
-
-        self.geom = geom
-        self._model = model
-
-        cells_by_id = {cell.id: cell
-                       for cell in generate(geom).values()}
-        self._cells = [cells_by_id[i] for i in range(len(cells_by_id))]
+    model: Type[ModelBase]
 
     @property
     def row_count(self) -> int:
         return self.geom.rows
 
     @property
+    @abstractmethod
     def cells(self) -> List[Cell]:
-        return list(self._cells)
+        raise NotImplementedError
+
+    @abstractmethod
+    def _cell(self, coordinate: Coordinate) -> Optional[Cell]:
+        raise NotImplementedError
 
     def select(self, sel: Selector) -> Iterable[Cell]:
+        """
+        Select cells within the grid.
+
+        The selector `sel` may be a query (like `inset(1)`), a Coordinate,
+        a Position, or a list thereof.
+        """
         if isinstance(sel, (int, Coordinate, Position)):
-            cells = [self[sel]]
+            try:
+                cells = [self[sel]]
+            except KeyError:
+                # FIXME(lyra): Face is sparse; coordinates not on a panel
+                # don't have a corresponding Cell
+                cells = []
         elif isinstance(sel, Cell):
             cells = [sel]
         elif isinstance(sel, Iterable) and not isinstance(self, str):
-            cells = sel
+            cells = sel  # FIXME(lyra)
         elif callable(sel):
             cells = sel(self)
         else:
-            raise TypeError(f'invalid Cell selector {sel}')
+            raise TypeError(f'invalid Cell selector {sel!r}')
 
         return cells
 
@@ -74,53 +86,47 @@ class Grid(Mapping[Location, Cell]):
 
         for cell in self.select(sel):
             for addr in cell.pixel_addresses(direction):
-                yield Pixel(cell, addr, self._model)
+                yield Pixel(cell, addr, self.model)
 
     def set(self, sel: Selector, color: Color):
         for pixel in self.pixels(sel):
             pixel.set(color)
 
-    def go(self):
-        """
-        Flush the underlying model (render its current state).
-        """
-        self._model.go()
-
     def clear(self, color: Color = RGB(0, 0, 0)):
         self.set(self.cells, color)
         self.go()
 
+    def go(self):
+        """
+        Flush the underlying model (render its current state).
+        """
+        self.model.go()
+
+    def _normalize_location(self, loc: Location) -> Coordinate:
+        if isinstance(loc, Coordinate):
+            return loc
+        elif isinstance(loc, Position):
+            return Coordinate.from_pos(loc, self.geom)
+        else:
+            raise TypeError(f'invalid Grid location {loc!r}')
+
     def __getitem__(self, loc: Location) -> Cell:
-        if isinstance(loc, Position):
-            cell_id = loc.id
-        elif isinstance(loc, Coordinate):
-            cell_id = loc.pos(self.geom).id
-        else:
-            cell_id = loc
+        coordinate = self._normalize_location(loc)
+        cell = self._cell(coordinate)
 
-        if cell_id < 0:
-            raise KeyError(cell_id)
+        if cell is None:
+            if coordinate not in self.geom:
+                raise KeyError(f'{coordinate} is not within {self.geom}')
 
-        try:
-            cell = self._cells[cell_id]
-        except IndexError:
-            raise KeyError(cell_id)
-        else:
-            if isinstance(loc, Position) and loc != cell.position:
-                logger.warning('got wrong cell: expected %r, got %r',
-                               loc, cell.position)
-                raise KeyError(loc)
-            elif isinstance(loc, Coordinate) and loc != cell.coordinate:
-                logger.warning('got wrong cell: expected %r, got %r',
-                               loc, cell.coordinate)
-                raise KeyError(loc)
-            return cell
+            return Cell(coordinate, None, [], self.geom, real=False)
+
+        return cell
 
     def __iter__(self):
-        return (cell.position for cell in self._cells)
+        return (cell.coordinate for cell in self.cells)
 
     def __len__(self) -> int:
-        return len(self._cells)
+        return len(self.cells)
 
     def __repr__(self):
-        return f'<{type(self).__name__} rows={self.row_count} {self._model}>'
+        return f'<{type(self).__name__} rows={self.row_count} {self.model}>'

@@ -14,7 +14,7 @@ class UniverseDebug(ShowBase):
 
         while True:
             for cell in self.grid.cells:
-                universe = max(a.universe for a in cell.addresses)
+                universe = max(u.id for u in cell.universes)
                 hue = min(0.9, (universe - 1) * 0.1)
                 self.grid.set(cell, hsv(hue, 0.8, 0.9))
 

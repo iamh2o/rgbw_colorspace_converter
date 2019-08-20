@@ -9,27 +9,20 @@ from grid.cell import Direction, Position
 
 
 class TopDown(ShowBase):
-    def __init__(self, grid, frame_delay=0.1):
+    def __init__(self, grid, frame_delay=1.0):
         self.grid = grid
         self.frame_delay = frame_delay
 
-        self.n_cells = len(self.grid.cells)
-#        from IPython import embed; embed()
-
     def next_frame(self):
-
         self.grid.clear()
+        decr = 1.0 / self.grid.geom.height
 
-        while True:
-            hsv = HSV(1.0, 1, 1)
+        hsv = HSV(1.0, 1, 1)
 
-            for row in range(0, 11):
-                # row+1 b/c the row_length function expects 1 indexed row nums
-                for col in range(0, self.grid.geom.row_length(row+1)):
-                    self.grid.set(Position(row=row, col=col), hsv)
-                self.grid.go()
-                time.sleep(1.5)
+        for row in range(self.grid.geom.height):
+            self.grid.set(
+                (c for c in self.grid.cells if c.row == row), hsv)
+            self.grid.go()
 
-                hsv.h -= 0.08
-
+            hsv.h -= decr
             yield self.frame_delay

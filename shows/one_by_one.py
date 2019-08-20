@@ -1,3 +1,5 @@
+from random import shuffle
+
 from color import RGB
 from grid import Grid
 from .showbase import ShowBase
@@ -9,12 +11,11 @@ class OneByOne(ShowBase):
         self.frame_delay = frame_delay
 
     def next_frame(self):
-        ncells = len(self.grid)
-
         while True:
-            for cell in range(ncells):
-                self.grid.clear()
+            cells = self.grid.cells
+            shuffle(cells)
 
-                for pixel in self.grid.pixels(cell):
-                    pixel.set(RGB(255, 255, 25))
-                    yield self.frame_delay
+            for cell in cells:
+                self.grid.clear()
+                self.grid.set(cell, RGB(255, 255, 25))
+                yield self.frame_delay

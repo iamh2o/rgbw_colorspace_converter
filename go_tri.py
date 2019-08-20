@@ -7,8 +7,9 @@ import queue
 import threading
 
 import cherrypy
-from grid import Geometry, Grid
-from model import sACN, SimulatorModel
+from grid import Address, Coordinate, Face, Geometry, Grid, Panel, Universe
+from model.sacn_model import sACN
+from model.simulator import SimulatorModel
 import netifaces
 import osc_serve
 import shows
@@ -38,8 +39,8 @@ def speed_interpolation(val):
         return hi_interp(val)
 
 
-low_interp = util.util.make_interpolater(0.0, 0.5, 2.0, 1.0)
-hi_interp = util.util.make_interpolater(0.5, 1.0, 1.0, 0.5)
+low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
+hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 
 class ShowRunner(threading.Thread):
@@ -297,6 +298,36 @@ class TriangleServer(object):
                             config=config)
 
 
+def build_grid(layout: str) -> Face:
+    ROWS_PER_PANEL = 11
+
+    if layout == 'one':
+        geom = Geometry(origin=Coordinate(0, 0), rows=ROWS_PER_PANEL)
+        panels = [
+            Panel(
+                Geometry(origin=Coordinate(0, 0), rows=ROWS_PER_PANEL),
+                Address(Universe(1, 1), 4),
+            ),
+        ]
+    elif layout == 'two':
+        geom = Geometry(origin=Coordinate(0, 0), rows=(2 * ROWS_PER_PANEL))
+        first = Panel(
+            Geometry(origin=Coordinate(0, 0), rows=ROWS_PER_PANEL),
+            Address(Universe(1, 1), 4),
+        )
+        x_max = max(cell.x for cell in first.cells(geom) if cell.y == 0)
+        second = Panel(
+            Geometry(origin=Coordinate(x_max + 2, 0), rows=ROWS_PER_PANEL),
+            Address(Universe(12, 12), 4),
+        )
+        panels = [first, second]
+    else:
+        raise NotImplementedError
+
+    # FIXME(lyra): catch-22
+    return Face(None, geom, panels)
+
+
 if __name__ == '__main__':
     console = logging.StreamHandler()
     console.setFormatter(logging.Formatter('%(levelname)s - %(message)s'))
@@ -304,8 +335,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Triangle Light Control')
 
-    parser.add_argument('-r', '--rows', type=int,
-                        default=11, help='Rows per panel')
+    parser.add_argument('-l', '--layout', type=str,
+                        choices=('one', 'two', 'side', 'full'),
+                        default='full')
     parser.add_argument('--max-time', type=float, default=float(60),
                         help='Maximum number of seconds a show will run (default 60)')
 
@@ -326,7 +358,12 @@ if __name__ == '__main__':
             [name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
 
+    grid = build_grid(args.layout)
+
     if args.simulator:
+        if args.layout != "one":
+            parser.error("--simulator requires --layout one")
+
         sim_host = "localhost"
         sim_port = 4444
         logger.info(f'Using TriSimulator at {sim_host}:{sim_port}')
@@ -352,9 +389,11 @@ if __name__ == '__main__':
                     'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
-        model = sACN(bind, args.rows)
+        model = sACN(bind, grid.cells)
 
-    app = TriangleServer(Grid(model, Geometry(args.rows)), args)
+    grid.model = model  # FIXME(lyra)
+
+    app = TriangleServer(grid, args)
 
     try:
         app.start()  # start related service threads

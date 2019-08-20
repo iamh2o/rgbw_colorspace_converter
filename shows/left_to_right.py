@@ -10,18 +10,15 @@ class LeftToRight(ShowBase):
         self.frame_delay = frame_delay
 
     def next_frame(self):
-        row_count = self.grid.row_count
-
         hsv = HSV(0.5, 0.2, .75)
 #        from IPython import embed; embed()
         pix_arr = []
         a_ctr = 0
-        for points in left_to_right(row_count):
 
+        for points in left_to_right(self.grid.geom):
             for pos in points:
-                cell = self.grid[pos]
                 b_ctr = 0
-                for pixel in list(self.grid.pixels(cell.id)):
+                for pixel in list(self.grid.pixels(pos)):
                     if len(pix_arr) <= a_ctr+b_ctr:
                         pix_arr.append([])
                     pix_arr[a_ctr+b_ctr].append(pixel)

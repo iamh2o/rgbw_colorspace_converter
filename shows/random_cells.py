@@ -11,8 +11,6 @@ class Random(ShowBase):
         self.grid = grid
         self.frame_delay = frame_delay
 
-        from IPython import embed; embed()
-
     def shuffle(self) -> Deque[Cell]:
         cells = self.grid.cells
         random.shuffle(cells)
