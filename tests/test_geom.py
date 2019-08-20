@@ -1,10 +1,11 @@
-from grid import Geometry
+from grid import Coordinate, Geometry
 
 
 def test_row_len():
     # (1, 1), (2, 3), (3, 5), (4, 7)...
     for (row, length) in enumerate(range(1, 16, 2), start=1):
-        assert Geometry(rows=row).row_length(row - 1) == length
+        assert Geometry(origin=Coordinate(0, 0),
+                        rows=row).row_length(row - 1) == length
 
 
 def test_triangle_number():

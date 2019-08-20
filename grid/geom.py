@@ -136,14 +136,18 @@ class Geometry(NamedTuple):
     origin: Coordinate  # bottom-leftmost cell coordinate
     rows: int
 
-    def __contains__(self, x: Union[Coordinate, Position]) -> bool:
-        if isinstance(x, Coordinate):
-            coord = x
-        elif isinstance(x, Position):
-            coord = Coordinate.from_pos(x, self)
+    def __contains__(self, loc: Union[Coordinate, Position]) -> bool:
+        if isinstance(loc, Coordinate):
+            if loc.x < 0 or loc.y < 0:
+                return False
+            coord = loc
+        elif isinstance(loc, Position):
+            if loc.row < 0 or loc.col < 0:
+                return False
+            coord = Coordinate.from_pos(loc, self)
         else:
             raise TypeError(
-                'invalid: `%r in Geometry` (expected Coordinate or Position)' % (x,))
+                f'`{loc!r} in Geometry` is invalid (not a Coordinate or a Position)')
 
         # convert to relative coordinate
         rel = Coordinate(coord.x - self.origin.x, coord.y - self.origin.y)

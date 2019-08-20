@@ -95,10 +95,10 @@ def edge_neighbors(loc: Location) -> Query:
     """
 
     def query(grid: Grid) -> Neighbors:
-        cell = grid.get(loc)
-        if cell is None:
+        if loc not in grid.geom:
             return Neighbors(None, None, None)
 
+        cell = grid.get(loc)
         pos = cell.position
 
         left = grid.get(pos.adjust(0, -1))
@@ -122,10 +122,10 @@ def vertex_neighbors(loc: Location) -> Query:
     """
 
     def query(grid: Grid) -> Neighbors:
-        cell = grid.get(loc)
-        if cell is None:
+        if loc not in grid.geom:
             return Neighbors(None, None, None)
 
+        cell = grid.get(loc)
         pos = cell.position
 
         if cell.is_up:

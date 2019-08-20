@@ -108,15 +108,16 @@ class Grid(Mapping[Location, Cell]):
         elif isinstance(loc, Position):
             return Coordinate.from_pos(loc, self.geom)
         else:
-            raise TypeError('invalid Grid location %r' % (loc,))
+            raise TypeError(f'invalid Grid location {loc!r}')
 
     def __getitem__(self, loc: Location) -> Cell:
         coordinate = self._normalize_location(loc)
         cell = self._cell(coordinate)
 
         if cell is None:
-            # if coordinate not in self.geom:
-            #     raise KeyError(f'{coordinate!r} is not within {self.geom}')
+            if coordinate not in self.geom:
+                raise KeyError(f'{coordinate} is not within {self.geom}')
+
             return Cell(coordinate, None, [], self.geom, real=False)
 
         return cell
