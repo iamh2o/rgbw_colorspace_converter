@@ -107,3 +107,24 @@ def test_cell_neighbors():
     # Invalid cell
     assert not any(triangle.select(edge_neighbors(Position(1, -1))))
     assert not any(triangle.select(vertex_neighbors(Position(1, -1))))
+
+
+def test_build_face():
+    single = Face.build(FakeModel(), [[0]])
+    assert len(single.panels) == 1
+    assert single.geom.height == 11
+
+    double = Face.build(FakeModel(), [[], [0, 1]])
+    assert len(double.panels) == 2
+    assert double.geom.height == 2 * 11
+    assert sorted(p.geom.origin for p in double.panels) == [Coordinate(0, 0),
+                                                            Coordinate(22, 0)]
+    assert sorted(p.start.universe.id for p in double.panels) == [1, 12]
+
+    full = Face.build(FakeModel(), [[0], [], [0, 4]])
+    assert len(full.panels) == 3
+    assert full.geom.height == 3 * 11
+    assert sorted(p.geom.origin for p in full.panels) == [Coordinate(0, 0),
+                                                          Coordinate(22, 22),
+                                                          Coordinate(88, 0)]
+    assert sorted(p.start.universe.id for p in full.panels) == [1, 12, 23]

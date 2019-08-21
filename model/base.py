@@ -7,6 +7,12 @@ from typing import Iterable, List, Mapping
 class ModelBase(ABC):
     """Abstract base class for simulators."""
 
+    def activate_universes(self, cells: Iterable[Cell]):
+        """
+        Called after Pyramid initialization.
+        """
+        pass
+
     @abstractmethod
     def set(self, cell: Cell, addr: Address, color: Color):
         """

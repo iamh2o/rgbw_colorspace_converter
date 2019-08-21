@@ -18,3 +18,12 @@ def test_triangle_number():
         (6, 36)
     ]:
         assert Geometry.triangular_number(n) == number
+
+
+def test_apex():
+    for (n, coordinate) in [
+        (1, Coordinate(0, 0)),
+        (2, Coordinate(1, 1)),
+        (11, Coordinate(10, 10))
+    ]:
+        assert Geometry(origin=Coordinate(0, 0), rows=n).apex == coordinate

@@ -16,11 +16,15 @@ logger = logging.getLogger("pyramidtriangles")
 
 
 class sACN(ModelBase):
-    def __init__(self, bind_address: str, cells: Iterable[Cell]):
+    def __init__(self, bind_address: str):
         self.sender = sacn.sACNsender(
             bind_address=bind_address,
             universeDiscovery=False,
         )
+
+        self.leds = []
+
+    def activate(self, cells: Iterable[Cell]):
         self.sender.start()
 
         # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.

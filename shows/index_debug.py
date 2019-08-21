@@ -1,42 +1,36 @@
-from itertools import chain
+from itertools import chain, cycle
+from typing import List
 
-from color import HSV as hsv
-from grid import Grid, every
+from color import HSV
+from grid import Coordinate, Grid, Pyramid, every
 from .showbase import ShowBase
 
 
 class IndexDebug(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 0.05):
-        self.grid = grid
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
+        self.pyramid = pyramid
         self.frame_delay = frame_delay
-        self.n_cells = len(self.grid)
 
     def next_frame(self):
-        coordinates = sorted([cell.coordinate for cell in self.grid.cells],
-                             key=lambda c: (c.y, c.x))
-        highest_universe = max(u.id
-                               for u in chain.from_iterable(cell.universes
-                                                            for cell in self.grid.cells))
+        self.pyramid.clear()
+        yield self.frame_delay
+
+        def coordinates(grid: Grid) -> List[Coordinate]:
+            return sorted([cell.coordinate for cell in grid.cells],
+                          key=lambda c: (c.y, c.x))
+
+        faces = [(face, cycle(coordinates(face)))
+                 for face in self.pyramid.faces]
+        highest_universe = max(cell.highest_universe.id
+                               for cell in self.pyramid.cells)
 
         while True:
-            for coord in coordinates:
-                cell = self.grid[coord]
-                hue = 1.0 - (cell.position.row / self.grid.row_count) * 0.9
+            for face, coordinates in faces:
+                face.set(every, HSV(0, 0, 0))
 
-                self.grid.clear()
-                self.grid.set(cell, hsv(hue, 0.8, 0.9))
-                self.grid.go()
-                yield self.frame_delay
+                cell = face[next(coordinates)]
+                hue = cell.highest_universe.id / (highest_universe + 1)
 
-            self.grid.clear()
+                face.set(cell, HSV(hue, 1.0, 0.8))
 
-            for coord in coordinates:
-                cell = self.grid[coord]
-                universe = max(u.id for u in cell.universes)
-                hue = universe / (highest_universe + 1)
-
-                self.grid.set(cell, hsv(hue, 0.8, 0.9))
-                self.grid.go()
-                yield self.frame_delay
-
-            self.grid.clear()
+        yield self.frame_delay

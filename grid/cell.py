@@ -26,6 +26,14 @@ class Direction(IntEnum):
 
         return self is Direction.NATURAL or self == orientation
 
+    def invert(self) -> "Direction":
+        if self is Direction.LEFT_TO_RIGHT:
+            return Direction.RIGHT_TO_LEFT
+        elif self is Direction.RIGHT_TO_LEFT:
+            return Direction.LEFT_TO_RIGHT
+        else:
+            return Direction.NATURAL
+
 
 class Cell(NamedTuple):
     """
@@ -132,6 +140,10 @@ class Cell(NamedTuple):
     @property
     def universes(self) -> Set[Universe]:
         return {a.universe for a in self.addresses}
+
+    @property
+    def highest_universe(self) -> Universe:
+        return max(self.universes)
 
     def __hash__(self):
         return hash((type(self), self.position))

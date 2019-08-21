@@ -1,13 +1,15 @@
 import time
 
 from color import HSV as hsv
-from grid import Grid, every
+from grid import Grid, Pyramid, every
 from .showbase import ShowBase
 
 
 class CycleHSV(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 0.025):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.025):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
         self.n_cells = len(self.grid)
 

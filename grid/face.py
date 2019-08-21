@@ -4,7 +4,7 @@ from typing import Iterable, Mapping, List, NamedTuple, Optional, Type
 from model.base import ModelBase
 
 from .cell import Cell, Orientation
-from .geom import Address, Coordinate, Geometry, Position
+from .geom import Address, Coordinate, Geometry, Position, Universe
 from .grid import Grid, Location, Pixel, Query, Selector
 
 PIXELS_PER_CELL: int = 8
@@ -85,6 +85,10 @@ class Panel(NamedTuple):
         return cells
 
 
+# a spec for Face.build() corresponding to our real full pyramid sides
+FULL_FACE_SPEC = [[0], [], [0, 4]]
+
+
 class Face(Grid):
     """
     Face is a side of the overall pyramid.
@@ -93,6 +97,64 @@ class Face(Grid):
     _cells: Mapping[Coordinate, Cell]
     panels: List[Panel]
     geom: Geometry
+
+    @classmethod
+    def build(cls,
+              model: Type[ModelBase],
+              spec: List[List[int]],
+              start: Address = Address(Universe(1, 1), 4),
+              rows_per_panel: int = 11) -> "Face":
+        """
+        Build a Face from a panel placement spec.
+
+        Each entry in the spec is a list representing a row (of panels),
+        starting from the top. Adding an index to the list indicates that
+        that panel exists in that row.
+        """
+
+        overall_geom = Geometry(origin=Coordinate(0, 0),
+                                rows=(len(spec) * rows_per_panel))
+        panel_rows = [[] for i in range(len(spec))]
+        addr = start
+
+        # Work row-by-row, panel-by-panel, generating all panels so we can use
+        # the offset of the previous to generate the next. Later, we'll filter
+        # out ones missing from the spec.
+        for r in reversed(range(len(spec))):
+            panel_row = panel_rows[r]
+            panels_in_row = (r + 1) * 2 - 1
+
+            if r + 1 == len(panel_rows):
+                origin = Coordinate(0, 0)
+            else:
+                leftmost_panel_in_row_below = panel_rows[r + 1][0]
+                origin = leftmost_panel_in_row_below.geom.apex.adjust(+1, +1)
+
+            for i in range(panels_in_row):
+                geom = Geometry(origin=origin, rows=rows_per_panel)
+                panel = Panel(geom=geom, start=addr)
+
+                panel_row.append(panel)
+
+                origin = origin.adjust(x=(geom.width + 1))
+
+                if i in spec[r]:
+                    # if this panel is included, update the starting address
+                    # of the next panel
+                    highest_universe = max(cell.highest_universe
+                                           for cell in panel.cells(overall_geom))
+                    next_id = highest_universe.id + 1
+                    universe = Universe(base=next_id, id=next_id)
+                    addr = Address(universe, start.offset)
+
+        # Exclude panels that aren't in the spec
+        real_panels = []
+        for row_spec, row_panels in zip(spec, panel_rows):
+            for i, panel in enumerate(row_panels):
+                if i in row_spec:
+                    real_panels.append(panel)
+
+        return cls(model, overall_geom, real_panels)
 
     def __init__(self, model: Type[ModelBase], geom: Geometry, panels: Iterable[Panel]):
         self.model = model
@@ -110,3 +172,11 @@ class Face(Grid):
 
     def _cell(self, coordinate: Coordinate) -> Optional[Cell]:
         return self._cells.get(coordinate)
+
+    @property
+    def next_address(self) -> Address:
+        lowest_addr = min(min(cell.addresses) for cell in self.cells)
+        highest_universe = max(cell.highest_universe for cell in self.cells)
+
+        next_id = highest_universe.id + 1
+        return Address(Universe(next_id, next_id), lowest_addr.offset)

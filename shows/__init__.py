@@ -11,9 +11,8 @@ from .stargate import Stargate
 from .strobe import Strobe
 from .marching_hexes import MarchingHexes
 from .top_down import TopDown
-# from .tendrils import Tendrils
+from .tendrils import Tendrils
 from .up_down import UpDown
 from .warp import Warp
 
 from .index_debug import IndexDebug
-from .universe_debug import UniverseDebug

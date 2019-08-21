@@ -1,11 +1,13 @@
 from color import RGB
-from grid import Grid, Orientation, every, pointed
+from grid import Grid, Pyramid, Orientation, every, pointed
 from .showbase import ShowBase
 
 
 class UpDown(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 2.0):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 2.0):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
 
     def next_frame(self):
