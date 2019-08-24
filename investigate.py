@@ -2,9 +2,9 @@ from itertools import cycle
 import pprint
 import time
 
-from model import sACN, demo_triangle_mapping
-import grid
-from grid.cells import CELLS, Position
+from pyramidtriangles.model.sacn_model import sACN, demo_triangle_mapping
+from pyramidtriangles import grid
+from pyramidtriangles.grid import CELLS
 
 model = sACN(model_json="./data/pixel_map.json",
              pixelmap=demo_triangle_mapping())

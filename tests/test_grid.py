@@ -1,11 +1,11 @@
 from collections.abc import Iterable
 from pytest import raises
 
-from grid import (
+from pyramidtriangles.grid import (
     Position, Geometry, Cell, Address, bottom_edge, left_edge, right_edge, vertex_neighbors, edge_neighbors,
     Coordinate, Face, Panel, Universe
 )
-from model import Model, DisplayColor
+from pyramidtriangles.model import Model, DisplayColor
 
 
 class FakeModel(Model):

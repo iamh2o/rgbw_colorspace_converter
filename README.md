@@ -6,22 +6,27 @@ Codebase to drive pyramid triangle art.
 
 ## Requirements
 
-* [Python 3](https://www.python.org), [poetry](https://poetry.eustace.io/)
-
-```sh
+* [Python 3](https://www.python.org)
 
 # Install Python 3 (any method will do)
-## Ideally, use a virtual env
-virtualenv --python=python3 ve
-...
-source ve/bin/activate
 
-.. or ..
+On Apple, with [Homebrew](https://brew.sh/)
 
+```sh
 brew install python
 export PATH="$(brew --prefix python)/libexec/bin:${PATH}"
+```
+
+... or on Linux
+
+```sh
+sudo apt install python3.9
+```
 
 # Install poetry and dependencies
+
+The build script will install Poetry if needed. Poetry will then download python dependencies. It will create a virtualenv if you're not already using one, which is great.
+```sh
 ./build.sh
 ```
 
@@ -38,11 +43,11 @@ Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-    poetry run python go_tri.py --simulator
+    poetry run python -X dev go_tri.py --simulator
 
 You can also specify which show to run by using the name of the show:
 
-    poetry run python go_tri.py --simulator UpDown
+    poetry run python -X dev go_tri.py --simulator UpDown
 
 You can also choose which show is running through the web interface:
 

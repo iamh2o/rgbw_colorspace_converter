@@ -1,65 +1,99 @@
 import queue
 import cherrypy
-from jinja2 import escape
 from cherrypy.test import helper
 
-from show_runner import RunShowCmd, RuntimeCmd, ClearCmd
-from web import TriangleWeb
+from pyramidtriangles.core import RunShowCmd, RuntimeCmd
+from pyramidtriangles.web import Web
 
 command_queue = queue.LifoQueue()
-
-
-class FakeRunner:
-    @staticmethod
-    def status():
-        return "Everything's fine"
+status_queue = queue.Queue()
 
 
 class WebTest(helper.CPWebCase):
+    interactive = False
+
     @staticmethod
     def setup_server():
-        cherrypy.tree.mount(TriangleWeb(
+        web = Web(
             command_queue,
-            FakeRunner(),
-            ['ShowFoo', 'ShowBar']
-        ), '/', {})
+            status_queue,
+        )
+        cherrypy.tree.mount(web, '/', Web.build_config({}))
 
-    def test_index_includes_shows(self):
+    def test_index_returns_something(self):
+        # index.html basically loads all the other content
         self.getPage('/')
-
         self.assertStatus(200)
-        [self.assertInBody(show) for show in ['ShowFoo', 'ShowBar']]
+        self.assertInBody('Triangle show control')
 
-    def test_index_includes_show_status(self):
-        self.getPage('/')
+    def test_cycle_time(self):
+        assert command_queue.empty()
 
+        body = '{"value":30}'
+        self.getPage(
+            url='/cycle_time',
+            headers=[
+                ('Content-Type', 'application/json'),
+                ('Content-Length', str(len(body))),
+            ],
+            method='POST',
+            body=body,
+        )
         self.assertStatus(200)
-        self.assertInBody(escape(FakeRunner.status()))
 
-    def test_clear_show(self):
-        assert command_queue.empty()
-        self.getPage('/clear_show', method='POST')
-
-        self.assertStatus(303)
-        assert command_queue.get() == ClearCmd()
-        assert command_queue.empty()
-
-    def test_change_run_time(self):
-        assert command_queue.empty()
-        self.getPage('/change_run_time', method='POST', body='run_time=30')
-
-        self.assertStatus(303)
         assert command_queue.get() == RuntimeCmd(30)
         assert command_queue.empty()
 
+    def test_get_shows(self):
+        self.getPage(
+            url='/shows',
+            headers=[
+                ('Content-Type', 'application/json'),
+                ('Content-Length', '0'),
+            ],
+            method='GET',
+        )
+        self.assertStatus(200)
+        self.assertInBody('Warp')
+
     def test_run_show(self):
         assert command_queue.empty()
-        self.getPage('/run_show', method='POST', body='show_name=ShowBar')
 
-        self.assertStatus(303)
-        assert command_queue.get() == RunShowCmd('ShowBar')
+        body = '{"data":"Warp"}'
+        self.getPage(
+            url='/shows',
+            headers=[
+                ('Content-Type', 'application/json'),
+                ('Content-Length', str(len(body))),
+            ],
+            method='POST',
+            body=body,
+        )
+        self.assertStatus(200)
+
+        assert command_queue.get() == RunShowCmd('Warp')
         assert command_queue.empty()
 
-        self.getPage('/run_show', method='POST', body='show_name=Invalid')
+        body = '{"data":"Invalid"}'
+        self.getPage(
+            url='/shows',
+            headers=[
+                ('Content-Type', 'application/json'),
+                ('Content-Length', str(len(body))),
+            ],
+            method='POST',
+            body=body,
+        )
         self.assertStatus(400)
-        assert command_queue.empty()
+
+        body = 'Invalid'
+        self.getPage(
+            url='/shows',
+            headers=[
+                ('Content-Type', 'application/json'),
+                ('Content-Length', str(len(body))),
+            ],
+            method='POST',
+            body=body,
+        )
+        self.assertStatus(400)

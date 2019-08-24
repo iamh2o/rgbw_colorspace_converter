@@ -2,8 +2,8 @@ from typing import NamedTuple
 
 from pytest import approx
 
-from ponzicolor.color import color
-from ponzicolor.space import (
+from pyramidtriangles.ponzicolor import color
+from pyramidtriangles.ponzicolor.space import (
     RGB,
     RGBW,
     HSV,
@@ -24,7 +24,7 @@ from ponzicolor.space import (
     hsv_to_rgbw,
     rgbw_to_hsv,
 )
-from ponzicolor.linear import delinearize, linearize
+from pyramidtriangles.ponzicolor.linear import delinearize, linearize
 
 
 class Case(NamedTuple):

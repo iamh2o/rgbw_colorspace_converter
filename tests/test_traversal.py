@@ -1,4 +1,4 @@
-from grid import Coordinate, Geometry, traversal
+from pyramidtriangles.grid import Coordinate, Geometry, traversal
 
 
 def geom(rows):

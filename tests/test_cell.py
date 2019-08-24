@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 
-from grid import Face, Panel, Position, Geometry, Cell, Address, Coordinate, Universe
-from model import Model, DisplayColor
+from pyramidtriangles.grid import Face, Panel, Position, Geometry, Cell, Address, Coordinate, Universe
+from pyramidtriangles.model import Model, DisplayColor
 
 
 class FakeModel(Model):
