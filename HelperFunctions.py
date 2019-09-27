@@ -86,6 +86,7 @@ def randColor():
 def randColorRange(color, window):
 	return (maxColor + color + randint(int(-window),int(window))) % maxColor
 
+
 # Wrapper for gradient_wheel in which the intensity is 1.0 (full)
 def wheel(color):
 	return gradient_wheel(color, 1)

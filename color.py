@@ -336,9 +336,14 @@ def Hex(value):
     return RGB(*rgb_t)
 
 class Color:
-    def __init__(self, hsv_tuple, only_rgb=False):
+    def __init__(self, hsv_tuple, only_rgb=False, brightness_scale=1.0):
         self._set_hsv(hsv_tuple)
         self.only_rgb = only_rgb
+        try:
+            self.brightness_scale = float(constrain(brightness_scale, 0.0,1.0))
+        except Exception as e:
+            print("NON-FLOAT sent to brightness_scale, setting to 1.0")
+            self.brightness_scale = constrain(1.0, 0.0,1.0)
 
     def __repr__(self):
         return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
@@ -360,12 +365,14 @@ class Color:
     @property
     def rgb(self):
         "returns a rgb[0-255] tuple"
-        return hsv_to_rgb(self.hsv_t)
+        new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2]*self.brightness_scale)
+        return hsv_to_rgb(new_t)
 
     @property
     def hsv(self):
         "returns a hsv[0.0-1.0] tuple"
-        return tuple(self.hsv_t)
+        new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2])
+        return tuple(new_t)
 
     @property
     def hex(self):

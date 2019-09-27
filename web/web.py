@@ -31,6 +31,12 @@ class TriangleWeb(object):
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
+    def restart_server(self, show_name=None):
+        self.runner.restart_program(reset_show=show_name)
+        time.sleep(7)
+        raise cherrypy.HTTPRedirect('/')
+
+    @cherrypy.expose
     def change_run_time(self, run_time=None):
         try:
             run_time = int(run_time)
@@ -40,6 +46,13 @@ class TriangleWeb(object):
         print(f'changing run_time to: {run_time}')
         self.queue.put(f'inc runtime:{run_time}')
         raise cherrypy.HTTPRedirect('/')
+
+    @cherrypy.expose
+    def change_brightness(self, brightness_scale=1.0):
+        self.runner.restart_program(brightness_scale=brightness_scale)
+        time.sleep(10)
+        raise cherrypy.HTTPRedirect('/')
+
 
     @cherrypy.expose
     def run_show(self, show_name=None):

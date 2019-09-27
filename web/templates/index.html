@@ -10,10 +10,10 @@
 
 <p>Status: {{status}}</p>
 
-<h3>Choose a show</h3>
+<h3>Change To a New Show Now</h3>
 <ul>
 {% for show in shows %}
-  <li><form action="run_show" method="post">
+  <li><form action="restart_server" method="post">
     <button name="show_name" value="{{show}}">{{show}}</button>
   </form></li>
 {% endfor %}
@@ -21,9 +21,6 @@
 
 <br/>
 
-<form action="clear_show" method="post">
-  <button>Clear Show</button>
-</form>
 
 <br/>
 
@@ -31,6 +28,19 @@
 <form action="change_run_time" method="post">
   Seconds: <input id=run_time type=number name=run_time value=60>
   <input type=submit>
+</form>
+
+<h3>Change Show Overall Brightness</h3>
+<form action="change_brightness" method="post">
+  Seconds: <input id=brightness_scale type=string name=brightness_scale value=1.0>
+  <input type=submit>
+</form>
+
+
+
+<h3>Reset To Test Pattern Show That Respects Timing // Interrupt Long Running Shows // Reset Setver</h3>
+<form action="restart_server" method="post">
+push the button....  <input id=restart_server type=submit>
 </form>
 
 </body>

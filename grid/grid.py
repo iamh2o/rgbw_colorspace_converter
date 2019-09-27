@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Union, Type
 
-from color import Color, RGB
+from color import Color, RGB, HSV
 from model import ModelBase
 from .cell import generate, Address, Cell, Direction, Position, Coordinate
 from .geom import Geometry
@@ -45,6 +45,15 @@ class Grid(Mapping[Location, Cell]):
                        for cell in generate(geom).values()}
         self._cells = [cells_by_id[i] for i in range(len(cells_by_id))]
 
+    def cell_exists(self, coord):
+        ret_val = True
+        try: 
+            self.select(coord)
+        except Exception as e:
+            #Coord does not exits
+            ret_val = False
+        return ret_val
+
     @property
     def row_count(self) -> int:
         return self.geom.rows
@@ -73,13 +82,25 @@ class Grid(Mapping[Location, Cell]):
         """
 
         for cell in self.select(sel):
-            for addr in cell.pixel_addresses(direction):
-                yield Pixel(cell, addr, self._model)
+            if cell is None:
+                pass
+            else:
+                for addr in cell.pixel_addresses(direction):
+                    yield Pixel(cell, addr, self._model)
 
     def set(self, sel: Selector, color: Color):
         for pixel in self.pixels(sel):
             pixel.set(color)
 
+    def set_cells(self,cells, color):
+        for c in cells:
+            self.set(Coordinate(c[0], c[1]), color)
+
+    def set_all_cells(self,color=None):
+        for cell in self._cells:
+            self.set(Coordinate(cell[0], cell[1]), color)
+
+                        
     def go(self):
         """
         Flush the underlying model (render its current state).
@@ -96,15 +117,17 @@ class Grid(Mapping[Location, Cell]):
         elif isinstance(loc, Coordinate):
             cell_id = loc.pos(self.geom).id
         else:
+            print("XXXX")
             cell_id = loc
-
+            
         if cell_id < 0:
-            raise KeyError(cell_id)
-
+            #raise KeyError(cell_id)
+            pass
         try:
             cell = self._cells[cell_id]
         except IndexError:
-            raise KeyError(cell_id)
+            pass
+            #raise KeyError(cell_id)
         else:
             if isinstance(loc, Position) and loc != cell.position:
                 logger.warning('got wrong cell: expected %r, got %r',
@@ -113,7 +136,7 @@ class Grid(Mapping[Location, Cell]):
             elif isinstance(loc, Coordinate) and loc != cell.coordinate:
                 logger.warning('got wrong cell: expected %r, got %r',
                                loc, cell.coordinate)
-                raise KeyError(loc)
+            #    raise KeyError(loc)
             return cell
 
     def __iter__(self):
