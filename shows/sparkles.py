@@ -1,5 +1,5 @@
 from .showbase import ShowBase
-from color import HSV
+from color import RGB
 
 from HelperClasses import*
 import random
@@ -11,7 +11,7 @@ class Sparkles(ShowBase):
 		self.faders = Faders(self.grid)
 		self.frame_delay = frame_delay
 		self.color = randColor()
-		self.spark_num = 45
+		self.spark_num = 25
 		          
 	def next_frame(self):
 		

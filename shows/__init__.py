@@ -21,3 +21,4 @@ from .gears import Gears
 #from .circling import Circling
 from .index_debug import IndexDebug
 from .universe_debug import UniverseDebug
+from .ripples import Ripples
