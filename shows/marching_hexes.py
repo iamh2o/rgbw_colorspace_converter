@@ -6,8 +6,8 @@ import time
 
 
 class MarchingHexes(ShowBase):
-    def __init__(self, grid, frame_delay=0.1):
-        self.grid = grid
+    def __init__(self, pyramid, frame_delay=0.1):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
 
         self.n_cells = len(self.grid.cells)
@@ -17,8 +17,10 @@ class MarchingHexes(ShowBase):
 
         while True:
             self.grid.clear()
+            up = self.grid.select(pointed_up)
+            rnd.shuffle(up)
 
-            for cell in self.grid.select(pointed_up):
+            for cell in up:
                 self.grid.set(hexagon(cell.position), hsv)
                 self.grid.go()
                 time.sleep(1)

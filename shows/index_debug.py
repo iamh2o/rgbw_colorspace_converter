@@ -1,29 +1,36 @@
-from color import HSV as hsv
-from grid import Grid, every
+from itertools import chain, cycle
+from typing import List
+
+from color import HSV
+from grid import Coordinate, Grid, Pyramid, every
 from .showbase import ShowBase
 
 
 class IndexDebug(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 0.05):
-        self.grid = grid
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
+        self.pyramid = pyramid
         self.frame_delay = frame_delay
-        self.n_cells = len(self.grid)
 
     def next_frame(self):
+        self.pyramid.clear()
+        yield self.frame_delay
+
+        def coordinates(grid: Grid) -> List[Coordinate]:
+            return sorted([cell.coordinate for cell in grid.cells],
+                          key=lambda c: (c.y, c.x))
+
+        faces = [(face, cycle(coordinates(face)))
+                 for face in self.pyramid.faces]
+        highest_universe = max(cell.highest_universe.id
+                               for cell in self.pyramid.cells)
+
         while True:
-            for cell in sorted(self.grid.cells):
-                universe = max(a.universe for a in cell.addresses)
-                hue = 1.0 - (cell.position.row / self.grid.row_count) * 0.9
+            for face, coordinates in faces:
+                face.set(every, HSV(0, 0, 0))
 
-                self.grid.clear()
-                self.grid.set(cell.position, hsv(hue, 0.8, 0.9))
-                self.grid.go()
-                yield self.frame_delay
+                cell = face[next(coordinates)]
+                hue = cell.highest_universe.id / (highest_universe + 1)
 
-            for cell in sorted(self.grid.cells):
-                universe = max(a.universe for a in cell.addresses)
-                hue = min(0.9, (universe - 1) * 0.1)
+                face.set(cell, HSV(hue, 1.0, 0.8))
 
-                self.grid.set(cell, hsv(hue, 0.8, 0.9))
-                self.grid.go()
-                yield self.frame_delay
+        yield self.frame_delay
