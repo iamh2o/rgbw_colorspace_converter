@@ -73,13 +73,19 @@ class TriangleWeb(object):
     @cherrypy.expose
     def change_hue(self, hue='purple'):
         try:
-            self.runner.show.set_param('s_num', s_num)
+            self.runner.show.set_param('hue', hue)
         except ValueError:
             print("Show prob does not accept this input", e)
         raise cherrypy.HTTPRedirect('/')
 
 
-
+    @cherrypy.expose
+    def flash_color(self, hue='purple'):
+        try:
+            self.runner.show.set_param('flash', hue)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
     def run_show(self, show_name=None):

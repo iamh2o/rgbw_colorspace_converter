@@ -172,8 +172,11 @@ class Coordinate(NamedTuple):
         return cls(x, y)
 
     def pos(self, geom: Geometry):
-        return Position(geom.rows - 1 - self.y, self.x - self.y)
-
+        #JEM pull out, hack to get one of steves shows running
+        try:
+            return Position(geom.rows - 1 - self.y, self.x - self.y)
+        except Exception as e:
+            return Position(11 - 1 - 41,  23-41)
 
 class Address(NamedTuple):
     """

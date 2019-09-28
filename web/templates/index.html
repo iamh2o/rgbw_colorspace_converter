@@ -6,6 +6,22 @@
 </head>
 <body>
 
+<h3>FLASH COLOR</h3>
+<form action="flash_color" method="post">
+ <select name=hue id=hue>
+    <option  value=red >RED</option>
+    <option value=orange > Orange</option>
+    <option value=yellow >Yellow</option>
+    <option value=green >Green</option>
+    <option value=blue >Blue</option>
+    <option value=purple >  Purple     </option>
+    <option value=pink >Pink</option>
+    <option value=monochrome >Monochrome</option>
+  </select>
+  <input type=submit>
+</form>
+
+
 <h1>Show Control</h1>
 
 <p>Status: {{status}}</p>
@@ -45,11 +61,25 @@
 
 <h3>Sparkles: Change Sparkle Number</h3>
 <form action="change_sparkle_number" method="post">
-  Seconds: <input id=s_num type=int name=s_num value=5>
+  Seconds: <input id=s_num type=number name=s_num value=5>
   <input type=submit>
 </form>
 
-
+<h3>Change Hue</h3>
+<form action="change_hue" method="post">
+  Hue Color: 
+  <select name=hue id=hue>
+    <option  value=red >RED</option>
+    <option value=orange > Orange</option>
+    <option value=yellow >Yellow</option>
+    <option value=green >Green</option>
+    <option value=blue >Blue</option>
+    <option value=purple >  Purple     </option>                                  
+    <option value=pink >Pink</option>
+    <option value=monochrome >Monochrome</option>
+  </select>
+  <input type=submit>
+</form>
 
 
 <h3>Reset To Test Pattern Show That Respects Timing // Interrupt Long Running Shows // Reset Setver</h3>

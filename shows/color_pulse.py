@@ -12,7 +12,7 @@ class ColorPulse(ShowBase):
         self.frame_delay = frame_delay
 
         # Knobs to change for effect
-        self.hue = 311
+        self.hue = 31
         self.low_saturation = 0.8
         self.high_saturation = 1.0
         self.steps = 3
