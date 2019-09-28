@@ -70,6 +70,16 @@ class TriangleWeb(object):
         time.sleep(10)
         raise cherrypy.HTTPRedirect('/')
 
+    @cherrypy.expose
+    def change_hue(self, hue='purple'):
+        try:
+            self.runner.show.set_param('s_num', s_num)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
+
+
+
 
     @cherrypy.expose
     def run_show(self, show_name=None):
