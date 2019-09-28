@@ -1,4 +1,5 @@
 import time
+from randomcolor import random_color
 
 from .showbase import ShowBase
 from color import RGB
@@ -10,7 +11,7 @@ class Strobe(ShowBase):
         self.grid = grid
         self.frame_delay = frame_delay
         self.n_cells = len(self.grid._cells)
-
+        self.pri_color 
     
 
     def set_param(self, name, val):

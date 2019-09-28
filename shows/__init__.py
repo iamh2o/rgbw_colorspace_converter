@@ -24,3 +24,5 @@ from .universe_debug import UniverseDebug
 from .ripples import Ripples
 from .color_pulse import ColorPulse
 from .strobe2 import Strobe2
+from .simple_color import SimpleColor
+from .up_down import UpDown

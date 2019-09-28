@@ -80,11 +80,32 @@ class TriangleWeb(object):
 
 
     @cherrypy.expose
+    def change_primary_hsv(self, hsv='1,0.2,0.2'):
+        try:
+            (h,s,v) = hsv.split(',')
+            hsv_arr = [float(h), float(s), float(v)]
+            self.runner.show.set_param('change_primary_hsv', hsv_arr)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+            raise cherrypy.HTTPRedirect('/')
+
+
+    @cherrypy.expose
+    def change_secondary_hsv(self, hsv='1,0.2,0.2'):
+        try:
+            (h,s,v) = hsv.split(',')
+            hsv_arr = [float(h), float(s), float(v)]
+            self.runner.show.set_param('change_secondary_hsv', hsv_arr)
+        except ValueError:
+                print("Show prob does not accept this input", hsv)
+        raise cherrypy.HTTPRedirect('/')
+
+    @cherrypy.expose
     def flash_color(self, hue='purple'):
         try:
             self.runner.show.set_param('flash', hue)
         except ValueError:
-            print("Show prob does not accept this input", e)
+            print("Show prob does not accept this input", hue)
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
@@ -98,3 +119,6 @@ class TriangleWeb(object):
         # XXX otherwise the runner.status() method hasn't had time to update
         time.sleep(0.2)
         raise cherrypy.HTTPRedirect('/')
+
+
+    
