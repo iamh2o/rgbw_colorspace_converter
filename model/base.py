@@ -12,7 +12,12 @@ class ModelBase(ABC):
         """
         Called after Pyramid initialization.
         """
-        pass
+        raise NotImplementedError
+
+    @abstractmethod
+    def stop(self):
+        """Stop model and cleanup resources."""
+        raise NotImplementedError
 
     @abstractmethod
     def set(self, cell: Cell, addr: Address, color: Color):
@@ -27,18 +32,6 @@ class ModelBase(ABC):
     def go(self):
         """Flush all buffered data out to devices."""
         raise NotImplementedError
-
-
-class NullModel(ModelBase):
-    """
-    Discards all set's and go's.
-    """
-
-    def set(self, cell: Cell, addr: Address, color: Color):
-        pass
-
-    def go(self):
-        pass
 
 
 def allocate_universes(cells: Iterable[Cell]) -> Mapping[int, List[int]]:

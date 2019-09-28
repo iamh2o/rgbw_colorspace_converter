@@ -15,6 +15,9 @@ class FakeModel(ModelBase):
     def go(self):
         pass
 
+    def stop(self):
+        pass
+
 
 def test_position_symmetry():
     for curr_id in range(256):
