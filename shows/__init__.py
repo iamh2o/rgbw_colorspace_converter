@@ -22,3 +22,4 @@ from .gears import Gears
 from .index_debug import IndexDebug
 from .universe_debug import UniverseDebug
 from .ripples import Ripples
+from.color_pulse import ColorPulse
