@@ -5,6 +5,7 @@ import logging
 import queue
 import socket
 
+from typing import Iterable, Union
 from color import Color
 from grid import Address, Cell
 from .base import ModelBase
@@ -37,3 +38,6 @@ class SimulatorModel(ModelBase):
             msg = self.message_queue.get()
             logger.debug(msg)
             self.sock.send(msg.encode())
+
+    def activate(self, cells: Iterable[Cell]):
+        pass

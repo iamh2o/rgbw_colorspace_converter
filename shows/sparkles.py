@@ -5,9 +5,10 @@ from HelperClasses import*
 import random
 
 class Sparkles(ShowBase):
-	def __init__(self, grid, frame_delay=0.1):
+	def __init__(self, pyramid, frame_delay=0.1):
 #		self.name = "Sparkles"        
-		self.grid = grid
+
+		self.grid = pyramid.face
 		self.faders = Faders(self.grid)
 		self.frame_delay = frame_delay
 		self.color = randColor()

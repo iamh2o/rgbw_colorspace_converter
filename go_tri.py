@@ -82,6 +82,7 @@ class ShowRunner(threading.Thread):
 
     def restart_program(self,reset_show=None, brightness_scale=1.0):
         """Restarts the current program, with orig arguments passed back.  reset_show=True will re-start running from a known good show.BUGGY as it assumed the show is the last argument always. """
+
         if reset_show is None:
             reset_show = self.show.name
 
@@ -91,7 +92,9 @@ class ShowRunner(threading.Thread):
                 os.close(handler.fd)
         except Exception as e:
             logging.error(e)
-            
+
+        time.sleep(1)
+
         python = sys.executable
 
         cmd = list(sys.argv)    
@@ -420,13 +423,14 @@ if __name__ == '__main__':
 
         logger.info("Starting sACN")
 
-        model = sACN(bind, args.rows, args.brightness_scale))
+        model = sACN(bind, args.brightness_scale)
 
-    pyramid = Pyramid.build(model)
+    pyramid = Pyramid.build_single(model)
     if args.panels:
         dump_panels(pyramid)
         sys.exit(0)
 
+    
     model.activate(pyramid.cells)
 
     app = TriangleServer(pyramid, args)

@@ -17,6 +17,7 @@ logger = logging.getLogger("pyramidtriangles")
 
 class sACN(ModelBase):
     def __init__(self, bind_address: str, brightness_scale=1.0):
+        self.brightness_scale = brightness_scale
         self.sender = sacn.sACNsender(
             bind_address=bind_address,
             universeDiscovery=False,
@@ -26,7 +27,6 @@ class sACN(ModelBase):
 
     def activate(self, cells: Iterable[Cell]):
         self.sender.start()
-        self.brightness_scale = brightness_scale
  
         # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
         self.leds = allocate_universes(cells)
