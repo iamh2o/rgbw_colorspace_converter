@@ -12,6 +12,20 @@ class Sparkles(ShowBase):
 		self.frame_delay = frame_delay
 		self.color = randColor()
 		self.spark_num = 25
+
+
+	def set_param(self, name, val):
+		if name == 's_num':
+			try:
+				self.spark_num = int(val)
+			except Exception as e:
+				print("Bad Speed Value!", val)
+		  #Touch OSC Stuff                                                                                                      
+		if name == 'speed':
+			try:
+				self.frame_delay = float(val)
+			except Exception as e:
+				print("Bad Speed Value!", val)
 		          
 	def next_frame(self):
 		

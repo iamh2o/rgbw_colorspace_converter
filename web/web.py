@@ -37,6 +37,23 @@ class TriangleWeb(object):
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
+    def change_frame_rate(self, frame_rate=0.1):
+        try:
+            self.runner.show.set_param('speed',float((frame_rate)))
+        except Exception as e:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
+
+
+    @cherrypy.expose
+    def change_sparkle_number(self, s_num=5):
+        try:
+            self.runner.show.set_param('s_num', s_num)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
+
+    @cherrypy.expose
     def change_run_time(self, run_time=None):
         try:
             run_time = int(run_time)

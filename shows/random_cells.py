@@ -19,6 +19,16 @@ class Random(ShowBase):
 
         return Deque(cells)
 
+    def set_param(self, name, val):
+
+        #Touch OSC Stuff
+        if name == 'speed':
+            try:
+                self.frame_delay = float(val)
+            except Exception as e:
+                print("Bad Speed Value!", val)
+                
+
     def next_frame(self):
         cells = self.shuffle()
         while True:
