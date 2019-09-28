@@ -28,17 +28,17 @@ class Pyramid:
 
     @classmethod
     def build_single(cls,
-              model: Type[ModelBase],
-              start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
+                     model: Type[ModelBase],
+                     start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
+        """Builds Pyramid with a single, repeated panel."""
         face = Face.build(model, [[0]], start)
-
         return cls([face])
-
 
     @classmethod
     def build(cls,
               model: Type[ModelBase],
               start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
+        """Builds Pyramid for the art car."""
         left_face = Face.build(model, FULL_FACE_SPEC, start)
         right_face = Face.build(model, FULL_FACE_SPEC, left_face.next_address)
         back_face = Face.build(model, [[0]], right_face.next_address)
@@ -46,12 +46,18 @@ class Pyramid:
         return cls([left_face, right_face, back_face])
 
     def __init__(self, faces: Iterable[Face]):
-        # faces: [left, right, back]
+        # faces: [left, right, back] on art car
 
         self.faces = list(faces)
 
+        # Special case for using one mirrored panel, not on the art car.
         if len(self.faces) == 1:
-            pass#            raise ValueError("don't you know a Pyramid has three sides")
+            self.panel = PanelReplicator(self.faces)
+            self.face = self.faces[0]
+            return
+
+        if len(self.faces) != 3:
+            raise ValueError("don't you know a Pyramid has three sides")
 
         self.panel = PanelReplicator(self.faces)
         self.face = FaceMirror(self.faces[:2])
