@@ -1,9 +1,14 @@
+from typing import Iterable
+
 from color import Color
 from grid import Face, Panel, Position, Geometry, Cell, Address, Coordinate, Universe
 from model import ModelBase
 
 
 class FakeModel(ModelBase):
+    def activate(self, cells: Iterable[Cell]):
+        pass
+
     def set(self, cell: Cell, addr: Address, color: Color):
         pass
 

@@ -40,4 +40,5 @@ class SimulatorModel(ModelBase):
             self.sock.send(msg.encode())
 
     def activate(self, cells: Iterable[Cell]):
+        """No activation needed for simulator."""
         pass
