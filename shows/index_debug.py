@@ -8,7 +8,7 @@ from .showbase import ShowBase
 
 class IndexDebug(ShowBase):
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
-        self.pyramid = pyramid
+        self.pyramid = pyramid.face
         self.frame_delay = frame_delay
 
     def next_frame(self):

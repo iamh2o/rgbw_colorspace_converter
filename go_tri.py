@@ -1,3 +1,6 @@
+import os
+import sys
+import psutil
 import argparse
 import faulthandler
 import logging
@@ -7,9 +10,13 @@ import queue
 import threading
 
 import cherrypy
+
+from cherrypy.process.plugins import SimplePlugin
+
 from grid import Pyramid
 from model.sacn_model import sACN
 from model.simulator import SimulatorModel
+
 import netifaces
 import osc_serve
 import shows
@@ -44,7 +51,8 @@ hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 
 class ShowRunner(threading.Thread):
-    def __init__(self, pyramid, queue, max_showtime=240, fail_hard=True):
+
+    def __init__(self, pyramid, queue, max_showtime=240, fail_hard=True,brightness_scale=1.0):
         super(ShowRunner, self).__init__(name="ShowRunner")
         self.pyramid = pyramid
         self.queue = queue
@@ -53,6 +61,7 @@ class ShowRunner(threading.Thread):
         self.running = True
         self.max_show_time = max_showtime
         self.show_runtime = 0
+        self.brightness_scale = brightness_scale
 
         # map of names -> show ctors
         self.shows = dict(shows.load_shows())
@@ -70,6 +79,33 @@ class ShowRunner(threading.Thread):
         # 1.0 is normal speed
         # lower numbers mean faster speeds, higher is slower
         self.speed_x = 1.0
+
+    def restart_program(self,reset_show=None, brightness_scale=1.0):
+        """Restarts the current program, with orig arguments passed back.  reset_show=True will re-start running from a known good show.BUGGY as it assumed the show is the last argument always. """
+
+        if reset_show is None:
+            reset_show = self.show.name
+
+        try:
+            p = psutil.Process(os.getpid())
+            for handler in p.get_open_files() + p.connections():
+                os.close(handler.fd)
+        except Exception as e:
+            logging.error(e)
+
+        time.sleep(1)
+
+        python = sys.executable
+
+        cmd = list(sys.argv)    
+        cmd[-1] = reset_show
+        try: 
+            x = cmd.index('--brightness-scale') 
+            cmd[x+1] = str(brightness_scale)
+        except Exception as e: 
+            cmd.insert(-1,'--brightness-scale') 
+            cmd.insert(-1,str(brightness_scale)) 
+        os.execl(python, python, *cmd)
 
     def status(self):
         if self.running:
@@ -208,9 +244,12 @@ def osc_listener(q, port=5700):
     osc_serve.create_server(listen_address, q)
 
 
+ 
 class TriangleServer(object):
     def __init__(self, pyramid, args):
         self.args = args
+
+        self.brightness_scale = args.brightness_scale
         self.pyramid = pyramid
 
         self.queue = queue.LifoQueue()
@@ -234,7 +273,8 @@ class TriangleServer(object):
 
         # Show runner
         self.runner = ShowRunner(
-            self.pyramid, self.queue, args.max_time, fail_hard=args.fail_hard)
+
+            self.pyramid, self.queue, args.max_time, fail_hard=args.fail_hard, brightness_scale=self.brightness_scale)
         if args.shows:
             print("setting show:", args.shows[0])
             self.runner.next_show(args.shows[0])
@@ -262,6 +302,19 @@ class TriangleServer(object):
             except Exception:
                 logger.exception("Exception stopping tri_grid!!")
 
+        self.runner.restart_program(str(self.runner.show.name)) 
+ 
+        #Fucked up threading handling in SACN preventing chrerrypy from restarting cleanly with any code change (a really REALLY nice feature when writing shows).  I gave up after 2 hrs of debugging mystery threads and applied the sleedge hammer above.  Love- Major
+#      time.sleep(2)  
+#      self.runner.grid._model.__del__() 
+#      del(self.runner.grid._model) 
+#      self.runner.grid._model.sender._output_thread._socket.close() 
+#      self.runner.grid._model.sender._output_thread.join()   
+#      self.runner.grid._model.__del__()   
+
+
+    
+
     def go_headless(self):
         """Run without the web interface"""
         logger.info("Running without web interface")
@@ -280,8 +333,9 @@ class TriangleServer(object):
         show_names = [name for (name, cls) in shows.load_shows()]
         print(f'shows: {show_names}')
 
-        cherrypy.engine.subscribe('stop', self.stop)
+#        webplugin(cherrypy.engine).subscribe()
 
+        cherrypy.engine.subscribe('stop', self.stop) 
         config = {
             'global': {
                 'server.socket_host': '0.0.0.0',
@@ -296,6 +350,7 @@ class TriangleServer(object):
         cherrypy.quickstart(TriangleWeb(self.queue, self.runner, show_names),
                             '/',
                             config=config)
+
 
 
 def dump_panels(pyramid: Pyramid):
@@ -331,6 +386,8 @@ if __name__ == '__main__':
                         help='name of show (or shows) to run')
     parser.add_argument('--fail-hard', type=bool, default=True,
                         help="For production runs, when shows fail, the show runner moves to the next show")
+    parser.add_argument('--brightness-scale',type=float,default=1.0, 
+                        help="Adjust the global brightness of the shows from 0.0-1.0")
 
     args = parser.parse_args()
 
@@ -338,7 +395,7 @@ if __name__ == '__main__':
         logger.info("Available shows: %s", ', '.join(
             [name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
-
+ 
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
@@ -365,13 +422,15 @@ if __name__ == '__main__':
                     'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
-        model = sACN(bind)
 
-    pyramid = Pyramid.build(model)
+        model = sACN(bind, args.brightness_scale)
+
+    pyramid = Pyramid.build_single(model)
     if args.panels:
         dump_panels(pyramid)
         sys.exit(0)
 
+    
     model.activate(pyramid.cells)
 
     app = TriangleServer(pyramid, args)
@@ -382,4 +441,4 @@ if __name__ == '__main__':
     except Exception:
         logger.exception("Unhandled exception running TRI!")
     finally:
-        app.stop()
+        app.stop

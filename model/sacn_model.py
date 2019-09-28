@@ -16,7 +16,8 @@ logger = logging.getLogger("pyramidtriangles")
 
 
 class sACN(ModelBase):
-    def __init__(self, bind_address: str):
+    def __init__(self, bind_address: str, brightness_scale=1.0):
+        self.brightness_scale = brightness_scale
         self.sender = sacn.sACNsender(
             bind_address=bind_address,
             universeDiscovery=False,
@@ -26,7 +27,7 @@ class sACN(ModelBase):
 
     def activate(self, cells: Iterable[Cell]):
         self.sender.start()
-
+ 
         # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
         self.leds = allocate_universes(cells)
         for universe_index in sorted(self.leds):
@@ -35,10 +36,18 @@ class sACN(ModelBase):
             self.sender.activate_output(universe_index)
             self.sender[universe_index].multicast = True
 
+    def stop(self):
+        for universe_index in self.leds:
+             self.sender.deactivate_output(universe_index)
+
+
     def __del__(self):
+        for universe_index in self.leds:
+            self.sender.deactivate_output(universe_index)
         self.sender.stop()  # If the object is destructing, close the sender connection
 
     def set(self, cell: Cell, addr: Address, color: Color):
+        color = Color(color.hsv, brightness_scale=self.brightness_scale)
         try:
             channels = self.leds[addr.universe.id]
         except KeyError:

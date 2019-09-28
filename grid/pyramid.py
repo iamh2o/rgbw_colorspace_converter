@@ -27,6 +27,15 @@ class Pyramid:
     face: Grid
 
     @classmethod
+    def build_single(cls,
+              model: Type[ModelBase],
+              start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
+        face = Face.build(model, [[0]], start)
+
+        return cls([face])
+
+
+    @classmethod
     def build(cls,
               model: Type[ModelBase],
               start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
@@ -41,8 +50,8 @@ class Pyramid:
 
         self.faces = list(faces)
 
-        if len(self.faces) != 3:
-            raise ValueError("don't you know a Pyramid has three sides")
+        if len(self.faces) == 1:
+            pass#            raise ValueError("don't you know a Pyramid has three sides")
 
         self.panel = PanelReplicator(self.faces)
         self.face = FaceMirror(self.faces[:2])

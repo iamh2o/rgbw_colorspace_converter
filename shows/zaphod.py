@@ -3,16 +3,17 @@ import random
 
 from .showbase import ShowBase
 from color import RGB
-from grid import Cell, Grid, Pyramid
+from grid.cell import Cell
 
 
-class Random(ShowBase):
-    grid: Grid
-
-    def __init__(self, pyramid: Pyramid, frame_delay=0.1):
-        self.grid = pyramid.face
+class Zaphod(ShowBase):
+    def __init__(self, grid, frame_delay=0.1):
+        self.grid = grid
         self.frame_delay = frame_delay
-        
+
+
+#        from IPython import embed; embed()
+
     def shuffle(self) -> Deque[Cell]:
         cells = self.grid.cells
         random.shuffle(cells)
