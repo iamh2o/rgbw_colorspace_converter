@@ -3,6 +3,8 @@ from color import RGB
 
 from HelperClasses import*
 import random
+from grid import every
+import time
 
 class Sparkles(ShowBase):
 	def __init__(self, grid, frame_delay=0.1):
@@ -11,10 +13,21 @@ class Sparkles(ShowBase):
 		self.faders = Faders(self.grid)
 		self.frame_delay = frame_delay
 		self.color = randColor()
-		self.spark_num = 25
+		self.spark_num = 15
 
 
 	def set_param(self, name, val):
+		if name == 'flash':
+			try:
+				self.grid.set(every, RGB(255, 0, 0, brightness_override=1.0))
+				self.grid.go()
+				old_fd = self.frame_delay 
+				self.frame_delay = 5
+				self.grid.go()
+				self.frame_delay = old_fd
+			except Exception as e:
+				print("Bad Hue flash!", val, e)
+				
 		if name == 's_num':
 			try:
 				self.spark_num = int(val)

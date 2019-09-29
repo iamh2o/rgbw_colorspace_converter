@@ -26,3 +26,4 @@ from .color_pulse import ColorPulse
 from .strobe2 import Strobe2
 from .simple_color import SimpleColor
 from .up_down import UpDown
+from .fuck_your_burn import FuckYourBurn
