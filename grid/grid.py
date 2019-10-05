@@ -2,8 +2,8 @@ from abc import abstractmethod
 import logging
 from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union, Type
 
-from color import Color, RGB, HSV
-from model import ModelBase
+from color import Color, RGB
+from model import Model
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Position
 
@@ -21,7 +21,7 @@ Selector = Union[Location,
 class Pixel(NamedTuple):
     cell: Cell
     address: Address
-    model: Type[ModelBase]
+    model: Type[Model]
 
     def set(self, color: Color):
         self.model.set(self.cell, self.address, color)
@@ -32,14 +32,14 @@ class Pixel(NamedTuple):
 
 class Grid(Mapping[Location, Cell]):
     """
-    Grid represents our trianglular cells in a coordinate system.
+    Grid represents our triangular cells in a coordinate system.
 
     A Grid may correspond to a single panel, or an entire side of
     the pyramid.
     """
 
     geom: Geometry
-    model: Type[ModelBase]
+    model: Type[Model]
 
     def cell_exists(self, coord):
         ret_val = True
@@ -101,15 +101,14 @@ class Grid(Mapping[Location, Cell]):
         for pixel in self.pixels(sel):
             pixel.set(color)
 
-    def set_cells(self,cells, color):
+    def set_cells(self, cells, color):
         for c in cells:
             self.set(Coordinate(c[0], c[1]), color)
 
-    def set_all_cells(self,color=None):
+    def set_all_cells(self, color=None):
         for cell in self._cells:
             self.set(Coordinate(cell[0], cell[1]), color)
 
-                        
     def clear(self, color: Color = RGB(0, 0, 0)):
         self.set(self.cells, color)
         self.go()

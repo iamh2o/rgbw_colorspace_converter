@@ -7,9 +7,10 @@ import queue
 import threading
 import cherrypy
 import netifaces
+from typing import Type
 
 from grid import Pyramid
-from model import ModelBase
+from model import Model
 from model.sacn_model import sACN
 from model.simulator import SimulatorModel
 import osc_serve
@@ -50,8 +51,7 @@ class ShowRunner(threading.Thread):
                  shutdown: threading.Event,
                  queue: queue.Queue,
                  max_showtime: int = 240,
-                 fail_hard: bool = True,
-                 brightness_scale: float = 1.0):
+                 fail_hard: bool = True):
         super(ShowRunner, self).__init__(name="ShowRunner")
         self.pyramid = pyramid
         self.shutdown = shutdown
@@ -61,7 +61,6 @@ class ShowRunner(threading.Thread):
         self.running = True
         self.max_show_time = max_showtime
         self.show_runtime = 0
-        self.brightness_scale = brightness_scale
 
         # map of names -> show ctors
         self.shows = dict(shows.load_shows())
@@ -113,7 +112,7 @@ class ShowRunner(threading.Thread):
             elif msg.startswith("inc runtime"):
                 self.max_show_time = int(msg.split(':')[1])
             elif msg.startswith("brightness:"):
-                self.brightness_scale = float(msg[11:])
+                self.pyramid.brightness = float(msg[11:])
 
         elif isinstance(msg, tuple):
             logger.debug(f'OSC: {msg}')
@@ -210,11 +209,10 @@ class ShowRunner(threading.Thread):
 
 
 class TriangleServer(object):
-    def __init__(self, model, pyramid, args):
+    def __init__(self, model: Type[Model], pyramid: Pyramid, args):
         self.model = model
         self.pyramid = pyramid
-
-        self.brightness_scale = args.brightness_scale
+        self.args = args
 
         self.queue = queue.LifoQueue()
         self.shutdown = threading.Event()  # Used to signal a shutdown event
@@ -239,13 +237,12 @@ class TriangleServer(object):
             pyramid=self.pyramid,
             shutdown=self.shutdown,
             queue=self.queue,
-            max_showtime=args.max_time,
-            fail_hard=args.fail_hard,
-            brightness_scale=self.brightness_scale)
+            max_showtime=self.args.max_time,
+            fail_hard=self.args.fail_hard)
 
-        if args.shows:
-            print("setting show:", args.shows[0])
-            self.runner.next_show(args.shows[0])
+        if self.args.shows:
+            print("setting show:", self.args.shows[0])
+            self.runner.next_show(self.args.shows[0])
 
     def start(self):
         if self.running:
@@ -332,8 +329,6 @@ if __name__ == '__main__':
                         help='name of show (or shows) to run')
     parser.add_argument('--fail-hard', type=bool, default=True,
                         help="For production runs, when shows fail, the show runner moves to the next show")
-    parser.add_argument('--brightness-scale',type=float,default=1.0, 
-                        help="Adjust the global brightness of the shows from 0.0-1.0")
 
     args = parser.parse_args()
 
@@ -341,7 +336,7 @@ if __name__ == '__main__':
         logger.info("Available shows: %s", ', '.join(
             [name for (name, cls) in shows.load_shows()]))
         sys.exit(0)
- 
+
     if args.simulator:
         sim_host = "localhost"
         sim_port = 4444
@@ -368,8 +363,7 @@ if __name__ == '__main__':
                     'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
-
-        model = sACN(bind, args.brightness_scale)
+        model = sACN(bind)
 
     pyramid = Pyramid.build_single(model)
     if args.panels:

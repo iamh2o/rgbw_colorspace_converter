@@ -5,7 +5,7 @@ import logging
 import queue
 import socket
 
-from typing import Iterable, Union
+from typing import Iterable
 from color import Color
 from grid import Address, Cell
 from .base import ModelBase
