@@ -1,5 +1,5 @@
 from HelperFunctions import*
-from color import HSV
+from color import RGB
 from grid.cell import Direction, Position, Coordinate
 
 #
@@ -54,7 +54,7 @@ class Fader(object):
 #        from IPython import embed; embed()
 
         gw = gradient_wheel(self.color, self.intense)
-        self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]), HSV(gw[0],gw[1],gw[2]))
+        self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]), RGB(gw[0],gw[1],gw[2]))
 
     def fade_fader(self):
         if self.growing:
@@ -70,7 +70,7 @@ class Fader(object):
         return self.growing or self.intense > 0.01
 
     def black_cell(self):
-        self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]),HSV(0,0,0))
+        self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]),RGB(0,0,0))
 
 
 #

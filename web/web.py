@@ -37,6 +37,23 @@ class TriangleWeb(object):
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
+    def change_frame_rate(self, frame_rate=0.1):
+        try:
+            self.runner.show.set_param('speed',float((frame_rate)))
+        except Exception as e:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
+
+
+    @cherrypy.expose
+    def change_sparkle_number(self, s_num=5):
+        try:
+            self.runner.show.set_param('s_num', s_num)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
+
+    @cherrypy.expose
     def change_run_time(self, run_time=None):
         try:
             run_time = int(run_time)
@@ -53,6 +70,43 @@ class TriangleWeb(object):
         time.sleep(10)
         raise cherrypy.HTTPRedirect('/')
 
+    @cherrypy.expose
+    def change_hue(self, hue='purple'):
+        try:
+            self.runner.show.set_param('hue', hue)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+        raise cherrypy.HTTPRedirect('/')
+
+
+    @cherrypy.expose
+    def change_primary_hsv(self, hsv='1,0.2,0.2'):
+        try:
+            (h,s,v) = hsv.split(',')
+            hsv_arr = [float(h), float(s), float(v)]
+            self.runner.show.set_param('change_primary_hsv', hsv_arr)
+        except ValueError:
+            print("Show prob does not accept this input", e)
+            raise cherrypy.HTTPRedirect('/')
+
+
+    @cherrypy.expose
+    def change_secondary_hsv(self, hsv='1,0.2,0.2'):
+        try:
+            (h,s,v) = hsv.split(',')
+            hsv_arr = [float(h), float(s), float(v)]
+            self.runner.show.set_param('change_secondary_hsv', hsv_arr)
+        except ValueError:
+                print("Show prob does not accept this input", hsv)
+        raise cherrypy.HTTPRedirect('/')
+
+    @cherrypy.expose
+    def flash_color(self, hue='purple'):
+        try:
+            self.runner.show.set_param('flash', hue)
+        except ValueError:
+            print("Show prob does not accept this input", hue)
+        raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
     def run_show(self, show_name=None):
@@ -65,3 +119,6 @@ class TriangleWeb(object):
         # XXX otherwise the runner.status() method hasn't had time to update
         time.sleep(0.2)
         raise cherrypy.HTTPRedirect('/')
+
+
+    

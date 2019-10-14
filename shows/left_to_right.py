@@ -1,19 +1,43 @@
-from color import HSV
+from color import HSV, RGB
 from .showbase import ShowBase
-from grid import Grid, Pyramid, left_to_right
+from grid import Grid, left_to_right, every
+
 import time
+from randomcolor import random_color
 
 
 class LeftToRight(ShowBase):
-    grid: Grid
-
-    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.2):
-        self.grid = pyramid.face
+  def __init__(self, grid: Grid, frame_delay: float = 1):
+        self.grid = grid
         self.frame_delay = frame_delay
+        self.color = random_color(hue=str('blue'))
+        
+
+
+    def set_param(self, name, val):
+        if name == 'flash':
+            try:
+                self.grid.set(every, RGB(255, 0, 0))
+                self.grid.go()
+            except Exception as e:
+                print("Bad Hue flash!", val, e)
+
+        if name == 'speed':
+            try:
+                self.frame_delay = float(val)
+            except Exception as e:
+                print("Bad Speed Value!", val)
+
+        if name == "change_primary_hsv":
+            try:
+#                from IPython import embed; embed() 
+                self.color = HSV(val[0],val[1],val[2])
+            except Exception as e:
+                print("Bad HSVColor Values!", val)
+
 
     def next_frame(self):
-        hsv = HSV(0.5, 0.2, .75)
-#        from IPython import embed; embed()
+        row_count = self.grid.row_count
         pix_arr = []
         a_ctr = 0
 
@@ -24,20 +48,22 @@ class LeftToRight(ShowBase):
                     if len(pix_arr) <= a_ctr+b_ctr:
                         pix_arr.append([])
                     pix_arr[a_ctr+b_ctr].append(pixel)
-                    pixel(hsv)
-                    self.grid.go()
+#                    pixel(self.color)
+ #                   self.grid.go()
                     b_ctr += 1
             a_ctr += 4
 
         while True:
+            self.grid.clear()
+
             for i in pix_arr:
                 for ii in i:
                     print(ii)
-                    ii(hsv)
+                    ii(self.color)
                     self.grid.go()
-                time.sleep(0.2)
+                time.sleep(self.frame_delay)
 
-                hsv.h += .1
-                if hsv.h >= 1.0:
-                    hsv.h = 0.0
-                yield self.frame_delay
+                self.color.h += .1
+                if self.color.h >= 1.0:
+                    self.color.h = 0.9
+            yield self.frame_delay

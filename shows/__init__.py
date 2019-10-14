@@ -8,9 +8,9 @@ from .marching_hexes import MarchingHexes
 from .random_cells import Random
 from .showbase import ShowBase, load_shows, random_shows
 #from .stargate import Stargate
-#from .rain import Rain
+from .rain import Rain
 from .circling import Circling
-#from .strobe import Strobe
+from .strobe import Strobe
 from .movingpyramids import MovingPyramids
 from .marching_hexes import MarchingHexes
 from .top_down import TopDown
@@ -22,3 +22,11 @@ from .sparkles import Sparkles
 from .gears import Gears
 #from .circling import Circling
 from .index_debug import IndexDebug
+from .universe_debug import UniverseDebug
+from .ripples import Ripples
+from .color_pulse import ColorPulse
+from .strobe2 import Strobe2
+from .simple_color import SimpleColor
+from .up_down import UpDown
+from .fuck_your_burn import FuckYourBurn
+

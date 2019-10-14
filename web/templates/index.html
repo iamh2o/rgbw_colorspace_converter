@@ -6,6 +6,22 @@
 </head>
 <body>
 
+<h3>FLASH COLOR</h3>
+<form action="flash_color" method="post">
+ <select name=hue id=hue>
+    <option  value=red >RED</option>
+    <option value=orange > Orange</option>
+    <option value=yellow >Yellow</option>
+    <option value=green >Green</option>
+    <option value=blue >Blue</option>
+    <option value=purple >  Purple     </option>
+    <option value=pink >Pink</option>
+    <option value=monochrome >Monochrome</option>
+  </select>
+  <input type=submit>
+</form>
+
+
 <h1>Show Control</h1>
 
 <p>Status: {{status}}</p>
@@ -24,6 +40,13 @@
 
 <br/>
 
+
+<h3>Change Show Frame Rate (seconds)</h3>
+<form action="change_frame_rate" method="post">
+  Seconds: <input id=frame_rate type=text name=frame_rate value=0.1>
+  <input type=submit>
+</form>
+
 <h3>Change Show Cycle Time (seconds)</h3>
 <form action="change_run_time" method="post">
   Seconds: <input id=run_time type=number name=run_time value=60>
@@ -32,10 +55,45 @@
 
 <h3>Change Show Overall Brightness</h3>
 <form action="change_brightness" method="post">
-  Seconds: <input id=brightness_scale type=string name=brightness_scale value=1.0>
+  Brightness 0.0 to 1.0: <input id=brightness_scale type=string name=brightness_scale value=0.1>
   <input type=submit>
 </form>
 
+<h3>Sparkles: Change Sparkle Number</h3>
+<form action="change_sparkle_number" method="post">
+  Seconds: <input id=s_num type=number name=s_num value=5>
+  <input type=submit>
+</form>
+
+<h3>Change Primary HSV</h3>
+<form action="change_primary_hsv" method="post">
+  Pri  HSV : <input id=hsv type=text name=hsv value="0.1,0.1,0.82">
+  <input type=submit>
+</form>
+
+<h3>Change Secondary HSV</h3>
+<form action="change_secondary_hsv" method="post">
+  Sec  HSV : <input id=hsv type=text name=hsv value="0.1,0.1,0.82">
+  <input type=submit>
+</form>
+
+
+
+<h3>Change Hue</h3>
+<form action="change_hue" method="post">
+  Hue Color: 
+  <select name=hue id=hue>
+    <option  value=red >RED</option>
+    <option value=orange > Orange</option>
+    <option value=yellow >Yellow</option>
+    <option value=green >Green</option>
+    <option value=blue >Blue</option>
+    <option value=purple >  Purple     </option>                                  
+    <option value=pink >Pink</option>
+    <option value=monochrome >Monochrome</option>
+  </select>
+  <input type=submit>
+</form>
 
 
 <h3>Reset To Test Pattern Show That Respects Timing // Interrupt Long Running Shows // Reset Setver</h3>
