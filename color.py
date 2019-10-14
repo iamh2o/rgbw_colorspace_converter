@@ -310,15 +310,15 @@ def HSI(h,s,i):
     assert is_hsi_hsl_tuple(t)
     return RGB( hsi2rgb(h,s,i) )
 
-def RGB(r,g,b, x=False, brightness_override=None):
+def RGB(r,g,b, x=False):
     "Create a new RGB color"
     t = (r,g,b)
     assert is_rgb_tuple(t)
-    return Color(rgb_to_hsv(t), x, brightness_override=brightness_override)
+    return Color(rgb_to_hsv(t), x)
 
-def HSV(h,s,v, x=False, brightness_override=None):
+def HSV(h,s,v, x=False):
     "Create a new HSV color"
-    return Color((h,s,v),x, brightness_override=brightness_override)
+    return Color((h,s,v),x)
 
 def HSL(h,s,l):
     "Create new HSL color"
@@ -336,22 +336,14 @@ def Hex(value):
     return RGB(*rgb_t)
 
 class Color:
-    def __init__(self, hsv_tuple, only_rgb=False, brightness_scale=0.050, brightness_override=None):
+    def __init__(self, hsv_tuple, only_rgb=False, brightness_scale=1.0):
         self._set_hsv(hsv_tuple)
         self.only_rgb = only_rgb
-        self.brightness_override = brightness_override
-        if self.brightness_override is None:
-            pass
-        else:
-            try:
-                self.brightness_override = float(constrain(self.brightness_override,0,1.0))
-            except Exception as e:
-                self.brightness_override = None
         try:
-            self.brightness_scale = float(constrain(brightness_scale, 0.0,0.25))
+            self.brightness_scale = float(constrain(brightness_scale, 0.0,1.0))
         except Exception as e:
-            print("NON-FLOAT sent to brightness_scale, setting to 1.0", brightness_scale)
-            self.brightness_scale = constrain(1.0, 0.0,0.1)
+            print("NON-FLOAT sent to brightness_scale, setting to 1.0")
+            self.brightness_scale = constrain(1.0, 0.0,1.0)
 
     def __repr__(self):
         return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
@@ -373,10 +365,7 @@ class Color:
     @property
     def rgb(self):
         "returns a rgb[0-255] tuple"
-        if self.brightness_override is not None:
-            new_t = (self.hsv_t[0], self.hsv_t[1], self.brightness_override )
-        else:
-            new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2]*self.brightness_scale)
+        new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2]*self.brightness_scale)
         return hsv_to_rgb(new_t)
 
     @property

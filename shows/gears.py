@@ -1,6 +1,6 @@
 from .showbase import ShowBase
 
-from color import RGB
+from color import HSV
 from grid.cell import Direction, Position, Coordinate
 
 from HelperFunctions import*
@@ -9,17 +9,17 @@ from triangle import*
 class Gear():
 	def __init__(self, grid, pos):
 		self.grid = grid
-		self.size = choice([1,2])
-		self.dir = 5
-		self.turn = self.size % 5
+		self.size = choice([1,2,3])
+		self.dir = 3
+		self.turn = self.size % 2
 		self.pos = pos
-		self.colorchurn = randint(0,6)
+		self.colorchurn = randint(25,100)
 
 	def draw_gear(self, color, clock):
 		color += (self.size * 100)
 		wc = wheel(color)
 		try:
-			self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]), RGB(wc[0],wc[1],wc[2]))  # Draw the center
+			self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]), HSV(wc[0],wc[1],wc[2]))  # Draw the center
 		except:
 			pass
 		# Draw the rest of the rings
@@ -28,7 +28,7 @@ class Gear():
 			for coord in get_ring(self.pos,r):
 				wh = wheel(col)
 				try:
-					self.grid.set(Coordinate(coord[0],coord[1]), RGB(wh[0],wh[1], wh[2]))
+					self.grid.set(Coordinate(coord[0],coord[1]), HSV(wh[0],wh[1], wh[2]))
 				except:
 					pass
 		# Draw the outside gear
@@ -40,7 +40,7 @@ class Gear():
 				wh = wheel(col)
 				for c in ring_cells[i]:
 					try:
-						self.grid.set(Coordinate(c[0],c[1]), RGB(wh[0],wh[1], wh[2]))
+						self.grid.set(Coordinate(c[0],c[1]), HSV(wh[0],wh[1], wh[2]))
 					except:
 						pass
 	
@@ -62,9 +62,10 @@ class Gears(ShowBase):
 
 		self.gears.extend([Gear(grid=self.grid, pos=coord) for coord in all_corners() + all_centers()])
 
-
+		self.grid.clear()
 
 		while (True):
+			self.grid.clear()
 
 
 			for g in self.gears:
@@ -76,4 +77,3 @@ class Gears(ShowBase):
 			self.color = randColorRange(self.color, 30)
 
 			yield self.frame_delay
-			

@@ -48,4 +48,3 @@ class LeftToRightAndBack(ShowBase):
                 if hsv.h >= 1.0:
                     hsv.h = 0.0
                 time.sleep(0.8)
-            yield 0.1
