@@ -4,8 +4,10 @@ from .showbase import ShowBase
 import time
 
 class UpDown(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 2.0):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 2.0):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
         self.up_color = RGB(0, 255, 255)
         self.down_color = RGB(255, 0, 200)

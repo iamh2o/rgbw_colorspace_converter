@@ -1,9 +1,8 @@
 from enum import IntEnum
-from functools import lru_cache
 from itertools import chain
-from typing import List, Mapping, Optional, NamedTuple
+from typing import List, Mapping, Optional, NamedTuple, Set
 
-from .geom import Geometry
+from .geom import Address, Coordinate, Geometry, Position, Universe
 
 
 class Orientation(IntEnum):
@@ -27,6 +26,14 @@ class Direction(IntEnum):
 
         return self is Direction.NATURAL or self == orientation
 
+    def invert(self) -> "Direction":
+        if self is Direction.LEFT_TO_RIGHT:
+            return Direction.RIGHT_TO_LEFT
+        elif self is Direction.RIGHT_TO_LEFT:
+            return Direction.LEFT_TO_RIGHT
+        else:
+            return Direction.NATURAL
+
 
 class Cell(NamedTuple):
     """
@@ -34,10 +41,11 @@ class Cell(NamedTuple):
     the panels.
     """
 
-    position: "Position"
+    coordinate: Coordinate
     orientation: Orientation
     addresses: List["Address"]
     geom: Geometry
+    real: bool
 
     def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> List["Address"]:
         return (self.addresses
@@ -45,8 +53,16 @@ class Cell(NamedTuple):
                 else reversed(self.addresses))
 
     @property
-    def coordinate(self) -> "Coordinate":
-        return Coordinate.from_pos(self.position, self.geom)
+    def x(self) -> int:
+        return self.coordinate.x
+
+    @property
+    def y(self) -> int:
+        return self.coordinate.y
+
+    @property
+    def position(self) -> Position:
+        return self.coordinate.pos(self.geom)
 
     @property
     def row(self) -> int:
@@ -58,7 +74,10 @@ class Cell(NamedTuple):
 
     @property
     def id(self) -> int:
+        # XXX: deprecated; only used for simulator
         return self.position.id
+
+    # TODO(lyra): use Coordinate below instead of Position
 
     @property
     def above(self) -> Optional["Position"]:
@@ -118,30 +137,6 @@ class Cell(NamedTuple):
         """Returns True if cell is the left corner of the greater triangle."""
         return self.is_bottom_edge and self.is_left_edge
 
-    def __hash__(self):
-        return hash((type(self), self.position))
-
-
-class Position(NamedTuple):
-    """
-    Position is (row, column) where the top row is 0, and every row begins with column 0.
-
-    Position(0, 0) is the apex of the triangle.
-    """
-    row: int
-    col: int
-
-    @classmethod
-    @lru_cache(maxsize=512)
-    def from_id(cls, id: int) -> "Position":
-        row_below = 1
-        while Geometry.triangular_number(row_below) <= id:
-            row_below += 1
-
-        row = row_below - 1
-        col = id - Geometry.triangular_number(row)
-        return cls(row, col)
-
     @property
     def id(self) -> int:
         return Geometry.triangular_number(self.row) + self.col
@@ -188,90 +183,8 @@ class Address(NamedTuple):
     offset: int
 
     @property
-    def next(self) -> "Address":
-        next_offset = self.offset + 4
-        if next_offset >= universe_size(self.universe):
-            return Address(self.universe + 1, 0)
+    def highest_universe(self) -> Universe:
+        return max(self.universes)
 
-        return Address(self.universe, next_offset)
-
-    def skip(self, n: int) -> "Address":
-        addr = self
-        for _ in range(n):
-            addr = addr.next
-
-        return addr
-
-    def range(self, len: int) -> List["Address"]:
-        addrs = [self]
-        for _ in range(len - 1):
-            addrs.append(addrs[-1].next)
-
-        return addrs
-
-
-def universe_count(row_count: int, start: Address = Address(1, 4)) -> int:
-    return row_count  # XXX(lyra): I don't think this is real
-
-
-def universe_size(universe_id: int) -> int:
-    """
-    Gives the number of connected channels in each DMX universe.
-
-    Every third universe is shorter. (Also, not all channels are
-    visible; some correspond to the strip segments between rows.)
-    """
-
-    return 512 if universe_id % 3 != 0 else (44 * 4)
-
-
-def generate(geom: Geometry, start: Address = Address(1, 4)) -> Mapping[Position, Cell]:
-    cells = {}
-    for row in range(geom.rows - 1, -1, -1):
-        row_mapping = mouth(geom, row, start)
-        cells.update(row_mapping)
-
-        end_address = max(chain.from_iterable(
-            cell.addresses for cell in row_mapping.values()))
-        start = end_address.next
-
-    return cells
-
-
-def mouth(geom: Geometry, row: int, start: Address) -> Mapping[Position, Cell]:
-    up = up_teeth(geom, row, start, row + 1)
-    last_up_address = up[max(up)].addresses[-1]
-    first_after_gap = last_up_address.range(11)[-1]
-    down = down_teeth(geom, row, first_after_gap, row)
-
-    return {**up, **down}
-
-
-def up_teeth(geom: Geometry, row: int, start: Address, length: int, pixels_per_cell: int = 8) -> Mapping[Position, Cell]:
-    cells = {}
-    addr = start
-
-    for i in range(length):
-        pos = Position(row, i * 2)
-        addrs = addr.range(pixels_per_cell)
-        cells[pos] = Cell(pos, Orientation.POINT_UP, addrs, geom)
-
-        addr = addrs[-1].next
-
-    return cells
-
-
-def down_teeth(geom: Geometry, row: int, start: Address, length: int, pixels_per_cell: int = 8) -> Mapping[Position, Cell]:
-    cells = {}
-    addr = start
-
-    col = length * 2 - 1
-    for _ in range(length):
-        pos = Position(row, col)
-        addrs = addr.range(pixels_per_cell)
-        cells[pos] = Cell(pos, Orientation.POINT_DOWN, addrs, geom)
-
-        col -= 2
-        addr = addrs[-1].next
-
-    return cells
+    def __hash__(self):
+        return hash((type(self), self.position))

@@ -1,20 +1,23 @@
+from random import shuffle
+
 from color import RGB
-from grid import Grid
+from grid import Grid, Pyramid
 from .showbase import ShowBase
 
 
 class OneByOne(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 0.9):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.9):
+        self.grid = pyramid.face
         self.frame_delay = frame_delay
 
     def next_frame(self):
-        ncells = len(self.grid)
-
         while True:
-            for cell in range(ncells):
-                self.grid.clear()
+            cells = self.grid.cells
+            shuffle(cells)
 
-                for pixel in self.grid.pixels(cell):
-                    pixel.set(RGB(255, 255, 25))
-                    yield self.frame_delay
+            for cell in cells:
+                self.grid.clear()
+                self.grid.set(cell, RGB(255, 255, 25))
+                yield self.frame_delay

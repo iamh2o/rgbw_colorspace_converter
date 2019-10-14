@@ -10,10 +10,13 @@ import queue
 import threading
 
 import cherrypy
+
 from cherrypy.process.plugins import SimplePlugin
-    
-from grid import Geometry, Grid
-from model import sACN, SimulatorModel
+
+from grid import Pyramid
+from model.sacn_model import sACN
+from model.simulator import SimulatorModel
+
 import netifaces
 import osc_serve
 import shows
@@ -43,14 +46,15 @@ def speed_interpolation(val):
         return hi_interp(val)
 
 
-low_interp = util.util.make_interpolater(0.0, 0.5, 2.0, 1.0)
-hi_interp = util.util.make_interpolater(0.5, 1.0, 1.0, 0.5)
+low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
+hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
 
 
 class ShowRunner(threading.Thread):
-    def __init__(self, grid, queue, max_showtime=240, fail_hard=True, brightness_scale=1.0):
+
+    def __init__(self, pyramid, queue, max_showtime=240, fail_hard=True,brightness_scale=1.0):
         super(ShowRunner, self).__init__(name="ShowRunner")
-        self.grid = grid
+        self.pyramid = pyramid
         self.queue = queue
 
         self.fail_hard = fail_hard
@@ -78,6 +82,7 @@ class ShowRunner(threading.Thread):
 
     def restart_program(self,reset_show=None, brightness_scale=1.0):
         """Restarts the current program, with orig arguments passed back.  reset_show=True will re-start running from a known good show.BUGGY as it assumed the show is the last argument always. """
+
         if reset_show is None:
             reset_show = self.show.name
 
@@ -87,7 +92,9 @@ class ShowRunner(threading.Thread):
                 os.close(handler.fd)
         except Exception as e:
             logging.error(e)
-            
+
+        time.sleep(1)
+
         python = sys.executable
 
         cmd = list(sys.argv)    
@@ -165,8 +172,8 @@ class ShowRunner(threading.Thread):
             print("ignoring unknown msg:", str(msg))
 
     def clear(self):
-        """Clears contained grid."""
-        self.grid.clear()
+        """Clears all panels."""
+        self.pyramid.clear()
 
     def next_show(self, name=None):
         show = None
@@ -183,7 +190,7 @@ class ShowRunner(threading.Thread):
         self.clear()
         self.prev_show = self.show
 
-        self.show = show(self.grid)
+        self.show = show(self.pyramid)
         print(f'next show: {name}')
         self.framegen = self.show.next_frame()
         self.show_params = hasattr(self.show, 'set_param')
@@ -208,7 +215,7 @@ class ShowRunner(threading.Thread):
                 self.check_queue()
 
                 d = self.get_next_frame()
-                self.grid.go()
+                self.pyramid.go()
                 if d:
                     real_d = d * self.speed_x
                     time.sleep(real_d)
@@ -239,10 +246,12 @@ def osc_listener(q, port=5700):
 
  
 class TriangleServer(object):
-    def __init__(self, grid, args):
+    def __init__(self, pyramid, args):
         self.args = args
-        self.grid = grid
+
         self.brightness_scale = args.brightness_scale
+        self.pyramid = pyramid
+
         self.queue = queue.LifoQueue()
 
         self.runner = None
@@ -266,7 +275,8 @@ class TriangleServer(object):
 
         # Show runner
         self.runner = ShowRunner(
-            self.grid, self.queue, args.max_time, fail_hard=args.fail_hard, brightness_scale=self.brightness_scale)
+
+            self.pyramid, self.queue, args.max_time, fail_hard=args.fail_hard, brightness_scale=self.brightness_scale)
         if args.shows:
             print("setting show:", args.shows[0])
             self.runner.next_show(args.shows[0])
@@ -343,6 +353,20 @@ class TriangleServer(object):
                             '/',
                             config=config)
 
+
+
+def dump_panels(pyramid: Pyramid):
+    for i, face in enumerate(pyramid.faces):
+        print(f'Face {i + 1}:')
+
+        for j, panel in enumerate(sorted(face.panels, key=lambda panel: panel.start)):
+            print(f'  Panel {j + 1}:')
+            print(f'    origin: {panel.geom.origin}')
+            print(f'    start:  {panel.start}')
+
+        print()
+
+
 if __name__ == '__main__':
     console = logging.StreamHandler()
     console.setFormatter(logging.Formatter('%(levelname)s - %(message)s'))
@@ -350,8 +374,6 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Triangle Light Control')
 
-    parser.add_argument('-r', '--rows', type=int,
-                        default=11, help='Rows per panel')
     parser.add_argument('--max-time', type=float, default=float(60),
                         help='Maximum number of seconds a show will run (default 60)')
 
@@ -360,6 +382,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--list', action='store_true',
                         help='List available shows')
+    parser.add_argument('--panels', action='store_true',
+                        help='Show face and panel attributes')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
                         help='name of show (or shows) to run')
     parser.add_argument('--fail-hard', type=bool, default=True,
@@ -400,9 +424,18 @@ if __name__ == '__main__':
                     'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
-        model = sACN(bind, args.rows, args.brightness_scale)
-        
-    app = TriangleServer(Grid(model, Geometry(args.rows)), args)
+
+        model = sACN(bind, args.brightness_scale)
+
+    pyramid = Pyramid.build_single(model)
+    if args.panels:
+        dump_panels(pyramid)
+        sys.exit(0)
+
+    
+    model.activate(pyramid.cells)
+
+    app = TriangleServer(pyramid, args)
 
     try:
         app.start()  # start related service threads

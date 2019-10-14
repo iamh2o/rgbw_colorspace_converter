@@ -9,6 +9,7 @@ from grid import every
 class Strobe(ShowBase):
     def __init__(self, grid, frame_delay=0.2):
         self.grid = grid
+
         self.frame_delay = frame_delay
         self.n_cells = len(self.grid._cells)
         self.pri_color = RGB(0, 255, 255)
@@ -64,4 +65,6 @@ class Strobe(ShowBase):
 
             
 
+
+            self.grid.set(every, RGB(100, 100, 100))
             yield self.frame_delay

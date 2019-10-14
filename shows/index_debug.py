@@ -1,12 +1,13 @@
 from color import HSV as hsv
 from color import RGB
 from grid import Grid, every
+
 from .showbase import ShowBase
 
 
 class IndexDebug(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 0.05):
-        self.grid = grid
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
+        self.pyramid = pyramid.face
         self.frame_delay = frame_delay
         self.n_cells = len(self.grid)
         self.hsv = hsv(1,1,1)
@@ -41,9 +42,19 @@ class IndexDebug(ShowBase):
             except Exception as e:
                 print("Bad HSVColor Values!", val)
 
-
-
     def next_frame(self):
+        self.pyramid.clear()
+        yield self.frame_delay
+
+        def coordinates(grid: Grid) -> List[Coordinate]:
+            return sorted([cell.coordinate for cell in grid.cells],
+                          key=lambda c: (c.y, c.x))
+
+        faces = [(face, cycle(coordinates(face)))
+                 for face in self.pyramid.faces]
+        highest_universe = max(cell.highest_universe.id
+                               for cell in self.pyramid.cells)
+
         while True:
             for cell in sorted(self.grid.cells):
                 universe = max(a.universe for a in cell.addresses)
@@ -62,3 +73,4 @@ class IndexDebug(ShowBase):
                 self.grid.set(cell, self.hsv )
                 self.grid.go()
                 yield self.frame_delay
+

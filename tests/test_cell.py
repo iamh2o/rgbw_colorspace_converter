@@ -1,9 +1,14 @@
+from typing import Iterable
+
 from color import Color
-from grid import Grid, Position, Geometry, Cell, Address, Coordinate
+from grid import Face, Panel, Position, Geometry, Cell, Address, Coordinate, Universe
 from model import ModelBase
 
 
 class FakeModel(ModelBase):
+    def activate(self, cells: Iterable[Cell]):
+        pass
+
     def set(self, cell: Cell, addr: Address, color: Color):
         pass
 
@@ -17,7 +22,7 @@ def test_position_symmetry():
 
 
 def test_coordinate_symmetry():
-    geom = Geometry(rows=3)
+    geom = Geometry(origin=Coordinate(0, 0), rows=3)
     values = (
         ((0, 0), (2, 2)),
         ((1, 0), (1, 1)),
@@ -38,7 +43,11 @@ def test_coordinate_symmetry():
 
 
 def test_cell_attributes():
-    triangle = Grid(model=FakeModel(), geom=Geometry(rows=3))
+    geom = Geometry(origin=Coordinate(0, 0), rows=3)
+    triangle = Face(FakeModel(),
+                    geom,
+                    [Panel(geom, Address(Universe(1, 1), 4))])
+
     assert len(triangle.cells) == 9
 
     top = triangle[Position(0, 0)]

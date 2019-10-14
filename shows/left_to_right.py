@@ -1,12 +1,13 @@
 from color import HSV, RGB
 from .showbase import ShowBase
 from grid import Grid, left_to_right, every
+
 import time
 from randomcolor import random_color
 
 
 class LeftToRight(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 1):
+  def __init__(self, grid: Grid, frame_delay: float = 1):
         self.grid = grid
         self.frame_delay = frame_delay
         self.color = random_color(hue=str('blue'))
@@ -37,15 +38,13 @@ class LeftToRight(ShowBase):
 
     def next_frame(self):
         row_count = self.grid.row_count
-
         pix_arr = []
         a_ctr = 0
-        for points in left_to_right(row_count):
 
+        for points in left_to_right(self.grid.geom):
             for pos in points:
-                cell = self.grid[pos]
                 b_ctr = 0
-                for pixel in list(self.grid.pixels(cell.id)):
+                for pixel in list(self.grid.pixels(pos)):
                     if len(pix_arr) <= a_ctr+b_ctr:
                         pix_arr.append([])
                     pix_arr[a_ctr+b_ctr].append(pixel)
