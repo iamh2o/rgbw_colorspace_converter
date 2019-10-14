@@ -268,9 +268,7 @@ class TriangleServer(object):
         # OSC listener
         try:
             osc_listener(self.queue)
-        except Exception as e:
-            print(e, "XXXXXX")
-            raise
+        except Exception:
             logger.warning("Can't create OSC listener", exc_info=True)
 
         # Show runner

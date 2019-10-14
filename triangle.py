@@ -3,9 +3,6 @@ from HelperFunctions import distance
 from collections import defaultdict
 from random import choice
 
-from grid.cell import Direction, Position, Coordinate
-
-
 """
 Model to communicate with a Triangle simulator over a TCP socket
 
@@ -412,7 +409,7 @@ def tri_in_direction(coord, direction, distance=1):
     """
     for i in range(distance):
         coord = tri_nextdoor(coord, direction)
-    return Coordinate(*coord)
+    return coord
 
 
 def tri_nextdoor(coord, direction):
@@ -478,7 +475,7 @@ def get_ring(center_coord, size):
     results = []
     for i in range(6):
         for j in range(size):
-            results.append(Coordinate(*t))
+            results.append(t)
             t = tri_nextdoor(t,i)
     return results
 
