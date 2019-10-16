@@ -2,6 +2,7 @@
 from .showbase import ShowBase, load_shows, random_shows
 
 from .circling import Circling
+from .color_pulse import ColorPulse
 from .cycle_hsv import CycleHSV
 from .fuck_your_burn import FuckYourBurn
 from .index_debug import IndexDebug
