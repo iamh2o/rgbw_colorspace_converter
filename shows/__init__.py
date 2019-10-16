@@ -11,7 +11,7 @@ from .showbase import ShowBase, load_shows, random_shows
 #from .rain import Rain
 from .circling import Circling
 #from .strobe import Strobe
-from .movingpyramids import MovingPyramids
+#from .movingpyramids import MovingPyramids
 from .marching_hexes import MarchingHexes
 from .top_down import TopDown
 from .tendrils import Tendrils

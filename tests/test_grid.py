@@ -20,6 +20,8 @@ class FakeModel(ModelBase):
     def go(self):
         pass
 
+    def stop(self):
+        pass
 
 def single_panel_grid(rows):
     geom = Geometry(origin=Coordinate(0, 0), rows=rows)

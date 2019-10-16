@@ -16,7 +16,6 @@ ola = "^0.10.7"
 jinja2 = "^2.10"
 spectra = "^0.0.11"
 netifaces = "^0.10.9"
-psutil = "^5.6.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"

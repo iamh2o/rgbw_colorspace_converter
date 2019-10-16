@@ -13,7 +13,7 @@
 <h3>Change To a New Show Now</h3>
 <ul>
 {% for show in shows %}
-  <li><form action="restart_server" method="post">
+  <li><form action="run_show" method="post">
     <button name="show_name" value="{{show}}">{{show}}</button>
   </form></li>
 {% endfor %}

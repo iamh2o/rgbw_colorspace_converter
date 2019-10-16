@@ -1,8 +1,7 @@
 from typing import Iterable, Iterator, List, Optional, Type
 
 from color import Color, RGB
-from model.base import ModelBase
-
+from model.base import ModelBase, Model
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Universe
 from .grid import Grid, Pixel, Selector
@@ -63,15 +62,38 @@ class Pyramid:
         self.face = FaceMirror(self.faces[:2])
 
     @property
+    def _model(self) -> Type[Model]:
+        # there should only really be one model
+        return self.faces[0].model
+
+    @property
     def cells(self) -> List[Cell]:
         cells = []
         for face in self.faces:
             cells.extend(face.cells)
         return cells
 
+    @property
+    def brightness(self) -> float:
+        """
+        Getter for current brightness scale [0,1].
+        """
+        return self._model.brightness
+
+    @brightness.setter
+    def brightness(self, value: float):
+        """
+        Setter for current brightness scale [0,1].
+        """
+        if value < 0.0:
+            self._model.brightness = 0.0
+        elif value > 1.0:
+            self._model.brightness = 1.0
+        else:
+            self._model.brightness = value
+
     def go(self):
-        # there should only really be one model
-        self.faces[0].model.go()
+        self._model.go()
 
     def clear(self, color: Color = RGB(0, 0, 0)):
         for face in self.faces:

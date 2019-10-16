@@ -1,12 +1,13 @@
-import cherrypy
+from queue import Queue
 import time
-
+from typing import List
+import cherrypy
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 class TriangleWeb(object):
     """Web API for running triangle shows."""
-    def __init__(self, queue, runner, show_names):
+    def __init__(self, queue: Queue, runner: "ShowRunner", show_names: List[str]):
         self.queue = queue
         self.runner = runner
         self.shows = show_names
@@ -31,12 +32,6 @@ class TriangleWeb(object):
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
-    def restart_server(self, show_name=None):
-        self.runner.restart_program(reset_show=show_name)
-        time.sleep(7)
-        raise cherrypy.HTTPRedirect('/')
-
-    @cherrypy.expose
     def change_run_time(self, run_time=None):
         try:
             run_time = int(run_time)
@@ -49,10 +44,8 @@ class TriangleWeb(object):
 
     @cherrypy.expose
     def change_brightness(self, brightness_scale=1.0):
-        self.runner.restart_program(brightness_scale=brightness_scale)
-        time.sleep(10)
+        self.queue.put(f'brightness:{brightness_scale}')
         raise cherrypy.HTTPRedirect('/')
-
 
     @cherrypy.expose
     def run_show(self, show_name=None):

@@ -5,7 +5,7 @@ import logging
 import queue
 import socket
 
-from typing import Iterable, Union
+from typing import Iterable
 from color import Color
 from grid import Address, Cell
 from .base import ModelBase
@@ -34,7 +34,7 @@ class SimulatorModel(ModelBase):
         self.message_queue.put(msg)
 
     def go(self):
-        while not self.message_queue.empty():
+        while not self.message_queue.empty() and self.sock is not None:
             msg = self.message_queue.get()
             logger.debug(msg)
             self.sock.send(msg.encode())
@@ -42,3 +42,7 @@ class SimulatorModel(ModelBase):
     def activate(self, cells: Iterable[Cell]):
         """No activation needed for simulator."""
         pass
+
+    def stop(self):
+        self.sock.close()
+        self.sock = None

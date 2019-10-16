@@ -335,15 +335,11 @@ def Hex(value):
     rgb_t = (int(value[i:i+int(lv/3)], 16) for i in range(0, lv, int(lv/3)))
     return RGB(*rgb_t)
 
+
 class Color:
-    def __init__(self, hsv_tuple, only_rgb=False, brightness_scale=1.0):
+    def __init__(self, hsv_tuple, only_rgb=False):
         self._set_hsv(hsv_tuple)
         self.only_rgb = only_rgb
-        try:
-            self.brightness_scale = float(constrain(brightness_scale, 0.0,1.0))
-        except Exception as e:
-            print("NON-FLOAT sent to brightness_scale, setting to 1.0")
-            self.brightness_scale = constrain(1.0, 0.0,1.0)
 
     def __repr__(self):
         return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
@@ -365,8 +361,8 @@ class Color:
     @property
     def rgb(self):
         "returns a rgb[0-255] tuple"
-        new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2]*self.brightness_scale)
-        return hsv_to_rgb(new_t)
+        hsv = self.hsv_t
+        return hsv_to_rgb((hsv[0], hsv[1], hsv[2]))
 
     @property
     def hsv(self):
@@ -491,6 +487,15 @@ class Color:
             return 0
         else:
             return self.rgbw[3]
+
+    @staticmethod
+    def scale(color: "Color", factor: float) -> "Color":
+        """
+        Scales the brightness of a Color by a factor in [0,1].
+        """
+        factor = constrain(factor, 0.0, 1.0)
+        (h, s, v) = color.hsv
+        return Color((h, s, v*factor))
 
 if __name__=='__main__':
     import doctest

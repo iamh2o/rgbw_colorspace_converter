@@ -1,11 +1,10 @@
 from itertools import chain
 from typing import Iterable, Mapping, List, NamedTuple, Optional, Type
 
-from model.base import ModelBase
-
+from model import Model
 from .cell import Cell, Orientation
-from .geom import Address, Coordinate, Geometry, Position, Universe
-from .grid import Grid, Location, Pixel, Query, Selector
+from .geom import Address, Coordinate, Geometry, Universe
+from .grid import Grid
 
 PIXELS_PER_CELL: int = 8
 PIXELS_IN_ROW_TURNAROUND: int = 11
@@ -100,7 +99,7 @@ class Face(Grid):
 
     @classmethod
     def build(cls,
-              model: Type[ModelBase],
+              model: Type[Model],
               spec: List[List[int]],
               start: Address = Address(Universe(1, 1), 4),
               rows_per_panel: int = 11) -> "Face":
@@ -156,7 +155,7 @@ class Face(Grid):
 
         return cls(model, overall_geom, real_panels)
 
-    def __init__(self, model: Type[ModelBase], geom: Geometry, panels: Iterable[Panel]):
+    def __init__(self, model: Type[Model], geom: Geometry, panels: Iterable[Panel]):
         self.model = model
         self.geom = geom
         self.panels = list(panels)

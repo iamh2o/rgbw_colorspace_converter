@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from color import Color
-from grid.cell import Address, Cell
-from typing import Iterable, List, Mapping
+from typing import Iterable, List, Mapping, TypeVar
+from grid.cell import Cell
+from grid.geom import Address
 
 
 class ModelBase(ABC):
@@ -12,7 +13,12 @@ class ModelBase(ABC):
         """
         Called after Pyramid initialization.
         """
-        pass
+        raise NotImplementedError
+
+    @abstractmethod
+    def stop(self):
+        """Stop model and cleanup resources."""
+        raise NotImplementedError
 
     @abstractmethod
     def set(self, cell: Cell, addr: Address, color: Color):
@@ -29,16 +35,8 @@ class ModelBase(ABC):
         raise NotImplementedError
 
 
-class NullModel(ModelBase):
-    """
-    Discards all set's and go's.
-    """
-
-    def set(self, cell: Cell, addr: Address, color: Color):
-        pass
-
-    def go(self):
-        pass
+# Useful for type hinting any subclass of ModelBase (i.e. Type[Model])
+Model = TypeVar('Model', bound=ModelBase)
 
 
 def allocate_universes(cells: Iterable[Cell]) -> Mapping[int, List[int]]:

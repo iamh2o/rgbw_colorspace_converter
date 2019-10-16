@@ -1,9 +1,12 @@
 from collections import defaultdict
 import logging
+from queue import Queue
+from threading import Event
+import time
+
 from osc4py3 import as_allthreads as osc
 from osc4py3 import oscbuildparse
 from osc4py3 import oscmethod
-import time
 
 THROTTLE_TIME = 0.1  # seconds
 
@@ -37,7 +40,8 @@ def server_test():
         osc.osc_terminate()
 
 
-def create_server(listen_address, queue):
+def create_server(shutdown: Event, queue: Queue, host: str = '0.0.0.0', port: int = 5700):
+    """Creates OSC listener threads and blocks until shutdown."""
     last_msg = defaultdict(float)
 
     def handler(addr, tags, data, source):
@@ -49,9 +53,15 @@ def create_server(listen_address, queue):
             last_msg[addr] = now
             queue.put((addr, data))
 
+    logger.info(f'Starting OSC Listener on {host}:{port}')
     osc.osc_startup()
-    osc.osc_udp_server(*listen_address, "main")
+    osc.osc_udp_server(host, port, "main")
     osc.osc_method("/*", handler, argscheme=oscmethod.OSCARG_ADDRESS + oscmethod.OSCARG_DATAUNPACK)
+    # osc.osc_process() isn't necessary when using as_allthreads
+
+    # Blocks thread until shutdown event is triggered, then cleans up OSC threads
+    shutdown.wait()
+    osc.osc_terminate()
 
 
 if __name__ == '__main__':
