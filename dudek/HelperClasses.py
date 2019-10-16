@@ -1,14 +1,17 @@
-from HelperFunctions import*
+from typing import List
+
 from color import HSV
-from grid.cell import Direction, Position, Coordinate
+from dudek.HelperFunctions import gradient_wheel
+from grid.cell import Coordinate
+
 
 #
 # Fader class and its collection: the Faders class
 #
-class Faders(object):
+class Faders:
     def __init__(self, grid):
-        self.grid= grid
-        self.fader_array = []
+        self.grid = grid
+        self.fader_array: List[Fader] = []
         self.max_faders = 1000
 
     def add_fader(self, color, pos, change=0.1, intense=1.0, growing=False):
@@ -41,7 +44,7 @@ class Faders(object):
             self.fader_array.remove(f)
 
 
-class Fader(object):
+class Fader:
     def __init__(self, grid, color, pos, change=0.25, intense=1.0, growing=False):
         self.grid = grid
         self.pos = pos
@@ -51,10 +54,8 @@ class Fader(object):
         self.decrease = change
 
     def draw_fader(self):
-#        from IPython import embed; embed()
-
         gw = gradient_wheel(self.color, self.intense)
-        self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]), HSV(gw[0],gw[1],gw[2]))
+        self.grid.set(Coordinate(*self.pos), HSV(*gw))
 
     def fade_fader(self):
         if self.growing:
@@ -70,17 +71,17 @@ class Fader(object):
         return self.growing or self.intense > 0.01
 
     def black_cell(self):
-        self.grid.set(Coordinate(x=self.pos[0],y=self.pos[1]),HSV(0,0,0))
+        self.grid.set(Coordinate(*self.pos), HSV(0, 0, 0))
 
 
 #
 # Brick class and its collection: the Bricks class
 #
-class Bricks(object):
-    def __init__(self, trianglemodel, bounce=False):
-        self.triangle = trianglemodel
+class Bricks:
+    def __init__(self, triangle, bounce=False):
+        self.triangle = triangle
         self.bounce = bounce
-        self.brick_array = []
+        self.brick_array: List[Brick] = []
 
     def add_brick(self, color, life, pos, length, pitch, length_x, length_y, dx, dy, accel_x=0, accel_y=0, use_faders=False, change=0.25):
         new_brick = Brick(self.triangle, color, life, pos, length, pitch, length_x, length_y, dx, dy, accel_x, accel_y, use_faders, change)
@@ -107,11 +108,11 @@ class Bricks(object):
 
     def set_all_dx(self, dx):
         for b in self.brick_array:
-            b.set_dx(dx)
+            b.dx = dx
 
     def set_all_dy(self, dy):
         for b in self.brick_array:
-            b.set_dy(dy)
+            b.dy = dy
 
     def set_all_accel_x(self, accel_x):
         for b in self.brick_array:
@@ -128,10 +129,10 @@ class Bricks(object):
         return self.brick_array
 
 
-class Brick(object):
-    def __init__(self, trianglemodel, color, life, pos, length, pitch, length_x, length_y, dx, dy, accel_x=0, accel_y=0,
+class Brick:
+    def __init__(self, triangle, color, life, pos, length, pitch, length_x, length_y, dx, dy, accel_x=0, accel_y=0,
                  use_faders=False, change=0.25):
-        self.triangle = trianglemodel
+        self.triangle = triangle
         self.color = color
         self.life = life
         self.pos = pos
@@ -144,7 +145,7 @@ class Brick(object):
         self.accel_x = accel_x
         self.accel_y = accel_y
         self.use_faders = use_faders
-        self.faders = Faders(trianglemodel) if self.use_faders else None
+        self.faders = Faders(triangle) if self.use_faders else None
         self.change = change
 
     def draw_brick(self):
@@ -180,31 +181,29 @@ class Brick(object):
     def is_alive(self):
         return self.life > 0
 
-    def get_coord(self):
+    @property
+    def coord(self):
         return self.pos
 
-    def get_x(self):
-        (x,y) = self.pos
+    @property
+    def x(self):
+        (x, _) = self.pos
         return x
 
-    def get_y(self):
-        (x,y) = self.pos
+    @x.setter
+    def x(self, x):
+        (_, y) = self.pos
+        self.pos = (x, y)
+
+    @property
+    def y(self):
+        (_, y) = self.pos
         return y
 
-    def get_dx(self):
-        return self.dx
-
-    def get_dy(self):
-        return self.dy
-
-    def get_life(self):
-        return self.life
-
-    def set_dx(self, dx):
-        self.dx = dx
-
-    def set_dy(self, dy):
-        self.dy = dy
+    @y.setter
+    def y(self, y):
+        (x, _) = self.pos
+        self.pos = (x, y)
 
     def set_accel_x(self, accel_x):
         self.accel_x = accel_x
@@ -217,17 +216,6 @@ class Brick(object):
 
     def set_length_y(self, length_y):
         self.length_y = length_y
-
-    def set_x(self, x):
-        (old_x, y) = self.pos
-        self.pos = (x, y)
-
-    def set_y(self, y):
-        (x, old_y) = self.pos
-        self.pos = (x, y)
-
-    def set_life(self, life):
-        self.life = life
 
     def kill_faders(self):
         if self.faders:

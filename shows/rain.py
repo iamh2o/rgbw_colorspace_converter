@@ -1,83 +1,86 @@
-from HelperClasses import*
-from triangle import*
-from .showbase import ShowBase
+from random import randint, choice
+from typing import List
+
 from color import HSV
-from grid.cell import Direction, Position, Coordinate
+from dudek.HelperFunctions import randColorRange, oneIn, upORdown, gradient_wheel
+from dudek.triangle import tri_nextdoor, min_max_row, min_max_column, TRI_GEN
+from grid.cell import Coordinate
+from .showbase import ShowBase
 
 
+class RainDrop:
+    def __init__(self, trimodel, coord):
+        self.tri = trimodel
+        self.coord = coord
+        self.color = randColorRange(1000, 100)  # First number = hue blue
 
-class RainDrop(object):
-	def __init__(self, trimodel, coord):
-		self.tri = trimodel
-		self.coord = coord
-		self.color = randColorRange(1000, 100)  # First number = hue blue
+#       from IPython import embed; embed()
 
-#		from IPython import embed; embed()
+    def draw(self):
+        if self.tri.cell_exists(self.coord):
+            color = HSV(.8,  1.0, 1.0)
+            self.tri.set(Coordinate(self.coord[0], self.coord[1]), color)
 
-	def draw(self):
-		if self.tri.cell_exists(self.coord):
-			color = HSV(.8,1.0,1.0)
-			self.tri.set(Coordinate(self.coord[0],self.coord[1]),color)
+    def move(self, dir):
+        for i in range(2):  # Prevents back+forth flicker of drops
+            self.coord = tri_nextdoor(self.coord, dir)
 
-	def move(self, dir):
-		for i in range(2):  # Prevents back+forth flicker of drops
-			self.coord = tri_nextdoor(self.coord, dir)
-
-	def hit_ground(self, ground_level):
-		x,y = self.coord
-		return y < ground_level
+    def hit_ground(self, ground_level):
+        x, y = self.coord
+        return y < ground_level
 
 
 class Rain(ShowBase):
-	def __init__(self, trimodel,frame_delay=1.0):
-		self.tri = trimodel
-		self.speed = frame_delay
-		self.raindrops = []  # list that holds Raindrop objects
-		self.freq = randint(3,10)
-		self.rain_dir = self.get_random_rain_dir()
-		self.ground_level = self.get_ground_level()
-		self.possible_starts = self.get_possible_starts()
+    def __init__(self, trimodel, frame_delay=1.0):
+        self.tri = trimodel
+        self.speed = frame_delay
+        self.raindrops: List[RainDrop] = []
+        self.freq = randint(3,10)
+        self.rain_dir = self.get_random_rain_dir()
+        self.ground_level = self.get_ground_level()
+        self.possible_starts = self.get_possible_starts()
 
-	def next_frame(self):
+    def next_frame(self):
+        while True:
+            self.tri.clear()
 
-		while (True):
+            for i in range(self.freq):  # just a repeat loop to generate a lot of raindrop
+                raindrop = RainDrop(self.tri, choice(self.possible_starts))
+                self.raindrops.append(raindrop)
 
-			self.tri.clear()
+            for r in self.raindrops:
+                r.draw()
+                r.move(self.rain_dir)
+                if r.hit_ground(self.ground_level):
+                    self.raindrops.remove(r)
 
-			for i in range(self.freq):  # just a repeat loop to generate a lot of raindrop
-				raindrop = RainDrop(self.tri, choice(self.possible_starts))
-				self.raindrops.append(raindrop)
+            if oneIn(10):
+                self.rain_dir = self.get_random_rain_dir()
 
-			for r in self.raindrops:
-				r.draw()
-				r.move(self.rain_dir)
-				if r.hit_ground(self.ground_level):
-					self.raindrops.remove(r)
+            if oneIn(10):
+                self.freq = upORdown(self.freq, 1, 3, 10)
 
-			if oneIn(10):
-				self.rain_dir = self.get_random_rain_dir()
+            if oneIn(20):
+                self.lightning()
 
-			if oneIn(10):
-				self.freq = upORdown(self.freq, 1, 3, 10)
+            yield self.speed
 
-			if oneIn(20):
-				self.lightning()
+    def lightning(self):
+        self.tri.set_all_cells(color=gradient_wheel(300))  # yellow
 
-			yield self.speed
+    @staticmethod
+    def get_random_rain_dir():
+        return choice([4, 5])
 
-	def lightning(self):
-		self.tri.set_all_cells(color=wheel(300))  # yellow
+    @staticmethod
+    def get_ground_level():
+        min_y, max_y = min_max_row()
+        return min_y
 
-	def get_random_rain_dir(self):
-		return choice([4,5])
-
-	def get_ground_level(self):
-		min_y, max_y = min_max_row()
-		return min_y
-
-	def get_possible_starts(self):
-		min_x, max_x = min_max_column()
-		min_y, max_y = min_max_row()
-		possible_starts = [(x, max_y) for x in range(min_x - TRI_GEN, max_x + TRI_GEN)]
-		return possible_starts
+    @staticmethod
+    def get_possible_starts():
+        min_x, max_x = min_max_column()
+        min_y, max_y = min_max_row()
+        possible_starts = [(x, max_y) for x in range(min_x - TRI_GEN, max_x + TRI_GEN)]
+        return possible_starts
 
