@@ -1,4 +1,4 @@
-from math import sin
+from math import sin, tau
 
 from dudek.HelperFunctions import randColor, gradient_wheel, maxColor
 from dudek.triangle import min_max_column, min_max_row
@@ -19,7 +19,7 @@ class Waves(ShowBase):
 
             for x in range(self.min_x, self.max_x):
                 for y in range(self.min_y, self.max_y + 1):
-                    att = (sin(2 * 3.1415 * (x + self.min_x + self.time) * (y + self.min_y + self.time) / (self.max_y * self.max_x)) + 1) * 0.5
+                    att = (sin(tau * (x + self.min_x + self.time) * (y + self.min_y + self.time) / (self.max_y * self.max_x)) + 1) * 0.5
                     self.tri.set_cell((x, y), gradient_wheel(self.color + (x * 10), att))
 
             self.time += 1

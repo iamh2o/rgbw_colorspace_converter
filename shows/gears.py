@@ -4,7 +4,7 @@ from typing import List
 from color import HSV
 from dudek.HelperFunctions import gradient_wheel, maxColor, turn_right, turn_left, randColor, randColorRange
 from dudek.triangle import get_ring, tri_in_direction, all_corners, all_centers
-from grid.cell import Coordinate
+from grid import Coordinate
 from .showbase import ShowBase
 
 
@@ -24,6 +24,7 @@ class Gear:
             self.grid.set(Coordinate(*self.pos), HSV(*wc))  # Draw the center
         except Exception:
             pass
+
         # Draw the rest of the rings
         for r in range(self.size):
             col = (color + (r * self.colorchurn)) % maxColor
@@ -33,6 +34,7 @@ class Gear:
                     self.grid.set(Coordinate(*coord), HSV(*wh))
                 except Exception:
                     pass
+
         # Draw the outside gear
         ring_cells = get_ring(self.pos, self.size)
         num_cells = len(ring_cells)
@@ -60,7 +62,6 @@ class Gears(ShowBase):
         self.color = randColor()
 
     def next_frame(self):
-
         self.gears.extend([Gear(grid=self.grid, pos=coord) for coord in all_corners() + all_centers()])
 
         while True:
@@ -71,7 +72,6 @@ class Gears(ShowBase):
                 g.move_gear()
 
             self.clock += 1
-
             self.color = randColorRange(self.color, 30)
 
             yield self.frame_delay

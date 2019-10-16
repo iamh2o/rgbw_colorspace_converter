@@ -18,7 +18,7 @@ class RainDrop:
 
     def draw(self):
         if self.tri.cell_exists(self.coord):
-            color = HSV(.8,  1.0, 1.0)
+            color = HSV(.8, 1.0, 1.0)
             self.tri.set(Coordinate(self.coord[0], self.coord[1]), color)
 
     def move(self, dir):
@@ -35,7 +35,7 @@ class Rain(ShowBase):
         self.tri = trimodel
         self.speed = frame_delay
         self.raindrops: List[RainDrop] = []
-        self.freq = randint(3,10)
+        self.freq = randint(3, 10)
         self.rain_dir = self.get_random_rain_dir()
         self.ground_level = self.get_ground_level()
         self.possible_starts = self.get_possible_starts()
@@ -83,4 +83,3 @@ class Rain(ShowBase):
         min_y, max_y = min_max_row()
         possible_starts = [(x, max_y) for x in range(min_x - TRI_GEN, max_x + TRI_GEN)]
         return possible_starts
-

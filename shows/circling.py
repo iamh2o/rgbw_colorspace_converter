@@ -54,13 +54,13 @@ class Planet:
 
     def draw_add_trail(self, color, intense, pos, center):
         if self.tri.cell_exists(Coordinate(pos[0], pos[1])):
-            color = HSV(0.5,1.0,1.0)
+            color = HSV(0.5, 1.0, 1.0)
             self.tri.set(Coordinate(pos[0], pos[1]), color)
             new_trail = Trail(self.tri, color, intense, pos, center)
             self.trails.append(new_trail)
 
     def fade_trails(self):
-        for t in self.trails:    # Plot last-in first
+        for t in self.trails:  # Plot last-in first
             t.draw_trail()
             if not t.fade_trail():
                 self.trails.remove(t)

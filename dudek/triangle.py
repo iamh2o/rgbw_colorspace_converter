@@ -1,6 +1,5 @@
-from dudek.HelperFunctions import ROTATE_CLOCK, ROTATE_COUNTER, ROTATE_COORD_CLOCK
-from dudek.HelperFunctions import distance
 from collections import defaultdict
+from dudek.HelperFunctions import distance, ROTATE_CLOCK, ROTATE_COUNTER, ROTATE_COORD_CLOCK
 from random import choice
 
 """
@@ -13,12 +12,12 @@ Processing file needs to be similarly adjusted
 """
 NUM_BIG_TRI = 6
 
-BIG_COORD = [ ((0, 0), 'L', 'L'),
+BIG_COORD = [((0, 0), 'L', 'L'),
               ((1, 1), 'L', 'L'),
               ((2, 0), 'L', 'L'),
               ((4, 0), 'L', 'L'),
               ((5, 1), 'L', 'L'),
-              ((6, 0), 'L', 'L') ]
+              ((6, 0), 'L', 'L')]
 
 TRI_GEN = 12    # Size of Big Triangles - Fixed at 12
 
@@ -27,13 +26,12 @@ def load_triangles(model):
     return Triangle(model)
 
 
-class Triangle(object):
-
+class Triangle:
     """
     Triangle coordinates are stored in a hash table.
     Keys are (x,y) coordinate tuples
     Values are (strip, pixel) tuples, sometimes more than one.
-    
+
     Frames implemented to shorten messages:
     Send only the pixels that change color
     Frames are hash tables where keys are (x,y) coordinates
@@ -101,13 +99,13 @@ class Triangle(object):
 
     def force_frame(self):
         for coord in self.curr_frame:
-            self.curr_frame[coord] = (-1,-1,-1)  # Force update
+            self.curr_frame[coord] = (-1, -1, -1)  # Force update
 
     def init_frames(self):
         for coord in self.cellmap:
             self.curr_frame[coord] = (0, 0, 0)
             self.next_frame[coord] = (0, 0, 0)
-            
+
     def get_rand_cell(self):
         return choice(self.all_cells())
 
@@ -144,7 +142,7 @@ class Triangle(object):
 
     def calc_fix(self, coord, big_coord, corner, direction):
         """This heavy lifter function converts coordinates in fixtures"""
-        (x,y) = coord
+        (x, y) = coord
         (big_x, big_y) = big_coord
 
         x -= (big_x * TRI_GEN)    # Remove big-grid offsets
@@ -190,7 +188,7 @@ class Triangle(object):
 
     def is_on_board(self, coord):
         """Return true if coordinate is between min and max of that row"""
-        (x,y) = coord
+        (x, y) = coord
         row_cells = self.get_row(y)
 
         if not row_cells:
@@ -310,7 +308,7 @@ def center(strip=0):
     """Return a Triangle's center coordinate. Handles point-down triangles too"""
     coeff = 0.4 if point_up(get_big_coord(strip)) else 0.6
     (x, y) = get_base(strip)
-    return x + TRI_GEN - 1, y + (int)(coeff * TRI_GEN)
+    return x + TRI_GEN - 1, y + int(coeff * TRI_GEN)
 
 
 def all_centers():

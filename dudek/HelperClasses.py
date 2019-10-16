@@ -1,8 +1,7 @@
-from typing import List
-
 from color import HSV
 from dudek.HelperFunctions import gradient_wheel
 from grid.cell import Coordinate
+from typing import List
 
 
 #

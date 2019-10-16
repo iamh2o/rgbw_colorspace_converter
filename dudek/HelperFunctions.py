@@ -99,8 +99,6 @@ def randColorRange(color, window):
     return (maxColor + color + randint(-window, window)) % maxColor
 
 
-# Picks a color in which one rgb channel is off and the other two channels
-# revolve around a color wheel
 def gradient_wheel(color, intense=1.0):
     """
     Picks a color in which one rgb channel is off and the other two channels revolve around a color wheel.
