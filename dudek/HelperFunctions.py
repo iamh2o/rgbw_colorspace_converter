@@ -1,164 +1,176 @@
-from random import random, randint, choice
+from random import choice, randint
 from math import sqrt
 
 #
 # Constants
 #
-
 maxColor = 1536
 maxDir = 6
+
 
 #
 # Common random functions
 #
-
-# Random chance. True if 1 in Number
 def oneIn(chance):
-	if randint(1,chance) == 1:
-		return True
-	else:
-		return False
+    """Random chance. Returns True if Number is 1"""
+    return randint(1, chance) == 1
 
-# Return either 1 or -1
+
 def plusORminus():
-	return (randint(0,1) * 2) - 1
+    """Return either 1 or -1."""
+    return choice((-1, 1))
 
-# Increase or Decrease a counter with a range
+
 def upORdown(value, amount, min, max):
-	value += (amount * plusORminus())
-	return bounds(value, min, max)
+    """Increase or Decrease a counter with a range"""
+    value += (amount * plusORminus())
+    return bounds(value, min, max)
 
-# Increase/Decrease a counter within a range
+
 def inc(value, increase, min, max):
-	value += increase
-	return bounds(value, min, max)
+    """Increase/Decrease a counter within a range"""
+    value += increase
+    return bounds(value, min, max)
+
 
 def bounds(value, min, max):
-	if value < min:
-		value = min
-	if value > max:
-		value = max
-	return value
-		
-# Get a random direction
+    if value < min:
+        return min
+    if value > max:
+        return max
+    return value
+
+
 def randDir():
-	return randint(0,maxDir)
+    """Get a random direction"""
+    return randint(0, maxDir)
 
-# Return the left direction
+
 def turn_left(dir):
-	return (maxDir + dir - 1) % maxDir
-	
-# Return the right direction
+    """Return the left direction"""
+    return (maxDir + dir - 1) % maxDir
+
+
 def turn_right(dir):
-	return (dir + 1) % maxDir
+    """Return the right direction"""
+    return (dir + 1) % maxDir
 
-# Randomly turn left, straight, or right
+
 def turn_left_or_right(dir):
-	return (maxDir + dir + randint(-1,1) ) % maxDir
+    """Randomly turn left, straight, or right"""
+    return (maxDir + dir + randint(-1, 1)) % maxDir
 
-# In Bounds: hack for the Hourglass geometry. Creates a frame.
+
 def in_bounds(coord):
-	(x,y) = coord
-	return x >= 0 and x <= 46 and y >= 0 and y <= 23
+    """hack for the Hourglass geometry. Creates a frame."""
+    (x, y) = coord
+    return 0 <= x <= 46 and 0 <= y <= 23
+
 
 #
 # Distance Functions
 #
 def distance(coord1, coord2):
-	(x1,y1) = coord1
-	(x2,y2) = coord2
-	return sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) )
+    (x1, y1) = coord1
+    (x2, y2) = coord2
+    return sqrt((x2-x1)**2 + (y2-y1)**2)
+
 
 def rect_coord(coord):
-	"Return the precise, calculated rectilinear coordinates"
-	(x,y) = coord
-	return ( (x/2.0)+0.5, (y*0.866)+0.5 )
+    """Return the precise, calculated rectilinear coordinates"""
+    (x, y) = coord
+    return (x/2.0)+0.5, (y*0.866)+0.5
+
 
 #
 # Color Functions
 #
-# Pick a random color
 def randColor():
-	return randint(0,maxColor-1)
-	
-# Returns a random color around a given color within a particular range
-# Function is good for selecting blues, for example
+    """Pick a random color"""
+    return randint(0, maxColor-1)
+
+
 def randColorRange(color, window):
-	return (maxColor + color + randint(int(-window),int(window))) % maxColor
+    """
+    Returns a random color around a given color within a particular range.
+    Function is good for selecting blues, for example.
+    """
+    window = int(window)
+    return (maxColor + color + randint(-window, window)) % maxColor
 
-
-# Wrapper for gradient_wheel in which the intensity is 1.0 (full)
-def wheel(color):
-	return gradient_wheel(color, 1)
 
 # Picks a color in which one rgb channel is off and the other two channels
 # revolve around a color wheel
-def gradient_wheel(color, intense):
-	color = color % maxColor  # just in case color is out of bounds
-	channel = color / 256;
-	value = color % 256;
+def gradient_wheel(color, intense=1.0):
+    """
+    Picks a color in which one rgb channel is off and the other two channels revolve around a color wheel.
+    """
+    color %= maxColor  # just in case color is out of bounds
+    channel = color / 256
+    value = color % 256
 
-	if channel == 0:
-		r = 255
-		g = value
-		b = 0
-	elif channel == 1:
-		r = 255 - value
-		g = 255
-		b = 0
-	elif channel == 2:
-		r = 0
-		g = 255
-		b = value
-	elif channel == 3:
-		r = 0
-		g = 255 - value
-		b = 255
-	elif channel == 4:
-		r = value
-		g = 0
-		b = 255
-	else:
-		r = 255
-		g = 0
-		b = 255 - value
-	return (((float(r)*float(intense))/255.0, (float(g)*float(intense))/255.0, (float(b)*float(intense))/255.0))
+    if channel == 0:
+        r = 255
+        g = value
+        b = 0
+    elif channel == 1:
+        r = 255 - value
+        g = 255
+        b = 0
+    elif channel == 2:
+        r = 0
+        g = 255
+        b = value
+    elif channel == 3:
+        r = 0
+        g = 255 - value
+        b = 255
+    elif channel == 4:
+        r = value
+        g = 0
+        b = 255
+    else:
+        r = 255
+        g = 0
+        b = 255 - value
+    return (float(r)*float(intense))/255.0, (float(g)*float(intense))/255.0, (float(b)*float(intense))/255.0
 
-#	return (r*intense, g*intense, b*intense)
-	
-# Picks a color in which one rgb channel is ON and the other two channels
-# revolve around a color wheel
+
 def white_wheel(color, intense):
-	color = color % maxColor  # just in case color is out of bounds
-	channel = color / 256;
-	value = color % 256;
+    """
+    Picks a color in which one rgb channel is ON and the other two channels revolve around a color wheel.
+    """
+    color &= maxColor  # just in case color is out of bounds
+    channel = color / 256
+    value = color % 256
 
-	if channel == 0:
-		r = 255
-		g = value
-		b = 255 - value
-	elif channel == 1:
-		r = 255 - value
-		g = 255
-		b = value
-	elif channel == 2:
-		r = value
-		g = 255 - value
-		b = 255
-	elif channel == 3:
-		r = 255
-		g = value
-		b = 255 - value
-	elif channel == 4:
-		r = 255 - value
-		g = 255
-		b = value
-	else:
-		r = value
-		g = 255 - value
-		b = 255
-	
-	return ((float(r)*float(intense))/255.0, (float(g)*float(intense))/255.0, (float(b)*float(intense))/255.0)
+    if channel == 0:
+        r = 255
+        g = value
+        b = 255 - value
+    elif channel == 1:
+        r = 255 - value
+        g = 255
+        b = value
+    elif channel == 2:
+        r = value
+        g = 255 - value
+        b = 255
+    elif channel == 3:
+        r = 255
+        g = value
+        b = 255 - value
+    elif channel == 4:
+        r = 255 - value
+        g = 255
+        b = value
+    else:
+        r = value
+        g = 255 - value
+        b = 255
+
+    return (float(r)*float(intense))/255.0, (float(g)*float(intense))/255.0, (float(b)*float(intense))/255.0
+
 
 ROTATE_CLOCK = [
     22,21,23,24,62,61,63,64,94,93,95,96,118,117,119,120,134,133,135,136,142,141,143,

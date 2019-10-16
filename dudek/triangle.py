@@ -1,5 +1,5 @@
-from HelperFunctions import ROTATE_CLOCK, ROTATE_COUNTER, ROTATE_COORD_CLOCK
-from HelperFunctions import distance
+from dudek.HelperFunctions import ROTATE_CLOCK, ROTATE_COUNTER, ROTATE_COORD_CLOCK
+from dudek.HelperFunctions import distance
 from collections import defaultdict
 from random import choice
 
@@ -47,7 +47,7 @@ class Triangle(object):
         self.init_frames()
 
     def __repr__(self):
-        return "Triangles(%s)" % (self.model, self.side)
+        return "Triangles(%s)" % self.model
 
     def all_cells(self):
         """Return the list of all valid coords"""
@@ -105,8 +105,8 @@ class Triangle(object):
 
     def init_frames(self):
         for coord in self.cellmap:
-            self.curr_frame[coord] = (0,0,0)
-            self.next_frame[coord] = (0,0,0)
+            self.curr_frame[coord] = (0, 0, 0)
+            self.next_frame[coord] = (0, 0, 0)
             
     def get_rand_cell(self):
         return choice(self.all_cells())
@@ -139,7 +139,7 @@ class Triangle(object):
                 coord = (xcoord, ycoord)
                 fix = self.calc_fix(coord, big_coord, corner, direction)
                 cellmap[coord].append((strip, fix))
-        
+
         return cellmap
 
     def calc_fix(self, coord, big_coord, corner, direction):
@@ -149,19 +149,19 @@ class Triangle(object):
 
         x -= (big_x * TRI_GEN)    # Remove big-grid offsets
         y -= (big_y * TRI_GEN)    # Remove big-grid offsets
-        
+
         # Fix downward pointing grids
-        if point_up(big_coord) == False:    # odd = pointing down
+        if not point_up(big_coord):    # odd = pointing down
             y = TRI_GEN - y - 1
             direction = 'R' if direction == 'L' else 'L'  # Swap the light direction: L -> R and R -> L
 
         rowflip = 1 if direction == 'R' else 0  # Left-right direction of wiring
-          
+
         # y row coordinate first. We're building up LEDs one row at a time.
         fix = 0
         for row in range(y):
             fix += row_width(row)
-        
+
         # add x column coordinate. Even rows serpentine back
         if y % 2 == rowflip:    # even
             fix += (row_width(y) - (x-y) - 1)
@@ -230,13 +230,13 @@ class Triangle(object):
 ## tri cell primitives
 ##
 def point_up(coord):
-    (x,y) = coord
+    (x, y) = coord
     return (x+y) % 2 == 0
 
 
 def get_big_coord(strip):
     ((big_x, big_y), corner, direction) = BIG_COORD[strip]
-    return (big_x, big_y)
+    return big_x, big_y
 
 
 def row_width(row):
@@ -245,8 +245,8 @@ def row_width(row):
 
 def vert_mirror(coord):
     """Return the vertical mirror"""
-    (x,y) = coord
-    return (row_width(y) - x - 1, y)
+    (x, y) = coord
+    return row_width(y) - x - 1, y
 
 
 def min_max_row():
@@ -254,7 +254,7 @@ def min_max_row():
     big_ys = [big_y for ((big_x, big_y), corner, direction) in BIG_COORD]
     min_y, max_y = min(big_ys), max(big_ys)
 
-    return (min_y * TRI_GEN, (max_y * TRI_GEN) + (TRI_GEN - 1) )
+    return min_y * TRI_GEN, (max_y * TRI_GEN) + (TRI_GEN - 1)
 
 
 def min_max_column():
@@ -262,12 +262,12 @@ def min_max_column():
     big_xs = [big_x for ((big_x, big_y), corner, direction) in BIG_COORD]
     min_x, max_x = min(big_xs), max(big_xs)
 
-    return (min_x * TRI_GEN, (max_x + 2) * TRI_GEN )
+    return min_x * TRI_GEN, (max_x + 2) * TRI_GEN
 
 
 def get_base(strip):
     (big_x, big_y) = get_big_coord(strip)
-    return (big_x * TRI_GEN, big_y * TRI_GEN)
+    return big_x * TRI_GEN, big_y * TRI_GEN
 
 
 def get_all_func(get_func):
@@ -281,7 +281,7 @@ def get_all_func(get_func):
 def reduce_coord(coord, strip=0):
     """Reduces a coordinate to (0,0) space"""
     (big_x, big_y) = get_big_coord(strip)
-    (x,y) = coord
+    (x, y) = coord
 
     x -= big_x * TRI_GEN
     y -= big_y * TRI_GEN
@@ -289,13 +289,13 @@ def reduce_coord(coord, strip=0):
     if not point_up(get_big_coord(strip)):
         y = TRI_GEN - 1 - y
 
-    return (x,y)
+    return x, y
 
 
 def expand_coord(coord, strip=0):
     """Expands a reduced coordinate back to its big-tri space"""
     (big_x, big_y) = get_big_coord(strip)
-    (x,y) = coord
+    (x, y) = coord
 
     if not point_up(get_big_coord(strip)):
         y = TRI_GEN - 1 - y
@@ -303,14 +303,14 @@ def expand_coord(coord, strip=0):
     x += big_x * TRI_GEN
     y += big_y * TRI_GEN
 
-    return (x,y)
+    return x, y
 
 
 def center(strip=0):
     """Return a Triangle's center coordinate. Handles point-down triangles too"""
     coeff = 0.4 if point_up(get_big_coord(strip)) else 0.6
-    (x,y) = get_base(strip)
-    return (x + TRI_GEN - 1, y + (int)(coeff * TRI_GEN))
+    (x, y) = get_base(strip)
+    return x + TRI_GEN - 1, y + (int)(coeff * TRI_GEN)
 
 
 def all_centers():
@@ -320,11 +320,11 @@ def all_centers():
 def corners(strip=0):
     """Return the 3 corner coordinates of a Triangle"""
     pad = TRI_GEN - 1
-    (x,y) = get_base(strip)
+    (x, y) = get_base(strip)
     if point_up(get_big_coord(strip)):
-        return [(x,y), (x+pad, y+pad), (x+pad+pad,y)]    # L,C,R
+        return [(x, y), (x+pad, y+pad), (x+pad+pad, y)]    # L,C,R
     else:
-        return [(x,y+pad), (x+pad,y), (x+pad+pad,y+pad)]    # L,C,R
+        return [(x, y+pad), (x+pad, y), (x+pad+pad, y+pad)]    # L,C,R
 
 
 def all_corners():
@@ -362,9 +362,9 @@ def edge(strip=0):
     width = row_width(0)-1
 
     if point_up(get_big_coord(strip)):
-        return tri_in_line(corns[0],1,width) + tri_in_line(corns[1],5,width) + tri_in_line(corns[2],3,width)
+        return tri_in_line(corns[0], 1, width) + tri_in_line(corns[1], 5, width) + tri_in_line(corns[2], 3, width)
     else:
-        return tri_in_line(corns[0],5,width) + tri_in_line(corns[1],1,width) + tri_in_line(corns[2],3,width)
+        return tri_in_line(corns[0], 5, width) + tri_in_line(corns[1], 1, width) + tri_in_line(corns[2], 3, width)
 
 
 def all_edges():
@@ -373,15 +373,15 @@ def all_edges():
 
 
 def neighbors(coord):
-    "Return a list of the three tris neighboring a tuple at a given coordinate"
-    (x,y) = coord
+    """Return a list of the three tris neighboring a tuple at a given coordinate"""
+    (x, y) = coord
 
     if (x+y) % 2 == 0:  # Even
-        _neighbors = [ (1, 0), (0, -1), (-1, 0) ]    # Point up
+        _neighbors = [(1, 0), (0, -1), (-1, 0)]    # Point up
     else:
-        _neighbors = [ (1, 0), (0, 1), (-1, 0) ]     # Point down
+        _neighbors = [(1, 0), (0, 1), (-1, 0)]     # Point down
 
-    return [(x+dx, y+dy) for (dx,dy) in _neighbors]
+    return [(x+dx, y+dy) for (dx, dy) in _neighbors]
 
 
 def tri_in_line(coord, direction, distance=0):
@@ -418,17 +418,17 @@ def tri_nextdoor(coord, direction):
     Even (point up) and odd (point down) tri behave different
     Coordinates determined from a lookup table
     """
-    _evens = [ (1, 0), (1, 0), (-1, 0), (-1, 0), (0, -1), (0, -1) ]
-    _odds  = [ (1, 0), (0, 1), (0, 1), (-1, 0), (-1, 0), (1, 0) ]
+    _evens = [(1, 0), (1, 0), (-1, 0), (-1, 0), (0, -1), (0, -1)]
+    _odds  = [(1, 0), (0, 1), (0, 1), (-1, 0), (-1, 0), (1, 0)]
 
-    (x,y) = coord
+    (x, y) = coord
 
     if (x+y) % 2 == 0:  # Even
-        (dx,dy) = _evens[direction % 6]
+        (dx, dy) = _evens[direction % 6]
     else:
-        (dx,dy) = _odds[direction % 6]
+        (dx, dy) = _odds[direction % 6]
 
-    return (x+dx, y+dy)
+    return x+dx, y+dy
 
 
 def get_rand_neighbor(coord):
@@ -476,7 +476,7 @@ def get_ring(center_coord, size):
     for i in range(6):
         for j in range(size):
             results.append(t)
-            t = tri_nextdoor(t,i)
+            t = tri_nextdoor(t, i)
     return results
 
 
@@ -508,7 +508,7 @@ def nested_triangles(start):
     cells = []
     for size in range(TRI_GEN, 0, -3):
         cells.append(tri_shape(left_corn, size))
-        left_corn = tri_in_direction( tri_in_direction(left_corn,direction,2), 0, 2)
+        left_corn = tri_in_direction(tri_in_direction(left_corn, direction, 2), 0, 2)
 
     return cells
 
