@@ -1,11 +1,13 @@
+from color import RGB
 from dudek.HelperFunctions import randColor, maxColor, oneIn, gradient_wheel
 from dudek.triangle import all_left_corners, nested_triangles
+from grid import Pyramid, Coordinate
 from .showbase import ShowBase
 
 
 class CenterColors(ShowBase):
-    def __init__(self, trimodel):
-        self.tri = trimodel
+    def __init__(self, pyramid: Pyramid):
+        self.tri = pyramid.panel
         self.time = 0
         self.speed = 0.01
         self.direction = 0
@@ -29,8 +31,10 @@ class CenterColors(ShowBase):
             nested_cells = nested_triangles(corner)
 
             for i in range(len(nested_cells)):
-                color = gradient_wheel(self.color + (i*10) + (j*30))
+                color = RGB(*gradient_wheel(self.color + (i*10) + (j*30)))
                 if (i + j + self.direction) % 2:
-                    self.tri.set_cell(nested_cells[i][self.time % len(nested_cells[i])], color)
+                    coord = Coordinate(*nested_cells[i][self.time % len(nested_cells[i])])
+                    self.tri.set(coord, color)
                 else:
-                    self.tri.set_cell(nested_cells[i][len(nested_cells[i])-1-(self.time % len(nested_cells[i]))], color)
+                    coord = Coordinate(*nested_cells[i][len(nested_cells[i])-1-(self.time % len(nested_cells[i]))])
+                    self.tri.set(coord, color)

@@ -1,10 +1,10 @@
 from random import randint, choice
 from typing import List
 
-from color import HSV
+from color import HSV, RGB
 from dudek.HelperFunctions import randColorRange, oneIn, upORdown, gradient_wheel
 from dudek.triangle import tri_nextdoor, min_max_row, min_max_column, TRI_GEN
-from grid.cell import Coordinate
+from grid import Coordinate, Pyramid, every
 from .showbase import ShowBase
 
 
@@ -17,9 +17,9 @@ class RainDrop:
 #       from IPython import embed; embed()
 
     def draw(self):
-        if self.tri.cell_exists(self.coord):
+        if Coordinate(*self.coord) in self.tri:
             color = HSV(.8, 1.0, 1.0)
-            self.tri.set(Coordinate(self.coord[0], self.coord[1]), color)
+            self.tri.set(Coordinate(*self.coord), color)
 
     def move(self, dir):
         for i in range(2):  # Prevents back+forth flicker of drops
@@ -31,8 +31,8 @@ class RainDrop:
 
 
 class Rain(ShowBase):
-    def __init__(self, trimodel, frame_delay=1.0):
-        self.tri = trimodel
+    def __init__(self, pyramid: Pyramid, frame_delay=1.0):
+        self.tri = pyramid.face
         self.speed = frame_delay
         self.raindrops: List[RainDrop] = []
         self.freq = randint(3, 10)
@@ -66,7 +66,7 @@ class Rain(ShowBase):
             yield self.speed
 
     def lightning(self):
-        self.tri.set_all_cells(color=gradient_wheel(300))  # yellow
+        self.tri.set(every, RGB(*gradient_wheel(300)))  # yellow
 
     @staticmethod
     def get_random_rain_dir():

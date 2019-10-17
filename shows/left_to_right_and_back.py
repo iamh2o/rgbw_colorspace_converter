@@ -1,8 +1,6 @@
 from color import HSV
 from .showbase import ShowBase
-from grid import Grid, Pyramid, Direction, sweep
-from grid.cell import Direction, Position
-from grid import traversal
+from grid import Direction, Grid, Pyramid, traversal
 import time
 
 

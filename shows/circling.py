@@ -4,7 +4,7 @@ from random import randint
 from color import HSV
 from dudek.HelperFunctions import turn_left, turn_right, randColor, maxColor
 from dudek.triangle import near_neighbor, get_ring, tri_in_direction, corners, center
-from grid.cell import Coordinate
+from grid import Coordinate, Pyramid
 from .showbase import ShowBase
 
 
@@ -17,7 +17,7 @@ class Trail:
         self.center = center
 
     def draw_trail(self):
-        self.tri.set(Coordinate(x=self.pos[0], y=self.pos[1]), self.color)
+        self.tri.set(Coordinate(*self.pos), self.color)
 
     def fade_trail(self):
         self.pos = near_neighbor(self.pos, self.center)
@@ -53,9 +53,10 @@ class Planet:
             self.dir = turn_left(self.dir) if self.rotation == 0 else turn_right(self.dir)
 
     def draw_add_trail(self, color, intense, pos, center):
-        if self.tri.cell_exists(Coordinate(pos[0], pos[1])):
+        coord = Coordinate(*pos)
+        if coord in self.tri:
             color = HSV(0.5, 1.0, 1.0)
-            self.tri.set(Coordinate(pos[0], pos[1]), color)
+            self.tri.set(coord, color)
             new_trail = Trail(self.tri, color, intense, pos, center)
             self.trails.append(new_trail)
 
@@ -67,8 +68,8 @@ class Planet:
 
 
 class Circling(ShowBase):
-    def __init__(self, trimodel, frame_delay=1.1):
-        self.tri = trimodel
+    def __init__(self, pyramid: Pyramid, frame_delay=1.1):
+        self.tri = pyramid.panel
         self.planets: List[Planet] = []
         self.speed = frame_delay
         self.dir = 0

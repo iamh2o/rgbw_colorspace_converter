@@ -41,15 +41,6 @@ class Grid(Mapping[Location, Cell]):
     geom: Geometry
     model: Type[Model]
 
-    def cell_exists(self, coord):
-        ret_val = True
-        try: 
-            self.select(coord)
-        except Exception as e:
-            #Coord does not exits
-            ret_val = False
-        return ret_val
-
     @property
     def row_count(self) -> int:
         return self.geom.rows
@@ -100,14 +91,6 @@ class Grid(Mapping[Location, Cell]):
     def set(self, sel: Selector, color: Color):
         for pixel in self.pixels(sel):
             pixel.set(color)
-
-    def set_cells(self, cells, color):
-        for c in cells:
-            self.set(Coordinate(c[0], c[1]), color)
-
-    def set_all_cells(self, color=None):
-        for cell in self._cells:
-            self.set(Coordinate(cell[0], cell[1]), color)
 
     def clear(self, color: Color = RGB(0, 0, 0)):
         self.set(self.cells, color)

@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Iterable, Mapping, List, NamedTuple, Optional, Type
+from typing import Iterable, List, NamedTuple, Optional, Type, MutableMapping
 
 from model import Model
 from .cell import Cell, Orientation
@@ -85,6 +85,7 @@ class Panel(NamedTuple):
 
 
 # a spec for Face.build() corresponding to our real full pyramid sides
+# [0] one panel at the top, [] nothing in the middle, [0, 4] positions of the bottom two panels
 FULL_FACE_SPEC = [[0], [], [0, 4]]
 
 
@@ -93,7 +94,7 @@ class Face(Grid):
     Face is a side of the overall pyramid.
     """
 
-    _cells: Mapping[Coordinate, Cell]
+    _cells: MutableMapping[Coordinate, Cell]
     panels: List[Panel]
     geom: Geometry
 

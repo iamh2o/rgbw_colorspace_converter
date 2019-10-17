@@ -1,5 +1,6 @@
 from collections import defaultdict
 from dudek.HelperFunctions import distance, ROTATE_CLOCK, ROTATE_COUNTER, ROTATE_COORD_CLOCK
+from grid import Coordinate
 from random import choice
 
 """
@@ -13,11 +14,11 @@ Processing file needs to be similarly adjusted
 NUM_BIG_TRI = 6
 
 BIG_COORD = [((0, 0), 'L', 'L'),
-              ((1, 1), 'L', 'L'),
-              ((2, 0), 'L', 'L'),
-              ((4, 0), 'L', 'L'),
-              ((5, 1), 'L', 'L'),
-              ((6, 0), 'L', 'L')]
+             ((1, 1), 'L', 'L'),
+             ((2, 0), 'L', 'L'),
+             ((4, 0), 'L', 'L'),
+             ((5, 1), 'L', 'L'),
+             ((6, 0), 'L', 'L')]
 
 TRI_GEN = 12    # Size of Big Triangles - Fixed at 12
 
@@ -95,7 +96,7 @@ class Triangle:
     def send_frame(self, fract=1):
         for coord, color in self.next_frame.items():
             if fract != 1 or (coord in self.curr_frame and self.curr_frame[coord] != color):  # Has the color changed?
-                self.model.set_cells(self.cellmap[coord], color)
+                self.model.set(Coordinate(*self.cellmap[coord]), color)
 
     def force_frame(self):
         for coord in self.curr_frame:

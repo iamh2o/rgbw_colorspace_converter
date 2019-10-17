@@ -1,13 +1,9 @@
-"""Simpe Demo Show. Move from Top of Triangle To Bottom, lighting each row at a time"""
-
 from .showbase import ShowBase
 from color import HSV
-from grid import Direction, Position, hexagon, pointed_up
-import random as rnd
-import time
 
 
 class TopDown(ShowBase):
+    """Simple Demo Show. Move from Top of Triangle To Bottom, lighting each row at a time"""
     def __init__(self, pyramid, frame_delay=1.0):
         self.grid = pyramid.face
         self.frame_delay = frame_delay
