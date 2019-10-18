@@ -4,12 +4,12 @@ import random
 
 from .showbase import ShowBase
 from color import RGB
-from grid.cell import Cell
+from grid import Cell, Pyramid
 
 
 class Zaphod(ShowBase):
-    def __init__(self, grid, frame_delay=0.1):
-        self.grid = grid
+    def __init__(self, pyramid: Pyramid, frame_delay=0.1):
+        self.grid = pyramid.panel
         self.frame_delay = frame_delay
 
     def shuffle(self) -> Deque[Cell]:

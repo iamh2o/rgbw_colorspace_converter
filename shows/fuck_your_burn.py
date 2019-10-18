@@ -1,14 +1,16 @@
 from itertools import repeat, chain
 
 from color import RGB
-from grid import Grid, Position
+from grid import Grid, Position, Pyramid
 from randomcolor import random_color
 from .showbase import ShowBase
 
 
 class FuckYourBurn(ShowBase):
-    def __init__(self, grid: Grid, frame_delay: float = 1.0):
-        self.grid = grid
+    grid: Grid
+
+    def __init__(self, pyramid: Pyramid, frame_delay: float = 1.0):
+        self.grid = pyramid.panel
         self.frame_delay = frame_delay
 
     @staticmethod

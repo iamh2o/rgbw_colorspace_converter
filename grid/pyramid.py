@@ -27,7 +27,7 @@ class Pyramid:
 
     @classmethod
     def build_single(cls,
-                     model: Type[ModelBase],
+                     model: Type[Model],
                      start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
         """Builds Pyramid with a single, repeated panel."""
         face = Face.build(model, [[0]], start)
@@ -35,7 +35,7 @@ class Pyramid:
 
     @classmethod
     def build(cls,
-              model: Type[ModelBase],
+              model: Type[Model],
               start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
         """Builds Pyramid for the art car."""
         left_face = Face.build(model, FULL_FACE_SPEC, start)
@@ -116,9 +116,6 @@ class PanelReplicator(Grid):
         if not self.faces:
             raise ValueError('no faces provided to PanelReplicator')
 
-        self.geom = Geometry(origin=Coordinate(0, 0),
-                             rows=self.faces[0].panels[0].geom.rows)
-
         # TODO(lyra): assumes each face has a panel at <0, 0>
         self._exemplar_face = self.faces[0]
         self._exemplar_panel_geom = min(self._exemplar_face.panels,
@@ -135,7 +132,7 @@ class PanelReplicator(Grid):
     def cells(self) -> List[Cell]:
         return [cell
                 for cell in self._exemplar_face.cells
-                if cell in self._exemplar_panel_geom]
+                if cell.coordinate in self._exemplar_panel_geom]
 
     def _cell(self, coordinate: Coordinate) -> Optional[Cell]:
         if coordinate not in self.geom:
@@ -149,7 +146,7 @@ class PanelReplicator(Grid):
 
             for face in self.faces:
                 for panel in face.panels:
-                    yield from face.pixels(coord.adjust(*panel.origin), direction)
+                    yield from face.pixels(coord.adjust(*panel.geom.origin), direction)
 
 
 class FaceReplicator(Grid):

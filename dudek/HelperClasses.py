@@ -1,4 +1,4 @@
-from color import HSV
+from color import RGB
 from dudek.HelperFunctions import gradient_wheel
 from grid.cell import Coordinate
 from typing import List
@@ -54,7 +54,7 @@ class Fader:
 
     def draw_fader(self):
         gw = gradient_wheel(self.color, self.intense)
-        self.grid.set(Coordinate(*self.pos), HSV(*gw))
+        self.grid.set(Coordinate(*self.pos), RGB(*gw))
 
     def fade_fader(self):
         if self.growing:
@@ -70,7 +70,7 @@ class Fader:
         return self.growing or self.intense > 0.01
 
     def black_cell(self):
-        self.grid.set(Coordinate(*self.pos), HSV(0, 0, 0))
+        self.grid.set(Coordinate(*self.pos), RGB(0, 0, 0))
 
 
 #

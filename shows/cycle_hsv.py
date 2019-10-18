@@ -1,5 +1,3 @@
-import time
-
 from color import HSV as hsv
 from grid import Grid, Pyramid, every
 from .showbase import ShowBase

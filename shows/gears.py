@@ -1,39 +1,35 @@
 from random import choice, randint
-from typing import List
+from typing import List, Tuple
 
-from color import HSV
+from color import RGB
 from dudek.HelperFunctions import gradient_wheel, maxColor, turn_right, turn_left, randColor, randColorRange
 from dudek.triangle import get_ring, tri_in_direction, all_corners, all_centers
-from grid import Coordinate
+from grid import Coordinate, Pyramid, Grid
 from .showbase import ShowBase
 
 
 class Gear:
-    def __init__(self, grid, pos):
+    def __init__(self, grid: Grid, pos: Tuple[int, int]):
         self.grid = grid
-        self.size = choice([1, 2, 3])
-        self.dir = 3
-        self.turn = self.size % 2
+        self.size = choice([1, 2])
+        self.dir = 5
+        self.turn = self.size % 5
         self.pos = pos
-        self.colorchurn = randint(25, 100)
+        self.colorchurn = randint(0, 6)
 
     def draw_gear(self, color, clock):
         color += (self.size * 100)
         wc = gradient_wheel(color)
-        try:
-            self.grid.set(Coordinate(*self.pos), HSV(*wc))  # Draw the center
-        except Exception:
-            pass
+        if Coordinate(*self.pos) in self.grid:
+            self.grid.set(Coordinate(*self.pos), RGB(*wc))  # Draw the center
 
         # Draw the rest of the rings
         for r in range(self.size):
             col = (color + (r * self.colorchurn)) % maxColor
             for coord in get_ring(self.pos, r):
                 wh = gradient_wheel(col)
-                try:
-                    self.grid.set(Coordinate(*coord), HSV(*wh))
-                except Exception:
-                    pass
+                if Coordinate(*coord) in self.grid:
+                    self.grid.set(Coordinate(*coord), RGB(*wh))
 
         # Draw the outside gear
         ring_cells = get_ring(self.pos, self.size)
@@ -42,11 +38,9 @@ class Gear:
             col = (color + (self.size * self.colorchurn)) % maxColor
             if (i + clock) % 2 == 0:
                 wh = gradient_wheel(col)
-                for c in ring_cells[i]:
-                    try:
-                        self.grid.set(Coordinate(*c), HSV(*wh))
-                    except Exception:
-                        pass
+                c = ring_cells[i]
+                if Coordinate(*c) in self.grid:
+                    self.grid.set(Coordinate(*c), RGB(*wh))
 
     def move_gear(self):
         self.pos = tri_in_direction(self.pos, self.dir, 2)
@@ -54,9 +48,9 @@ class Gear:
 
 
 class Gears(ShowBase):
-    def __init__(self, grid, frame_delay=0.25):
+    def __init__(self, pyramid: Pyramid, frame_delay=0.25):
+        self.grid = pyramid.panel
         self.frame_delay = frame_delay
-        self.grid = grid
         self.gears: List[Gear] = []
         self.clock = 10000
         self.color = randColor()

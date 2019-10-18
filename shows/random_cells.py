@@ -1,3 +1,4 @@
+from collections import deque
 from typing import Deque
 import random
 
@@ -12,12 +13,12 @@ class Random(ShowBase):
     def __init__(self, pyramid: Pyramid, frame_delay=0.1):
         self.grid = pyramid.face
         self.frame_delay = frame_delay
-        
+
     def shuffle(self) -> Deque[Cell]:
         cells = self.grid.cells
         random.shuffle(cells)
 
-        return Deque(cells)
+        return deque(cells)
 
     def next_frame(self):
         cells = self.shuffle()

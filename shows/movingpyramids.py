@@ -32,8 +32,8 @@ class MovingPyramids(ShowBase):
             for j, triangle in enumerate(inset_triangles(corner, 12-x)):
                 for p in triangle:
                     color = HSV(.2, 1, 1)
-                    self.tri.set(Coordinate(p[0], p[1]), color)
-                # self.tri.set_cells(triangle, wheel(color))
+                    self.tri.set(Coordinate(*p), color)
+                # self.tri.set(map(lambda pair: Coordinate(*pair), triangle), wheel(color))
 
         for i, corner in enumerate(all_center_corners()):
             x = self.get_offset(12, self.time*2)
@@ -43,7 +43,7 @@ class MovingPyramids(ShowBase):
                 # color = self.color + (j * 80) + (i * 200)
                 color = self.color
                 color.s += .2
-                self.tri.set_cells(triangle, color)
+                self.tri.set(map(lambda pair: Coordinate(*pair), triangle), color)
 
     @staticmethod
     def push_down_one(coord):
