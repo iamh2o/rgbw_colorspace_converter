@@ -131,7 +131,7 @@ def gradient_wheel(color, intense=1.0):
         r = 255
         g = 0
         b = 255 - value
-    return (float(r)*float(intense))/255.0, (float(g)*float(intense))/255.0, (float(b)*float(intense))/255.0
+    return float(r)*float(intense), float(g)*float(intense), float(b)*float(intense)
 
 
 def white_wheel(color, intense):
@@ -167,7 +167,7 @@ def white_wheel(color, intense):
         g = 255 - value
         b = 255
 
-    return (float(r)*float(intense))/255.0, (float(g)*float(intense))/255.0, (float(b)*float(intense))/255.0
+    return float(r)*float(intense), float(g)*float(intense), float(b)*float(intense)
 
 
 ROTATE_CLOCK = [

@@ -1,7 +1,7 @@
 from random import choice, randint
 from typing import List, Tuple
 
-from color import HSV
+from color import RGB
 from dudek.HelperFunctions import gradient_wheel, maxColor, turn_right, turn_left, randColor, randColorRange
 from dudek.triangle import get_ring, tri_in_direction, all_corners, all_centers
 from grid import Coordinate, Pyramid, Grid
@@ -11,17 +11,17 @@ from .showbase import ShowBase
 class Gear:
     def __init__(self, grid: Grid, pos: Tuple[int, int]):
         self.grid = grid
-        self.size = choice([1, 2, 3])
-        self.dir = 3
-        self.turn = self.size % 2
+        self.size = choice([1, 2])
+        self.dir = 5
+        self.turn = self.size % 5
         self.pos = pos
-        self.colorchurn = randint(25, 100)
+        self.colorchurn = randint(0, 6)
 
     def draw_gear(self, color, clock):
         color += (self.size * 100)
         wc = gradient_wheel(color)
         if Coordinate(*self.pos) in self.grid:
-            self.grid.set(Coordinate(*self.pos), HSV(*wc))  # Draw the center
+            self.grid.set(Coordinate(*self.pos), RGB(*wc))  # Draw the center
 
         # Draw the rest of the rings
         for r in range(self.size):
@@ -29,7 +29,7 @@ class Gear:
             for coord in get_ring(self.pos, r):
                 wh = gradient_wheel(col)
                 if Coordinate(*coord) in self.grid:
-                    self.grid.set(Coordinate(*coord), HSV(*wh))
+                    self.grid.set(Coordinate(*coord), RGB(*wh))
 
         # Draw the outside gear
         ring_cells = get_ring(self.pos, self.size)
@@ -40,7 +40,7 @@ class Gear:
                 wh = gradient_wheel(col)
                 c = ring_cells[i]
                 if Coordinate(*c) in self.grid:
-                    self.grid.set(Coordinate(*c), HSV(*wh))
+                    self.grid.set(Coordinate(*c), RGB(*wh))
 
     def move_gear(self):
         self.pos = tri_in_direction(self.pos, self.dir, 2)
