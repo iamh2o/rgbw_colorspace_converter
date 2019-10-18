@@ -164,10 +164,11 @@ class Geometry(NamedTuple):
 
         # convert to relative coordinate
         rel = Coordinate(coord.x - self.origin.x, coord.y - self.origin.y)
+        rel_pos = rel.pos(self)
 
         try:
-            return (0 <= rel.x < self.row_length(rel.pos(self).row) and
-                    0 <= rel.y < self.rows)
+            return (0 <= rel_pos.col < self.row_length(rel_pos.row) and
+                    0 <= rel_pos.row < self.rows)
         except IndexError:
             return False
 
