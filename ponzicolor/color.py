@@ -1,8 +1,9 @@
-from typing import NamedTuple, Optional, Tuple, Union
+from typing import NamedTuple, Tuple, Union
 
 from . import blend
 from .space import (
     RGB,
+    HSV,
     Lab,
     HCL,
     XYZ,
@@ -15,6 +16,9 @@ from .space import (
     linear_rgb_to_xyz,
     srgb_to_linear_rgb,
     linear_rgb_to_srgb,
+    srgb_to_hsv,
+    hsv_to_srgb,
+    hsv_to_rgbw,
 )
 
 
@@ -34,11 +38,15 @@ class Color(NamedTuple):
             h = h[1:]
         if len(h) == 6:
             h += "00"
-        return Color(*tuple(int(h[i : i + 2], 16) / 255 for i in range(0, 8, 2)))
+        return Color(*tuple(int(h[i: i + 2], 16) / 255 for i in range(0, 8, 2)))
 
     @classmethod
     def from_rgb(cls, rgb: RGB, w: float = 0.0) -> "Color":
         return cls(rgb.r, rgb.g, rgb.b, w)
+
+    @classmethod
+    def from_hsv(cls, hsv: HSV, w: float = 0.0) -> "Color":
+        return cls.from_rgb(hsv_to_srgb(hsv), w)
 
     @classmethod
     def from_linear_rgb(cls, rgb: LinearRGB, w: float = 0.0) -> "Color":
@@ -73,14 +81,25 @@ class Color(NamedTuple):
 
     @property
     def dmx(self) -> Tuple[int, int, int, int]:
+        """
+        Emit RGBW [0-255] tuple.
+        """
+        r, g, b, w = self.r, self.g, self.b, self.w
+
+        # If white element unused, re-blend to RGBW before emitting.
+        if w == 0.0 and max(r, g, b) != 0.0:
+            rgbw = hsv_to_rgbw(self.hsv)
+            r, g, b, w = rgbw.r, rgbw.g, rgbw.b, rgbw.w
+
         def c(v: float) -> int:
             return int(v * 255.0 + 0.5)
-
-        return (c(self.r), c(self.g), c(self.b), c(self.w))
+        return c(r), c(g), c(b), c(w)
 
     @property
     def hex(self) -> str:
-        return "#%02X%02X%02X%02X" % self.dmx
+        def c(v: float) -> int:
+            return int(v * 255.0 + 0.5)
+        return "#%02X%02X%02X%02X" % (c(self.r), c(self.g), c(self.b), c(self.w))
 
     @property
     def rgb(self) -> RGB:
@@ -89,6 +108,10 @@ class Color(NamedTuple):
     @property
     def linear_rgb(self) -> LinearRGB:
         return srgb_to_linear_rgb(self.rgb)
+
+    @property
+    def hsv(self) -> HSV:
+        return srgb_to_hsv(self.rgb)
 
     @property
     def xyz(self) -> XYZ:
@@ -107,7 +130,7 @@ class Color(NamedTuple):
         return self.hcl.h
 
 
-def color(chroma: Union[str, RGB, Lab, HCL], white: float = 0.0) -> Color:
+def color(chroma: Union[str, RGB, Lab, HCL, HSV], white: float = 0.0) -> Color:
     if isinstance(chroma, str):
         return Color.from_hex(chroma)
     if isinstance(chroma, HCL):
@@ -116,8 +139,10 @@ def color(chroma: Union[str, RGB, Lab, HCL], white: float = 0.0) -> Color:
         return Color.from_lab(chroma, white)
     elif isinstance(chroma, RGB):
         return Color.from_rgb(chroma, white)
+    elif isinstance(chroma, HSV):
+        return Color.from_hsv(chroma, white)
     else:
-        raise TypeError("%r is not an RGB, Lab, or HCL color" % (chroma,))
+        raise TypeError("%r is not an RGB, Lab, HCL, or HSV color" % (chroma,))
 
 
 def white(w: float) -> Color:

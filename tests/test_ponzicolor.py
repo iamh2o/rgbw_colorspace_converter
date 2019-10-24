@@ -5,6 +5,8 @@ from pytest import approx
 from ponzicolor.color import color
 from ponzicolor.space import (
     RGB,
+    RGBW,
+    HSV,
     Lab,
     HCL,
     XYZ,
@@ -17,6 +19,10 @@ from ponzicolor.space import (
     linear_rgb_to_xyz,
     srgb_to_linear_rgb,
     linear_rgb_to_srgb,
+    srgb_to_hsv,
+    hsv_to_srgb,
+    hsv_to_rgbw,
+    rgbw_to_hsv,
 )
 from ponzicolor.linear import delinearize, linearize
 
@@ -24,6 +30,8 @@ from ponzicolor.linear import delinearize, linearize
 class Case(NamedTuple):
     hex: str
     rgb: RGB
+    rgbw: RGBW
+    hsv: HSV
     lrgb: LinearRGB
     xyz: XYZ
     lab: Lab
@@ -34,6 +42,8 @@ cases = [
     Case(
         "#ffffff",
         RGB(1.0, 1.0, 1.0),
+        RGBW(0.0, 0.0, 0.0, 1.0),
+        HSV(0.0, 0.0, 1.0),
         LinearRGB(1, 1, 1),
         XYZ(0.950470, 1.000000, 1.088830),
         Lab(1.000000, 0.000000, 0.000000),
@@ -42,6 +52,8 @@ cases = [
     Case(
         "#80ffff",
         RGB(0.5, 1.0, 1.0),
+        RGBW(0.0, 0.5, 0.5, 0.5),
+        HSV(180.0, 0.5, 1.0),
         LinearRGB(0.21404114048223255, 1, 1),
         XYZ(0.626296, 0.832848, 1.073634),
         Lab(0.931390, -0.353319, -0.108946),
@@ -50,6 +62,8 @@ cases = [
     Case(
         "#ff80ff",
         RGB(1.0, 0.5, 1.0),
+        RGBW(0.5, 0.0, 0.5, 0.5),
+        HSV(300.0, 0.5, 1.0),
         LinearRGB(1, 0.21404114048223255, 1),
         XYZ(0.669430, 0.437920, 0.995150),
         Lab(0.720892, 0.651673, -0.422133),
@@ -58,6 +72,8 @@ cases = [
     Case(
         "#ffff80",
         RGB(1.0, 1.0, 0.5),
+        RGBW(0.5, 0.5, 0.0, 0.5),
+        HSV(60.0, 0.5, 1.0),
         LinearRGB(1, 1, 0.21404114048223255),
         XYZ(0.808654, 0.943273, 0.341930),
         Lab(0.977637, -0.165795, 0.602017),
@@ -66,6 +82,8 @@ cases = [
     Case(
         "#8080ff",
         RGB(0.5, 0.5, 1.0),
+        RGBW(0.0, 0.0, 0.5, 0.5),
+        HSV(240.0, 0.5, 1.0),
         LinearRGB(0.21404114048223255, 0.21404114048223255, 1),
         XYZ(0.345256, 0.270768, 0.979954),
         Lab(0.590453, 0.332846, -0.637099),
@@ -74,6 +92,8 @@ cases = [
     Case(
         "#ff8080",
         RGB(1.0, 0.5, 0.5),
+        RGBW(0.5, 0.0, 0.0, 0.5),
+        HSV(0.0, 0.5, 1.0),
         LinearRGB(1, 0.21404114048223255, 0.21404114048223255),
         XYZ(0.527613, 0.381193, 0.248250),
         Lab(0.681085, 0.483884, 0.228328),
@@ -82,6 +102,8 @@ cases = [
     Case(
         "#80ff80",
         RGB(0.5, 1.0, 0.5),
+        RGBW(0.0, 0.5, 0.0, 0.5),
+        HSV(120.0, 0.5, 1.0),
         LinearRGB(0.21404114048223255, 1, 0.21404114048223255),
         XYZ(0.484480, 0.776121, 0.326734),
         Lab(0.906026, -0.600870, 0.498993),
@@ -90,6 +112,8 @@ cases = [
     Case(
         "#808080",
         RGB(0.5, 0.5, 0.5),
+        RGBW(0.0, 0.0, 0.0, 0.5),
+        HSV(0.0, 0.0, 0.5),
         LinearRGB(0.21404114048223255, 0.21404114048223255, 0.21404114048223255),
         XYZ(0.203440, 0.214041, 0.233054),
         Lab(0.533890, 0.000000, 0.000000),
@@ -98,6 +122,8 @@ cases = [
     Case(
         "#00ffff",
         RGB(0.0, 1.0, 1.0),
+        RGBW(0.0, 1.0, 1.0, 0.0),
+        HSV(180.0, 1.0, 1.0),
         LinearRGB(0.0, 1.0, 1.0),
         XYZ(0.538014, 0.787327, 1.069496),
         Lab(0.911132, -0.480875, -0.141312),
@@ -106,6 +132,8 @@ cases = [
     Case(
         "#ff00ff",
         RGB(1.0, 0.0, 1.0),
+        RGBW(1.0, 0.0, 1.0, 0.0),
+        HSV(300.0, 1.0, 1.0),
         LinearRGB(1.0, 0.0, 1.0),
         XYZ(0.592894, 0.284848, 0.969638),
         Lab(0.603242, 0.982343, -0.608249),
@@ -114,6 +142,8 @@ cases = [
     Case(
         "#ffff00",
         RGB(1.0, 1.0, 0.0),
+        RGBW(1.0, 1.0, 0.0, 0.0),
+        HSV(60.0, 1.0, 1.0),
         LinearRGB(1.0, 1.0, 0.0),
         XYZ(0.770033, 0.927825, 0.138526),
         Lab(0.971393, -0.215537, 0.944780),
@@ -122,6 +152,8 @@ cases = [
     Case(
         "#0000ff",
         RGB(0.0, 0.0, 1.0),
+        RGBW(0.0, 0.0, 1.0, 0.0),
+        HSV(240.0, 1.0, 1.0),
         LinearRGB(0.0, 0.0, 1.0),
         XYZ(0.180437, 0.072175, 0.950304),
         Lab(0.322970, 0.791875, -1.078602),
@@ -130,6 +162,8 @@ cases = [
     Case(
         "#00ff00",
         RGB(0.0, 1.0, 0.0),
+        RGBW(0.0, 1.0, 0.0, 0.0),
+        HSV(120.0, 1.0, 1.0),
         LinearRGB(0.0, 1.0, 0.0),
         XYZ(0.357576, 0.715152, 0.119192),
         Lab(0.877347, -0.861827, 0.831793),
@@ -138,6 +172,8 @@ cases = [
     Case(
         "#ff0000",
         RGB(1.0, 0.0, 0.0),
+        RGBW(1.0, 0.0, 0.0, 0.0),
+        HSV(0.0, 1.0, 1.0),
         LinearRGB(1.0, 0.0, 0.0),
         XYZ(0.412456, 0.212673, 0.019334),
         Lab(0.532408, 0.800925, 0.672032),
@@ -146,12 +182,36 @@ cases = [
     Case(
         "#000000",
         RGB(0.0, 0.0, 0.0),
+        RGBW(0.0, 0.0, 0.0, 0.0),
+        HSV(0.0, 0.0, 0.0),
         LinearRGB(0.0, 0.0, 0.0),
         XYZ(0.000000, 0.000000, 0.000000),
         Lab(0.000000, 0.000000, 0.000000),
         HCL(0.0000, 0.000000, 0.000000),
     ),
 ]
+
+
+def test_rgbw():
+    for c in cases:
+        actual = hsv_to_rgbw(c.hsv)
+        assert actual == approx(c.rgbw, 0.0001)
+    for c in cases:
+        actual = rgbw_to_hsv(c.rgbw)
+        assert actual == approx(c.hsv, 0.0001)
+
+
+def test_hsv():
+    for c in cases:
+        actual = srgb_to_hsv(c.rgb)
+        assert actual.h == approx(c.hsv.h, 0.0001)
+        assert actual.s == approx(c.hsv.s, 0.0001)
+        assert actual.v == approx(c.hsv.v, 0.0001)
+    for c in cases:
+        actual = hsv_to_srgb(c.hsv)
+        assert actual.r == approx(c.rgb.r, 0.0001)
+        assert actual.g == approx(c.rgb.g, 0.0001)
+        assert actual.b == approx(c.rgb.b, 0.0001)
 
 
 def test_linear_rgb():
