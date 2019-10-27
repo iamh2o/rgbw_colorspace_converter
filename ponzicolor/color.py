@@ -80,6 +80,38 @@ class Color(NamedTuple):
         )
 
     @property
+    def rgb256(self) -> Tuple[int, int, int]:
+        """
+        Called to emit an RGB triple in [0-255].
+
+        Used in DisplayColor interface.
+        """
+        def c(v: float) -> int:
+            return int(v * 255.0 + 0.5)
+
+        rgb = self.rgb
+        return c(rgb.r), c(rgb.g), c(rgb.b)
+
+    @property
+    def rgbw256(self) -> Tuple[int, int, int, int]:
+        """
+        Called to emit an RGBW quadruple in [0-255].
+
+        Used in DisplayColor interface.
+        """
+        return self.dmx
+
+    def scale(self, factor: float) -> "Color":
+        """
+        Scales the brightness by a factor in [0,1].
+
+        Used in DisplayColor interface.
+        """
+        factor = max(0.0, min(factor, 1.0))
+        hsv = self.hsv
+        return color(HSV(hsv.h, hsv.s, hsv.v * factor))
+
+    @property
     def dmx(self) -> Tuple[int, int, int, int]:
         """
         Emit RGBW [0-255] tuple.

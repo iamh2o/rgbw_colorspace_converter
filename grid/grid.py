@@ -2,8 +2,8 @@ from abc import abstractmethod
 import logging
 from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union, Type
 
-from color import Color, HSV
-from model import Model
+from color import HSV
+from model import Model, DisplayColor
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Position
 
@@ -23,10 +23,10 @@ class Pixel(NamedTuple):
     address: Address
     model: Type[Model]
 
-    def set(self, color: Color):
+    def set(self, color: Type[DisplayColor]):
         self.model.set(self.cell, self.address, color)
 
-    def __call__(self, color: Color):
+    def __call__(self, color: Type[DisplayColor]):
         self.set(color)
 
 
@@ -88,11 +88,11 @@ class Grid(Mapping[Location, Cell]):
             for addr in cell.pixel_addresses(direction):
                 yield Pixel(cell, addr, self.model)
 
-    def set(self, sel: Selector, color: Color):
+    def set(self, sel: Selector, color: Type[DisplayColor]):
         for pixel in self.pixels(sel):
             pixel.set(color)
 
-    def clear(self, color: Color = HSV(0, 0, 0)):
+    def clear(self, color: Type[DisplayColor] = HSV(0, 0, 0)):
         self.set(self.cells, color)
         self.go()
 

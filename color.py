@@ -85,6 +85,8 @@ from copy import deepcopy
 from math import fmod, cos, radians
 from typing import Tuple, List, TypeVar, Union
 
+from model import DisplayColorBase
+
 __all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
 
 # Constrained generic type of int or float
@@ -453,7 +455,7 @@ def Hex(value: str) -> "Color":
     return RGB(*rgb_t)
 
 
-class Color:
+class Color(DisplayColorBase):
     hsv_t: List[float]
 
     def __init__(self, hsv: Tuple[float, float, float]):
@@ -481,9 +483,23 @@ class Color:
         return hsv_to_rgbw(*self.hsv_t)
 
     @property
+    def rgbw256(self) -> Tuple[int, int, int, int]:
+        """
+        Alias for rgbw(self)
+        """
+        return self.rgbw
+
+    @property
     def rgb(self) -> Tuple[int, int, int]:
         """returns an RGB tuple in [0, 255]."""
         return hsv_to_rgb(*self.hsv_t)
+
+    @property
+    def rgb256(self) -> Tuple[int, int, int]:
+        """
+        Alias for rgb(self)
+        """
+        return self.rgb
 
     @property
     def hsv(self) -> Tuple[float, float, float]:
@@ -564,13 +580,12 @@ class Color:
         r, g, _ = self.rgb
         self._set_hsv(rgb_to_hsv(r, g, b))
 
-    @staticmethod
-    def scale(color: "Color", factor: float) -> "Color":
+    def scale(self, factor: float) -> "Color":
         """
-        Scales the brightness of a Color by a factor in [0,1].
+        Scales the brightness by a factor in [0,1].
         """
         factor = clamp(factor, 0.0, 1.0)
-        (h, s, v) = color.hsv
+        (h, s, v) = self.hsv
         return Color((h, s, v*factor))
 
 
