@@ -85,8 +85,6 @@ from copy import deepcopy
 from math import fmod, cos, radians
 from typing import Tuple, List, TypeVar, Union
 
-from model import DisplayColorBase
-
 __all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
 
 # Constrained generic type of int or float
@@ -455,7 +453,7 @@ def Hex(value: str) -> "Color":
     return RGB(*rgb_t)
 
 
-class Color(DisplayColorBase):
+class Color:
     hsv_t: List[float]
 
     def __init__(self, hsv: Tuple[float, float, float]):

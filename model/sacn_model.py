@@ -45,7 +45,7 @@ class sACN(ModelBase):
         self.stop()
 
     def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
-        color = color.scale(color, self.brightness)
+        color = color.scale(self.brightness)
         try:
             channels = self.leds[addr.universe.id]
         except KeyError:
