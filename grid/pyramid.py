@@ -1,7 +1,7 @@
 from typing import Iterable, Iterator, List, Optional, Type
 
-from color import Color, RGB
-from model.base import ModelBase, Model
+from color import HSV
+from model import Model, DisplayColor
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Universe
 from .grid import Grid, Pixel, Selector
@@ -95,7 +95,7 @@ class Pyramid:
     def go(self):
         self._model.go()
 
-    def clear(self, color: Color = RGB(0, 0, 0)):
+    def clear(self, color: Type[DisplayColor] = HSV(0, 0, 0)):
         for face in self.faces:
             face.clear(color)
 
@@ -172,7 +172,7 @@ class FaceReplicator(Grid):
         return self.primary.geom
 
     @property
-    def model(self) -> Type[ModelBase]:
+    def model(self) -> Type[Model]:
         return self.primary.model
 
     @property

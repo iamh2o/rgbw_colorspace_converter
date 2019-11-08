@@ -57,10 +57,11 @@ class OLAModel(ModelBase):
             ix = self.PIXEL_MAP[pixel][1] - 1  # dmx is 1-based, python lists are 0-based
 
             def set_color(color):
-                self.leds[ux][ix] = color.r
-                self.leds[ux][ix + 1] = color.g
-                self.leds[ux][ix + 2] = color.b
-                self.leds[ux][ix + 3] = color.w
+                (r, g, b, w) = color.rgbw
+                self.leds[ux][ix] = r
+                self.leds[ux][ix + 1] = g
+                self.leds[ux][ix + 2] = b
+                self.leds[ux][ix + 3] = w
 
             yield set_color
 

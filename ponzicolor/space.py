@@ -1,4 +1,5 @@
-from math import atan2, cos, degrees, sin, sqrt, radians
+import colorsys
+from math import atan2, cos, degrees, sin, sqrt, radians, fmod
 from typing import Callable, NamedTuple
 
 from . import linear
@@ -22,6 +23,25 @@ class RGB(NamedTuple):
             return max(0.0, min(v, 1.0))
 
         return RGB(c(self.r), c(self.g), c(self.b))
+
+
+class RGBW(NamedTuple):
+    """
+    RGBW is an sRGB color with an extended white element for saturation.
+    """
+    r: float  # [0-1]
+    g: float  # [0-1]
+    b: float  # [0-1]
+    w: float  # [0-1]
+
+
+class HSV(NamedTuple):
+    """
+    Hue in [0..360], Saturation and Value in [0..1]. You're better off using HCL, see below.
+    """
+    h: float
+    s: float
+    v: float
 
 
 class Lab(NamedTuple):
@@ -69,6 +89,64 @@ class LinearRGB(NamedTuple):
 
 D50 = XYZ(0.96422, 1.00000, 0.82521)
 D65 = XYZ(0.95047, 1.00000, 1.08883)
+
+
+def srgb_to_hsv(rgb: RGB) -> HSV:
+    h, s, v = colorsys.rgb_to_hsv(rgb.r, rgb.g, rgb.b)
+    return HSV(h * 360, s, v)
+
+
+def hsv_to_srgb(hsv: HSV) -> RGB:
+    r, g, b = colorsys.hsv_to_rgb(hsv.h / 360, hsv.s, hsv.v)
+    return RGB(r, g, b)
+
+
+def hsv_to_rgbw(hsv: HSV) -> RGBW:
+    h_prime = hsv.h / 60
+    chroma = hsv.s * hsv.v
+    x = chroma * (1 - abs((fmod(h_prime, 2) - 1)))
+
+    r, g, b, w = 0.0, 0.0, 0.0, hsv.v - chroma
+    if h_prime <= 1:
+        r, g = chroma, x
+    elif h_prime <= 2:
+        r, g = x, chroma
+    elif h_prime <= 3:
+        g, b = chroma, x
+    elif h_prime <= 4:
+        g, b = x, chroma
+    elif h_prime <= 5:
+        r, b = x, chroma
+    else:
+        r, b = chroma, x
+    return RGBW(r, g, b, w)
+
+
+def rgbw_to_hsv(rgbw: RGBW) -> HSV:
+    maximal = max(rgbw.r, rgbw.g, rgbw.b)
+    minimal = min(rgbw.r, rgbw.g, rgbw.b)
+    chroma = maximal - minimal
+
+    if chroma == 0:
+        hue = 0
+    elif maximal == rgbw.r:
+        hue = (rgbw.g - rgbw.b) / chroma
+    elif maximal == rgbw.g:
+        hue = 2 + (rgbw.b - rgbw.r) / chroma
+    else:
+        hue = 4 + (rgbw.r - rgbw.g) / chroma
+
+    hue *= 60
+    if hue < 0:
+        hue += 360
+
+    value = chroma + rgbw.w
+
+    saturation = 0.0
+    if maximal > 0.0:
+        saturation = chroma / value
+
+    return HSV(hue, saturation, value)
 
 
 def hcl_to_lab(hcl: HCL) -> Lab:

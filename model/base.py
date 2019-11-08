@@ -1,8 +1,39 @@
 from abc import ABC, abstractmethod
-from color import Color
-from typing import Iterable, List, Mapping, TypeVar
+from typing import Iterable, List, Mapping, TypeVar, Tuple, Type
 from grid.cell import Cell
 from grid.geom import Address
+
+
+class DisplayColorBase(ABC):
+    """
+    Abstract base class for displayable color.
+    """
+    @property
+    @abstractmethod
+    def rgb256(self) -> Tuple[int, int, int]:
+        """
+        Called to emit an RGB triple in [0-255].
+        """
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def rgbw256(self) -> Tuple[int, int, int, int]:
+        """
+        Called to emit an RGBW quadruple in [0-255].
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def scale(self, factor: float) -> "DisplayColor":
+        """
+        Scales the brightness by a factor in [0,1].
+        """
+        raise NotImplementedError
+
+
+# Useful for type hinting any subclass of ModelBase (i.e. Type[Model])
+DisplayColor = TypeVar('DisplayColor', bound=DisplayColorBase)
 
 
 class ModelBase(ABC):
@@ -21,7 +52,7 @@ class ModelBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set(self, cell: Cell, addr: Address, color: Color):
+    def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
         """
         Set one pixel to a particular color.
 

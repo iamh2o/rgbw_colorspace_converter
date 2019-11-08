@@ -5,12 +5,12 @@ Pixels are representations of the addressable unit in your object. Cells can hav
 have one LED each.
 """
 import logging
-from typing import Iterable
+from typing import Iterable, Type
 
 import sacn
-from color import Color
-from grid.cell import Address, Cell
-from .base import ModelBase, allocate_universes
+
+from grid import Address, Cell
+from .base import ModelBase, allocate_universes, DisplayColor
 
 logger = logging.getLogger("pyramidtriangles")
 
@@ -44,8 +44,8 @@ class sACN(ModelBase):
     def __del__(self):
         self.stop()
 
-    def set(self, cell: Cell, addr: Address, color: Color):
-        color = Color.scale(color, self.brightness)
+    def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
+        color = color.scale(color, self.brightness)
         try:
             channels = self.leds[addr.universe.id]
         except KeyError:
@@ -53,7 +53,7 @@ class sACN(ModelBase):
                 f'attempt to set channel in undefined universe {addr.universe.id}')
 
         # our Color tuples have their channels in the same order as sACN
-        for i, c in enumerate(color.rgbw):
+        for i, c in enumerate(color.rgbw256):
             try:
                 channels[addr.offset + i] = c
             except IndexError:

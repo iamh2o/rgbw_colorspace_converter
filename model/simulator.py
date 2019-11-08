@@ -5,10 +5,9 @@ import logging
 import queue
 import socket
 
-from typing import Iterable
-from color import Color
+from typing import Iterable, Type
 from grid import Address, Cell
-from .base import ModelBase
+from .base import ModelBase, DisplayColor
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
 logger = logging.getLogger("pyramidtriangles")
@@ -28,9 +27,9 @@ class SimulatorModel(ModelBase):
     def __repr__(self):
         return f'{__class__.__name__} (hostname={self.hostname}, port={self.port})'
 
-    def set(self, cell: Cell, addr: Address, color: Color):
+    def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
         # Enqueue a message to simulator, sets address
-        msg = f"{str(cell.id)} {','.join(map(str, color.rgb))}\n"
+        msg = f"{str(cell.id)} {','.join(map(str, color.rgb256))}\n"
         self.message_queue.put(msg)
 
     def go(self):

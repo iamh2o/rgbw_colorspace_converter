@@ -1,7 +1,7 @@
+from typing import Type
 
-from color import Color
 from grid.cell import Address, Cell
-from .base import ModelBase
+from .base import ModelBase, DisplayColor
 
 
 class MirrorModel(ModelBase):
@@ -15,7 +15,7 @@ class MirrorModel(ModelBase):
     def add_model(self, model):
         self.models.append(model)
 
-    def set(self, cell: Cell, addr: Address, color: Color):
+    def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
         for m in self.models:
             m.set(addr, color)
 
