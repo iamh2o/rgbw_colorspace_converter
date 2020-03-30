@@ -12,15 +12,15 @@ import java.util.regex.*;
 boolean DRAW_LABELS = true;
 
 // model vars
-TriangleForm grid = null;
+TriangleForm grid;
 
 // network vars
-int port = 4444;
+final int port = 4444;
 Server _server; 
-StringBuffer _buf = new StringBuffer();
+final StringBuilder _buf = new StringBuilder();
 
-color defaultLineColor = color(255, 255, 255);
-color defaultFillColor = color(255, 0, 255);
+final color defaultLineColor = color(255, 255, 255);
+final color defaultFillColor = color(255, 0, 255);
 
 void setup() {
   size(800,700);
@@ -33,7 +33,7 @@ void setup() {
   grid = makeSimpleGrid();
   
   _server = new Server(this, port);
-  println("server listening:" + _server);
+  println("server listening on port " + port);
 }
 
 void drawCheckbox(int x, int y, boolean checked) {
@@ -104,10 +104,11 @@ void pollServer() {
 
 Pattern cmd_pattern = Pattern.compile("^\\s*(\\d+)\\s+(\\d+),(\\d+),(\\d+)\\s*$");
 
+// processes a line command from the client.
 void processCommand(String cmd) {
   Matcher m = cmd_pattern.matcher(cmd);
   if (!m.find()) {
-    println("ignoring input!");
+    println("ignoring input: " + cmd);
     return;
   }
   int cell = Integer.valueOf(m.group(1));
@@ -122,7 +123,6 @@ TriangleForm makeSimpleGrid() {
   TriangleForm form = new TriangleForm();
   Table table = loadTable("triangleCellMapping.csv", "header");
   for (TableRow row : table.rows()) {
-    String shape = row.getString("shape");
     int x1 = row.getInt("x1");
     int y1 = row.getInt("y1");
     int x2 = row.getInt("x2");
@@ -130,7 +130,7 @@ TriangleForm makeSimpleGrid() {
     int x3 = row.getInt("x3");
     int y3 = row.getInt("y3");
     int id = row.getInt("id");
-    form.add(new Triangle(x1, y1, x2, y2, x3, y3, id), id);  
+    form.add(new Triangle(x1, y1, x2, y2, x3, y3, id));
   }
   
   return form;  
@@ -139,12 +139,8 @@ TriangleForm makeSimpleGrid() {
 class TriangleForm {
   ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 
-  TriangleForm() {
-  }
-
-  void add(Triangle triangle, int id) {
-    print("Triangle ID:", id);
-    triangle.setId(id);
+  void add(Triangle triangle) {
+    print("Triangle ID:", triangle.id);
     triangles.add(triangle);
   }
 
@@ -159,73 +155,59 @@ class TriangleForm {
   }
 
   // XXX probably need a better API here!
-  void setCellColor(int i, color c) {
-    if (i >= triangles.size()) {
-      println("invalid offset for HexForm.setColor: i only have " + triangles.size() + " hexes");
+  void setCellColor(int id, color c) {
+    if (id >= triangles.size()) {
+      println(String.format("invalid offset for setCellColor: %d exceeds %d cells", id, triangles.size()));
       return;
     }
 
-    triangles.get(i).setColor(c);
+    triangles.get(id).setColor(c);
   }
     
 }
 
 class Triangle {
-  int id = 0; // optional
-  int x1;
-  int y1;
-  int x2;
-  int y2;
-  int x3;
-  int y3;
-  int cell;
- 
-  Integer c; // can store color/int or null
+  final int id; // Cell ID
+  final int x1;
+  final int y1;
+  final int x2;
+  final int y2;
+  final int x3;
+  final int y3;
+  color fillColor = defaultFillColor;
   
-  Triangle(int x1, int y1,int x2, int y2,int x3, int y3, int id) {
-    print("CreateTriangle\n");
+  Triangle(int x1, int y1, int x2, int y2, int x3, int y3, int id) {
+    println("CreateTriangle");
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.x3 = x3;
     this.y3 = y3;
-    this.c = null;
     this.id = id;
-    this.cell = 0;
-  }
-
-  void setId(int id) {
-    this.id = id;
-    print("pass");
   }
 
   void setColor(color c) {
-    this.c = c;
+    fillColor = c;
   }
 
   void draw() {
-    color fill_color = (this.c != null) ? c : defaultFillColor;
-    fill(fill_color);
+    fill(fillColor);
     stroke(defaultLineColor);
-
-    beginShape();
-    triangle(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3);
-
-    endShape(CLOSE);
+    triangle(x1, y1, x2, y2, x3, y3);
 
     // draw text label
-    if (DRAW_LABELS && this.id != 0) {
+    if (DRAW_LABELS && id != 0) {
         fill(defaultLineColor);
 
-        if (this.y1 == this.y2) {
-          textAlign(CENTER); 
-          print(this.id,"pointy");
-          text(this.id,this.x1+12,this.y1+10);
+        if (y1 == y2) {
+          textAlign(CENTER);
+          //print(id, "pointy"); // This debug output will consume a lot of CPU
+          text(id, x1+12, y1+10);
         } else {
-          textAlign(BOTTOM); 
-          print(this.id,"flat");
-          text(this.id,this.x1,this.y1+30);
+          textAlign(BOTTOM);
+          //print(id, "flat"); // This debug output will consume a lot of CPU
+          text(id, x1, y1+30);
         }
     }
 
