@@ -253,7 +253,7 @@ class TriangleServer(object):
             self.runner.start()
             self.running = True
         except Exception:
-            logger.exception("Exception starting tri_grid!!")
+            logger.exception("Exception starting ShowRunner")
 
     def stop(self):
         # safe to call multiple times

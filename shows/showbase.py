@@ -37,9 +37,9 @@ class ShowBase(ABC):
 
 
 @lru_cache(maxsize=None)
-def load_shows() -> List[Tuple[str, Type[ShowBase]]]:
+def load_shows() -> List[Tuple[str, Show]]:
     """Return a sorted list of tuples (name, class) of ShowBase subclasses."""
-    return sorted([(cls.__name__, cls) for cls in ShowBase.__subclasses__()])
+    return sorted([(cls.__name__, cast(Show, cls)) for cls in ShowBase.__subclasses__()])
 
 
 def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]:
