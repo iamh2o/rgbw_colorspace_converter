@@ -1,7 +1,6 @@
 from .showbase import ShowBase
 from color import HSV
 from grid import Coordinate, Pyramid
-import time
 
 
 class Roar(ShowBase):
@@ -25,7 +24,7 @@ class Roar(ShowBase):
                     if coord in self.grid:
                         self.grid.set(coord, hsv)
                 self.grid.go()
-                time.sleep(1.5)
+                yield 1.5
 
                 hsv.h -= 0.08
 

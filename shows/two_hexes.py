@@ -1,9 +1,7 @@
 from .showbase import ShowBase
 from color import HSV
-from grid import hexagon, pointed_up
-import random as rnd
-import time
-from grid.cell import Direction, Position, row_length
+from grid import hexagon
+from grid.cell import Position, row_length
 
 
 class TwoHexes(ShowBase):
@@ -30,7 +28,7 @@ class TwoHexes(ShowBase):
                 #self.grid.set(h1, hsv1)
                 self.grid.set(h2, hsv2)
                 self.grid.go()
-                time.sleep(5)
+                yield 5.0
                 h1_c += 1
                 h2_c -= 1
 
