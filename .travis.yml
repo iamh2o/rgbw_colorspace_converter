@@ -4,6 +4,6 @@ python:
 before_install:
   - pip install poetry
 install:
-  - poetry install
+  - ./build.sh
 script:
   - poetry run python -m pytest tests/
