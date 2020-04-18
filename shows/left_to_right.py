@@ -1,7 +1,6 @@
 from color import HSV
 from .showbase import ShowBase
 from grid import Grid, Pyramid, left_to_right
-import time
 
 
 class LeftToRight(ShowBase):
@@ -35,7 +34,7 @@ class LeftToRight(ShowBase):
                     print(ii)
                     ii(hsv)
                     self.grid.go()
-                time.sleep(0.2)
+                yield 0.2
 
                 hsv.h += .1
                 if hsv.h >= 1.0:

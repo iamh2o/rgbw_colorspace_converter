@@ -23,6 +23,10 @@ class ColorPulse(ShowBase):
 
         self.saturation_step = (self.high_saturation - self.low_saturation) / self.steps
 
+    @staticmethod
+    def description() -> str:
+        return 'pulse where saturation gently fluctuates'
+
     def next_frame(self):
         color = HSV(self.hue/360, self.low_saturation, 1.0)
 

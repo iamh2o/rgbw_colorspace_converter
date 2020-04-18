@@ -1,4 +1,4 @@
-from itertools import chain, cycle
+from itertools import cycle
 from typing import List
 
 from color import HSV
@@ -8,7 +8,7 @@ from .showbase import ShowBase
 
 class IndexDebug(ShowBase):
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
-        self.pyramid = pyramid.face
+        self.pyramid = pyramid
         self.frame_delay = frame_delay
 
     def next_frame(self):
@@ -33,4 +33,4 @@ class IndexDebug(ShowBase):
 
                 face.set(cell, HSV(hue, 1.0, 0.8))
 
-        yield self.frame_delay
+            yield self.frame_delay

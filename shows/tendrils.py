@@ -1,8 +1,7 @@
 from color import HSV
 from .showbase import ShowBase
-from grid import Grid, Pyramid, Direction, Position, sweep, traversal
+from grid import Grid, Pyramid, Direction, Position, traversal
 from util import choose_random_hsv
-import time
 import random
 
 
@@ -85,16 +84,16 @@ class Tendrils(ShowBase):
                 s3 = self.set_pix(s3, ccol, pix_arr)
                 s4 = self.set_pix(s4, ccol, pix_arr)
                 self.grid.go()
-                time.sleep(0.5)
+                yield 0.5
             s1[2] = self.inc_hsv_s(s1[2])
             s2[2] = self.inc_hsv_s(s2[2])
             s3[2] = self.inc_hsv_s(s3[2])
             s4[2] = self.inc_hsv_s(s4[2])
 
-        yield self.frame_delay
+            yield self.frame_delay
 
     def inc_hsv_s(self, hsv):
         hsv.s += 0.04
         if hsv.s >= 1.0:
             hsv.s = 0
-        return(hsv)
+        return hsv

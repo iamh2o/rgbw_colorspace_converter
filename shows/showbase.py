@@ -1,19 +1,35 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
 from random import choice
-from typing import Iterator, List, Tuple, Type
+from typing import Iterator, Tuple, Type, TypeVar, List, cast
+
+Show = TypeVar('Show', bound="ShowBase")
 
 
 class ShowBase(ABC):
-    """Abstract base class to register Shows"""
+    """
+    Abstract base class for shows.
+
+    By inheriting from ShowBase (e.g. `class AwesomeShow(ShowBase):` your show will be found and listed as a runnable
+    show.
+    Your show MUST implement next_frame().
+    Your show MAY override other methods (just description() right now) that will give context about your show.
+    """
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Returns the name of the show."""
         return type(self).__name__
 
+    @staticmethod
+    def description() -> str:
+        """
+        Returns a show's description when overridden, or empty string.
+        """
+        return ''
+
     @abstractmethod
-    def next_frame(self):
+    def next_frame(self) -> float:
         """
         Draw the next step of the animation.  This is the main loop of the show.  Set some pixels and then 'yield' a
         number to indicate how long you'd like to wait before drawing the next frame.  Delay numbers are in seconds.
@@ -21,9 +37,9 @@ class ShowBase(ABC):
 
 
 @lru_cache(maxsize=None)
-def load_shows() -> List[Tuple[str, Type[ShowBase]]]:
+def load_shows() -> List[Tuple[str, Show]]:
     """Return a sorted list of tuples (name, class) of ShowBase subclasses."""
-    return sorted([(cls.__name__, cls) for cls in ShowBase.__subclasses__()])
+    return sorted([(cls.__name__, cast(Show, cls)) for cls in ShowBase.__subclasses__()])
 
 
 def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]:

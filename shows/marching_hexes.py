@@ -23,7 +23,7 @@ class MarchingHexes(ShowBase):
             for cell in up:
                 self.grid.set(hexagon(cell.position), hsv)
                 self.grid.go()
-                time.sleep(1)
+                yield 1.0
 
                 hsv.h = 0.0 if hsv.h >= 1.0 else hsv.h + 0.2
 

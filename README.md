@@ -22,11 +22,8 @@ source ve/bin/activate
 brew install python
 export PATH="$(brew --prefix python)/libexec/bin:${PATH}"
 
-# Install Poetry
-curl -fsSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-
-# Install dependencies
-poetry install
+# Install poetry and dependencies
+./build.sh
 ```
 
 * [Processing 2.2.1+](https://www.processing.org) (for simulator only)
