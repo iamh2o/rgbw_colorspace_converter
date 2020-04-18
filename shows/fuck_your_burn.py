@@ -9,9 +9,13 @@ from .showbase import ShowBase
 class FuckYourBurn(ShowBase):
     grid: Grid
 
-    def __init__(self, pyramid: Pyramid, frame_delay: float = 1.0):
+    def __init__(self, pyramid: Pyramid):
         self.grid = pyramid.panel
-        self.frame_delay = frame_delay
+        self.frame_delay = 1.0
+
+    @staticmethod
+    def description() -> str:
+        return 'FUCK YOUR BURN, two letters at a time, on repeat'
 
     @staticmethod
     def fu():
