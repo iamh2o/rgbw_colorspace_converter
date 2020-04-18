@@ -7,10 +7,9 @@ import queue
 import threading
 import cherrypy
 import netifaces
-from typing import Type
 
 from grid import Pyramid
-from model import Model
+from model import ModelBase
 from model.sacn_model import sACN
 from model.simulator import SimulatorModel
 import osc_serve
@@ -208,8 +207,8 @@ class ShowRunner(threading.Thread):
                     self.next_show()
 
 
-class TriangleServer(object):
-    def __init__(self, model: Type[Model], pyramid: Pyramid, args):
+class TriangleServer:
+    def __init__(self, model: ModelBase, pyramid: Pyramid, args):
         self.model = model
         self.pyramid = pyramid
         self.args = args

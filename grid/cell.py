@@ -1,6 +1,5 @@
 from enum import IntEnum
-from itertools import chain
-from typing import List, Mapping, Optional, NamedTuple, Set
+from typing import List, Optional, NamedTuple, Set, Iterable
 
 from .geom import Address, Coordinate, Geometry, Position, Universe
 
@@ -47,7 +46,7 @@ class Cell(NamedTuple):
     geom: Geometry
     real: bool
 
-    def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> List["Address"]:
+    def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> Iterable["Address"]:
         return (self.addresses
                 if direction.natural_for(self.orientation)
                 else reversed(self.addresses))

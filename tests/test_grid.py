@@ -1,18 +1,18 @@
-from typing import Iterable, Type
+from typing import Iterable
 from pytest import raises
 
 from grid import (
     Position, Geometry, Cell, Address, bottom_edge, left_edge, right_edge, vertex_neighbors, edge_neighbors,
     Coordinate, Face, Panel, Universe
 )
-from model import ModelBase, DisplayColor
+from model import ModelBase, DisplayColorBase
 
 
 class FakeModel(ModelBase):
     def activate(self, cells: Iterable[Cell]):
         pass
 
-    def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
+    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
         pass
 
     def go(self):

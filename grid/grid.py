@@ -1,9 +1,9 @@
 from abc import abstractmethod
 import logging
-from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union, Type
+from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union
 
 from color import HSV
-from model import Model, DisplayColor
+from model import DisplayColorBase, ModelBase
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Position
 
@@ -21,12 +21,12 @@ Selector = Union[Location,
 class Pixel(NamedTuple):
     cell: Cell
     address: Address
-    model: Type[Model]
+    model: ModelBase
 
-    def set(self, color: Type[DisplayColor]):
+    def set(self, color: DisplayColorBase):
         self.model.set(self.cell, self.address, color)
 
-    def __call__(self, color: Type[DisplayColor]):
+    def __call__(self, color: DisplayColorBase):
         self.set(color)
 
 
@@ -39,7 +39,7 @@ class Grid(Mapping[Location, Cell]):
     """
 
     geom: Geometry
-    model: Type[Model]
+    model: ModelBase
 
     @property
     def row_count(self) -> int:
@@ -71,9 +71,9 @@ class Grid(Mapping[Location, Cell]):
         elif isinstance(sel, Cell):
             cells = [sel]
         elif isinstance(sel, Iterable) and not isinstance(self, str):
-            cells = sel  # FIXME(lyra)
+            cells = list(sel)  # FIXME(lyra)
         elif callable(sel):
-            cells = sel(self)
+            cells = list(sel(self))
         else:
             raise TypeError(f'invalid Cell selector {sel!r}')
 
@@ -88,11 +88,11 @@ class Grid(Mapping[Location, Cell]):
             for addr in cell.pixel_addresses(direction):
                 yield Pixel(cell, addr, self.model)
 
-    def set(self, sel: Selector, color: Type[DisplayColor]):
+    def set(self, sel: Selector, color: DisplayColorBase):
         for pixel in self.pixels(sel):
             pixel.set(color)
 
-    def clear(self, color: Type[DisplayColor] = HSV(0, 0, 0)):
+    def clear(self, color: DisplayColorBase = HSV(0, 0, 0)):
         self.set(self.cells, color)
         self.go()
 

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Mapping, TypeVar, Tuple, Type
+from typing import Iterable, List, Mapping, Tuple
 from grid.cell import Cell
 from grid.geom import Address
 
@@ -25,15 +25,11 @@ class DisplayColorBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def scale(self, factor: float) -> "DisplayColor":
+    def scale(self, factor: float) -> "DisplayColorBase":
         """
         Scales the brightness by a factor in [0,1].
         """
         raise NotImplementedError
-
-
-# Useful for type hinting any subclass of ModelBase (i.e. Type[Model])
-DisplayColor = TypeVar('DisplayColor', bound=DisplayColorBase)
 
 
 class ModelBase(ABC):
@@ -52,7 +48,7 @@ class ModelBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set(self, cell: Cell, addr: Address, color: Type[DisplayColor]):
+    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
         """
         Set one pixel to a particular color.
 
@@ -64,10 +60,6 @@ class ModelBase(ABC):
     def go(self):
         """Flush all buffered data out to devices."""
         raise NotImplementedError
-
-
-# Useful for type hinting any subclass of ModelBase (i.e. Type[Model])
-Model = TypeVar('Model', bound=ModelBase)
 
 
 def allocate_universes(cells: Iterable[Cell]) -> Mapping[int, List[int]]:

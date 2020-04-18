@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
 from random import choice
-from typing import Iterator, Tuple, Type, TypeVar, List, cast
-
-Show = TypeVar('Show', bound="ShowBase")
+from typing import Iterator, Tuple, List, cast
 
 
 class ShowBase(ABC):
@@ -37,12 +35,12 @@ class ShowBase(ABC):
 
 
 @lru_cache(maxsize=None)
-def load_shows() -> List[Tuple[str, Show]]:
+def load_shows() -> List[Tuple[str, ShowBase]]:
     """Return a sorted list of tuples (name, class) of ShowBase subclasses."""
-    return sorted([(cls.__name__, cast(Show, cls)) for cls in ShowBase.__subclasses__()])
+    return sorted([(cls.__name__, cast(ShowBase, cls)) for cls in ShowBase.__subclasses__()])
 
 
-def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]:
+def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, ShowBase]]:
     """
     Return an infinite sequence of randomized shows.
 

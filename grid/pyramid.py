@@ -1,7 +1,7 @@
-from typing import Iterable, Iterator, List, Optional, Type
+from typing import Iterable, Iterator, List, Optional
 
 from color import HSV
-from model import Model, DisplayColor
+from model import ModelBase, DisplayColorBase
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Universe
 from .grid import Grid, Pixel, Selector
@@ -27,7 +27,7 @@ class Pyramid:
 
     @classmethod
     def build_single(cls,
-                     model: Type[Model],
+                     model: ModelBase,
                      start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
         """Builds Pyramid with a single, repeated panel."""
         face = Face.build(model, [[0]], start)
@@ -35,7 +35,7 @@ class Pyramid:
 
     @classmethod
     def build(cls,
-              model: Type[Model],
+              model: ModelBase,
               start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
         """Builds Pyramid for the art car."""
         left_face = Face.build(model, FULL_FACE_SPEC, start)
@@ -62,7 +62,7 @@ class Pyramid:
         self.face = FaceMirror(self.faces[:2])
 
     @property
-    def _model(self) -> Type[Model]:
+    def _model(self) -> ModelBase:
         # there should only really be one model
         return self.faces[0].model
 
@@ -95,7 +95,7 @@ class Pyramid:
     def go(self):
         self._model.go()
 
-    def clear(self, color: Type[DisplayColor] = HSV(0, 0, 0)):
+    def clear(self, color: DisplayColorBase = HSV(0, 0, 0)):
         for face in self.faces:
             face.clear(color)
 
@@ -172,7 +172,7 @@ class FaceReplicator(Grid):
         return self.primary.geom
 
     @property
-    def model(self) -> Type[Model]:
+    def model(self) -> ModelBase:
         return self.primary.model
 
     @property

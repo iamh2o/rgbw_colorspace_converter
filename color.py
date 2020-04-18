@@ -83,12 +83,12 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
 import colorsys
 from copy import deepcopy
 from math import fmod, cos, radians
-from typing import Tuple, List, TypeVar, Union
+from typing import Tuple, List, Union
 
 __all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
 
-# Constrained generic type of int or float
-V = TypeVar('V', int, float)
+# Generic type of int or float
+V = Union[int, float]
 
 
 def clamp(val: V, min_value: V, max_value: V) -> V:

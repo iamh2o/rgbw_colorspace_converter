@@ -5,7 +5,7 @@ import cherrypy
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 
-class TriangleWeb(object):
+class TriangleWeb:
     """Web API for running triangle shows."""
     def __init__(self, queue: Queue, runner: "ShowRunner", show_names: List[str]):
         self.queue = queue

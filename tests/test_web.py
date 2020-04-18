@@ -8,7 +8,7 @@ from web import TriangleWeb
 command_queue = queue.LifoQueue()
 
 
-class FakeRunner(object):
+class FakeRunner:
     @staticmethod
     def status():
         return "Everything's fine"
