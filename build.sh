@@ -1,7 +1,7 @@
 #!/bin/bash
 
-hash poetry
-if [ $? -ne 0 ]; then
+if ! hash poetry
+then
   echo "Installing poetry"
   curl -fsSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
 fi

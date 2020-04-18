@@ -2,8 +2,7 @@
 
 Codebase to drive pyramid triangle art.
 
-![Build
-Status](https://travis-ci.com/pyramidscheme/pyramidtriangles.svg?branch=master)
+![Build Status](https://travis-ci.com/pyramidscheme/pyramidtriangles.svg?branch=master)
 
 ## Requirements
 
@@ -97,7 +96,7 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 5)Add the 'Device' ArtNet [IP] Artnet Universe 0:0:0 Direction  == OUTPUT
 6) Save
 7) from sourced ve, type python ./go_led.py
-8)Open DMX4pro condiguration tool.  You should be able to see the OLA artnet and the DMX4pro.
-9)From localhost:9090 (OMG! There is a much better 'new ola UI' which you can access by clicking the tiny link to it at the obttomo of this page that loads for localhost:9090), click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
-10) IF you have cherrypy installed, you can go to the simple web interface that should have started on localhost:9990. you can shoose shows, set cycle interval,etc.
+8)Open DMX4pro configuration tool.  You should be able to see the OLA artnet and the DMX4pro.
+9)From localhost:9090 (OMG! There is a much better 'new ola UI' which you can access by clicking the tiny link to it at the bottom of this page that loads for localhost:9090), click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
+10) IF you have cherrypy installed, you can go to the simple web interface that should have started on localhost:9990. you can choose shows, set cycle interval,etc.
 11) simulator possibly coming!
