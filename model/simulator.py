@@ -1,6 +1,3 @@
-"""
-Model to communicate with a Simulator over a TCP socket.
-"""
 import logging
 import queue
 import socket
@@ -14,12 +11,18 @@ logger = logging.getLogger("pyramidtriangles")
 
 
 class SimulatorModel(ModelBase):
+    """
+    Model to communicate with a Processing simulator over a TCP socket.
+    """
     def __init__(self, hostname: str, port: int):
         self.hostname = hostname
         self.port = port
 
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((self.hostname, self.port))
+        try:
+            self.sock = socket.create_connection((self.hostname, self.port), 2.0)  # 2 second timeout
+        except ConnectionError as e:
+            e.filename = f"{self.hostname}:{self.port}"
+            raise
 
         # queue of 'dirty' messages to send
         self.message_queue = queue.SimpleQueue()
