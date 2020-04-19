@@ -88,6 +88,8 @@ from typing import Tuple, List, Union
 __all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
 
 # Generic type of int or float
+from model import DisplayColor
+
 V = Union[int, float]
 
 
@@ -453,7 +455,7 @@ def Hex(value: str) -> "Color":
     return RGB(*rgb_t)
 
 
-class Color:
+class Color(DisplayColor):
     hsv_t: List[float]
 
     def __init__(self, hsv: Tuple[float, float, float]):
