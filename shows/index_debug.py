@@ -3,10 +3,10 @@ from typing import List
 
 from color import HSV
 from grid import Coordinate, Grid, Pyramid, every
-from .showbase import ShowBase
+from .show import Show
 
 
-class IndexDebug(ShowBase):
+class IndexDebug(Show):
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
         self.pyramid = pyramid
         self.frame_delay = frame_delay

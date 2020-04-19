@@ -11,14 +11,14 @@ import logging
 from typing import Iterator
 
 import ola
-from .base import ModelBase
+from .base import Model
 from .mapping import PixelMap
 
 logger = logging.getLogger("pyramidtriangles")
 
 
-# XXX(lyra): this is no longer a valid ModelBase
-class OLAModel(ModelBase):
+# XXX(lyra): this is no longer a valid Model
+class OLAModel(Model):
     def __init__(self, max_dmx, model_json: str, pixelmap: PixelMap):
         # XXX any way to check if this is a valid connection?
 
@@ -29,7 +29,7 @@ class OLAModel(ModelBase):
         self.client = self.wrapper.Client()
         # Keys for LEDs are integers representing universes, each universe has an array of possible DMX channels
         # Pixels are an LED represented by 4 DMX addresses
-        
+
         # initializing just 4 universes!!! Need to make this more configurable.
         self.leds = {
             0: [0] * max_dmx,

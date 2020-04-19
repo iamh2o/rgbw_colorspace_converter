@@ -1,5 +1,5 @@
 # These imports include submodules under the `shows` namespace (e.g. shows.UpDown is available).
-from .showbase import ShowBase, load_shows, random_shows
+from .show import Show, load_shows, random_shows
 
 from .circling import Circling
 from .color_pulse import ColorPulse

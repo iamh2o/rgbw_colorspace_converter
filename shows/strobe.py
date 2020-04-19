@@ -1,11 +1,11 @@
 import time
 
-from .showbase import ShowBase
+from .show import Show
 from color import RGB
 from grid import every
 
 
-class Strobe(ShowBase):
+class Strobe(Show):
     def __init__(self, pyramid, frame_delay=0.02):
         self.grid = pyramid.face
         self.frame_delay = frame_delay

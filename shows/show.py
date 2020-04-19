@@ -4,11 +4,11 @@ from random import choice
 from typing import Iterator, Tuple, List, cast, Type, Generator
 
 
-class ShowBase(ABC):
+class Show(ABC):
     """
     Abstract base class for shows.
 
-    By inheriting from ShowBase (e.g. `class AwesomeShow(ShowBase):` your show will be found and listed as a runnable
+    By inheriting from Show (e.g. `class AwesomeShow(Show):` your show will be found and listed as a runnable
     show.
     Your show MUST implement next_frame().
     Your show MAY override other methods (just description() right now) that will give context about your show.
@@ -35,12 +35,12 @@ class ShowBase(ABC):
 
 
 @lru_cache(maxsize=None)
-def load_shows() -> List[Tuple[str, ShowBase]]:
-    """Return a sorted list of tuples (name, class) of ShowBase subclasses."""
-    return sorted([(cls.__name__, cast(ShowBase, cls)) for cls in ShowBase.__subclasses__()])
+def load_shows() -> List[Tuple[str, Show]]:
+    """Return a sorted list of tuples (name, class) of Show subclasses."""
+    return sorted([(cls.__name__, cast(Show, cls)) for cls in Show.__subclasses__()])
 
 
-def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]:
+def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[Show]]]:
     """
     Return an infinite sequence of randomized shows.
 

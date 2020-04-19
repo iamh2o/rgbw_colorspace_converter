@@ -3,10 +3,10 @@ from itertools import repeat, chain
 from color import RGB
 from grid import Grid, Position, Pyramid
 from randomcolor import random_color
-from .showbase import ShowBase
+from .show import Show
 
 
-class FuckYourBurn(ShowBase):
+class FuckYourBurn(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid):

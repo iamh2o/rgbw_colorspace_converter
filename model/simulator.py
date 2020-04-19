@@ -4,13 +4,13 @@ import socket
 
 from typing import Iterable
 from grid import Address, Cell
-from .base import DisplayColorBase, ModelBase
+from .base import DisplayColor, Model
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
 logger = logging.getLogger("pyramidtriangles")
 
 
-class SimulatorModel(ModelBase):
+class SimulatorModel(Model):
     """
     Model to communicate with a Processing simulator over a TCP socket.
     """
@@ -30,7 +30,7 @@ class SimulatorModel(ModelBase):
     def __repr__(self):
         return f'{__class__.__name__} (hostname={self.hostname}, port={self.port})'
 
-    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
+    def set(self, cell: Cell, addr: Address, color: DisplayColor):
         # Enqueue a message to simulator, sets address
         msg = f"{str(cell.id)} {','.join(map(str, color.rgb256))}\n"
         self.message_queue.put(msg)

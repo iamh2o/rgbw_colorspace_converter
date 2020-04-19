@@ -1,10 +1,10 @@
-from .showbase import ShowBase
+from .show import Show
 from color import HSV
 from grid import hexagon
 from grid.cell import Position, row_length
 
 
-class TwoHexes(ShowBase):
+class TwoHexes(Show):
     def __init__(self, grid, frame_delay=0.1):
         self.grid = grid
         self.frame_delay = frame_delay

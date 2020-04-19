@@ -2,10 +2,10 @@ from random import shuffle
 
 from color import RGB
 from grid import Grid, Pyramid
-from .showbase import ShowBase
+from .show import Show
 
 
-class OneByOne(ShowBase):
+class OneByOne(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.9):

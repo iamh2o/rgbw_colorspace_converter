@@ -1,10 +1,10 @@
 from typing import Iterable
 
 from grid import Address, Cell
-from .base import DisplayColorBase, ModelBase
+from .base import DisplayColor, Model
 
 
-class NullModel(ModelBase):
+class NullModel(Model):
     """
     Model that does nothing.
 
@@ -13,7 +13,7 @@ class NullModel(ModelBase):
     def __repr__(self):
         return f'{__class__.__name__}'
 
-    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
+    def set(self, cell: Cell, addr: Address, color: DisplayColor):
         pass
 
     def go(self):

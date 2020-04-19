@@ -1,9 +1,9 @@
 from color import HSV as hsv
 from grid import Grid, Pyramid, every
-from .showbase import ShowBase
+from .show import Show
 
 
-class CycleHSV(ShowBase):
+class CycleHSV(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.025):

@@ -5,7 +5,7 @@ from color import HSV, RGB
 from dudek.HelperFunctions import randColorRange, oneIn, upORdown, gradient_wheel
 from dudek.triangle import tri_nextdoor, min_max_row, min_max_column, TRI_GEN
 from grid import Coordinate, Pyramid, every
-from .showbase import ShowBase
+from .show import Show
 
 
 class RainDrop:
@@ -30,7 +30,7 @@ class RainDrop:
         return y < ground_level
 
 
-class Rain(ShowBase):
+class Rain(Show):
     def __init__(self, pyramid: Pyramid, frame_delay=1.0):
         self.tri = pyramid.face
         self.speed = frame_delay

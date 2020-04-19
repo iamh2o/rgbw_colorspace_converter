@@ -3,7 +3,7 @@ import logging
 from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union
 
 from color import HSV
-from model import DisplayColorBase, ModelBase
+from model import DisplayColor, Model
 from .cell import Cell, Direction
 from .geom import Address, Coordinate, Geometry, Position
 
@@ -21,12 +21,12 @@ Selector = Union[Location,
 class Pixel(NamedTuple):
     cell: Cell
     address: Address
-    model: ModelBase
+    model: Model
 
-    def set(self, color: DisplayColorBase):
+    def set(self, color: DisplayColor):
         self.model.set(self.cell, self.address, color)
 
-    def __call__(self, color: DisplayColorBase):
+    def __call__(self, color: DisplayColor):
         self.set(color)
 
 
@@ -39,7 +39,7 @@ class Grid(Mapping[Location, Cell]):
     """
 
     geom: Geometry
-    model: ModelBase
+    model: Model
 
     @property
     def row_count(self) -> int:
@@ -88,11 +88,11 @@ class Grid(Mapping[Location, Cell]):
             for addr in cell.pixel_addresses(direction):
                 yield Pixel(cell, addr, self.model)
 
-    def set(self, sel: Selector, color: DisplayColorBase):
+    def set(self, sel: Selector, color: DisplayColor):
         for pixel in self.pixels(sel):
             pixel.set(color)
 
-    def clear(self, color: DisplayColorBase = HSV(0, 0, 0)):
+    def clear(self, color: DisplayColor = HSV(0, 0, 0)):
         self.set(self.cells, color)
         self.go()
 

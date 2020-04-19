@@ -1,9 +1,9 @@
 from color import RGB
 from grid import Grid, Pyramid, Orientation, every, pointed
-from .showbase import ShowBase
+from .show import Show
 
 
-class UpDown(ShowBase):
+class UpDown(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 2.0):

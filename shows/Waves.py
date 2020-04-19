@@ -4,10 +4,10 @@ from color import RGB
 from dudek.HelperFunctions import randColor, gradient_wheel, maxColor
 from dudek.triangle import min_max_column, min_max_row
 from grid import Pyramid, Coordinate
-from .showbase import ShowBase
+from .show import Show
 
 
-class Waves(ShowBase):
+class Waves(Show):
     def __init__(self, pyramid: Pyramid):
         self.tri = pyramid.panel
         self.time = 0

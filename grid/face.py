@@ -1,7 +1,7 @@
 from itertools import chain
 from typing import Iterable, List, NamedTuple, Optional, MutableMapping
 
-from model import ModelBase
+from model import Model
 from .cell import Cell, Orientation
 from .geom import Address, Coordinate, Geometry, Universe
 from .grid import Grid
@@ -100,7 +100,7 @@ class Face(Grid):
 
     @classmethod
     def build(cls,
-              model: ModelBase,
+              model: Model,
               spec: List[List[int]],
               start: Address = Address(Universe(1, 1), 4),
               rows_per_panel: int = 11) -> "Face":
@@ -156,7 +156,7 @@ class Face(Grid):
 
         return cls(model, overall_geom, real_panels)
 
-    def __init__(self, model: ModelBase, geom: Geometry, panels: Iterable[Panel]):
+    def __init__(self, model: Model, geom: Geometry, panels: Iterable[Panel]):
         self.model = model
         self.geom = geom
         self.panels = list(panels)
