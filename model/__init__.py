@@ -1,2 +1,2 @@
-# These imports include submodules under the `model` namespace (e.g. model.SimulatorModel is available).
+# These imports include submodules under the `model` namespace.
 from .base import DisplayColor, Model
