@@ -2,7 +2,6 @@ import argparse
 import faulthandler
 import logging
 import sys
-import time
 import queue
 import threading
 import cherrypy
@@ -10,10 +9,10 @@ import netifaces
 
 from grid import Pyramid
 from model import Model
-from model.sacn_model import sACN
-from model.simulator import SimulatorModel
 import osc_serve
 import shows
+from model.sacn_model import sACN
+from model.simulator import SimulatorModel
 from web import TriangleWeb
 from show_runner import ShowRunner
 
@@ -23,51 +22,47 @@ faulthandler.enable()
 logger = logging.getLogger("pyramidtriangles")
 
 
+# Threading Model
+#
+# The main thread parses commandline arguments and creates a TriangleServer. A threading.Event is created to signal a
+# shutdown to any other threads, allowing them to shutdown gracefully.
+#
+# TriangleServer.start() starts threads for the ShowRunner and the OSC listener.
+# Then TriangleServer may startup with a web server or run headless:
+# 1. TriangleServer.go_web() launches and joins cherrypy, which is multi-threaded itself.
+# 2. TriangleServer.go_headless() joins to the shutdown event and has nothing more to do.
+
+
 class TriangleServer:
     def __init__(self, model: Model, pyramid: Pyramid, args):
         self.model = model
         self.pyramid = pyramid
-        self.args = args
 
         self.queue = queue.LifoQueue()
         self.shutdown = threading.Event()  # Used to signal a shutdown event
-
-        self.runner = None
-
-        self.running = False
-        self._create_services()
-
-    def _create_services(self):
-        """Create TRI services, trying to fail gracefully on missing dependencies"""
-
-        # XXX can this also advertise the web interface?
-        # XXX should it only advertise services that exist?
-
-        # OSC listener
-        t = threading.Thread(target=osc_serve.create_server, args=(self.shutdown, self.queue))
-        t.start()
 
         self.runner = ShowRunner(
             pyramid=self.pyramid,
             command_queue=self.queue,
             shutdown=self.shutdown,
-            max_showtime=self.args.max_time,
-            fail_hard=self.args.fail_hard)
+            max_showtime=args.max_time,
+            fail_hard=args.fail_hard)
 
-        if self.args.shows:
-            print("setting show:", self.args.shows[0])
-            self.runner.next_show(self.args.shows[0])
+        self.osc_listener = threading.Thread(target=osc_serve.create_server, args=(self.shutdown, self.queue))
+
+        self.running = False
+
+        if args.shows:
+            print("setting show:", args.shows[0])
+            self.runner.next_show(args.shows[0])
 
     def start(self):
         if self.running:
             logger.warning("start() called, but tri_grid is already running!")
             return
-
-        try:
-            self.runner.start()
-            self.running = True
-        except Exception:
-            logger.exception("Exception starting ShowRunner")
+        self.osc_listener.start()
+        self.runner.start()
+        self.running = True
 
     def stop(self):
         # safe to call multiple times
@@ -78,8 +73,7 @@ class TriangleServer:
         """Run without the web interface"""
         logger.info("Running without web interface")
         try:
-            while True:
-                time.sleep(999)  # control-c breaks out of time.sleep
+            self.shutdown.wait()
         except KeyboardInterrupt:
             print("Exiting on keyboard interrupt")
 
