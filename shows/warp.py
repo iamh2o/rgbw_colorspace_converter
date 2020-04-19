@@ -1,9 +1,9 @@
 from randomcolor import random_color
-from .showbase import ShowBase
+from .show import Show
 from grid import Grid, Pyramid, inset
 
 
-class Warp(ShowBase):
+class Warp(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.2):

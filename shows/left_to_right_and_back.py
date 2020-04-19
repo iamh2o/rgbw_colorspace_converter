@@ -1,9 +1,9 @@
 from color import HSV
-from .showbase import ShowBase
+from .show import Show
 from grid import Direction, Grid, Pyramid, traversal
 
 
-class LeftToRightAndBack(ShowBase):
+class LeftToRightAndBack(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 1.0):

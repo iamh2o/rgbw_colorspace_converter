@@ -84,7 +84,7 @@ class Color(NamedTuple):
         """
         Called to emit an RGB triple in [0-255].
 
-        Used in DisplayColorBase interface.
+        Used in DisplayColor interface.
         """
         def c(v: float) -> int:
             return int(v * 255.0 + 0.5)
@@ -97,7 +97,7 @@ class Color(NamedTuple):
         """
         Called to emit an RGBW quadruple in [0-255].
 
-        Used in DisplayColorBase interface.
+        Used in DisplayColor interface.
         """
         return self.dmx
 

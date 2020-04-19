@@ -1,11 +1,11 @@
 from color import HSV
-from .showbase import ShowBase
+from .show import Show
 from grid import Grid, Pyramid, Direction, Position, traversal
 from util import choose_random_hsv
 import random
 
 
-class Tendrils(ShowBase):
+class Tendrils(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 1.0):

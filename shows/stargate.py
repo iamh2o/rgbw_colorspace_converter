@@ -2,10 +2,10 @@ import random
 
 from color import Color, HSV
 from grid import Grid, Pyramid, inset
-from .showbase import ShowBase
+from .show import Show
 
 
-class Stargate(ShowBase):
+class Stargate(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.25):

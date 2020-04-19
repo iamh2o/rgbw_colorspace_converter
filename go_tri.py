@@ -9,7 +9,7 @@ import cherrypy
 import netifaces
 
 from grid import Pyramid
-from model import ModelBase
+from model import Model
 from model.sacn_model import sACN
 from model.simulator import SimulatorModel
 import osc_serve
@@ -24,7 +24,7 @@ logger = logging.getLogger("pyramidtriangles")
 
 
 class TriangleServer:
-    def __init__(self, model: ModelBase, pyramid: Pyramid, args):
+    def __init__(self, model: Model, pyramid: Pyramid, args):
         self.model = model
         self.pyramid = pyramid
         self.args = args

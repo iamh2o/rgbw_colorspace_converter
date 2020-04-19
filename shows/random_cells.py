@@ -2,12 +2,12 @@ from collections import deque
 from typing import Deque
 import random
 
-from .showbase import ShowBase
+from .show import Show
 from color import RGB
 from grid import Cell, Grid, Pyramid
 
 
-class Random(ShowBase):
+class Random(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay=0.1):

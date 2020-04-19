@@ -5,14 +5,14 @@ from grid import (
     Position, Geometry, Cell, Address, bottom_edge, left_edge, right_edge, vertex_neighbors, edge_neighbors,
     Coordinate, Face, Panel, Universe
 )
-from model import ModelBase, DisplayColorBase
+from model import Model, DisplayColor
 
 
-class FakeModel(ModelBase):
+class FakeModel(Model):
     def activate(self, cells: Iterable[Cell]):
         pass
 
-    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
+    def set(self, cell: Cell, addr: Address, color: DisplayColor):
         pass
 
     def go(self):

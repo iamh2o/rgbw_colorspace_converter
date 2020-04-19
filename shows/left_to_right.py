@@ -1,9 +1,9 @@
 from color import HSV
-from .showbase import ShowBase
+from .show import Show
 from grid import Grid, Pyramid, left_to_right
 
 
-class LeftToRight(ShowBase):
+class LeftToRight(Show):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.2):

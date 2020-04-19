@@ -2,12 +2,12 @@ from collections import deque
 from typing import Deque
 import random
 
-from .showbase import ShowBase
+from .show import Show
 from color import RGB
 from grid import Cell, Pyramid
 
 
-class Zaphod(ShowBase):
+class Zaphod(Show):
     def __init__(self, pyramid: Pyramid, frame_delay=0.1):
         self.grid = pyramid.panel
         self.frame_delay = frame_delay

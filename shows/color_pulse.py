@@ -1,10 +1,10 @@
 from color import HSV
 from grid import every, inset
 
-from .showbase import ShowBase
+from .show import Show
 
 
-class ColorPulse(ShowBase):
+class ColorPulse(Show):
     """Simple color pulse from a base color where the saturation is gently adjusted up and down."""
     def __init__(self, pyramid, frame_delay=0.2):
         self.grid = pyramid.face

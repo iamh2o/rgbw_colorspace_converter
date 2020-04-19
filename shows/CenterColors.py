@@ -2,10 +2,10 @@ from color import RGB
 from dudek.HelperFunctions import randColor, maxColor, oneIn, gradient_wheel
 from dudek.triangle import all_left_corners, nested_triangles
 from grid import Pyramid, Coordinate
-from .showbase import ShowBase
+from .show import Show
 
 
-class CenterColors(ShowBase):
+class CenterColors(Show):
     def __init__(self, pyramid: Pyramid):
         self.tri = pyramid.panel
         self.time = 0

@@ -4,7 +4,7 @@ from grid.cell import Cell
 from grid.geom import Address
 
 
-class DisplayColorBase(ABC):
+class DisplayColor(ABC):
     """
     Abstract base class for displayable color.
     """
@@ -25,14 +25,14 @@ class DisplayColorBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def scale(self, factor: float) -> "DisplayColorBase":
+    def scale(self, factor: float) -> "DisplayColor":
         """
         Scales the brightness by a factor in [0,1].
         """
         raise NotImplementedError
 
 
-class ModelBase(ABC):
+class Model(ABC):
     """Abstract base class for simulators."""
 
     @abstractmethod
@@ -48,7 +48,7 @@ class ModelBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
+    def set(self, cell: Cell, addr: Address, color: DisplayColor):
         """
         Set one pixel to a particular color.
 

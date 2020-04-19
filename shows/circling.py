@@ -5,7 +5,7 @@ from color import HSV
 from dudek.HelperFunctions import turn_left, turn_right, randColor, maxColor
 from dudek.triangle import near_neighbor, get_ring, tri_in_direction, corners, center
 from grid import Coordinate, Pyramid
-from .showbase import ShowBase
+from .show import Show
 
 
 class Trail:
@@ -67,7 +67,7 @@ class Planet:
                 self.trails.remove(t)
 
 
-class Circling(ShowBase):
+class Circling(Show):
     def __init__(self, pyramid: Pyramid, frame_delay=1.1):
         self.tri = pyramid.panel
         self.planets: List[Planet] = []

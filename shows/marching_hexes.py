@@ -1,11 +1,11 @@
-from .showbase import ShowBase
+from .show import Show
 from color import HSV
 from grid import hexagon, pointed_up
 import random as rnd
 import time
 
 
-class MarchingHexes(ShowBase):
+class MarchingHexes(Show):
     def __init__(self, pyramid, frame_delay=0.1):
         self.grid = pyramid.face
         self.frame_delay = frame_delay

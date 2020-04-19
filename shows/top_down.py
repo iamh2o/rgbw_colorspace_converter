@@ -1,8 +1,8 @@
-from .showbase import ShowBase
+from .show import Show
 from color import HSV
 
 
-class TopDown(ShowBase):
+class TopDown(Show):
     """Simple Demo Show. Move from Top of Triangle To Bottom, lighting each row at a time"""
     def __init__(self, pyramid, frame_delay=1.0):
         self.grid = pyramid.face

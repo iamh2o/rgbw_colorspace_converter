@@ -5,7 +5,7 @@ from color import RGB
 from dudek.HelperFunctions import gradient_wheel, maxColor, turn_right, turn_left, randColor, randColorRange
 from dudek.triangle import get_ring, tri_in_direction, all_corners, all_centers
 from grid import Coordinate, Pyramid, Grid
-from .showbase import ShowBase
+from .show import Show
 
 
 class Gear:
@@ -47,7 +47,7 @@ class Gear:
         self.dir = turn_right(self.dir) if self.turn == 1 else turn_left(self.dir)
 
 
-class Gears(ShowBase):
+class Gears(Show):
     def __init__(self, pyramid: Pyramid, frame_delay=0.25):
         self.grid = pyramid.panel
         self.frame_delay = frame_delay

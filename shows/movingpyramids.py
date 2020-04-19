@@ -1,11 +1,11 @@
 from color import HSV
 from dudek.triangle import all_left_corners, tri_in_direction, inset_triangles, all_center_corners
 from grid.cell import Coordinate
-from .showbase import ShowBase
+from .show import Show
 from util import choose_random_hsv
 
 
-class MovingPyramids(ShowBase):
+class MovingPyramids(Show):
     def __init__(self, trimodel, frame_delay=.5):
         self.tri = trimodel.face
         self.time = 0

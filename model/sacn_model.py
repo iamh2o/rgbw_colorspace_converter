@@ -10,12 +10,12 @@ from typing import Iterable
 import sacn
 
 from grid import Address, Cell
-from .base import allocate_universes, DisplayColorBase, ModelBase
+from .base import allocate_universes, DisplayColor, Model
 
 logger = logging.getLogger("pyramidtriangles")
 
 
-class sACN(ModelBase):
+class sACN(Model):
     def __init__(self, bind_address: str, brightness: float = 1.0):
         self.brightness = brightness
         self.sender = sacn.sACNsender(
@@ -44,7 +44,7 @@ class sACN(ModelBase):
     def __del__(self):
         self.stop()
 
-    def set(self, cell: Cell, addr: Address, color: DisplayColorBase):
+    def set(self, cell: Cell, addr: Address, color: DisplayColor):
         color = color.scale(self.brightness)
         try:
             channels = self.leds[addr.universe.id]

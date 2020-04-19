@@ -2,10 +2,10 @@ from random import choices, randint
 
 from dudek.HelperClasses import Faders
 from dudek.HelperFunctions import randColor, oneIn, randColorRange
-from .showbase import ShowBase
+from .show import Show
 
 
-class Sparkles(ShowBase):
+class Sparkles(Show):
     def __init__(self, pyramid, frame_delay=0.1):
         self.grid = pyramid.face
         self.faders = Faders(self.grid)

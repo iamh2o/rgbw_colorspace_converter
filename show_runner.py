@@ -8,7 +8,7 @@ from typing import Optional, Generator
 import shows
 import util
 from grid import Pyramid
-from shows import ShowBase
+from shows import Show
 
 logger = logging.getLogger("pyramidtriangles")
 
@@ -42,8 +42,8 @@ class ShowRunner(Thread):
     __brightness_scale = 1.0
     __speed_scale = 1.0
     show_start_time = 0.0
-    show: Optional[ShowBase] = None
-    prev_show: Optional[ShowBase] = None
+    show: Optional[Show] = None
+    prev_show: Optional[Show] = None
     framegen: Generator[float, None, None] = iter(())
 
     def __init__(self,
