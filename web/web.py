@@ -4,10 +4,12 @@ from typing import List
 import cherrypy
 from jinja2 import Environment, PackageLoader, select_autoescape
 
+from show_runner import ShowRunner, ClearCmd, RuntimeCmd, BrightnessCmd, RunShowCmd
+
 
 class TriangleWeb:
     """Web API for running triangle shows."""
-    def __init__(self, queue: Queue, runner: "ShowRunner", show_names: List[str]):
+    def __init__(self, queue: Queue, runner: ShowRunner, show_names: List[str]):
         self.queue = queue
         self.runner = runner
         self.shows = show_names
@@ -28,7 +30,7 @@ class TriangleWeb:
 
     @cherrypy.expose
     def clear_show(self):
-        self.queue.put("clear")
+        self.queue.put(ClearCmd())
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
@@ -39,12 +41,12 @@ class TriangleWeb:
             raise cherrypy.HTTPError(400)
 
         print(f'changing run_time to: {run_time}')
-        self.queue.put(f'inc runtime:{run_time}')
+        self.queue.put(RuntimeCmd(run_time))
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
     def change_brightness(self, brightness_scale=1.0):
-        self.queue.put(f'brightness:{brightness_scale}')
+        self.queue.put(BrightnessCmd(brightness_scale))
         raise cherrypy.HTTPRedirect('/')
 
     @cherrypy.expose
@@ -52,8 +54,8 @@ class TriangleWeb:
         if show_name is None or show_name not in self.shows:
             raise cherrypy.HTTPError(400)
 
-        self.queue.put(f'run_show:{show_name}')
         print(f'setting show to: {show_name}')
+        self.queue.put(RunShowCmd(show_name))
 
         # XXX otherwise the runner.status() method hasn't had time to update
         time.sleep(0.2)

@@ -14,197 +14,13 @@ from model.sacn_model import sACN
 from model.simulator import SimulatorModel
 import osc_serve
 import shows
-import util
 from web import TriangleWeb
+from show_runner import ShowRunner
 
 # Prints stack trace on failure
 faulthandler.enable()
 
 logger = logging.getLogger("pyramidtriangles")
-
-
-def speed_interpolation(val):
-    """
-    Interpolation function to map OSC input into ShowRunner speed_x
-
-    Input values range from 0.0 to 1.0
-    input 0.5 => 1.0
-    input < 0.5 ranges from 2.0 to 1.0
-    input > 0.5 ranges from 1.0 to 0.5
-    """
-    if val == 0.5:
-        return 1.0
-    elif val < 0.5:
-        return low_interp(val)
-    else:
-        return hi_interp(val)
-
-
-low_interp = util.make_interpolater(0.0, 0.5, 2.0, 1.0)
-hi_interp = util.make_interpolater(0.5, 1.0, 1.0, 0.5)
-
-
-class ShowRunner(threading.Thread):
-    def __init__(self,
-                 pyramid: Pyramid,
-                 shutdown: threading.Event,
-                 queue: queue.Queue,
-                 max_showtime: int = 240,
-                 fail_hard: bool = True):
-        super(ShowRunner, self).__init__(name="ShowRunner")
-        self.pyramid = pyramid
-        self.shutdown = shutdown
-        self.queue = queue
-
-        self.fail_hard = fail_hard
-        self.running = True
-        self.max_show_time = max_showtime
-        self.show_runtime = 0
-
-        # map of names -> show ctors
-        self.shows = dict(shows.load_shows())
-        self.randseq = shows.random_shows()
-        self.show_params = False
-
-        # current show object & frame generator
-        self.show = None
-        self.framegen = None
-        self.prev_show = None
-
-        # current show parameters
-
-        # show speed multiplier - ranges from 0.5 to 2.0
-        # 1.0 is normal speed
-        # lower numbers mean faster speeds, higher is slower
-        self.speed_x = 1.0
-
-    def status(self):
-        if self.running:
-            return "Running %s (%d seconds left)" % (self.show.name, self.max_show_time - self.show_runtime)
-        else:
-            return "Stopped"
-
-    def check_queue(self):
-        msgs = []
-        try:
-            while True:
-                m = self.queue.get_nowait()
-                if m:
-                    msgs.append(m)
-
-        except queue.Empty:
-            pass
-
-        if msgs:
-            for m in msgs:
-                self.process_command(m)
-
-    def process_command(self, msg):
-        if isinstance(msg, str):
-            if msg == "clear":
-                self.clear()
-                time.sleep(2)
-            elif msg.startswith("run_show:"):
-                self.running = True
-                show_name = msg[9:]
-                self.next_show(show_name)
-            elif msg.startswith("inc runtime"):
-                self.max_show_time = int(msg.split(':')[1])
-            elif msg.startswith("brightness:"):
-                self.pyramid.brightness = float(msg[11:])
-
-        elif isinstance(msg, tuple):
-            logger.debug(f'OSC: {msg}')
-
-            (addr, val) = msg
-            addr = addr.split('/z')[0]
-            val = val[0]
-            assert addr[0] == '/'
-            (ns, cmd) = addr[1:].split('/')
-            if ns == '1':
-                # control command
-                if cmd == 'next':
-                    self.next_show()
-                elif cmd == 'previous':
-                    if self.prev_show:
-                        self.next_show(self.prev_show.name)
-                elif cmd == 'speed':
-                    self.speed_x = speed_interpolation(val)
-                    print("setting speed_x to:", self.speed_x)
-
-                pass
-            elif ns == '2':
-                # show command
-                if self.show_params:
-                    self.show.set_param(cmd, val)
-
-        else:
-            print("ignoring unknown msg:", str(msg))
-
-    def clear(self):
-        """Clears all panels."""
-        self.pyramid.clear()
-
-    def next_show(self, name=None):
-        show = None
-        if name:
-            if name in self.shows:
-                show = self.shows[name]
-            else:
-                logger.warning(f'unknown show: {name}')
-
-        if not show:
-            logger.info("choosing random show")
-            (name, show) = next(self.randseq)
-
-        self.clear()
-        self.prev_show = self.show
-
-        self.show = show(self.pyramid)
-        print(f'next show: {name}')
-        self.framegen = self.show.next_frame()
-        self.show_params = hasattr(self.show, 'set_param')
-        if self.show_params:
-            print("Show can accept OSC params!")
-        self.show_runtime = 0
-
-    def get_next_frame(self):
-        "return a delay or None"
-        try:
-            return next(self.framegen)
-        except StopIteration:
-            return None
-
-    def run(self):
-        if not (self.show and self.framegen):
-            print("Next Next Next")
-            self.next_show()
-
-        # Executes until shutdown event is triggered
-        while not self.shutdown.is_set():
-            try:
-                self.check_queue()
-
-                d = self.get_next_frame()
-                self.pyramid.go()
-                if d:
-                    real_d = d * self.speed_x
-                    self.shutdown.wait(real_d)  # similar to sleep() but can be interrupted
-                    self.show_runtime += real_d
-                    if self.show_runtime > self.max_show_time:
-                        print("max show time elapsed, changing shows")
-                        self.next_show()
-                else:
-                    print("show is out of frames, waiting...")
-                    self.shutdown.wait(2)
-                    self.next_show()
-
-            except Exception:
-                logger.exception("unexpected exception in show loop!")
-                if self.fail_hard:
-                    raise
-                else:
-                    self.next_show()
 
 
 class TriangleServer:
@@ -231,11 +47,10 @@ class TriangleServer:
         t = threading.Thread(target=osc_serve.create_server, args=(self.shutdown, self.queue))
         t.start()
 
-        # Show runner
         self.runner = ShowRunner(
             pyramid=self.pyramid,
+            command_queue=self.queue,
             shutdown=self.shutdown,
-            queue=self.queue,
             max_showtime=self.args.max_time,
             fail_hard=self.args.fail_hard)
 

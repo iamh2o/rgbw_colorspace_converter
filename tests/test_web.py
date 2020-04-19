@@ -3,6 +3,7 @@ import cherrypy
 from jinja2 import escape
 from cherrypy.test import helper
 
+from show_runner import RunShowCmd, RuntimeCmd, ClearCmd
 from web import TriangleWeb
 
 command_queue = queue.LifoQueue()
@@ -40,7 +41,7 @@ class WebTest(helper.CPWebCase):
         self.getPage('/clear_show', method='POST')
 
         self.assertStatus(303)
-        assert "clear" == command_queue.get()
+        assert command_queue.get() == ClearCmd()
         assert command_queue.empty()
 
     def test_change_run_time(self):
@@ -48,7 +49,7 @@ class WebTest(helper.CPWebCase):
         self.getPage('/change_run_time', method='POST', body='run_time=30')
 
         self.assertStatus(303)
-        assert "inc runtime:30" == command_queue.get()
+        assert command_queue.get() == RuntimeCmd(30)
         assert command_queue.empty()
 
     def test_run_show(self):
@@ -56,7 +57,7 @@ class WebTest(helper.CPWebCase):
         self.getPage('/run_show', method='POST', body='show_name=ShowBar')
 
         self.assertStatus(303)
-        assert "run_show:ShowBar" == command_queue.get()
+        assert command_queue.get() == RunShowCmd('ShowBar')
         assert command_queue.empty()
 
         self.getPage('/run_show', method='POST', body='show_name=Invalid')
