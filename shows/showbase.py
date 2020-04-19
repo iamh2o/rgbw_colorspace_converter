@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from functools import lru_cache
 from random import choice
-from typing import Iterator, Tuple, List, cast
+from typing import Iterator, Tuple, List, cast, Type, Generator
 
 
 class ShowBase(ABC):
@@ -27,7 +27,7 @@ class ShowBase(ABC):
         return ''
 
     @abstractmethod
-    def next_frame(self) -> float:
+    def next_frame(self) -> Generator[float, None, None]:
         """
         Draw the next step of the animation.  This is the main loop of the show.  Set some pixels and then 'yield' a
         number to indicate how long you'd like to wait before drawing the next frame.  Delay numbers are in seconds.
@@ -40,7 +40,7 @@ def load_shows() -> List[Tuple[str, ShowBase]]:
     return sorted([(cls.__name__, cast(ShowBase, cls)) for cls in ShowBase.__subclasses__()])
 
 
-def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, ShowBase]]:
+def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[ShowBase]]]:
     """
     Return an infinite sequence of randomized shows.
 
