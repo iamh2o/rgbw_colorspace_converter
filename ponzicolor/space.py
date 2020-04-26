@@ -1,11 +1,13 @@
 import colorsys
+from dataclasses import dataclass
 from math import atan2, cos, degrees, sin, sqrt, radians, fmod
-from typing import Callable, NamedTuple
+from typing import Callable
 
 from . import linear
 
 
-class RGB(NamedTuple):
+@dataclass
+class RGB:
     """
     RGB is an sRGB color.
     """
@@ -25,7 +27,8 @@ class RGB(NamedTuple):
         return RGB(c(self.r), c(self.g), c(self.b))
 
 
-class RGBW(NamedTuple):
+@dataclass
+class RGBW:
     """
     RGBW is an sRGB color with an extended white element for saturation.
     """
@@ -35,7 +38,8 @@ class RGBW(NamedTuple):
     w: float  # [0-1]
 
 
-class HSV(NamedTuple):
+@dataclass
+class HSV:
     """
     Hue in [0..360], Saturation and Value in [0..1]. You're better off using HCL, see below.
     """
@@ -44,7 +48,8 @@ class HSV(NamedTuple):
     v: float
 
 
-class Lab(NamedTuple):
+@dataclass
+class Lab:
     """
     Lab is a color in the CIE L*a*b* perceptually-uniform color space.
     """
@@ -54,7 +59,8 @@ class Lab(NamedTuple):
     b: float
 
 
-class HCL(NamedTuple):
+@dataclass
+class HCL:
     """
     HCL is a color in the CIE L*C*h° color space, a polar projection of L*a*b*.
     It's basically a superior HSV.
@@ -65,7 +71,8 @@ class HCL(NamedTuple):
     l: float  # luminance [0-1]
 
 
-class XYZ(NamedTuple):
+@dataclass
+class XYZ:
     """
     XYZ is a color in CIE's standard color space.
     """
@@ -75,7 +82,8 @@ class XYZ(NamedTuple):
     z: float
 
 
-class LinearRGB(NamedTuple):
+@dataclass
+class LinearRGB:
     """
     RGB is a linear color.
     """

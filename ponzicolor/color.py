@@ -1,5 +1,7 @@
-from typing import NamedTuple, Tuple, Union
+from dataclasses import dataclass
+from typing import Tuple, Union
 
+from model import DisplayColor
 from . import blend
 from .space import (
     RGB,
@@ -22,7 +24,8 @@ from .space import (
 )
 
 
-class Color(NamedTuple):
+@dataclass(frozen=True)
+class Color(DisplayColor):
     r: float  # [0-1]
     g: float  # [0-1]
     b: float  # [0-1]
@@ -41,28 +44,28 @@ class Color(NamedTuple):
         return Color(*tuple(int(h[i: i + 2], 16) / 255 for i in range(0, 8, 2)))
 
     @classmethod
-    def from_rgb(cls, rgb: RGB, w: float = 0.0) -> "Color":
-        return cls(rgb.r, rgb.g, rgb.b, w)
+    def from_rgb(cls, rgb: RGB) -> "Color":
+        return cls(rgb.r, rgb.g, rgb.b, 0.0)
 
     @classmethod
-    def from_hsv(cls, hsv: HSV, w: float = 0.0) -> "Color":
-        return cls.from_rgb(hsv_to_srgb(hsv), w)
+    def from_hsv(cls, hsv: HSV) -> "Color":
+        return cls.from_rgb(hsv_to_srgb(hsv))
 
     @classmethod
-    def from_linear_rgb(cls, rgb: LinearRGB, w: float = 0.0) -> "Color":
-        return cls.from_rgb(linear_rgb_to_srgb(rgb), w)
+    def from_linear_rgb(cls, rgb: LinearRGB) -> "Color":
+        return cls.from_rgb(linear_rgb_to_srgb(rgb))
 
     @classmethod
-    def from_xyz(cls, xyz: XYZ, w: float = 0.0) -> "Color":
-        return cls.from_linear_rgb(xyz_to_linear_rgb(xyz), w)
+    def from_xyz(cls, xyz: XYZ) -> "Color":
+        return cls.from_linear_rgb(xyz_to_linear_rgb(xyz))
 
     @classmethod
-    def from_lab(cls, lab: Lab, w: float = 0.0) -> "Color":
-        return cls.from_xyz(lab_to_xyz(lab), w)
+    def from_lab(cls, lab: Lab) -> "Color":
+        return cls.from_xyz(lab_to_xyz(lab))
 
     @classmethod
-    def from_hcl(cls, hcl: HCL, w: float = 0.0) -> "Color":
-        return cls.from_lab(hcl_to_lab(hcl), w)
+    def from_hcl(cls, hcl: HCL) -> "Color":
+        return cls.from_lab(hcl_to_lab(hcl))
 
     @property
     def valid(self) -> bool:
@@ -76,7 +79,7 @@ class Color(NamedTuple):
 
     def blend(self, other: "Color", bias: float) -> "Color":
         return Color.from_hcl(
-            blend.hcl(self.hcl, other.hcl, bias), w=blend.scale(self.w, other.w, bias)
+            blend.hcl(self.hcl, other.hcl, bias)
         )
 
     @property
@@ -162,17 +165,17 @@ class Color(NamedTuple):
         return self.hcl.h
 
 
-def color(chroma: Union[str, RGB, Lab, HCL, HSV], white: float = 0.0) -> Color:
+def color(chroma: Union[str, RGB, Lab, HCL, HSV]) -> Color:
     if isinstance(chroma, str):
         return Color.from_hex(chroma)
     if isinstance(chroma, HCL):
-        return Color.from_hcl(chroma, white)
+        return Color.from_hcl(chroma)
     elif isinstance(chroma, Lab):
-        return Color.from_lab(chroma, white)
+        return Color.from_lab(chroma)
     elif isinstance(chroma, RGB):
-        return Color.from_rgb(chroma, white)
+        return Color.from_rgb(chroma)
     elif isinstance(chroma, HSV):
-        return Color.from_hsv(chroma, white)
+        return Color.from_hsv(chroma)
     else:
         raise TypeError("%r is not an RGB, Lab, HCL, or HSV color" % (chroma,))
 
