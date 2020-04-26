@@ -1,17 +1,20 @@
 from itertools import repeat, chain
+from typing import Iterable
 
-from color import RGB
-from grid import Grid, Position, Pyramid
+from color import HSV
+from grid import Position, Pyramid
+import ponzicolor
+from ponzicolor import Color
 from randomcolor import random_color
 from .show import Show
 
 
 class FuckYourBurn(Show):
-    grid: Grid
-
     def __init__(self, pyramid: Pyramid):
         self.grid = pyramid.panel
         self.frame_delay = 1.0
+        self.background_color = HSV(0, 0, 0)
+        self.foreground_color = random_color(hue='green')
 
     @staticmethod
     def description() -> str:
@@ -92,22 +95,45 @@ class FuckYourBurn(Show):
         )
         return [Position(row, col) for row, col in positions]
 
+    @property
+    def background(self):
+        vals = self.background_color.hsv
+        return Color.from_hsv(ponzicolor.space.HSV(h=vals[0]*360, s=vals[1], v=vals[2]))
+
+    @property
+    def foreground(self):
+        vals = self.foreground_color.hsv
+        return Color.from_hsv(ponzicolor.space.HSV(h=vals[0]*360, s=vals[1], v=vals[2]))
+
     def next_frame(self):
-        background = RGB(0, 0, 0)
-        color = random_color(hue='purple')
 
         letters = (self.fu, self.ck, self.yo, self.ur, self.bu, self.rn)
 
-        while True:
-            self.grid.clear(background)
+        self.grid.clear(self.background)
 
-            def prev():
-                return []
+        # Function variable to return past frame's letters, as an optimization for clearing them
+        def prev() -> Iterable[Position]:
+            return []
 
-            for curr in chain.from_iterable(repeat(letters)):
-                [self.grid.set(pos, background) for pos in prev()]
-                [self.grid.set(pos, color) for pos in curr()]
-                prev = curr
+        for curr in chain.from_iterable(repeat(letters)):
+            background = self.background
+            foreground = self.foreground
 
+            # Fade out
+            for i in range(1, 11):
+                if not prev():
+                    continue
+                color = foreground.blend(background, i/10).clamp()
+                [self.grid.set(pos, color) for pos in prev()]
                 self.grid.go()
-                yield self.frame_delay
+                yield 0.01
+
+            # Fade in
+            for i in range(1, 11):
+                color = background.blend(foreground, i/10).clamp()
+                [self.grid.set(pos, color) for pos in curr()]
+                self.grid.go()
+                yield 0.01
+
+            prev = curr
+            yield self.frame_delay
