@@ -123,14 +123,14 @@ class FuckYourBurn(Show):
             for i in range(1, 11):
                 if not prev():
                     continue
-                color = foreground.blend(background, i/10).clamp()
+                color = foreground.blend_lab(background, i/10).clamp()
                 [self.grid.set(pos, color) for pos in prev()]
                 self.grid.go()
                 yield 0.01
 
             # Fade in
             for i in range(1, 11):
-                color = background.blend(foreground, i/10).clamp()
+                color = background.blend_lab(foreground, i/10).clamp()
                 [self.grid.set(pos, color) for pos in curr()]
                 self.grid.go()
                 yield 0.01
