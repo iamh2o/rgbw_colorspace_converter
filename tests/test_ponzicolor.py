@@ -195,10 +195,15 @@ cases = [
 def test_rgbw():
     for c in cases:
         actual = hsv_to_rgbw(c.hsv)
-        assert actual == approx(c.rgbw, 0.0001)
+        assert actual.r == approx(c.rgbw.r, 0.0001)
+        assert actual.g == approx(c.rgbw.g, 0.0001)
+        assert actual.b == approx(c.rgbw.b, 0.0001)
+        assert actual.w == approx(c.rgbw.w, 0.0001)
     for c in cases:
         actual = rgbw_to_hsv(c.rgbw)
-        assert actual == approx(c.hsv, 0.0001)
+        assert actual.h == approx(c.hsv.h, 0.0001)
+        assert actual.s == approx(c.hsv.s, 0.0001)
+        assert actual.v == approx(c.hsv.v, 0.0001)
 
 
 def test_hsv():
