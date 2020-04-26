@@ -1,10 +1,12 @@
 from randomcolor import random_color
 from .show import Show
-from grid import Grid, Pyramid, inset
+from grid import Pyramid, inset
 
 
 class Warp(Show):
-    grid: Grid
+    @staticmethod
+    def description():
+        return 'concentric triangle outlines from out to in'
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.2):
         self.grid = pyramid.face
