@@ -177,9 +177,5 @@ if __name__ == '__main__':
 
     # TriangleServer only needs model for model.stop()
     app = TriangleServer(model=model, pyramid=pyramid, args=args)
-
-    try:
-        app.start()  # start related service threads
-        app.go_web()  # enter main blocking event loop
-    except Exception:
-        logger.exception("Unhandled exception running TRI!")
+    app.start()  # start related service threads
+    app.go_web()  # enter main blocking event loop
