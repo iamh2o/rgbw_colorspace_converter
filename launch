@@ -8,4 +8,4 @@ source "/home/pi/.poetry/env"
 cd /opt/pyramid/triangles
 pyenv local
 
-exec poetry run python go_tri.py --bind 192.168.0.2
+exec poetry run python go_tri.py --bind 192.168.0.2 --fail-hard

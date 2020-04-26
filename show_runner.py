@@ -38,20 +38,12 @@ speed_interpolation = make_interpolator()
 
 
 class ShowRunner(Thread):
-    __max_show_time: int
-    __brightness_scale = 1.0
-    __speed_scale = 1.0
-    show_start_time = 0.0
-    show: Optional[Show] = None
-    prev_show: Optional[Show] = None
-    framegen: Generator[float, None, None] = iter(())
-
     def __init__(self,
                  pyramid: Pyramid,
                  command_queue: Queue,
                  shutdown: Event,
-                 max_showtime: int = 240,
-                 fail_hard: bool = True):
+                 max_showtime: int,
+                 fail_hard: bool):
         # Set thread name
         super(ShowRunner, self).__init__(name=type(self).__name__)
 
@@ -61,9 +53,19 @@ class ShowRunner(Thread):
         self.__max_show_time = max_showtime
         self.fail_hard = fail_hard
 
+        # default settings
+        self.__brightness_scale = 1.0
+        self.__speed_scale = 1.0
+        self.show_start_time = 0.0
+
         # map of names -> show constructors
         self.shows = dict(shows.load_shows())
         self.random_show_sequence = shows.random_shows()
+
+        # show state variables
+        self.show: Optional[Show] = None
+        self.prev_show: Optional[Show] = None
+        self.framegen: Generator[float, None, None] = (_ for _ in ())
 
     @property
     def status(self):
@@ -180,9 +182,10 @@ class ShowRunner(Thread):
                     print("show is out of frames, waiting...")
                     self.shutdown.wait(2)
                     self.next_show()
-
+            except KeyboardInterrupt:
+                raise
             except Exception:
-                logger.exception("unexpected exception in show loop!")
+                logger.exception(f"unexpected exception in show loop while running {self.show.name}")
                 if self.fail_hard:
                     raise
                 self.next_show()

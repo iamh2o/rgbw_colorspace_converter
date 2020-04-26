@@ -1,5 +1,4 @@
 import argparse
-import faulthandler
 import logging
 import sys
 import queue
@@ -16,10 +15,8 @@ from model.simulator import SimulatorModel
 from web import TriangleWeb
 from show_runner import ShowRunner
 
-# Prints stack trace on failure
-faulthandler.enable()
-
 logger = logging.getLogger("pyramidtriangles")
+logger.propagate = False  # Prevent double logging
 
 
 # Threading Model
@@ -132,7 +129,7 @@ if __name__ == '__main__':
     parser.add_argument('--list', action='store_true', help='List available shows')
     parser.add_argument('--panels', action='store_true', help='Show face and panel attributes')
     parser.add_argument('shows', metavar='show_name', type=str, nargs='*', help='name of show (or shows) to run')
-    parser.add_argument('--fail-hard', type=bool, default=True,
+    parser.add_argument('--fail-hard', action='store_true',
                         help="For production runs, when shows fail, the show runner moves to the next show")
 
     args = parser.parse_args()
@@ -177,5 +174,11 @@ if __name__ == '__main__':
 
     # TriangleServer only needs model for model.stop()
     app = TriangleServer(model=model, pyramid=pyramid, args=args)
-    app.start()  # start related service threads
-    app.go_web()  # enter main blocking event loop
+
+    try:
+        app.start()  # start related service threads
+        app.go_web()  # enter main blocking event loop
+    except KeyboardInterrupt:
+        pass
+    except Exception:
+        logger.exception("Unhandled exception from cherrypy thread")
