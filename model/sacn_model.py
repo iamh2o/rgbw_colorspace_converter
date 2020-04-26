@@ -62,4 +62,7 @@ class sACN(Model):
 
     def go(self):
         for ux in self.leds:
+            for v in self.leds[ux]:
+                if not 0 <= v < 256:
+                    raise ValueError(f"bad led value '{v}'")
             self.sender[ux].dmx_data = self.leds[ux]
