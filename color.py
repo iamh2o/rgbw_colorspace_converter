@@ -84,12 +84,11 @@ import colorsys
 from copy import deepcopy
 from math import fmod, cos, radians
 from typing import Tuple, List, Union
+from model import DisplayColor
 
 __all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
 
 # Generic type of int or float
-from model import DisplayColor
-
 V = Union[int, float]
 
 

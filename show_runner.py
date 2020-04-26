@@ -87,7 +87,7 @@ class ShowRunner(Thread):
                 break
         [self._process_command(cmd) for cmd in msgs]
 
-    def _process_command(self, msg) -> None:
+    def _process_command(self, msg):
         if isinstance(msg, ClearCmd):
             self.clear()
             self.shutdown.wait(2.0)
