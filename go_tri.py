@@ -129,12 +129,9 @@ if __name__ == '__main__':
     parser.add_argument('--bind', help='Local address to use for sACN')
     parser.add_argument('--simulator', dest='simulator', action='store_true')
 
-    parser.add_argument('--list', action='store_true',
-                        help='List available shows')
-    parser.add_argument('--panels', action='store_true',
-                        help='Show face and panel attributes')
-    parser.add_argument('shows', metavar='show_name', type=str, nargs='*',
-                        help='name of show (or shows) to run')
+    parser.add_argument('--list', action='store_true', help='List available shows')
+    parser.add_argument('--panels', action='store_true', help='Show face and panel attributes')
+    parser.add_argument('shows', metavar='show_name', type=str, nargs='*', help='name of show (or shows) to run')
     parser.add_argument('--fail-hard', type=bool, default=True,
                         help="For production runs, when shows fail, the show runner moves to the next show")
 
@@ -159,16 +156,14 @@ if __name__ == '__main__':
             for _, interface, _ in gateways:
                 for a in netifaces.ifaddresses(interface).get(netifaces.AF_INET, []):
                     if a['addr'].startswith('192.168.0'):
-                        logger.info(
-                            f"Auto-detected Pyramid local IP: {a['addr']}")
+                        logger.info(f"Auto-detected Pyramid local IP: {a['addr']}")
                         bind = a['addr']
                         break
                 if bind:
                     break
 
             if not bind:
-                parser.error(
-                    'Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
+                parser.error('Failed to auto-detect local IP. Are you on Pyramid Scheme wifi or ethernet?')
 
         logger.info("Starting sACN")
         model = sACN(bind)
@@ -182,9 +177,5 @@ if __name__ == '__main__':
 
     # TriangleServer only needs model for model.stop()
     app = TriangleServer(model=model, pyramid=pyramid, args=args)
-
-    try:
-        app.start()  # start related service threads
-        app.go_web()  # enter main blocking event loop
-    except Exception:
-        logger.exception("Unhandled exception running TRI!")
+    app.start()  # start related service threads
+    app.go_web()  # enter main blocking event loop

@@ -6,7 +6,7 @@ from grid import Coordinate, Grid, Pyramid, every
 from .show import Show
 
 
-class IndexDebug(Show):
+class IndexDebug(Show, debug=True):
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.05):
         self.pyramid = pyramid
         self.frame_delay = frame_delay

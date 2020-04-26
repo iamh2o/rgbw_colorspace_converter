@@ -5,7 +5,7 @@ from grid import Grid, Pyramid
 from .show import Show
 
 
-class OneByOne(Show):
+class OneByOne(Show, disable=True):
     grid: Grid
 
     def __init__(self, pyramid: Pyramid, frame_delay: float = 0.9):

@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import Iterable, List, Mapping, Tuple
-from grid.cell import Cell
-from grid.geom import Address
 
 
 class DisplayColor(ABC):
@@ -36,7 +34,7 @@ class Model(ABC):
     """Abstract base class for simulators."""
 
     @abstractmethod
-    def activate(self, cells: Iterable[Cell]):
+    def activate(self, cells: Iterable['Cell']):
         """
         Called after Pyramid initialization.
         """
@@ -48,7 +46,7 @@ class Model(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set(self, cell: Cell, addr: Address, color: DisplayColor):
+    def set(self, cell: 'Cell', addr: 'Address', color: DisplayColor):
         """
         Set one pixel to a particular color.
 
@@ -62,7 +60,7 @@ class Model(ABC):
         raise NotImplementedError
 
 
-def allocate_universes(cells: Iterable[Cell]) -> Mapping[int, List[int]]:
+def allocate_universes(cells: Iterable['Cell']) -> Mapping[int, List[int]]:
     universes = set()
     for cell in cells:
         universes |= cell.universes
