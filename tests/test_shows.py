@@ -1,11 +1,23 @@
-import shows
+from shows import Show, load_shows
 
 
 def test_load_shows():
-    names = {name for (name, cls) in shows.load_shows()}
+    names = {name for (name, cls) in load_shows()}
     assert {
-        shows.LeftToRight.__name__,
-        shows.LeftToRightAndBack.__name__,
-        shows.Random.__name__,
-        shows.UpDown.__name__,
+        'LeftToRight',
+        'LeftToRightAndBack',
+        'Random',
+        'UpDown',
     }.issubset(names)
+    assert 'DebugShow' in names
+    assert 'DisabledShow' not in names
+
+
+class DebugShow(Show, debug=True):
+    def next_frame(self):
+        pass
+
+
+class DisabledShow(Show, disable=True):
+    def next_frame(self):
+        pass

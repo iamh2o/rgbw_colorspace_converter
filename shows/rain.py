@@ -30,7 +30,7 @@ class RainDrop:
         return y < ground_level
 
 
-class Rain(Show):
+class Rain(Show, disable=True):
     def __init__(self, pyramid: Pyramid, frame_delay=1.0):
         self.tri = pyramid.face
         self.speed = frame_delay

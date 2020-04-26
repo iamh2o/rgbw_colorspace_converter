@@ -5,7 +5,7 @@ from .show import Show
 from util import choose_random_hsv
 
 
-class MovingPyramids(Show):
+class MovingPyramids(Show, disable=True):
     def __init__(self, trimodel, frame_delay=.5):
         self.tri = trimodel.face
         self.time = 0
