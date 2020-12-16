@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from collections.abc import Iterable
 
 from grid.cell import Address, Cell
 from .base import DisplayColor, Model
@@ -8,7 +8,7 @@ class MirrorModel(Model):
     """
     Proof of concept that dealing with mirroring across multiple backend models is best done at this layer.
     """
-    models: List[Model]
+    models: list[Model]
 
     def __init__(self, *models):
         self.models = list(models)

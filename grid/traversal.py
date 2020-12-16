@@ -1,7 +1,6 @@
+from collections.abc import Iterator, Sequence
 
-from typing import Iterator, Sequence
-
-from .cell import Coordinate, Direction, Position
+from .cell import Direction, Position
 from .grid import Geometry
 
 

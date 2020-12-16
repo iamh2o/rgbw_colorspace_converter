@@ -1,6 +1,7 @@
+from __future__ import annotations
 from itertools import islice
+from collections.abc import Sequence
 
-from typing import List, Sequence, Tuple
 from .color import Color
 
 
@@ -9,18 +10,18 @@ class Scale:
     Scale is a linear color gradient.
     """
 
-    points: List[Tuple[Color, float]]
+    points: list[tuple[Color, float]]
 
     @classmethod
-    def of(cls, *colors: Color) -> "Scale":
+    def of(cls, *colors: Color) -> Scale:
         return cls.linear(colors)
 
     @classmethod
-    def linear(cls, colors: Sequence[Color]) -> "Scale":
+    def linear(cls, colors: Sequence[Color]) -> Scale:
         s = 1.0 / len(colors)
         return cls([(color, i * s) for i, color in enumerate(colors)])
 
-    def __init__(self, points: Sequence[Tuple[Color, float]]):
+    def __init__(self, points: Sequence[tuple[Color, float]]):
         self.points = list(points)
 
     def __call__(self, t: float) -> Color:

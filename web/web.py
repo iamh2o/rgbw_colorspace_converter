@@ -1,6 +1,5 @@
 from queue import Queue
 import time
-from typing import List
 import cherrypy
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -9,7 +8,7 @@ from show_runner import ShowRunner, ClearCmd, RuntimeCmd, BrightnessCmd, RunShow
 
 class TriangleWeb:
     """Web API for running triangle shows."""
-    def __init__(self, queue: Queue, runner: ShowRunner, show_names: List[str]):
+    def __init__(self, queue: Queue, runner: ShowRunner, show_names: list[str]):
         self.queue = queue
         self.runner = runner
         self.shows = show_names

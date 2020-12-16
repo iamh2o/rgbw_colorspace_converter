@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from grid import Address, Cell
 from .base import DisplayColor, Model

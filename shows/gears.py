@@ -1,5 +1,4 @@
 from random import choice, randint
-from typing import List, Tuple
 
 from color import RGB
 from dudek.HelperFunctions import gradient_wheel, maxColor, turn_right, turn_left, randColor, randColorRange
@@ -9,7 +8,7 @@ from .show import Show
 
 
 class Gear:
-    def __init__(self, grid: Grid, pos: Tuple[int, int]):
+    def __init__(self, grid: Grid, pos: tuple[int, int]):
         self.grid = grid
         self.size = choice([1, 2])
         self.dir = 5
@@ -51,7 +50,7 @@ class Gears(Show):
     def __init__(self, pyramid: Pyramid, frame_delay=0.25):
         self.grid = pyramid.panel
         self.frame_delay = frame_delay
-        self.gears: List[Gear] = []
+        self.gears: list[Gear] = []
         self.clock = 10000
         self.color = randColor()
 

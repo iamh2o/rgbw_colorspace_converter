@@ -1,4 +1,3 @@
-from typing import List
 from random import randint
 
 from color import HSV
@@ -36,7 +35,7 @@ class Planet:
         self.arc_count = self.arc
         self.size = 2
         self.center = center
-        self.trails: List[Trail] = []
+        self.trails: list[Trail] = []
 
     def draw_planet(self):
         self.fade_trails()
@@ -70,7 +69,7 @@ class Planet:
 class Circling(Show):
     def __init__(self, pyramid: Pyramid, frame_delay=1.1):
         self.tri = pyramid.panel
-        self.planets: List[Planet] = []
+        self.planets: list[Planet] = []
         self.speed = frame_delay
         self.dir = 0
         self.color = randColor()

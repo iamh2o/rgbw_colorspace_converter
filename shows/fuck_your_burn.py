@@ -1,5 +1,5 @@
 from itertools import repeat, chain
-from typing import Iterable
+from collections.abc import Iterable
 
 from color import HSV
 from grid import Position, Pyramid

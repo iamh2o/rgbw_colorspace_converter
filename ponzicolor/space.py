@@ -1,7 +1,8 @@
+from __future__ import annotations
 import colorsys
+from collections.abc import Callable
 from dataclasses import dataclass
 from math import atan2, cos, degrees, sin, sqrt, radians, fmod
-from typing import Callable
 
 from . import linear
 
@@ -20,7 +21,7 @@ class RGB:
     def valid(self) -> bool:
         return 0.0 <= self.r <= 1.0 and 0.0 <= self.g <= 1.0 and 0.0 <= self.b <= 1.0
 
-    def clamp(self) -> "RGB":
+    def clamp(self) -> RGB:
         def c(v: float) -> float:
             return max(0.0, min(v, 1.0))
 

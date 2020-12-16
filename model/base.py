@@ -1,5 +1,6 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Mapping, Tuple
+from collections.abc import Iterable, Mapping
 
 
 class DisplayColor(ABC):
@@ -8,7 +9,7 @@ class DisplayColor(ABC):
     """
     @property
     @abstractmethod
-    def rgb256(self) -> Tuple[int, int, int]:
+    def rgb256(self) -> tuple[int, int, int]:
         """
         Called to emit an RGB triple in [0-255].
         """
@@ -16,14 +17,14 @@ class DisplayColor(ABC):
 
     @property
     @abstractmethod
-    def rgbw256(self) -> Tuple[int, int, int, int]:
+    def rgbw256(self) -> tuple[int, int, int, int]:
         """
         Called to emit an RGBW quadruple in [0-255].
         """
         raise NotImplementedError
 
     @abstractmethod
-    def scale(self, factor: float) -> "DisplayColor":
+    def scale(self, factor: float) -> DisplayColor:
         """
         Scales the brightness by a factor in [0,1].
         """
@@ -60,7 +61,7 @@ class Model(ABC):
         raise NotImplementedError
 
 
-def allocate_universes(cells: Iterable['Cell']) -> Mapping[int, List[int]]:
+def allocate_universes(cells: Iterable['Cell']) -> Mapping[int, list[int]]:
     universes = set()
     for cell in cells:
         universes |= cell.universes

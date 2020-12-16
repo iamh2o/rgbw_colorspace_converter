@@ -5,7 +5,7 @@ Pixels are representations of the addressable unit in your object. Cells can hav
 have one LED each.
 """
 import logging
-from typing import Iterable
+from collections.abc import Iterable
 
 import sacn
 
@@ -28,7 +28,7 @@ class sACN(Model):
     def activate(self, cells: Iterable[Cell]):
         self.sender.start()
  
-        # dictionary which will hold an array of 512 int's for each universe, universes are keys to the arrays.
+        # dictionary which will hold an array of 512 ints for each universe, universes are keys to the arrays.
         self.leds = allocate_universes(cells)
         for universe_index in sorted(self.leds):
             logger.info('Activating sACN universe %d (%d channels)',

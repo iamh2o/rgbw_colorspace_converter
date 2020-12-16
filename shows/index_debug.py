@@ -1,5 +1,4 @@
 from itertools import cycle
-from typing import List
 
 from color import HSV
 from grid import Coordinate, Grid, Pyramid, every
@@ -15,7 +14,7 @@ class IndexDebug(Show, debug=True):
         self.pyramid.clear()
         yield self.frame_delay
 
-        def coordinates(grid: Grid) -> List[Coordinate]:
+        def coordinates(grid: Grid) -> list[Coordinate]:
             return sorted([cell.coordinate for cell in grid.cells],
                           key=lambda c: (c.y, c.x))
 

@@ -1,9 +1,10 @@
 import logging
+from collections.abc import Generator
 from dataclasses import dataclass
 from queue import Queue, Empty
 import time
 from threading import Event, Thread
-from typing import Optional, Generator
+from typing import Optional
 
 import shows
 import util

@@ -1,5 +1,7 @@
+from __future__ import annotations
+from collections.abc import Iterable, MutableMapping
 from itertools import chain
-from typing import Iterable, List, NamedTuple, Optional, MutableMapping
+from typing import NamedTuple, Optional
 
 from model import Model
 from .cell import Cell, Orientation
@@ -36,7 +38,7 @@ class Panel(NamedTuple):
 
         return cells
 
-    def _cells_in_row(self, within: Geometry, y: int, start: Address) -> List[Cell]:
+    def _cells_in_row(self, within: Geometry, y: int, start: Address) -> list[Cell]:
         row = Coordinate(0, y).pos(self.geom).row
 
         cells = self._up_pointed_cells_in_row(within, row, y, start)
@@ -48,7 +50,7 @@ class Panel(NamedTuple):
 
         return cells
 
-    def _up_pointed_cells_in_row(self, within: Geometry, row: int, y: int, start: Address) -> List[Cell]:
+    def _up_pointed_cells_in_row(self, within: Geometry, row: int, y: int, start: Address) -> list[Cell]:
         cells = []
         addr = start
 
@@ -65,7 +67,7 @@ class Panel(NamedTuple):
 
         return cells
 
-    def _down_pointed_cells_in_row(self, within: Geometry, row: int, y: int, start: Address) -> List[Cell]:
+    def _down_pointed_cells_in_row(self, within: Geometry, row: int, y: int, start: Address) -> list[Cell]:
         cells = []
         addr = start
 
@@ -95,15 +97,15 @@ class Face(Grid):
     """
 
     _cells: MutableMapping[Coordinate, Cell]
-    panels: List[Panel]
+    panels: list[Panel]
     geom: Geometry
 
     @classmethod
     def build(cls,
               model: Model,
-              spec: List[List[int]],
+              spec: list[list[int]],
               start: Address = Address(Universe(1, 1), 4),
-              rows_per_panel: int = 11) -> "Face":
+              rows_per_panel: int = 11) -> Face:
         """
         Build a Face from a panel placement spec.
 
@@ -114,7 +116,7 @@ class Face(Grid):
 
         overall_geom = Geometry(origin=Coordinate(0, 0),
                                 rows=(len(spec) * rows_per_panel))
-        panel_rows = [[] for i in range(len(spec))]
+        panel_rows = [[] for _ in range(len(spec))]
         addr = start
 
         # Work row-by-row, panel-by-panel, generating all panels so we can use
@@ -167,7 +169,7 @@ class Face(Grid):
                 self._cells[cell.coordinate] = cell
 
     @property
-    def cells(self) -> List[Cell]:
+    def cells(self) -> list[Cell]:
         return list(self._cells.values())
 
     def _cell(self, coordinate: Coordinate) -> Optional[Cell]:

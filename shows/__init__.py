@@ -1,9 +1,10 @@
+from collections.abc import Iterator
 import importlib
 import logging
 from functools import lru_cache
 from pathlib import Path
 from random import choice
-from typing import List, Tuple, cast, Iterator, Type
+from typing import cast
 
 # These imports include submodules under the `shows` namespace.
 from .show import Show
@@ -15,7 +16,7 @@ logger = logging.getLogger("pyramidtriangles")
 # This function, like the original version, dynamically imports all files in
 # this directory so individual show files don't need to be imported.
 @lru_cache(maxsize=None)
-def load_shows() -> List[Tuple[str, Show]]:
+def load_shows() -> list[tuple[str, Show]]:
     """Return a sorted list of (name, class) tuples of all Show subclasses."""
     for name in Path(__file__).parent.glob('[!_]*.py'):
         try:
@@ -26,7 +27,7 @@ def load_shows() -> List[Tuple[str, Show]]:
     return sorted([(cls.__name__, cast(Show, cls)) for cls in show.registry])
 
 
-def random_shows(no_repeat: float = 1/3) -> Iterator[Tuple[str, Type[Show]]]:
+def random_shows(no_repeat: float = 1/3) -> Iterator[tuple[str, type[Show]]]:
     """
     Returns an infinite sequence of randomized shows.
 

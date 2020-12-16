@@ -1,4 +1,4 @@
-from typing import Iterable
+from collections.abc import Iterable
 from pytest import raises
 
 from grid import (

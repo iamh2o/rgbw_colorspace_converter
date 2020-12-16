@@ -8,7 +8,7 @@ have one LED each.
 import array
 import json
 import logging
-from typing import Iterator
+from collections.abc import Iterator
 
 import ola
 from .base import Model

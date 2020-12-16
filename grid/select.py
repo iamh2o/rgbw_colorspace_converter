@@ -1,4 +1,5 @@
-from typing import Iterable, List, NamedTuple, Sequence
+from collections.abc import Iterable, Sequence
+from typing import NamedTuple
 
 from .cell import Cell, Orientation
 from .grid import Grid, Query, Location
@@ -8,23 +9,23 @@ def query(grid: Grid, q: Query) -> Iterable[Cell]:
     return q(grid)
 
 
-def every(grid: Grid) -> List[Cell]:
+def every(grid: Grid) -> list[Cell]:
     return grid.cells
 
 
-def on_edge(grid: Grid) -> List[Cell]:
+def on_edge(grid: Grid) -> list[Cell]:
     return [cell for cell in grid.cells if cell.is_edge]
 
 
-def left_edge(grid: Grid) -> List[Cell]:
+def left_edge(grid: Grid) -> list[Cell]:
     return [cell for cell in grid.cells if cell.is_left_edge]
 
 
-def right_edge(grid: Grid) -> List[Cell]:
+def right_edge(grid: Grid) -> list[Cell]:
     return [cell for cell in grid.cells if cell.is_right_edge]
 
 
-def bottom_edge(grid: Grid) -> List[Cell]:
+def bottom_edge(grid: Grid) -> list[Cell]:
     return [cell for cell in grid.cells if cell.is_bottom_edge]
 
 
@@ -33,7 +34,7 @@ def inset(distance: int) -> Query:
     Selects an inner triangle, `distance` cells away from the edges.
     """
 
-    def query(grid: Grid) -> List[Cell]:
+    def query(grid: Grid) -> list[Cell]:
         def at_distance(cell: Cell, row_length: int) -> bool:
             horiz = distance * 2
 
@@ -65,17 +66,17 @@ def inset(distance: int) -> Query:
 
 
 def pointed(orientation: Orientation) -> Query:
-    def query(grid: Grid) -> List[Cell]:
+    def query(grid: Grid) -> list[Cell]:
         return [cell for cell in grid.cells if cell.orientation is orientation]
 
     return query
 
 
-def pointed_up(grid: Grid) -> List[Cell]:
+def pointed_up(grid: Grid) -> list[Cell]:
     return [cell for cell in grid.cells if cell.is_up]
 
 
-def pointed_down(grid: Grid) -> List[Cell]:
+def pointed_down(grid: Grid) -> list[Cell]:
     return [cell for cell in grid.cells if cell.is_down]
 
 

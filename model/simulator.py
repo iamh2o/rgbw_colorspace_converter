@@ -1,8 +1,8 @@
 import logging
 import queue
 import socket
+from collections.abc import Iterable
 
-from typing import Iterable
 from grid import Address, Cell
 from .base import DisplayColor, Model
 

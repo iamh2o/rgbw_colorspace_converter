@@ -1,5 +1,4 @@
 from random import randint, choice
-from typing import List
 
 from color import HSV, RGB
 from dudek.HelperFunctions import randColorRange, oneIn, upORdown, gradient_wheel
@@ -34,7 +33,7 @@ class Rain(Show, disable=True):
     def __init__(self, pyramid: Pyramid, frame_delay=1.0):
         self.tri = pyramid.face
         self.speed = frame_delay
-        self.raindrops: List[RainDrop] = []
+        self.raindrops: list[RainDrop] = []
         self.freq = randint(3, 10)
         self.rain_dir = self.get_random_rain_dir()
         self.ground_level = self.get_ground_level()

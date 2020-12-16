@@ -1,5 +1,6 @@
-from dataclasses import dataclass
-from typing import Tuple, Union
+from __future__ import annotations
+from dataclasses import dataclass, astuple
+from typing import Union
 
 from model import DisplayColor
 from . import blend
@@ -32,11 +33,11 @@ class Color(DisplayColor):
     w: float  # [0-1]
 
     @classmethod
-    def white(cls, w: float) -> "Color":
+    def white(cls, w: float) -> Color:
         return cls(0.0, 0.0, 0.0, w)
 
     @classmethod
-    def from_hex(cls, h: str) -> "Color":
+    def from_hex(cls, h: str) -> Color:
         if h.startswith("#"):
             h = h[1:]
         if len(h) == 6:
@@ -44,46 +45,46 @@ class Color(DisplayColor):
         return Color(*tuple(int(h[i: i + 2], 16) / 255 for i in range(0, 8, 2)))
 
     @classmethod
-    def from_rgb(cls, rgb: RGB) -> "Color":
+    def from_rgb(cls, rgb: RGB) -> Color:
         return cls(rgb.r, rgb.g, rgb.b, 0.0)
 
     @classmethod
-    def from_hsv(cls, hsv: HSV) -> "Color":
+    def from_hsv(cls, hsv: HSV) -> Color:
         return cls.from_rgb(hsv_to_srgb(hsv))
 
     @classmethod
-    def from_linear_rgb(cls, rgb: LinearRGB) -> "Color":
+    def from_linear_rgb(cls, rgb: LinearRGB) -> Color:
         return cls.from_rgb(linear_rgb_to_srgb(rgb))
 
     @classmethod
-    def from_xyz(cls, xyz: XYZ) -> "Color":
+    def from_xyz(cls, xyz: XYZ) -> Color:
         return cls.from_linear_rgb(xyz_to_linear_rgb(xyz))
 
     @classmethod
-    def from_lab(cls, lab: Lab) -> "Color":
+    def from_lab(cls, lab: Lab) -> Color:
         return cls.from_xyz(lab_to_xyz(lab))
 
     @classmethod
-    def from_hcl(cls, hcl: HCL) -> "Color":
+    def from_hcl(cls, hcl: HCL) -> Color:
         return cls.from_lab(hcl_to_lab(hcl))
 
     @property
     def valid(self) -> bool:
-        return all(0.0 <= c <= 1.0 for c in self)
+        return all(0.0 <= c <= 1.0 for c in astuple(self))
 
-    def clamp(self) -> "Color":
+    def clamp(self) -> Color:
         def c(v: float) -> float:
             return max(0.0, min(v, 1.0))
 
         return Color(c(self.r), c(self.g), c(self.b), c(self.w))
 
-    def blend(self, other: "Color", bias: float) -> "Color":
+    def blend(self, other: Color, bias: float) -> Color:
         return Color.from_hcl(
             blend.hcl(self.hcl, other.hcl, bias)
         )
 
     @property
-    def rgb256(self) -> Tuple[int, int, int]:
+    def rgb256(self) -> tuple[int, int, int]:
         """
         Called to emit an RGB triple in [0-255].
 
@@ -96,7 +97,7 @@ class Color(DisplayColor):
         return c(rgb.r), c(rgb.g), c(rgb.b)
 
     @property
-    def rgbw256(self) -> Tuple[int, int, int, int]:
+    def rgbw256(self) -> tuple[int, int, int, int]:
         """
         Called to emit an RGBW quadruple in [0-255].
 
@@ -104,7 +105,7 @@ class Color(DisplayColor):
         """
         return self.dmx
 
-    def scale(self, factor: float) -> "Color":
+    def scale(self, factor: float) -> Color:
         """
         Scales the brightness by a factor in [0,1].
 
@@ -115,7 +116,7 @@ class Color(DisplayColor):
         return color(HSV(hsv.h, hsv.s, hsv.v * factor))
 
     @property
-    def dmx(self) -> Tuple[int, int, int, int]:
+    def dmx(self) -> tuple[int, int, int, int]:
         """
         Emit RGBW [0-255] tuple.
         """

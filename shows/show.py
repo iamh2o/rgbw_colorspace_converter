@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generator
+from collections.abc import Generator
 
 # Will contain all available non-debug shows and debug shows.
 registry = set()

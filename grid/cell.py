@@ -1,5 +1,8 @@
+from __future__ import annotations
+from collections.abc import Iterable
 from enum import IntEnum
-from typing import List, Optional, NamedTuple, Set, Iterable
+from typing import Optional, NamedTuple
+
 
 from .geom import Address, Coordinate, Geometry, Position, Universe
 
@@ -8,7 +11,7 @@ class Orientation(IntEnum):
     POINT_UP = 1
     POINT_DOWN = -1
 
-    def invert(self) -> "Orientation":
+    def invert(self) -> Orientation:
         return Orientation.POINT_UP if self is Orientation.POINT_DOWN else Orientation.POINT_DOWN
 
 
@@ -25,7 +28,7 @@ class Direction(IntEnum):
 
         return self is Direction.NATURAL or self == orientation
 
-    def invert(self) -> "Direction":
+    def invert(self) -> Direction:
         if self is Direction.LEFT_TO_RIGHT:
             return Direction.RIGHT_TO_LEFT
         elif self is Direction.RIGHT_TO_LEFT:
@@ -42,11 +45,11 @@ class Cell(NamedTuple):
 
     coordinate: Coordinate
     orientation: Orientation
-    addresses: List["Address"]
+    addresses: list[Address]
     geom: Geometry
     real: bool
 
-    def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> Iterable["Address"]:
+    def pixel_addresses(self, direction: Direction = Direction.LEFT_TO_RIGHT) -> Iterable[Address]:
         return (self.addresses
                 if direction.natural_for(self.orientation)
                 else reversed(self.addresses))
@@ -79,19 +82,19 @@ class Cell(NamedTuple):
     # TODO(lyra): use Coordinate below instead of Position
 
     @property
-    def above(self) -> Optional["Position"]:
+    def above(self) -> Optional[Position]:
         return self.position.adjust(row=-1, col=-1) if self.row > 0 else None
 
     @property
-    def below(self) -> Optional["Position"]:
+    def below(self) -> Optional[Position]:
         return self.position.adjust(row=1, col=1) if self.row + 1 < self.geom.rows else None
 
     @property
-    def left(self) -> Optional["Position"]:
+    def left(self) -> Optional[Position]:
         return self.position.adjust(col=-1) if self.col > 0 else None
 
     @property
-    def right(self) -> Optional["Position"]:
+    def right(self) -> Optional[Position]:
         return self.position.adjust(col=1) if self.col + 1 < self.geom.row_length(self.row) else None
 
     @property
@@ -137,7 +140,7 @@ class Cell(NamedTuple):
         return self.is_bottom_edge and self.is_left_edge
 
     @property
-    def universes(self) -> Set[Universe]:
+    def universes(self) -> set[Universe]:
         return {a.universe for a in self.addresses}
 
     @property

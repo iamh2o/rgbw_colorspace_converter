@@ -1,5 +1,6 @@
+from __future__ import annotations
 from functools import lru_cache
-from typing import List, NamedTuple, Union
+from typing import NamedTuple, Union
 
 
 class Position(NamedTuple):
@@ -13,27 +14,27 @@ class Position(NamedTuple):
 
     @classmethod
     @lru_cache(maxsize=512)
-    def from_id(cls, id: int) -> "Position":
+    def from_id(cls, id: int) -> Position:
         row_below = 1
         while Geometry.triangular_number(row_below) <= id:
             row_below += 1
 
         row = row_below - 1
         col = id - Geometry.triangular_number(row)
-        return cls(row, col)
+        return Position(row, col)
 
     @property
     def id(self) -> int:
         return Geometry.triangular_number(self.row) + self.col
 
-    def adjust(self, row: int = 0, col: int = 0) -> "Position":
-        return type(self)(self.row + row, self.col + col)
+    def adjust(self, row: int = 0, col: int = 0) -> Position:
+        return Position(self.row + row, self.col + col)
 
-    def __add__(self, other: "Position") -> "Position":
+    def __add__(self, other: Position) -> Position:
         if not isinstance(other, Position):
             raise TypeError('invalid: %r + %r' % (self, other))
 
-        return type(self)(self.row + other.row, self.col + other.col)
+        return Position(self.row + other.row, self.col + other.col)
 
 
 class Coordinate(NamedTuple):
@@ -54,16 +55,16 @@ class Coordinate(NamedTuple):
 
     @classmethod
     @lru_cache(maxsize=2048)
-    def from_pos(cls, pos: Position, geom: "Geometry") -> "Coordinate":
+    def from_pos(cls, pos: Position, geom: Geometry) -> Coordinate:
         y = geom.rows - 1 - pos.row
         x = pos.col + y
-        return cls(x, y)
+        return Coordinate(x, y)
 
-    def pos(self, geom: "Geometry"):
+    def pos(self, geom: Geometry):
         return Position(geom.rows - 1 - self.y, self.x - self.y)
 
-    def adjust(self, x: int = 0, y: int = 0) -> "Coordinate":
-        return type(self)(self.x + x, self.y + y)
+    def adjust(self, x: int = 0, y: int = 0) -> Coordinate:
+        return Coordinate(self.x + x, self.y + y)
 
     def __str__(self) -> str:
         return f'<{self.x}, {self.y}>'
@@ -95,7 +96,7 @@ class Universe(NamedTuple):
         return 512 if (self.id - (self.base - 1)) % 3 != 0 else (44 * 4)
 
     @property
-    def next(self) -> "Universe":
+    def next(self) -> Universe:
         return Universe(self.base, self.id + 1)
 
     def __str__(self) -> str:
@@ -113,24 +114,24 @@ class Address(NamedTuple):
 
     @classmethod
     def first(cls, universe: Universe = Universe(1, 1), offset: int = 4):
-        return cls(universe=universe, offset=offset)
+        return Address(universe=universe, offset=offset)
 
     @property
-    def next(self) -> "Address":
+    def next(self) -> Address:
         next_offset = self.offset + CHANNELS_PER_PIXEL
         if next_offset >= self.universe.size:
             return Address(self.universe.next, 0)
 
         return Address(self.universe, next_offset)
 
-    def skip(self, n: int) -> "Address":
+    def skip(self, n: int) -> Address:
         addr = self
         for _ in range(n):
             addr = addr.next
 
         return addr
 
-    def range(self, len: int) -> List["Address"]:
+    def range(self, len: int) -> list[Address]:
         addrs = [self]
         for _ in range(len - 1):
             addrs.append(addrs[-1].next)

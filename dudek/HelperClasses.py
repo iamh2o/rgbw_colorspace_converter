@@ -1,7 +1,6 @@
 from color import RGB
 from dudek.HelperFunctions import gradient_wheel
 from grid.cell import Coordinate
-from typing import List
 
 
 #
@@ -10,7 +9,7 @@ from typing import List
 class Faders:
     def __init__(self, grid):
         self.grid = grid
-        self.fader_array: List[Fader] = []
+        self.fader_array: list[Fader] = []
         self.max_faders = 1000
 
     def add_fader(self, color, pos, change=0.1, intense=1.0, growing=False):

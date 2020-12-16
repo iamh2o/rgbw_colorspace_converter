@@ -1,5 +1,4 @@
 from collections import deque
-from typing import Deque
 import random
 
 from .show import Show
@@ -12,7 +11,7 @@ class Zaphod(Show):
         self.grid = pyramid.panel
         self.frame_delay = frame_delay
 
-    def shuffle(self) -> Deque[Cell]:
+    def shuffle(self) -> deque[Cell]:
         cells = self.grid.cells
         random.shuffle(cells)
         return deque(cells)

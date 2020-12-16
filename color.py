@@ -83,7 +83,7 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
 import colorsys
 from copy import deepcopy
 from math import fmod, cos, radians
-from typing import Tuple, List, Union
+from typing import Union
 from model import DisplayColor
 
 __all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
@@ -97,14 +97,14 @@ def clamp(val: V, min_value: V, max_value: V) -> V:
     return max(min(val, max_value), min_value)
 
 
-def rgb_to_hsv(r: int, g: int, b: int) -> Tuple[float, float, float]:
+def rgb_to_hsv(r: int, g: int, b: int) -> tuple[float, float, float]:
     """
     Converts an RGB[0, 255] tuple to HSV[0, 1].
     """
     return colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
 
 
-def hsv_to_rgb(hue: float, saturation: float, value: float) -> Tuple[int, int, int]:
+def hsv_to_rgb(hue: float, saturation: float, value: float) -> tuple[int, int, int]:
     """
     Converts a Hue Saturation Value triple to an RGB triple.
     """
@@ -112,7 +112,7 @@ def hsv_to_rgb(hue: float, saturation: float, value: float) -> Tuple[int, int, i
     return r, g, b
 
 
-def hsv_to_rgbw(hue: float, saturation: float, value: float) -> Tuple[int, int, int, int]:
+def hsv_to_rgbw(hue: float, saturation: float, value: float) -> tuple[int, int, int, int]:
     """
     Converts a Hue Saturation Value triple to an RGBW quadruple.
 
@@ -144,7 +144,7 @@ def hsv_to_rgbw(hue: float, saturation: float, value: float) -> Tuple[int, int, 
     return r, g, b, w
 
 
-def rgbw_to_hsv(r: int, g: int, b: int, w: int) -> Tuple[float, float, float]:
+def rgbw_to_hsv(r: int, g: int, b: int, w: int) -> tuple[float, float, float]:
     """
     Converts RGBW quadruple in [0, 255] to HSV triple in [0, 1].
     """
@@ -180,7 +180,7 @@ def rgbw_to_hsv(r: int, g: int, b: int, w: int) -> Tuple[float, float, float]:
     return hue / 360, saturation, value
 
 
-def hsi_to_rgb(hue: float, sat: float, intensity: float) -> Tuple[int, int, int]:
+def hsi_to_rgb(hue: float, sat: float, intensity: float) -> tuple[int, int, int]:
     """
     Converts a Hue Saturation Intensity triple to RGB triple.
 
@@ -212,7 +212,7 @@ def hsi_to_rgb(hue: float, sat: float, intensity: float) -> Tuple[int, int, int]
     return r, g, b
 
 
-def rgb_to_hsi(r: int, g: int, b: int) -> Tuple[float, float, float]:
+def rgb_to_hsi(r: int, g: int, b: int) -> tuple[float, float, float]:
     """
     Converts an RGB triple to Hue Saturation Intensity triple.
 
@@ -251,7 +251,7 @@ def rgb_to_hsi(r: int, g: int, b: int) -> Tuple[float, float, float]:
     return hue / 360, abs(saturation), intensity
 
 
-def hsi_to_rgbw(hue: float, sat: float, intensity: float) -> Tuple[int, int, int, int]:
+def hsi_to_rgbw(hue: float, sat: float, intensity: float) -> tuple[int, int, int, int]:
     """
     Converts a Hue Saturation Intensity triple to RGBW quadruple.
 
@@ -282,7 +282,7 @@ def hsi_to_rgbw(hue: float, sat: float, intensity: float) -> Tuple[int, int, int
     return r, g, b, w
 
 
-def rgbw_to_hsi(r: int, g: int, b: int, w: int) -> Tuple[float, float, float]:
+def rgbw_to_hsi(r: int, g: int, b: int, w: int) -> tuple[float, float, float]:
     """
     Converts RGBW quadruple to HSI triple.
 
@@ -323,7 +323,7 @@ def rgbw_to_hsi(r: int, g: int, b: int, w: int) -> Tuple[float, float, float]:
     return hue / 360, saturation, intensity
 
 
-def hsv_to_hsl(hue: float, sat_hsv: float, value: float) -> Tuple[float, float, float]:
+def hsv_to_hsl(hue: float, sat_hsv: float, value: float) -> tuple[float, float, float]:
     """
     Converts HSV triple in [0, 1] to HSL triple in [0, 1].
 
@@ -338,7 +338,7 @@ def hsv_to_hsl(hue: float, sat_hsv: float, value: float) -> Tuple[float, float, 
     return hue, sat_hsl, lightness
 
 
-def hsl_to_hsv(hue: float, sat_hsl: float, lightness: float) -> Tuple[float, float, float]:
+def hsl_to_hsv(hue: float, sat_hsl: float, lightness: float) -> tuple[float, float, float]:
     """
     Converts HSL triple in [0, 1] to HSV triple in [0, 1].
 
@@ -455,9 +455,9 @@ def Hex(value: str) -> "Color":
 
 
 class Color(DisplayColor):
-    hsv_t: List[float]
+    hsv_t: list[float]
 
-    def __init__(self, hsv: Tuple[float, float, float]):
+    def __init__(self, hsv: tuple[float, float, float]):
         """
         Creates a native HSV Color.
         """
@@ -469,7 +469,7 @@ class Color(DisplayColor):
     def copy(self) -> "Color":
         return deepcopy(self)
 
-    def _set_hsv(self, hsv: Tuple[float, float, float]) -> None:
+    def _set_hsv(self, hsv: tuple[float, float, float]) -> None:
         if not len(hsv) == 3 and all([(0.0 <= t <= 1.0) for t in hsv]):
             raise ValueError(f"invalid HSV tuple '{hsv}'")
 
@@ -477,31 +477,31 @@ class Color(DisplayColor):
         self.hsv_t = list(hsv)
 
     @property
-    def rgbw(self) -> Tuple[int, int, int, int]:
+    def rgbw(self) -> tuple[int, int, int, int]:
         """returns an RGBW tuple in [0, 255]."""
         return hsv_to_rgbw(*self.hsv_t)
 
     @property
-    def rgbw256(self) -> Tuple[int, int, int, int]:
+    def rgbw256(self) -> tuple[int, int, int, int]:
         """
         Alias for rgbw(self)
         """
         return self.rgbw
 
     @property
-    def rgb(self) -> Tuple[int, int, int]:
+    def rgb(self) -> tuple[int, int, int]:
         """returns an RGB tuple in [0, 255]."""
         return hsv_to_rgb(*self.hsv_t)
 
     @property
-    def rgb256(self) -> Tuple[int, int, int]:
+    def rgb256(self) -> tuple[int, int, int]:
         """
         Alias for rgb(self)
         """
         return self.rgb
 
     @property
-    def hsv(self) -> Tuple[float, float, float]:
+    def hsv(self) -> tuple[float, float, float]:
         """returns a hsv[0.0-1.0] tuple"""
         return self.hsv_t[0], self.hsv_t[1], self.hsv_t[2]
 
@@ -511,7 +511,7 @@ class Color(DisplayColor):
         return '#%02x%02x%02x' % self.rgb
 
     @property
-    def hsl(self) -> Tuple[int, float, float]:
+    def hsl(self) -> tuple[int, float, float]:
         """returns an HSL tuple ([0, 360], [0, 1], [0, 1])."""
         (h, s, l) = hsv_to_hsl(*self.hsv_t)
         return round(h * 360), s, l

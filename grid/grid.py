@@ -1,6 +1,8 @@
+from __future__ import annotations
 from abc import abstractmethod
+from collections.abc import Callable, Iterator, Iterable, Mapping
 import logging
-from typing import Callable, Iterator, Iterable, List, Mapping, NamedTuple, Optional, Union
+from typing import NamedTuple, Optional, Union
 
 from color import HSV
 from model import DisplayColor, Model
@@ -9,13 +11,10 @@ from .geom import Address, Coordinate, Geometry, Position
 
 logger = logging.getLogger('pyramidtriangles')
 
+# Types
 Location = Union[Coordinate, Position]
-
-Query = Callable[['Grid'], Iterable[Cell]]
-Selector = Union[Location,
-                 Cell,
-                 Iterable[Cell],
-                 Query]
+Query = Callable[..., Iterable[Cell]]
+Selector = Union[Location, Cell, Iterable[Cell], Query]
 
 
 class Pixel(NamedTuple):
@@ -47,7 +46,7 @@ class Grid(Mapping[Location, Cell]):
 
     @property
     @abstractmethod
-    def cells(self) -> List[Cell]:
+    def cells(self) -> list[Cell]:
         raise NotImplementedError
 
     @abstractmethod

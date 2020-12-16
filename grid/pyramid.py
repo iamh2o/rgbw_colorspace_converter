@@ -1,4 +1,6 @@
-from typing import Iterable, Iterator, List, Optional
+from __future__ import annotations
+from collections.abc import Iterable, Iterator
+from typing import Optional
 
 from color import HSV
 from model import Model, DisplayColor
@@ -19,7 +21,7 @@ class Pyramid:
       mirrored on the other side
     """
 
-    faces: List[Face]
+    faces: list[Face]
 
     # synthesized grids
     panel: Grid
@@ -28,7 +30,7 @@ class Pyramid:
     @classmethod
     def build_single(cls,
                      model: Model,
-                     start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
+                     start: Address = Address(Universe(1, 1), 4)) -> Pyramid:
         """Builds Pyramid with a single, repeated panel."""
         face = Face.build(model, [[0]], start)
         return cls([face])
@@ -36,7 +38,7 @@ class Pyramid:
     @classmethod
     def build(cls,
               model: Model,
-              start: Address = Address(Universe(1, 1), 4)) -> "Pyramid":
+              start: Address = Address(Universe(1, 1), 4)) -> Pyramid:
         """Builds Pyramid for the art car."""
         left_face = Face.build(model, FULL_FACE_SPEC, start)
         right_face = Face.build(model, FULL_FACE_SPEC, left_face.next_address)
@@ -67,7 +69,7 @@ class Pyramid:
         return self.faces[0].model
 
     @property
-    def cells(self) -> List[Cell]:
+    def cells(self) -> list[Cell]:
         cells = []
         for face in self.faces:
             cells.extend(face.cells)
@@ -106,7 +108,7 @@ class PanelReplicator(Grid):
     panel of every face.
     """
 
-    faces: List[Face]
+    faces: list[Face]
 
     _exemplar_face: Face
     _exemplar_panel_geom: Geometry
@@ -129,7 +131,7 @@ class PanelReplicator(Grid):
                              rows=self._exemplar_panel_geom.rows)
 
     @property
-    def cells(self) -> List[Cell]:
+    def cells(self) -> list[Cell]:
         return [cell
                 for cell in self._exemplar_face.cells
                 if cell.coordinate in self._exemplar_panel_geom]
@@ -155,7 +157,7 @@ class FaceReplicator(Grid):
     """
 
     primary: Face
-    replicas: List[Face]
+    replicas: list[Face]
 
     def __init__(self, faces: Iterable[Face]):
         face_list = list(faces)
@@ -176,7 +178,7 @@ class FaceReplicator(Grid):
         return self.primary.model
 
     @property
-    def cells(self) -> List[Cell]:
+    def cells(self) -> list[Cell]:
         return self.primary.cells
 
     def _cell(self, coordinate: Coordinate) -> Optional[Cell]:
