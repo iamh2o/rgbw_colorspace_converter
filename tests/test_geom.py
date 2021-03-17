@@ -1,4 +1,4 @@
-from grid import Coordinate, Geometry
+from pyramidtriangles.grid import Coordinate, Geometry
 
 
 def test_row_len():

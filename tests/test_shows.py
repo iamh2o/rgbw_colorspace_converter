@@ -1,4 +1,5 @@
-from shows import Show, load_shows
+from pyramidtriangles.grid import Pyramid
+from pyramidtriangles.shows import Show, load_shows
 
 
 def test_load_shows():
@@ -14,10 +15,16 @@ def test_load_shows():
 
 
 class DebugShow(Show, debug=True):
+    def __init__(self, pyramid: Pyramid) -> None:
+        pass
+
     def next_frame(self):
         pass
 
 
 class DisabledShow(Show, disable=True):
+    def __init__(self, pyramid: Pyramid) -> None:
+        pass
+
     def next_frame(self):
         pass
