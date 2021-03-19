@@ -10,13 +10,13 @@ from collections.abc import Iterable
 
 import sacn
 
-from .base import allocate_universes, DisplayColor, Model
+from . import allocate_universes, DisplayColor
 from ..grid import Address, Cell
 
 logger = getLogger(__name__)
 
 
-class sACN(Model):
+class sACN:
     def __init__(self, bind_address: str, brightness: float = 1.0):
         self.brightness = brightness
         self.sender = sacn.sACNsender(

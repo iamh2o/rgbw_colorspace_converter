@@ -2,7 +2,6 @@ from __future__ import annotations
 from dataclasses import dataclass, astuple
 from typing import Union
 
-from ..model import DisplayColor
 from . import blend
 from .space import (
     RGB,
@@ -26,7 +25,7 @@ from .space import (
 
 
 @dataclass(frozen=True)
-class Color(DisplayColor):
+class Color:
     r: float  # [0-1]
     g: float  # [0-1]
     b: float  # [0-1]

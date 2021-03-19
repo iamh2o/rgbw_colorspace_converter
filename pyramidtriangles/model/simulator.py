@@ -4,14 +4,14 @@ from logging import getLogger
 import queue
 import socket
 
-from .base import DisplayColor, Model
-from ..grid import Address, Cell
+from . import DisplayColor
+from ..grid import Cell
 
 SIM_DEFAULT = (188, 210, 229)  # BCD2E5, "off" color for simulator
 logger = getLogger(__name__)
 
 
-class SimulatorModel(Model):
+class SimulatorModel:
     """
     Model to communicate with a Processing simulator over a TCP socket.
     """
@@ -31,7 +31,7 @@ class SimulatorModel(Model):
     def __repr__(self):
         return f'{SimulatorModel.__name__} (hostname={self.hostname}, port={self.port})'
 
-    def set(self, cell: Cell, addr: Address, color: DisplayColor):
+    def set(self, cell: Cell, addr, color: DisplayColor):
         # Enqueue a message to simulator, sets address
         msg = f"{str(cell.id)} {','.join(map(str, color.rgb256))}\n"
         self.message_queue.put(msg)

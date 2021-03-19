@@ -1,30 +1,15 @@
-from collections.abc import Iterable
 from pytest import raises
 
 from pyramidtriangles.grid import (
-    Position, Geometry, Cell, Address, bottom_edge, left_edge, right_edge, vertex_neighbors, edge_neighbors,
+    Position, Geometry, Address, bottom_edge, left_edge, right_edge, vertex_neighbors, edge_neighbors,
     Coordinate, Face, Panel, Universe
 )
-from pyramidtriangles.model import Model, DisplayColor
-
-
-class FakeModel(Model):
-    def activate(self, cells: Iterable[Cell]):
-        pass
-
-    def set(self, cell: Cell, addr: Address, color: DisplayColor):
-        pass
-
-    def go(self):
-        pass
-
-    def stop(self):
-        pass
+from pyramidtriangles.model.null import NullModel
 
 
 def single_panel_grid(rows):
     geom = Geometry(origin=Coordinate(0, 0), rows=rows)
-    return Face(FakeModel(),
+    return Face(NullModel(),
                 geom,
                 [Panel(geom, Address(Universe(1, 1), 4))])
 
@@ -94,18 +79,18 @@ def test_cell_neighbors():
 
 
 def test_build_face():
-    single = Face.build(FakeModel(), [[0]])
+    single = Face.build(NullModel(), [[0]])
     assert len(single.panels) == 1
     assert single.geom.height == 11
 
-    double = Face.build(FakeModel(), [[], [0, 1]])
+    double = Face.build(NullModel(), [[], [0, 1]])
     assert len(double.panels) == 2
     assert double.geom.height == 2 * 11
     assert sorted(p.geom.origin for p in double.panels) == [Coordinate(0, 0),
                                                             Coordinate(22, 0)]
     assert sorted(p.start.universe.id for p in double.panels) == [1, 12]
 
-    full = Face.build(FakeModel(), [[0], [], [0, 4]])
+    full = Face.build(NullModel(), [[0], [], [0, 4]])
     assert len(full.panels) == 3
     assert full.geom.height == 3 * 11
     assert sorted(p.geom.origin for p in full.panels) == [Coordinate(0, 0),

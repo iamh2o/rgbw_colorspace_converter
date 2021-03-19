@@ -12,14 +12,13 @@ from collections.abc import Iterator
 
 import ola
 
-from .base import Model
 from .mapping import PixelMap
 
 logger = getLogger(__name__)
 
 
 # XXX(lyra): this is no longer a valid Model
-class OLAModel(Model):
+class OLAModel:
     def __init__(self, max_dmx, model_json: str, pixelmap: PixelMap):
         # XXX any way to check if this is a valid connection?
 

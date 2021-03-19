@@ -2,10 +2,10 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from ..grid import Address, Cell
-from .base import DisplayColor, Model
+from . import DisplayColor
 
 
-class NullModel(Model):
+class NullModel:
     """
     Model that does nothing.
 

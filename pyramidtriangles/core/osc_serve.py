@@ -45,6 +45,7 @@ def create_server(shutdown: Event, queue: Queue, host: str = '0.0.0.0', port: in
     last_msg = defaultdict(float)
 
     def handler(addr, tags, data, source):
+        """Processes all OSC messages."""
         now = time.time()
         sincelast = now - last_msg[addr]
 

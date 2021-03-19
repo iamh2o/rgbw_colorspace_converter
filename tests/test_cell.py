@@ -1,21 +1,5 @@
-from collections.abc import Iterable
-
-from pyramidtriangles.grid import Face, Panel, Position, Geometry, Cell, Address, Coordinate, Universe
-from pyramidtriangles.model import Model, DisplayColor
-
-
-class FakeModel(Model):
-    def activate(self, cells: Iterable[Cell]):
-        pass
-
-    def set(self, cell: Cell, addr: Address, color: DisplayColor):
-        pass
-
-    def go(self):
-        pass
-
-    def stop(self):
-        pass
+from pyramidtriangles.grid import Face, Panel, Position, Geometry, Address, Coordinate, Universe
+from pyramidtriangles.model.null import NullModel
 
 
 def test_position_symmetry():
@@ -46,7 +30,7 @@ def test_coordinate_symmetry():
 
 def test_cell_attributes():
     geom = Geometry(origin=Coordinate(0, 0), rows=3)
-    triangle = Face(FakeModel(),
+    triangle = Face(NullModel(),
                     geom,
                     [Panel(geom, Address(Universe(1, 1), 4))])
 

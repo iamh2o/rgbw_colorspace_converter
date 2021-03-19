@@ -2,10 +2,10 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from ..grid.cell import Address, Cell
-from .base import DisplayColor, Model
+from . import DisplayColor, Model
 
 
-class MirrorModel(Model):
+class MirrorModel:
     """
     Proof of concept that dealing with mirroring across multiple backend models is best done at this layer.
     """

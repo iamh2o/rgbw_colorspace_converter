@@ -7,9 +7,7 @@ from pathlib import Path
 from random import choice
 from typing import cast
 
-# These imports include submodules under the `shows` namespace.
 from .show import Show
-from .knobs import KnobValue
 
 logger = getLogger(__name__)
 
