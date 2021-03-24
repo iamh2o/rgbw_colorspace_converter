@@ -13,10 +13,10 @@ from threading import Event, Thread
 from typing import Optional, Any
 
 
-from .. import util
-from ..grid import Pyramid
-from ..shows import load_shows, random_shows, Show, KnobValue
-from .playlist_controller import PlaylistController
+from . import util
+from .grid import Pyramid
+from .shows import load_shows, random_shows, Show, KnobValue
+from .playlist import Playlist
 
 logger = getLogger(__name__)
 
@@ -71,7 +71,7 @@ class ShowRunner(Thread):
         # map of names -> show constructors
         self.shows = dict(load_shows())
         self.random_show_sequence = random_shows()
-        self.playlist = PlaylistController()
+        self.playlist = Playlist()
 
         # show state variables
         self.show: Optional[Show] = None

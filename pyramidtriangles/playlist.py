@@ -25,7 +25,7 @@ Settings = dict[str, Value]
 _db_conn_keep_open: sqlite3.Connection
 
 
-class PlaylistController:
+class Playlist:
     """
     Controller to handle in-memory database lookups for playlists.
 

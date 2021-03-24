@@ -10,7 +10,8 @@ from typing import Optional
 import orjson
 
 from ..color import HSV
-from ..core import BrightnessCmd, PlaylistController, RuntimeCmd, RunShowCmd, Settings, ShowKnobCmd, SpeedCmd
+from ..show_runner import BrightnessCmd, Playlist, RuntimeCmd, RunShowCmd, ShowKnobCmd, SpeedCmd
+from ..playlist import Settings
 from ..grid import Pyramid
 from ..model.null import NullModel
 from ..shows import load_shows
@@ -36,14 +37,14 @@ class Web:
     def __init__(self, command_queue: Queue, status_queue: Queue[Status]):
         # In-memory DB is easier than organizing thread-safety around all operations. At least one connection must stay
         # open. 'self.db' shouldn't be closed.
-        self.db = PlaylistController()
+        self.db = Playlist()
 
         status = LatestStatus(status_queue)
 
         # These all are REST endpoints, path denoted by the variable name (e.g. /cycle_time).
         self.brightness = Brightness(command_queue, status)
         self.cycle_time = CycleTime(command_queue, status)
-        self.playlist = Playlist(command_queue, self.db)
+        self.playlist = PlaylistWeb(command_queue, self.db)
         self.shows = Shows(command_queue)
         self.show_knob = ShowKnob(command_queue)
         self.speed = Speed(command_queue, status)
@@ -136,11 +137,11 @@ class CycleTime:
 @cherrypy.expose
 @cherrypy.tools.json_in()
 @cherrypy.tools.json_out()
-class Playlist:
+class PlaylistWeb:
     """
     Handles requests under /playlist.
     """
-    def __init__(self, queue: Queue, playlist: PlaylistController):
+    def __init__(self, queue: Queue, playlist: Playlist):
         self.entries = Entry(playlist)
         self.queue = queue
         self.playlist = playlist
@@ -199,7 +200,7 @@ class Entry:
 
     A playlist entry. A show can have multiple entries, each with different settings.
     """
-    def __init__(self, playlist: PlaylistController):
+    def __init__(self, playlist: Playlist):
         self.playlist = playlist
 
     def GET(self, entry_id: int) -> Settings:
