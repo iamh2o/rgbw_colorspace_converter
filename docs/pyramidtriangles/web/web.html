@@ -1,0 +1,1683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>pyramidtriangles.web.web API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyramidtriangles.web.web</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from __future__ import annotations
+import logging
+import time
+from collections import defaultdict
+from dataclasses import dataclass
+from pathlib import Path
+from queue import Queue, Empty
+import cherrypy
+from typing import Optional
+import orjson
+
+from ..color import HSV
+from ..show_runner import BrightnessCmd, Playlist, RuntimeCmd, RunShowCmd, ShowKnobCmd, SpeedCmd
+from ..playlist import Settings
+from ..grid import Pyramid
+from ..model.null import NullModel
+from ..shows import load_shows
+
+# Suppressing logging to terminal for cherrypy access logs, which are really noisy.
+# The log is still written to `log/cherrypy_access.log` though.
+logging.getLogger(&#34;cherrypy&#34;).propagate = False
+
+logger = logging.getLogger(__name__)
+
+
+class Web:
+    &#34;&#34;&#34;
+    Web API for running triangle shows.
+
+    This is a CherryPy base, so each REST endpoint is assigned to it. For example, requests to `/cycle_time` route to
+    self.cycle_time.
+
+    There are two queues used to pass information in a thread-safe way. The command_queue passes commands from Web to
+    the ShowRunner, which changes the behavior of running shows. The status_queue passes information from the ShowRunner
+    to Web to display the current status of what&#39;s running.
+    &#34;&#34;&#34;
+    def __init__(self, command_queue: Queue, status_queue: Queue[Status]):
+        # In-memory DB is easier than organizing thread-safety around all operations. At least one connection must stay
+        # open. &#39;self.db&#39; shouldn&#39;t be closed.
+        self.db = Playlist()
+
+        status = LatestStatus(status_queue)
+
+        # These all are REST endpoints, path denoted by the variable name (e.g. /cycle_time).
+        self.brightness = Brightness(command_queue, status)
+        self.cycle_time = CycleTime(command_queue, status)
+        self.playlist = PlaylistWeb(command_queue, self.db)
+        self.shows = Shows(command_queue)
+        self.show_knob = ShowKnob(command_queue)
+        self.speed = Speed(command_queue, status)
+        self.status = Status(status)
+
+    @staticmethod
+    def build_config(config: Optional[dict] = None) -&gt; dict:
+        &#34;&#34;&#34;
+        Builds a cherrypy config by merging some default settings into the `config` argument.
+        Exposed so tests can reuse this config.
+        &#34;&#34;&#34;
+        if config is None:
+            config = {}
+
+        config.update({
+            &#39;/&#39;: {
+                &#39;request.dispatch&#39;: cherrypy.dispatch.MethodDispatcher(),
+                &#39;request.body.processors&#39;: {&#39;application/json&#39;: orjson_processor},
+                &#39;tools.json_out.handler&#39;: orjson_handler,
+                &#39;tools.gzip.on&#39;: True,
+                &#39;tools.staticdir.on&#39;: True,
+                &#39;tools.staticdir.dir&#39;: Path(__file__).parent/&#39;../../js/public&#39;,
+                &#39;tools.staticdir.index&#39;: &#39;index.html&#39;,
+            }
+        })
+        return config
+
+    def start(self, config):
+        &#34;&#34;&#34;Starts the cherrypy server and blocks the current thread.&#34;&#34;&#34;
+        config = self.build_config(config)
+        cherrypy.config.update({
+            &#39;log.access_file&#39;: &#39;log/cherrypy_access.log&#39;,
+            &#39;log.screen&#39;: False,
+        })
+
+        # this method blocks until KeyboardInterrupt
+        cherrypy.quickstart(self, &#39;/&#39;, config=config)
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class Brightness:
+    &#34;&#34;&#34;
+    Handles requests under /brightness.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, status: LatestStatus):
+        self.queue = queue
+        self.status = status
+
+    def GET(self) -&gt; dict:
+        if latest := self.status.latest():
+            return {&#39;value&#39;: int(latest.brightness_scale * 100)}
+        return {&#39;value&#39;: 100}
+
+    def POST(self):
+        data = cherrypy.request.json
+        if &#39;value&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+        brightness = data[&#39;value&#39;]/100.0
+        self.queue.put(BrightnessCmd(brightness))
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class CycleTime:
+    &#34;&#34;&#34;
+    Handles requests under /cycle_time.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, status: LatestStatus):
+        self.queue = queue
+        self.status = status
+
+    def GET(self) -&gt; dict:
+        if latest := self.status.latest():
+            return {&#39;value&#39;: latest.max_show_time}
+        return {&#39;value&#39;: 60}
+
+    def POST(self) -&gt; None:
+        data = cherrypy.request.json
+        if &#39;value&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+        value = data[&#39;value&#39;]
+
+        logger.info(&#39;received new cycle time %s&#39;, value)
+        self.queue.put(RuntimeCmd(int(value)))
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class PlaylistWeb:
+    &#34;&#34;&#34;
+    Handles requests under /playlist.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, playlist: Playlist):
+        self.entries = Entry(playlist)
+        self.queue = queue
+        self.playlist = playlist
+
+    def _current_playlist(self) -&gt; dict:
+        return {
+            &#39;playlist&#39;: self.playlist.current_playlist(),
+            &#39;playing&#39;: self.playlist.current_entry(),
+        }
+
+    def GET(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Returns the current playlist of shows. [(id, show),...].
+        &#34;&#34;&#34;
+        return self._current_playlist()
+
+    def POST(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Appends a show to the playlist and returns the new playlist.
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+        if &#39;show&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;show&#39;&#34;)
+
+        self.playlist.append(data[&#39;show&#39;])
+        return self._current_playlist()
+
+    def DELETE(self) -&gt; None:
+        &#34;&#34;&#34;
+        Deletes all shows.
+        &#34;&#34;&#34;
+        self.playlist.clear()
+
+    def PUT(self) -&gt; None:
+        &#34;&#34;&#34;
+        Runs the playlist entry with {entry_id} as the current show.
+
+        It works by setting {entry_id} to be the next playlist entry, then triggers the ShowRunner to play the next
+        show.
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+        if &#39;entry_id&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;entry_id&#39;&#34;)
+        entry_id = data[&#39;entry_id&#39;]
+        self.playlist.set_next(entry_id)
+        self.queue.put(RunShowCmd(None))
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+@cherrypy.popargs(&#39;entry_id&#39;)
+class Entry:
+    &#34;&#34;&#34;
+    Handles requests under /playlist/entries/{entry_id}.
+
+    A playlist entry. A show can have multiple entries, each with different settings.
+    &#34;&#34;&#34;
+    def __init__(self, playlist: Playlist):
+        self.playlist = playlist
+
+    def GET(self, entry_id: int) -&gt; Settings:
+        &#34;&#34;&#34;
+        Returns the settings for a playlist entry, if any.
+
+        Setting entries have the form:
+        {
+          Color: { h: 1.0, s: 1.0, v: 1.0 },
+          Speed: 1.5,
+          ...
+        }
+        &#34;&#34;&#34;
+        return self.playlist.get_settings(entry_id)
+
+    def POST(self, entry_id: int) -&gt; Settings:
+        &#34;&#34;&#34;
+        Sets the show settings for a playlist entry. Returns the new setting.
+
+        Request data should be a JSON object mapping a setting name to a value.
+        { Color: { h: 1.0, s: 1.0, v: 1.0 } }
+        or
+        { Speed: 1.5 }
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+
+        # Merges settings from request with settings from database, with minimal validation.
+        settings = self.playlist.get_settings(entry_id)
+        for (key, value) in data.items():
+            if isinstance(value, (int, float, dict)):
+                settings[key] = value
+
+        self.playlist.set_settings(entry_id, settings)
+        return self.playlist.get_settings(entry_id)
+
+    def DELETE(self, entry_id: int) -&gt; None:
+        &#34;&#34;&#34;
+        Deletes a show from the playlist.
+        &#34;&#34;&#34;
+        self.playlist.delete(entry_id)
+
+
+@dataclass
+class Show:
+    &#34;&#34;&#34;Show is a simple object for JSON&#34;&#34;&#34;
+    name: str
+    description: str
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class Shows:
+    &#34;&#34;&#34;
+    Handles requests under /shows.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue):
+        self.queue = queue
+        self.shows = [Show(name=name, description=cls.description()) for (name, cls) in load_shows()]
+        self.show_names = list(map(lambda x: x.name, self.shows))
+
+    def GET(self) -&gt; dict:
+        &#34;&#34;&#34;Returns listing of show names&#34;&#34;&#34;
+        return {&#34;shows&#34;: self.shows}
+
+    def POST(self) -&gt; None:
+        &#34;&#34;&#34;Sets the current show to request&#39;s &#39;data&#39; key.&#34;&#34;&#34;
+        data = cherrypy.request.json
+        if &#39;data&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;&#39;data&#39; parameter missing in request&#34;)
+        show_name = data[&#39;data&#39;]
+
+        if show_name is None or show_name not in self.show_names:
+            raise cherrypy.HTTPError(400, f&#34;&#39;{show_name}&#39; not an available show&#34;)
+
+        self.queue.put(RunShowCmd(show_name))
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class ShowKnob:
+    &#34;&#34;&#34;
+    Handles requests under /show_knob.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue):
+        self.queue = queue
+        self.knobs = defaultdict(list)  # if the knob doesn&#39;t exist, you&#39;ll get []
+
+        # load each show with a null model to get the available show knobs
+        null_pyramid = Pyramid.build_single(NullModel())
+        for (name, cls) in load_shows():
+            show = cls(null_pyramid)
+            if show.knobs:
+                self.knobs[name] = show.knobs.json_array
+
+    @cherrypy.popargs(&#39;show&#39;)
+    def GET(self, show) -&gt; list:
+        &#34;&#34;&#34;
+        Returns the available knobs for the given show.
+
+        [{
+            name: &#39;Main Color&#39;,
+            value: {
+              default: { h: 1.0, s: 1.0, v: 1.0},
+            },
+            type: &#39;HSVKnob&#39;
+        }, {
+            name: &#39;Speed&#39;,
+            value: {
+              default: 1.0,
+            },
+            type: &#39;ValueKnob&#39;
+        },
+        ...]
+        &#34;&#34;&#34;
+        return self.knobs[show]
+
+    def POST(self) -&gt; None:
+        &#34;&#34;&#34;
+        Sets the knob `name` to value `value` for show `show`
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+        for p in [&#39;show&#39;, &#39;name&#39;, &#39;value&#39;]:
+            if p not in data.keys():
+                raise cherrypy.HTTPError(400, f&#34;missing parameter &#39;{p}&#39;&#34;)
+
+        value = data[&#39;value&#39;]
+
+        if isinstance(value, dict):
+            if any([c not in value.keys() for c in &#39;hsv&#39;]):
+                raise cherrypy.HTTPError(400, &#39;missing HSV parameter&#39;)
+
+            try:
+                value = HSV(*[value[c] for c in &#39;hsv&#39;])
+            except TypeError as e:
+                raise cherrypy.HTTPError(400, e)
+
+        self.queue.put_nowait(ShowKnobCmd(show=data[&#39;show&#39;], name=data[&#39;name&#39;], value=value))
+
+
+@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class Speed:
+    &#34;&#34;&#34;
+    Handles requests under /speed.
+
+    Speed exposes the speed multiplier of the ShowRunner to get/set.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, status: LatestStatus):
+        self.queue = queue
+        self.status = status
+
+    def GET(self) -&gt; dict:
+        if latest := self.status.latest():
+            return {&#34;value&#34;: latest.speed_scale}
+        return {&#34;value&#34;: &#34;1.0&#34;}
+
+    def POST(self) -&gt; None:
+        data = cherrypy.request.json
+        if &#39;value&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+        speed = data[&#39;value&#39;]
+        self.queue.put(SpeedCmd(speed))
+
+
+@cherrypy.expose
+@cherrypy.tools.json_out()
+class Status:
+    &#34;&#34;&#34;
+    Handles requests under /status.
+
+    Status returns the current status of the ShowRunner.
+    &#34;&#34;&#34;
+    def __init__(self, status: LatestStatus):
+        self.status = status
+
+    def GET(self):
+        return self.status.latest()
+
+
+class LatestStatus:
+    &#34;&#34;&#34;
+    Wraps a Queue of Status updates to supply the most recent status.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue[Status]):
+        self.queue = queue
+        self.status: Optional[Status] = None
+
+    def latest(self) -&gt; Optional[Status]:
+        while True:
+            try:
+                self.status = self.queue.get_nowait()
+            except Empty:
+                break
+
+        status = self.status
+        now = time.perf_counter()
+        if status:
+            status.seconds_remaining = status.max_show_time - int(now - status.show_start_time)
+        return status
+
+
+def orjson_processor(entity):
+    &#34;&#34;&#34;
+    Read application/json data into request.json.
+
+    This is an alternative to cherrypy&#39;s json_processor which sucks. This uses orjson which does a lot more.
+    &#34;&#34;&#34;
+    if not entity.headers.get(&#34;Content-Length&#34;):
+        raise cherrypy.HTTPError(411)
+
+    body = entity.fp.read()
+    with cherrypy.HTTPError.handle(ValueError, 400, &#39;Invalid JSON document&#39;):
+        cherrypy.serving.request.json = orjson.loads(body)
+
+
+def orjson_handler(*args, **kwargs):
+    &#34;&#34;&#34;Cherrypy response processor to serialize json because the builtin one sucks. This uses orjson.&#34;&#34;&#34;
+    value = cherrypy.serving.request._json_inner_handler(*args, **kwargs)
+    return orjson.dumps(value)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyramidtriangles.web.web.orjson_handler"><code class="name flex">
+<span>def <span class="ident">orjson_handler</span></span>(<span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Cherrypy response processor to serialize json because the builtin one sucks. This uses orjson.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def orjson_handler(*args, **kwargs):
+    &#34;&#34;&#34;Cherrypy response processor to serialize json because the builtin one sucks. This uses orjson.&#34;&#34;&#34;
+    value = cherrypy.serving.request._json_inner_handler(*args, **kwargs)
+    return orjson.dumps(value)</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.orjson_processor"><code class="name flex">
+<span>def <span class="ident">orjson_processor</span></span>(<span>entity)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read application/json data into request.json.</p>
+<p>This is an alternative to cherrypy's json_processor which sucks. This uses orjson which does a lot more.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def orjson_processor(entity):
+    &#34;&#34;&#34;
+    Read application/json data into request.json.
+
+    This is an alternative to cherrypy&#39;s json_processor which sucks. This uses orjson which does a lot more.
+    &#34;&#34;&#34;
+    if not entity.headers.get(&#34;Content-Length&#34;):
+        raise cherrypy.HTTPError(411)
+
+    body = entity.fp.read()
+    with cherrypy.HTTPError.handle(ValueError, 400, &#39;Invalid JSON document&#39;):
+        cherrypy.serving.request.json = orjson.loads(body)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyramidtriangles.web.web.Brightness"><code class="flex name class">
+<span>class <span class="ident">Brightness</span></span>
+<span>(</span><span>queue: Queue, status: <a title="pyramidtriangles.web.web.LatestStatus" href="#pyramidtriangles.web.web.LatestStatus">LatestStatus</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /brightness.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class Brightness:
+    &#34;&#34;&#34;
+    Handles requests under /brightness.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, status: LatestStatus):
+        self.queue = queue
+        self.status = status
+
+    def GET(self) -&gt; dict:
+        if latest := self.status.latest():
+            return {&#39;value&#39;: int(latest.brightness_scale * 100)}
+        return {&#39;value&#39;: 100}
+
+    def POST(self):
+        data = cherrypy.request.json
+        if &#39;value&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+        brightness = data[&#39;value&#39;]/100.0
+        self.queue.put(BrightnessCmd(brightness))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Brightness.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Brightness.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self) -&gt; dict:
+    if latest := self.status.latest():
+        return {&#39;value&#39;: int(latest.brightness_scale * 100)}
+    return {&#39;value&#39;: 100}</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.Brightness.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self):
+    data = cherrypy.request.json
+    if &#39;value&#39; not in data:
+        raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+    brightness = data[&#39;value&#39;]/100.0
+    self.queue.put(BrightnessCmd(brightness))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.CycleTime"><code class="flex name class">
+<span>class <span class="ident">CycleTime</span></span>
+<span>(</span><span>queue: Queue, status: <a title="pyramidtriangles.web.web.LatestStatus" href="#pyramidtriangles.web.web.LatestStatus">LatestStatus</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /cycle_time.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class CycleTime:
+    &#34;&#34;&#34;
+    Handles requests under /cycle_time.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, status: LatestStatus):
+        self.queue = queue
+        self.status = status
+
+    def GET(self) -&gt; dict:
+        if latest := self.status.latest():
+            return {&#39;value&#39;: latest.max_show_time}
+        return {&#39;value&#39;: 60}
+
+    def POST(self) -&gt; None:
+        data = cherrypy.request.json
+        if &#39;value&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+        value = data[&#39;value&#39;]
+
+        logger.info(&#39;received new cycle time %s&#39;, value)
+        self.queue.put(RuntimeCmd(int(value)))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.CycleTime.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.CycleTime.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self) -&gt; dict:
+    if latest := self.status.latest():
+        return {&#39;value&#39;: latest.max_show_time}
+    return {&#39;value&#39;: 60}</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.CycleTime.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self) -&gt; None:
+    data = cherrypy.request.json
+    if &#39;value&#39; not in data:
+        raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+    value = data[&#39;value&#39;]
+
+    logger.info(&#39;received new cycle time %s&#39;, value)
+    self.queue.put(RuntimeCmd(int(value)))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.Entry"><code class="flex name class">
+<span>class <span class="ident">Entry</span></span>
+<span>(</span><span>playlist: Playlist)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /playlist/entries/{entry_id}.</p>
+<p>A playlist entry. A show can have multiple entries, each with different settings.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+@cherrypy.popargs(&#39;entry_id&#39;)
+class Entry:
+    &#34;&#34;&#34;
+    Handles requests under /playlist/entries/{entry_id}.
+
+    A playlist entry. A show can have multiple entries, each with different settings.
+    &#34;&#34;&#34;
+    def __init__(self, playlist: Playlist):
+        self.playlist = playlist
+
+    def GET(self, entry_id: int) -&gt; Settings:
+        &#34;&#34;&#34;
+        Returns the settings for a playlist entry, if any.
+
+        Setting entries have the form:
+        {
+          Color: { h: 1.0, s: 1.0, v: 1.0 },
+          Speed: 1.5,
+          ...
+        }
+        &#34;&#34;&#34;
+        return self.playlist.get_settings(entry_id)
+
+    def POST(self, entry_id: int) -&gt; Settings:
+        &#34;&#34;&#34;
+        Sets the show settings for a playlist entry. Returns the new setting.
+
+        Request data should be a JSON object mapping a setting name to a value.
+        { Color: { h: 1.0, s: 1.0, v: 1.0 } }
+        or
+        { Speed: 1.5 }
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+
+        # Merges settings from request with settings from database, with minimal validation.
+        settings = self.playlist.get_settings(entry_id)
+        for (key, value) in data.items():
+            if isinstance(value, (int, float, dict)):
+                settings[key] = value
+
+        self.playlist.set_settings(entry_id, settings)
+        return self.playlist.get_settings(entry_id)
+
+    def DELETE(self, entry_id: int) -&gt; None:
+        &#34;&#34;&#34;
+        Deletes a show from the playlist.
+        &#34;&#34;&#34;
+        self.playlist.delete(entry_id)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Entry.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Entry.DELETE"><code class="name flex">
+<span>def <span class="ident">DELETE</span></span>(<span>self, entry_id: int) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Deletes a show from the playlist.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def DELETE(self, entry_id: int) -&gt; None:
+    &#34;&#34;&#34;
+    Deletes a show from the playlist.
+    &#34;&#34;&#34;
+    self.playlist.delete(entry_id)</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.Entry.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self, entry_id: int) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the settings for a playlist entry, if any.</p>
+<p>Setting entries have the form:
+{
+Color: { h: 1.0, s: 1.0, v: 1.0 },
+Speed: 1.5,
+&hellip;
+}</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self, entry_id: int) -&gt; Settings:
+    &#34;&#34;&#34;
+    Returns the settings for a playlist entry, if any.
+
+    Setting entries have the form:
+    {
+      Color: { h: 1.0, s: 1.0, v: 1.0 },
+      Speed: 1.5,
+      ...
+    }
+    &#34;&#34;&#34;
+    return self.playlist.get_settings(entry_id)</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.Entry.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self, entry_id: int) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the show settings for a playlist entry. Returns the new setting.</p>
+<p 1.5 Speed:>Request data should be a JSON object mapping a setting name to a value.
+{ Color: { h: 1.0, s: 1.0, v: 1.0 } }
+or</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self, entry_id: int) -&gt; Settings:
+    &#34;&#34;&#34;
+    Sets the show settings for a playlist entry. Returns the new setting.
+
+    Request data should be a JSON object mapping a setting name to a value.
+    { Color: { h: 1.0, s: 1.0, v: 1.0 } }
+    or
+    { Speed: 1.5 }
+    &#34;&#34;&#34;
+    data = cherrypy.request.json
+
+    # Merges settings from request with settings from database, with minimal validation.
+    settings = self.playlist.get_settings(entry_id)
+    for (key, value) in data.items():
+        if isinstance(value, (int, float, dict)):
+            settings[key] = value
+
+    self.playlist.set_settings(entry_id, settings)
+    return self.playlist.get_settings(entry_id)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.LatestStatus"><code class="flex name class">
+<span>class <span class="ident">LatestStatus</span></span>
+<span>(</span><span>queue: Queue[<a title="pyramidtriangles.web.web.Status" href="#pyramidtriangles.web.web.Status">Status</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wraps a Queue of Status updates to supply the most recent status.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LatestStatus:
+    &#34;&#34;&#34;
+    Wraps a Queue of Status updates to supply the most recent status.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue[Status]):
+        self.queue = queue
+        self.status: Optional[Status] = None
+
+    def latest(self) -&gt; Optional[Status]:
+        while True:
+            try:
+                self.status = self.queue.get_nowait()
+            except Empty:
+                break
+
+        status = self.status
+        now = time.perf_counter()
+        if status:
+            status.seconds_remaining = status.max_show_time - int(now - status.show_start_time)
+        return status</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.LatestStatus.latest"><code class="name flex">
+<span>def <span class="ident">latest</span></span>(<span>self) ‑> Optional[<a title="pyramidtriangles.web.web.Status" href="#pyramidtriangles.web.web.Status">Status</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def latest(self) -&gt; Optional[Status]:
+    while True:
+        try:
+            self.status = self.queue.get_nowait()
+        except Empty:
+            break
+
+    status = self.status
+    now = time.perf_counter()
+    if status:
+        status.seconds_remaining = status.max_show_time - int(now - status.show_start_time)
+    return status</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.PlaylistWeb"><code class="flex name class">
+<span>class <span class="ident">PlaylistWeb</span></span>
+<span>(</span><span>queue: Queue, playlist: Playlist)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /playlist.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class PlaylistWeb:
+    &#34;&#34;&#34;
+    Handles requests under /playlist.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, playlist: Playlist):
+        self.entries = Entry(playlist)
+        self.queue = queue
+        self.playlist = playlist
+
+    def _current_playlist(self) -&gt; dict:
+        return {
+            &#39;playlist&#39;: self.playlist.current_playlist(),
+            &#39;playing&#39;: self.playlist.current_entry(),
+        }
+
+    def GET(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Returns the current playlist of shows. [(id, show),...].
+        &#34;&#34;&#34;
+        return self._current_playlist()
+
+    def POST(self) -&gt; dict:
+        &#34;&#34;&#34;
+        Appends a show to the playlist and returns the new playlist.
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+        if &#39;show&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;show&#39;&#34;)
+
+        self.playlist.append(data[&#39;show&#39;])
+        return self._current_playlist()
+
+    def DELETE(self) -&gt; None:
+        &#34;&#34;&#34;
+        Deletes all shows.
+        &#34;&#34;&#34;
+        self.playlist.clear()
+
+    def PUT(self) -&gt; None:
+        &#34;&#34;&#34;
+        Runs the playlist entry with {entry_id} as the current show.
+
+        It works by setting {entry_id} to be the next playlist entry, then triggers the ShowRunner to play the next
+        show.
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+        if &#39;entry_id&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;entry_id&#39;&#34;)
+        entry_id = data[&#39;entry_id&#39;]
+        self.playlist.set_next(entry_id)
+        self.queue.put(RunShowCmd(None))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.PlaylistWeb.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.PlaylistWeb.DELETE"><code class="name flex">
+<span>def <span class="ident">DELETE</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Deletes all shows.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def DELETE(self) -&gt; None:
+    &#34;&#34;&#34;
+    Deletes all shows.
+    &#34;&#34;&#34;
+    self.playlist.clear()</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.PlaylistWeb.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the current playlist of shows. [(id, show),&hellip;].</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self) -&gt; dict:
+    &#34;&#34;&#34;
+    Returns the current playlist of shows. [(id, show),...].
+    &#34;&#34;&#34;
+    return self._current_playlist()</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.PlaylistWeb.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Appends a show to the playlist and returns the new playlist.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self) -&gt; dict:
+    &#34;&#34;&#34;
+    Appends a show to the playlist and returns the new playlist.
+    &#34;&#34;&#34;
+    data = cherrypy.request.json
+    if &#39;show&#39; not in data:
+        raise cherrypy.HTTPError(400, &#34;missing parameter &#39;show&#39;&#34;)
+
+    self.playlist.append(data[&#39;show&#39;])
+    return self._current_playlist()</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.PlaylistWeb.PUT"><code class="name flex">
+<span>def <span class="ident">PUT</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Runs the playlist entry with {entry_id} as the current show.</p>
+<p>It works by setting {entry_id} to be the next playlist entry, then triggers the ShowRunner to play the next
+show.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def PUT(self) -&gt; None:
+    &#34;&#34;&#34;
+    Runs the playlist entry with {entry_id} as the current show.
+
+    It works by setting {entry_id} to be the next playlist entry, then triggers the ShowRunner to play the next
+    show.
+    &#34;&#34;&#34;
+    data = cherrypy.request.json
+    if &#39;entry_id&#39; not in data:
+        raise cherrypy.HTTPError(400, &#34;missing parameter &#39;entry_id&#39;&#34;)
+    entry_id = data[&#39;entry_id&#39;]
+    self.playlist.set_next(entry_id)
+    self.queue.put(RunShowCmd(None))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.Show"><code class="flex name class">
+<span>class <span class="ident">Show</span></span>
+<span>(</span><span>name: str, description: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Show is a simple object for JSON</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Show:
+    &#34;&#34;&#34;Show is a simple object for JSON&#34;&#34;&#34;
+    name: str
+    description: str</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Show.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pyramidtriangles.web.web.Show.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.ShowKnob"><code class="flex name class">
+<span>class <span class="ident">ShowKnob</span></span>
+<span>(</span><span>queue: Queue)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /show_knob.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class ShowKnob:
+    &#34;&#34;&#34;
+    Handles requests under /show_knob.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue):
+        self.queue = queue
+        self.knobs = defaultdict(list)  # if the knob doesn&#39;t exist, you&#39;ll get []
+
+        # load each show with a null model to get the available show knobs
+        null_pyramid = Pyramid.build_single(NullModel())
+        for (name, cls) in load_shows():
+            show = cls(null_pyramid)
+            if show.knobs:
+                self.knobs[name] = show.knobs.json_array
+
+    @cherrypy.popargs(&#39;show&#39;)
+    def GET(self, show) -&gt; list:
+        &#34;&#34;&#34;
+        Returns the available knobs for the given show.
+
+        [{
+            name: &#39;Main Color&#39;,
+            value: {
+              default: { h: 1.0, s: 1.0, v: 1.0},
+            },
+            type: &#39;HSVKnob&#39;
+        }, {
+            name: &#39;Speed&#39;,
+            value: {
+              default: 1.0,
+            },
+            type: &#39;ValueKnob&#39;
+        },
+        ...]
+        &#34;&#34;&#34;
+        return self.knobs[show]
+
+    def POST(self) -&gt; None:
+        &#34;&#34;&#34;
+        Sets the knob `name` to value `value` for show `show`
+        &#34;&#34;&#34;
+        data = cherrypy.request.json
+        for p in [&#39;show&#39;, &#39;name&#39;, &#39;value&#39;]:
+            if p not in data.keys():
+                raise cherrypy.HTTPError(400, f&#34;missing parameter &#39;{p}&#39;&#34;)
+
+        value = data[&#39;value&#39;]
+
+        if isinstance(value, dict):
+            if any([c not in value.keys() for c in &#39;hsv&#39;]):
+                raise cherrypy.HTTPError(400, &#39;missing HSV parameter&#39;)
+
+            try:
+                value = HSV(*[value[c] for c in &#39;hsv&#39;])
+            except TypeError as e:
+                raise cherrypy.HTTPError(400, e)
+
+        self.queue.put_nowait(ShowKnobCmd(show=data[&#39;show&#39;], name=data[&#39;name&#39;], value=value))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.ShowKnob.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.ShowKnob.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self, show) ‑> list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the available knobs for the given show.</p>
+<p>[{
+name: 'Main Color',
+value: {
+default: { h: 1.0, s: 1.0, v: 1.0},
+},
+type: 'HSVKnob'
+}, {
+name: 'Speed',
+value: {
+default: 1.0,
+},
+type: 'ValueKnob'
+},
+&hellip;]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.popargs(&#39;show&#39;)
+def GET(self, show) -&gt; list:
+    &#34;&#34;&#34;
+    Returns the available knobs for the given show.
+
+    [{
+        name: &#39;Main Color&#39;,
+        value: {
+          default: { h: 1.0, s: 1.0, v: 1.0},
+        },
+        type: &#39;HSVKnob&#39;
+    }, {
+        name: &#39;Speed&#39;,
+        value: {
+          default: 1.0,
+        },
+        type: &#39;ValueKnob&#39;
+    },
+    ...]
+    &#34;&#34;&#34;
+    return self.knobs[show]</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.ShowKnob.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the knob <code>name</code> to value <code>value</code> for show <code>show</code></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self) -&gt; None:
+    &#34;&#34;&#34;
+    Sets the knob `name` to value `value` for show `show`
+    &#34;&#34;&#34;
+    data = cherrypy.request.json
+    for p in [&#39;show&#39;, &#39;name&#39;, &#39;value&#39;]:
+        if p not in data.keys():
+            raise cherrypy.HTTPError(400, f&#34;missing parameter &#39;{p}&#39;&#34;)
+
+    value = data[&#39;value&#39;]
+
+    if isinstance(value, dict):
+        if any([c not in value.keys() for c in &#39;hsv&#39;]):
+            raise cherrypy.HTTPError(400, &#39;missing HSV parameter&#39;)
+
+        try:
+            value = HSV(*[value[c] for c in &#39;hsv&#39;])
+        except TypeError as e:
+            raise cherrypy.HTTPError(400, e)
+
+    self.queue.put_nowait(ShowKnobCmd(show=data[&#39;show&#39;], name=data[&#39;name&#39;], value=value))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.Shows"><code class="flex name class">
+<span>class <span class="ident">Shows</span></span>
+<span>(</span><span>queue: Queue)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /shows.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class Shows:
+    &#34;&#34;&#34;
+    Handles requests under /shows.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue):
+        self.queue = queue
+        self.shows = [Show(name=name, description=cls.description()) for (name, cls) in load_shows()]
+        self.show_names = list(map(lambda x: x.name, self.shows))
+
+    def GET(self) -&gt; dict:
+        &#34;&#34;&#34;Returns listing of show names&#34;&#34;&#34;
+        return {&#34;shows&#34;: self.shows}
+
+    def POST(self) -&gt; None:
+        &#34;&#34;&#34;Sets the current show to request&#39;s &#39;data&#39; key.&#34;&#34;&#34;
+        data = cherrypy.request.json
+        if &#39;data&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;&#39;data&#39; parameter missing in request&#34;)
+        show_name = data[&#39;data&#39;]
+
+        if show_name is None or show_name not in self.show_names:
+            raise cherrypy.HTTPError(400, f&#34;&#39;{show_name}&#39; not an available show&#34;)
+
+        self.queue.put(RunShowCmd(show_name))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Shows.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Shows.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns listing of show names</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self) -&gt; dict:
+    &#34;&#34;&#34;Returns listing of show names&#34;&#34;&#34;
+    return {&#34;shows&#34;: self.shows}</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.Shows.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets the current show to request's 'data' key.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self) -&gt; None:
+    &#34;&#34;&#34;Sets the current show to request&#39;s &#39;data&#39; key.&#34;&#34;&#34;
+    data = cherrypy.request.json
+    if &#39;data&#39; not in data:
+        raise cherrypy.HTTPError(400, &#34;&#39;data&#39; parameter missing in request&#34;)
+    show_name = data[&#39;data&#39;]
+
+    if show_name is None or show_name not in self.show_names:
+        raise cherrypy.HTTPError(400, f&#34;&#39;{show_name}&#39; not an available show&#34;)
+
+    self.queue.put(RunShowCmd(show_name))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.Speed"><code class="flex name class">
+<span>class <span class="ident">Speed</span></span>
+<span>(</span><span>queue: Queue, status: <a title="pyramidtriangles.web.web.LatestStatus" href="#pyramidtriangles.web.web.LatestStatus">LatestStatus</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /speed.</p>
+<p>Speed exposes the speed multiplier of the ShowRunner to get/set.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_in()
+@cherrypy.tools.json_out()
+class Speed:
+    &#34;&#34;&#34;
+    Handles requests under /speed.
+
+    Speed exposes the speed multiplier of the ShowRunner to get/set.
+    &#34;&#34;&#34;
+    def __init__(self, queue: Queue, status: LatestStatus):
+        self.queue = queue
+        self.status = status
+
+    def GET(self) -&gt; dict:
+        if latest := self.status.latest():
+            return {&#34;value&#34;: latest.speed_scale}
+        return {&#34;value&#34;: &#34;1.0&#34;}
+
+    def POST(self) -&gt; None:
+        data = cherrypy.request.json
+        if &#39;value&#39; not in data:
+            raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+        speed = data[&#39;value&#39;]
+        self.queue.put(SpeedCmd(speed))</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Speed.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Speed.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self) -&gt; dict:
+    if latest := self.status.latest():
+        return {&#34;value&#34;: latest.speed_scale}
+    return {&#34;value&#34;: &#34;1.0&#34;}</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.web.web.Speed.POST"><code class="name flex">
+<span>def <span class="ident">POST</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def POST(self) -&gt; None:
+    data = cherrypy.request.json
+    if &#39;value&#39; not in data:
+        raise cherrypy.HTTPError(400, &#34;missing parameter &#39;value&#39;&#34;)
+    speed = data[&#39;value&#39;]
+    self.queue.put(SpeedCmd(speed))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.Status"><code class="flex name class">
+<span>class <span class="ident">Status</span></span>
+<span>(</span><span>status: <a title="pyramidtriangles.web.web.LatestStatus" href="#pyramidtriangles.web.web.LatestStatus">LatestStatus</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Handles requests under /status.</p>
+<p>Status returns the current status of the ShowRunner.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@cherrypy.expose
+@cherrypy.tools.json_out()
+class Status:
+    &#34;&#34;&#34;
+    Handles requests under /status.
+
+    Status returns the current status of the ShowRunner.
+    &#34;&#34;&#34;
+    def __init__(self, status: LatestStatus):
+        self.status = status
+
+    def GET(self):
+        return self.status.latest()</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Status.exposed"><code class="name">var <span class="ident">exposed</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Status.GET"><code class="name flex">
+<span>def <span class="ident">GET</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def GET(self):
+    return self.status.latest()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pyramidtriangles.web.web.Web"><code class="flex name class">
+<span>class <span class="ident">Web</span></span>
+<span>(</span><span>command_queue: Queue, status_queue: Queue[<a title="pyramidtriangles.web.web.Status" href="#pyramidtriangles.web.web.Status">Status</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Web API for running triangle shows.</p>
+<p>This is a CherryPy base, so each REST endpoint is assigned to it. For example, requests to <code>/cycle_time</code> route to
+self.cycle_time.</p>
+<p>There are two queues used to pass information in a thread-safe way. The command_queue passes commands from Web to
+the ShowRunner, which changes the behavior of running shows. The status_queue passes information from the ShowRunner
+to Web to display the current status of what's running.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Web:
+    &#34;&#34;&#34;
+    Web API for running triangle shows.
+
+    This is a CherryPy base, so each REST endpoint is assigned to it. For example, requests to `/cycle_time` route to
+    self.cycle_time.
+
+    There are two queues used to pass information in a thread-safe way. The command_queue passes commands from Web to
+    the ShowRunner, which changes the behavior of running shows. The status_queue passes information from the ShowRunner
+    to Web to display the current status of what&#39;s running.
+    &#34;&#34;&#34;
+    def __init__(self, command_queue: Queue, status_queue: Queue[Status]):
+        # In-memory DB is easier than organizing thread-safety around all operations. At least one connection must stay
+        # open. &#39;self.db&#39; shouldn&#39;t be closed.
+        self.db = Playlist()
+
+        status = LatestStatus(status_queue)
+
+        # These all are REST endpoints, path denoted by the variable name (e.g. /cycle_time).
+        self.brightness = Brightness(command_queue, status)
+        self.cycle_time = CycleTime(command_queue, status)
+        self.playlist = PlaylistWeb(command_queue, self.db)
+        self.shows = Shows(command_queue)
+        self.show_knob = ShowKnob(command_queue)
+        self.speed = Speed(command_queue, status)
+        self.status = Status(status)
+
+    @staticmethod
+    def build_config(config: Optional[dict] = None) -&gt; dict:
+        &#34;&#34;&#34;
+        Builds a cherrypy config by merging some default settings into the `config` argument.
+        Exposed so tests can reuse this config.
+        &#34;&#34;&#34;
+        if config is None:
+            config = {}
+
+        config.update({
+            &#39;/&#39;: {
+                &#39;request.dispatch&#39;: cherrypy.dispatch.MethodDispatcher(),
+                &#39;request.body.processors&#39;: {&#39;application/json&#39;: orjson_processor},
+                &#39;tools.json_out.handler&#39;: orjson_handler,
+                &#39;tools.gzip.on&#39;: True,
+                &#39;tools.staticdir.on&#39;: True,
+                &#39;tools.staticdir.dir&#39;: Path(__file__).parent/&#39;../../js/public&#39;,
+                &#39;tools.staticdir.index&#39;: &#39;index.html&#39;,
+            }
+        })
+        return config
+
+    def start(self, config):
+        &#34;&#34;&#34;Starts the cherrypy server and blocks the current thread.&#34;&#34;&#34;
+        config = self.build_config(config)
+        cherrypy.config.update({
+            &#39;log.access_file&#39;: &#39;log/cherrypy_access.log&#39;,
+            &#39;log.screen&#39;: False,
+        })
+
+        # this method blocks until KeyboardInterrupt
+        cherrypy.quickstart(self, &#39;/&#39;, config=config)</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Web.build_config"><code class="name flex">
+<span>def <span class="ident">build_config</span></span>(<span>config: Optional[dict] = None) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Builds a cherrypy config by merging some default settings into the <code>config</code> argument.
+Exposed so tests can reuse this config.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def build_config(config: Optional[dict] = None) -&gt; dict:
+    &#34;&#34;&#34;
+    Builds a cherrypy config by merging some default settings into the `config` argument.
+    Exposed so tests can reuse this config.
+    &#34;&#34;&#34;
+    if config is None:
+        config = {}
+
+    config.update({
+        &#39;/&#39;: {
+            &#39;request.dispatch&#39;: cherrypy.dispatch.MethodDispatcher(),
+            &#39;request.body.processors&#39;: {&#39;application/json&#39;: orjson_processor},
+            &#39;tools.json_out.handler&#39;: orjson_handler,
+            &#39;tools.gzip.on&#39;: True,
+            &#39;tools.staticdir.on&#39;: True,
+            &#39;tools.staticdir.dir&#39;: Path(__file__).parent/&#39;../../js/public&#39;,
+            &#39;tools.staticdir.index&#39;: &#39;index.html&#39;,
+        }
+    })
+    return config</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pyramidtriangles.web.web.Web.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>self, config)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Starts the cherrypy server and blocks the current thread.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start(self, config):
+    &#34;&#34;&#34;Starts the cherrypy server and blocks the current thread.&#34;&#34;&#34;
+    config = self.build_config(config)
+    cherrypy.config.update({
+        &#39;log.access_file&#39;: &#39;log/cherrypy_access.log&#39;,
+        &#39;log.screen&#39;: False,
+    })
+
+    # this method blocks until KeyboardInterrupt
+    cherrypy.quickstart(self, &#39;/&#39;, config=config)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyramidtriangles.web" href="index.html">pyramidtriangles.web</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.orjson_handler" href="#pyramidtriangles.web.web.orjson_handler">orjson_handler</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.orjson_processor" href="#pyramidtriangles.web.web.orjson_processor">orjson_processor</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Brightness" href="#pyramidtriangles.web.web.Brightness">Brightness</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Brightness.GET" href="#pyramidtriangles.web.web.Brightness.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Brightness.POST" href="#pyramidtriangles.web.web.Brightness.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Brightness.exposed" href="#pyramidtriangles.web.web.Brightness.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.CycleTime" href="#pyramidtriangles.web.web.CycleTime">CycleTime</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.CycleTime.GET" href="#pyramidtriangles.web.web.CycleTime.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.CycleTime.POST" href="#pyramidtriangles.web.web.CycleTime.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.CycleTime.exposed" href="#pyramidtriangles.web.web.CycleTime.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Entry" href="#pyramidtriangles.web.web.Entry">Entry</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Entry.DELETE" href="#pyramidtriangles.web.web.Entry.DELETE">DELETE</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Entry.GET" href="#pyramidtriangles.web.web.Entry.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Entry.POST" href="#pyramidtriangles.web.web.Entry.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Entry.exposed" href="#pyramidtriangles.web.web.Entry.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.LatestStatus" href="#pyramidtriangles.web.web.LatestStatus">LatestStatus</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.LatestStatus.latest" href="#pyramidtriangles.web.web.LatestStatus.latest">latest</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.PlaylistWeb" href="#pyramidtriangles.web.web.PlaylistWeb">PlaylistWeb</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.PlaylistWeb.DELETE" href="#pyramidtriangles.web.web.PlaylistWeb.DELETE">DELETE</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.PlaylistWeb.GET" href="#pyramidtriangles.web.web.PlaylistWeb.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.PlaylistWeb.POST" href="#pyramidtriangles.web.web.PlaylistWeb.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.PlaylistWeb.PUT" href="#pyramidtriangles.web.web.PlaylistWeb.PUT">PUT</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.PlaylistWeb.exposed" href="#pyramidtriangles.web.web.PlaylistWeb.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Show" href="#pyramidtriangles.web.web.Show">Show</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Show.description" href="#pyramidtriangles.web.web.Show.description">description</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Show.name" href="#pyramidtriangles.web.web.Show.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.ShowKnob" href="#pyramidtriangles.web.web.ShowKnob">ShowKnob</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.ShowKnob.GET" href="#pyramidtriangles.web.web.ShowKnob.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.ShowKnob.POST" href="#pyramidtriangles.web.web.ShowKnob.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.ShowKnob.exposed" href="#pyramidtriangles.web.web.ShowKnob.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Shows" href="#pyramidtriangles.web.web.Shows">Shows</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Shows.GET" href="#pyramidtriangles.web.web.Shows.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Shows.POST" href="#pyramidtriangles.web.web.Shows.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Shows.exposed" href="#pyramidtriangles.web.web.Shows.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Speed" href="#pyramidtriangles.web.web.Speed">Speed</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Speed.GET" href="#pyramidtriangles.web.web.Speed.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Speed.POST" href="#pyramidtriangles.web.web.Speed.POST">POST</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Speed.exposed" href="#pyramidtriangles.web.web.Speed.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Status" href="#pyramidtriangles.web.web.Status">Status</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Status.GET" href="#pyramidtriangles.web.web.Status.GET">GET</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Status.exposed" href="#pyramidtriangles.web.web.Status.exposed">exposed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pyramidtriangles.web.web.Web" href="#pyramidtriangles.web.web.Web">Web</a></code></h4>
+<ul class="">
+<li><code><a title="pyramidtriangles.web.web.Web.build_config" href="#pyramidtriangles.web.web.Web.build_config">build_config</a></code></li>
+<li><code><a title="pyramidtriangles.web.web.Web.start" href="#pyramidtriangles.web.web.Web.start">start</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>
