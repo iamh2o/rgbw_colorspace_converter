@@ -1,6 +1,6 @@
 from ..color import HSV
 from ..grid import every, inset
-from .show import Show, ValueKnob, HSVKnob
+from . import Show, ValueKnob, HSVKnob
 
 
 class ColorPulse(Show):

@@ -1,6 +1,6 @@
 from ..randomcolor import random_color
-from .show import Show, HSVKnob
 from ..grid import Pyramid, inset
+from . import Show, HSVKnob
 
 
 class Warp(Show):

@@ -2,7 +2,7 @@ from ..color import RGB
 from ..dudek.HelperFunctions import randColor, maxColor, oneIn, gradient_wheel
 from ..dudek.triangle import all_left_corners, nested_triangles
 from ..grid import Pyramid, Coordinate
-from .show import Show
+from . import Show
 
 
 class CenterColors(Show):

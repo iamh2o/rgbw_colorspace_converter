@@ -4,7 +4,7 @@ from ..color import HSV
 from ..dudek.HelperFunctions import turn_left, turn_right, randColor, maxColor
 from ..dudek.triangle import near_neighbor, get_ring, tri_in_direction, corners, center
 from ..grid import Coordinate, Pyramid
-from .show import Show
+from . import Show
 
 
 class Trail:

@@ -1,6 +1,6 @@
 from ..color import RGB
 from ..grid import Grid, Pyramid, Orientation, every, pointed
-from .show import Show
+from . import Show
 
 
 class UpDown(Show):

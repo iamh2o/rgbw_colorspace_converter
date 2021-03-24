@@ -1,5 +1,5 @@
+from . import Show
 from ..color import HSV
-from .show import Show
 from ..grid import Direction, Grid, Pyramid, traversal
 
 

@@ -1,6 +1,6 @@
 from ..color import HSV as hsv
 from ..grid import Grid, Pyramid, every
-from .show import Show
+from . import Show
 
 
 class CycleHSV(Show):

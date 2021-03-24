@@ -11,8 +11,7 @@ from typing import Optional, Any
 
 from .. import util
 from ..grid import Pyramid
-from ..shows import load_shows, random_shows
-from ..shows.show import Show, KnobValue
+from ..shows import load_shows, random_shows, Show, KnobValue
 from .playlist_controller import PlaylistController
 
 logger = getLogger(__name__)

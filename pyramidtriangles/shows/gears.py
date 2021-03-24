@@ -4,7 +4,7 @@ from ..color import RGB
 from ..dudek.HelperFunctions import gradient_wheel, maxColor, turn_right, turn_left, randColor, randColorRange
 from ..dudek.triangle import get_ring, tri_in_direction, all_corners, all_centers
 from ..grid import Coordinate, Pyramid, Grid
-from .show import Show
+from . import Show
 
 
 class Gear:

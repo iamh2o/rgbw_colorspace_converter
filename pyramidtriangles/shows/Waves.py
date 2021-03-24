@@ -4,7 +4,7 @@ from ..color import RGB
 from ..dudek.HelperFunctions import randColor, gradient_wheel, maxColor
 from ..dudek.triangle import min_max_column, min_max_row
 from ..grid import Pyramid, Coordinate
-from .show import Show
+from . import Show
 
 
 class Waves(Show):

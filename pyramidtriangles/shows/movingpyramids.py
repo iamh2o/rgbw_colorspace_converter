@@ -1,7 +1,7 @@
+from . import Show
 from ..color import HSV
 from ..dudek.triangle import all_left_corners, tri_in_direction, inset_triangles, all_center_corners
 from ..grid.cell import Coordinate
-from .show import Show
 from ..util import choose_random_hsv
 
 

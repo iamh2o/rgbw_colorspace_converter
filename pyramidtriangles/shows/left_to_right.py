@@ -1,7 +1,7 @@
 from logging import getLogger
 
+from . import Show
 from ..color import HSV
-from .show import Show
 from ..grid import Grid, Pyramid, left_to_right
 
 logger = getLogger(__name__)

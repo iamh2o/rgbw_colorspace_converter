@@ -1,4 +1,4 @@
-from .show import Show
+from . import Show
 from ..color import HSV
 from ..grid import hexagon, Pyramid
 from ..grid.cell import Position
