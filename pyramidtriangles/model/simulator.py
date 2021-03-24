@@ -1,3 +1,6 @@
+"""
+Model to communicate with a Processing simulator over a TCP socket.
+"""
 from __future__ import annotations
 from collections.abc import Iterable
 from logging import getLogger
@@ -12,9 +15,6 @@ logger = getLogger(__name__)
 
 
 class SimulatorModel:
-    """
-    Model to communicate with a Processing simulator over a TCP socket.
-    """
     def __init__(self, hostname: str, port: int):
         self.hostname = hostname
         self.port = port
@@ -25,15 +25,15 @@ class SimulatorModel:
             e.filename = f"{self.hostname}:{self.port}"
             raise
 
-        # queue of 'dirty' messages to send
+        # queue of 'dirty' messages to send: "id r,g,b"
         self.message_queue = queue.SimpleQueue()
 
     def __repr__(self):
-        return f'{SimulatorModel.__name__} (hostname={self.hostname}, port={self.port})'
+        return f'{SimulatorModel.__name__} ({self.hostname=}, {self.port=})'
 
     def set(self, cell: Cell, addr, color: DisplayColor):
         # Enqueue a message to simulator, sets address
-        msg = f"{str(cell.id)} {','.join(map(str, color.rgb256))}\n"
+        msg = f"{cell.id} {','.join(map(str, color.rgb256))}\n"
         self.message_queue.put(msg)
 
     def go(self):
@@ -49,3 +49,7 @@ class SimulatorModel:
     def stop(self):
         self.sock.close()
         self.sock = None
+
+    def __del__(self):
+        """Model will stop if it is garbage collected."""
+        self.stop()
