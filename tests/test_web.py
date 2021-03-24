@@ -2,7 +2,7 @@ import queue
 import cherrypy
 from cherrypy.test import helper
 
-from pyramidtriangles.core import RunShowCmd, RuntimeCmd
+from pyramidtriangles.show_runner import RunShowCmd, RuntimeCmd
 from pyramidtriangles.web import Web
 
 command_queue = queue.LifoQueue()

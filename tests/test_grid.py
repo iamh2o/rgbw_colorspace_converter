@@ -2,8 +2,9 @@ from pytest import raises
 
 from pyramidtriangles.grid import (
     Position, Geometry, Address, bottom_edge, left_edge, right_edge, vertex_neighbors, edge_neighbors,
-    Coordinate, Face, Panel, Universe
+    Coordinate, Face, Universe
 )
+from pyramidtriangles.grid.face import Panel
 from pyramidtriangles.model.null import NullModel
 
 

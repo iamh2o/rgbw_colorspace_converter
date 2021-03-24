@@ -16,15 +16,15 @@ def test_load_shows():
 
 class DebugShow(Show, debug=True):
     def __init__(self, pyramid: Pyramid) -> None:
-        pass
+        ...
 
     def next_frame(self):
-        pass
+        ...
 
 
 class DisabledShow(Show, disable=True):
     def __init__(self, pyramid: Pyramid) -> None:
-        pass
+        ...
 
     def next_frame(self):
-        pass
+        ...

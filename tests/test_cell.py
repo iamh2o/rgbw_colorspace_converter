@@ -1,4 +1,5 @@
-from pyramidtriangles.grid import Face, Panel, Position, Geometry, Address, Coordinate, Universe
+from pyramidtriangles.grid import Face, Position, Geometry, Address, Coordinate, Universe
+from pyramidtriangles.grid.face import Panel
 from pyramidtriangles.model.null import NullModel
 
 

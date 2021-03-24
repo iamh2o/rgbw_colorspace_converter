@@ -1,6 +1,6 @@
 import pytest
 
-from pyramidtriangles.core import PlaylistController
+from pyramidtriangles.playlist import Playlist
 
 
 def second(items):
@@ -9,8 +9,8 @@ def second(items):
 
 @pytest.fixture
 def playlist():
-    PlaylistController.setup_database()
-    p = PlaylistController()
+    Playlist.setup_database()
+    p = Playlist()
     p.clear()
     return p
 
