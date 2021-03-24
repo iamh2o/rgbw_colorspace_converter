@@ -8,4 +8,3 @@ fi
 
 echo "Installing python dependencies with poetry"
 poetry install
-

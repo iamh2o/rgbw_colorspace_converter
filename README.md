@@ -87,7 +87,10 @@ Debian / Ubuntu:
 ## Generate python documentation
 
 ```sh
-poetry run pdoc --html --skip-errors --force -o docs/ pyramidtriangles
+rm -r docs && \
+poetry run pdoc --html --skip-errors --output-dir docs/ pyramidtriangles && \
+mv docs/pyramidtriangles/* docs/ && \
+rmdir docs/pyramidtriangles
 ```
 
 ## History
