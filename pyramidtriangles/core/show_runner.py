@@ -1,3 +1,7 @@
+"""
+ShowRunner is the primary thread. It maintains a status of what show(s) is running, when to change
+shows, and display frames. The show runner can also modulate overall brightness and speed.
+"""
 from __future__ import annotations
 from collections.abc import Generator, Iterable, Mapping
 from dataclasses import dataclass

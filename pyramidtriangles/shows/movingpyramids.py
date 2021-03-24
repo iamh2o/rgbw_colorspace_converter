@@ -6,8 +6,8 @@ from ..util import choose_random_hsv
 
 
 class MovingPyramids(Show, disable=True):
-    def __init__(self, trimodel, frame_delay=.5):
-        self.tri = trimodel.face
+    def __init__(self, pyramid, frame_delay=.5):
+        self.tri = pyramid.face
         self.time = 0
         self.speed = frame_delay
         self.color = choose_random_hsv()

@@ -1,3 +1,7 @@
+"""
+osc_serve opens a listening socket to receive messages. Messages can change the state of the
+ShowRunner.
+"""
 from collections import defaultdict
 from logging import getLogger
 from queue import Queue

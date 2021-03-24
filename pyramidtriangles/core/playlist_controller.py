@@ -1,3 +1,14 @@
+"""
+Playlists are created as an optional way to set up a looped sequence of shows to run. It the
+playlist is not used, a random show will be selected when one show is ending.
+
+A playlist may contain multiple entries of the same show. Each playlist entry for a show may
+contain different settings. A playlist might contain FuckYourBurn in green, then FuckYourBurn
+again in purple at a higher speed.
+
+The database used for playlists is in-memory and automatically created. It is destroyed when the
+process exits.
+"""
 from __future__ import annotations
 import json
 import sqlite3
