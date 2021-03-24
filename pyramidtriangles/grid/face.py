@@ -15,12 +15,14 @@ PIXELS_IN_ROW_TURNAROUND: int = 11
 class Panel(NamedTuple):
     """
     Panel represents an assembled panel in the pyramid frame.
+
+    A Face contains a set of Panels. Panel isn't expected to be used often outside of that class.
     """
 
     geom: Geometry
     start: Address
 
-    def cells(self, within: Geometry):
+    def cells(self, within: Geometry) -> list[Cell]:
         """
         Generate the panel's cells. `within` is the overall Face's geometry.
         """
@@ -93,7 +95,9 @@ FULL_FACE_SPEC = [[0], [], [0, 4]]
 
 class Face(Grid):
     """
-    Face is a side of the overall pyramid.
+    Face is a side of the overall pyramid. It is a kind of Grid, so it can be used in the same way.
+
+    A face is built from a specification (see `build()`).
     """
 
     _cells: MutableMapping[Coordinate, Cell]
@@ -109,9 +113,11 @@ class Face(Grid):
         """
         Build a Face from a panel placement spec.
 
-        Each entry in the spec is a list representing a row (of panels),
-        starting from the top. Adding an index to the list indicates that
-        that panel exists in that row.
+        Each item the spec is a list representing a row (of panels), starting from the top.
+        [[], [], []]  # represents 3 empty rows
+
+        Adding a position to the list indicates a panel exists in that row at that position.
+        [[0], [], [4]]  # represents 3 rows, panel at beginning or first row and a panel at 4th spot of 3rd row.
         """
 
         overall_geom = Geometry(origin=Coordinate(0, 0),
@@ -156,7 +162,7 @@ class Face(Grid):
                 if i in row_spec:
                     real_panels.append(panel)
 
-        return cls(model, overall_geom, real_panels)
+        return Face(model, overall_geom, real_panels)
 
     def __init__(self, model: Model, geom: Geometry, panels: Iterable[Panel]):
         self.model = model

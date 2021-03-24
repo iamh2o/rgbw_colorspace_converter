@@ -2,7 +2,7 @@ import random
 
 from ..color import Color, HSV
 from ..grid import Grid, Pyramid, inset
-from .show import Show
+from . import Show
 
 
 class Stargate(Show):

@@ -1,3 +1,21 @@
+"""
+This package contains classes for triangle geometry, doing math for positioning within a triangle
+panel's cells and DMX universes. They are all immutable dataclasses, which amount to tuples with
+functions.
+
+Coordinate(x,y) and Position(row,col) are two ways to give a location of a cell in a triangle.
+They are different but can both express location equally.
+
+Universe(base,id) is a DMX universe. Each triangle panels contains multiple DMX universes. The
+first DMX universe of a panel is the base. DMX universes do not span multiple triangle panels.
+
+Address(universe,offset) is a specific offset within a DMX universe. Models (sACN) send color
+data to a specific Address.
+
+Geometry(origin,rows) is a conceptual geometry that can represent either a single triangle or
+a larger side of the pyramid. A side of the pyramid contains multiple triangles with empty space
+between them.
+"""
 from __future__ import annotations
 from functools import lru_cache
 from typing import NamedTuple, Union
@@ -6,8 +24,9 @@ from typing import NamedTuple, Union
 class Position(NamedTuple):
     """
     Position is (row, column) where the top row is 0, and every row begins with column 0.
-
     Position(0, 0) is the apex of the triangle.
+
+    Prefer to use Coordinate, which is (x, y) such that the left-most, bottom triangle is (0, 0).
     """
     row: int
     col: int
@@ -70,7 +89,7 @@ class Coordinate(NamedTuple):
         return f'<{self.x}, {self.y}>'
 
 
-CHANNELS_PER_PIXEL: int = 4
+CHANNELS_PER_PIXEL: int = 4  # R, G, B, W
 
 
 class Universe(NamedTuple):
@@ -99,14 +118,10 @@ class Universe(NamedTuple):
     def next(self) -> Universe:
         return Universe(self.base, self.id + 1)
 
-    def __str__(self) -> str:
-        return f'{self.id}'
-
 
 class Address(NamedTuple):
     """
-    Address refers to a cell's DMX address within one of the
-    triangle panels.
+    Address refers to a cell's DMX address within one of the triangle panels.
     """
 
     universe: Universe
@@ -151,6 +166,14 @@ class Geometry(NamedTuple):
     rows: int
 
     def __contains__(self, loc: Union[Coordinate, Position]) -> bool:
+        """
+        Returns if a Coordinate or Position fits within the geometry.
+
+        For example:
+
+        if Coordinate(9, 8) in Geometry(origin=Coordinate(0,0), rows=11):
+            print("(x=9,y=8) is within the triangle")
+        """
         if isinstance(loc, Coordinate):
             if loc.x < 0 or loc.y < 0:
                 return False

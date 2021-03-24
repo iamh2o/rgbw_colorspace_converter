@@ -1,4 +1,4 @@
-from .show import Show
+from . import Show
 from ..color import RGB
 from ..grid import every
 

@@ -4,6 +4,8 @@ Based on ola_send_dmx.py
 
 Pixels are representations of the addressable unit in your object. Cells can have multiple pixels in this model only
 have one LED each.
+
+NOTE: This model hasn't been maintained and no longer works!!
 """
 import array
 import json
@@ -12,14 +14,12 @@ from collections.abc import Iterator
 
 import ola
 
-from .base import Model
 from .mapping import PixelMap
 
 logger = getLogger(__name__)
 
 
-# XXX(lyra): this is no longer a valid Model
-class OLAModel(Model):
+class OLAModel:
     def __init__(self, max_dmx, model_json: str, pixelmap: PixelMap):
         # XXX any way to check if this is a valid connection?
 
@@ -49,7 +49,7 @@ class OLAModel(Model):
             self.PIXEL_MAP = json.load(json_file, object_hook=lambda d: {int(k): v for (k, v) in d.items()})
 
     # Model basics
-    def set_pixels_by_cellid(self, cell_id) -> Iterator[SetColorFunc]:
+    def set_pixels_by_cellid(self, cell_id) -> Iterator['DisplayColor']:
         for pixel in self._pixelmap[cell_id]:
             if pixel not in self.PIXEL_MAP:
                 logger.warning(f'{pixel} not in sACN pixel ID map')

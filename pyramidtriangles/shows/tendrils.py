@@ -1,8 +1,8 @@
 from logging import getLogger
 import random
 
+from . import Show
 from ..color import HSV
-from .show import Show
 from ..grid import Grid, Pyramid, Direction, Position, traversal
 from ..util import choose_random_hsv
 

@@ -2,7 +2,7 @@ from random import choices, randint
 
 from ..dudek.HelperClasses import Faders
 from ..dudek.HelperFunctions import randColor, oneIn, randColorRange
-from .show import Show
+from . import Show
 
 
 class Sparkles(Show):

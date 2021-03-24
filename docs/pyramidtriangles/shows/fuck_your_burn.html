@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>pyramidtriangles.shows.fuck_your_burn API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pyramidtriangles.shows.fuck_your_burn</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from __future__ import annotations
+from collections.abc import Iterable
+from itertools import repeat, chain
+
+from ..color import HSV
+from ..grid import Position, Pyramid
+from ..ponzicolor import Color, space
+from ..randomcolor import random_color
+from . import Show, ValueKnob, HSVKnob
+
+
+class FuckYourBurn(Show):
+    def __init__(self, pyramid: Pyramid):
+        self.grid = pyramid.panel
+
+        # Knobs to change for effect
+        self.knobs.register(&#39;Speed&#39;, ValueKnob(default=1.0, min=0.2, max=2.0, step=0.2))
+        self.knobs.register(&#39;Letter Color&#39;, HSVKnob(default=random_color(hue=&#39;purple&#39;)))
+        self.knobs.register(&#39;Background Color&#39;, HSVKnob(default=HSV(0, 0, 0)))
+
+    @staticmethod
+    def description() -&gt; str:
+        return &#39;FUCK YOUR BURN, two letters at a time, on repeat&#39;
+
+    @staticmethod
+    def fu():
+        positions = (
+            (5, 2), (5, 3), (5, 4), (5, 5),
+            (6, 2), (6, 3),
+            (7, 2), (7, 3), (7, 4), (7, 5), (7, 8), (7, 9), (7, 12), (7, 13),
+            (8, 2), (8, 3), (8, 8), (8, 9), (8, 12), (8, 13),
+            (9, 2), (9, 3), (9, 8), (9, 9), (9, 12), (9, 13),
+            (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (10, 13)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def ck():
+        positions = (
+            (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+            (5, 0), (5, 1),
+            (6, 0), (6, 1), (6, 8), (6, 9), (6, 12),
+            (7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 8), (7, 9), (7, 10), (7, 11), (7, 12), (7, 13),
+            (8, 8), (8, 9), (8, 11), (8, 12),
+            (9, 8), (9, 9), (9, 12), (9, 13)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def yo():
+        positions = (
+            (5, 2), (5, 3), (5, 6), (5, 7),
+            (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7),
+            (7, 4), (7, 5), (7, 8), (7, 9), (7, 10), (7, 11), (7, 12), (7, 13),
+            (8, 4), (8, 5), (8, 8), (8, 9), (8, 12), (8, 13),
+            (9, 8), (9, 9), (9, 10), (9, 11), (9, 12), (9, 13),
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def ur():
+        positions = (
+            (4, 0), (4, 1), (4, 4), (4, 5),
+            (5, 0), (5, 1), (5, 4), (5, 5),
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 8), (6, 9), (6, 10), (6, 11), (6, 12),
+            (7, 8), (7, 9), (7, 12), (7, 13),
+            (8, 8), (8, 9), (8, 10), (8, 11), (8, 12), (8, 13),
+            (9, 8), (9, 9), (9, 11), (9, 12),
+            (10, 8), (10, 9), (10, 13), (10, 14)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def bu():
+        positions = (
+            (4, 0), (4, 1), (4, 2), (4, 3), (4, 4),
+            (5, 0), (5, 1), (5, 4), (5, 5),
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5),
+            (7, 0), (7, 1), (7, 4), (7, 8), (7, 9), (7, 12), (7, 13),
+            (8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 8), (8, 9), (8, 12), (8, 13),
+            (9, 8), (9, 9), (9, 12), (9, 13),
+            (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (10, 13)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def rn():
+        positions = (
+            (2, 0), (2, 1), (2, 2), (2, 3), (2, 4),
+            (3, 0), (3, 1), (3, 4), (3, 5),
+            (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+            (5, 0), (5, 1), (5, 3), (5, 4),
+            (6, 0), (6, 1), (6, 5), (6, 6),
+            (7, 8), (7, 9), (7, 10), (7, 14),
+            (8, 8), (8, 9), (8, 11), (8, 12), (8, 14), (8, 15),
+            (9, 8), (9, 9), (9, 13), (9, 14), (9, 15)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @property
+    def background(self):
+        vals = self.knobs[&#39;Background Color&#39;].hsv
+        return Color.from_hsv(space.HSV(h=vals[0] * 360, s=vals[1], v=vals[2]))
+
+    @property
+    def foreground(self):
+        vals = self.knobs[&#39;Letter Color&#39;].hsv
+        return Color.from_hsv(space.HSV(h=vals[0] * 360, s=vals[1], v=vals[2]))
+
+    def next_frame(self):
+        letters = (self.fu, self.ck, self.yo, self.ur, self.bu, self.rn)
+
+        self.grid.clear(self.background)
+
+        # Function variable to return past frame&#39;s letters, as an optimization for clearing them
+        def prev() -&gt; Iterable[Position]:
+            return []
+
+        for curr in chain.from_iterable(repeat(letters)):
+            background = self.background
+            foreground = self.foreground
+
+            # Fade out
+            for i in range(1, 11):
+                if not prev():
+                    continue
+                color = foreground.blend_lab(background, i/10).clamp()
+                [self.grid.set(pos, color) for pos in prev()]
+                self.grid.go()
+                yield 0.01
+
+            # Fade in
+            for i in range(1, 11):
+                color = background.blend_lab(foreground, i/10).clamp()
+                [self.grid.set(pos, color) for pos in curr()]
+                self.grid.go()
+                yield 0.01
+
+            prev = curr
+            yield self.knobs[&#39;Speed&#39;]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn"><code class="flex name class">
+<span>class <span class="ident">FuckYourBurn</span></span>
+<span>(</span><span>pyramid: Pyramid)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for all shows.</p>
+<p>By inheriting from Show (e.g. <code>class AwesomeShow(Show):</code> the show will be
+found and listed as a runnable show.</p>
+<p>Shows can be disabled with a flag: <code>class UnfinishedShow(Show, disable=True):</code>
+Shows can be marked debug with a flag: <code>class IndexDebug(Show, debug=True):</code>
+The flags can be combined.</p>
+<p>Shows MUST implement <code>next_frame()</code>.
+Shows MAY override <code>description()</code> to give context about what the show does.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FuckYourBurn(Show):
+    def __init__(self, pyramid: Pyramid):
+        self.grid = pyramid.panel
+
+        # Knobs to change for effect
+        self.knobs.register(&#39;Speed&#39;, ValueKnob(default=1.0, min=0.2, max=2.0, step=0.2))
+        self.knobs.register(&#39;Letter Color&#39;, HSVKnob(default=random_color(hue=&#39;purple&#39;)))
+        self.knobs.register(&#39;Background Color&#39;, HSVKnob(default=HSV(0, 0, 0)))
+
+    @staticmethod
+    def description() -&gt; str:
+        return &#39;FUCK YOUR BURN, two letters at a time, on repeat&#39;
+
+    @staticmethod
+    def fu():
+        positions = (
+            (5, 2), (5, 3), (5, 4), (5, 5),
+            (6, 2), (6, 3),
+            (7, 2), (7, 3), (7, 4), (7, 5), (7, 8), (7, 9), (7, 12), (7, 13),
+            (8, 2), (8, 3), (8, 8), (8, 9), (8, 12), (8, 13),
+            (9, 2), (9, 3), (9, 8), (9, 9), (9, 12), (9, 13),
+            (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (10, 13)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def ck():
+        positions = (
+            (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+            (5, 0), (5, 1),
+            (6, 0), (6, 1), (6, 8), (6, 9), (6, 12),
+            (7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 8), (7, 9), (7, 10), (7, 11), (7, 12), (7, 13),
+            (8, 8), (8, 9), (8, 11), (8, 12),
+            (9, 8), (9, 9), (9, 12), (9, 13)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def yo():
+        positions = (
+            (5, 2), (5, 3), (5, 6), (5, 7),
+            (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7),
+            (7, 4), (7, 5), (7, 8), (7, 9), (7, 10), (7, 11), (7, 12), (7, 13),
+            (8, 4), (8, 5), (8, 8), (8, 9), (8, 12), (8, 13),
+            (9, 8), (9, 9), (9, 10), (9, 11), (9, 12), (9, 13),
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def ur():
+        positions = (
+            (4, 0), (4, 1), (4, 4), (4, 5),
+            (5, 0), (5, 1), (5, 4), (5, 5),
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 8), (6, 9), (6, 10), (6, 11), (6, 12),
+            (7, 8), (7, 9), (7, 12), (7, 13),
+            (8, 8), (8, 9), (8, 10), (8, 11), (8, 12), (8, 13),
+            (9, 8), (9, 9), (9, 11), (9, 12),
+            (10, 8), (10, 9), (10, 13), (10, 14)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def bu():
+        positions = (
+            (4, 0), (4, 1), (4, 2), (4, 3), (4, 4),
+            (5, 0), (5, 1), (5, 4), (5, 5),
+            (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5),
+            (7, 0), (7, 1), (7, 4), (7, 8), (7, 9), (7, 12), (7, 13),
+            (8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 8), (8, 9), (8, 12), (8, 13),
+            (9, 8), (9, 9), (9, 12), (9, 13),
+            (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (10, 13)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @staticmethod
+    def rn():
+        positions = (
+            (2, 0), (2, 1), (2, 2), (2, 3), (2, 4),
+            (3, 0), (3, 1), (3, 4), (3, 5),
+            (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+            (5, 0), (5, 1), (5, 3), (5, 4),
+            (6, 0), (6, 1), (6, 5), (6, 6),
+            (7, 8), (7, 9), (7, 10), (7, 14),
+            (8, 8), (8, 9), (8, 11), (8, 12), (8, 14), (8, 15),
+            (9, 8), (9, 9), (9, 13), (9, 14), (9, 15)
+        )
+        return [Position(row, col) for row, col in positions]
+
+    @property
+    def background(self):
+        vals = self.knobs[&#39;Background Color&#39;].hsv
+        return Color.from_hsv(space.HSV(h=vals[0] * 360, s=vals[1], v=vals[2]))
+
+    @property
+    def foreground(self):
+        vals = self.knobs[&#39;Letter Color&#39;].hsv
+        return Color.from_hsv(space.HSV(h=vals[0] * 360, s=vals[1], v=vals[2]))
+
+    def next_frame(self):
+        letters = (self.fu, self.ck, self.yo, self.ur, self.bu, self.rn)
+
+        self.grid.clear(self.background)
+
+        # Function variable to return past frame&#39;s letters, as an optimization for clearing them
+        def prev() -&gt; Iterable[Position]:
+            return []
+
+        for curr in chain.from_iterable(repeat(letters)):
+            background = self.background
+            foreground = self.foreground
+
+            # Fade out
+            for i in range(1, 11):
+                if not prev():
+                    continue
+                color = foreground.blend_lab(background, i/10).clamp()
+                [self.grid.set(pos, color) for pos in prev()]
+                self.grid.go()
+                yield 0.01
+
+            # Fade in
+            for i in range(1, 11):
+                color = background.blend_lab(foreground, i/10).clamp()
+                [self.grid.set(pos, color) for pos in curr()]
+                self.grid.go()
+                yield 0.01
+
+            prev = curr
+            yield self.knobs[&#39;Speed&#39;]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pyramidtriangles.shows.Show" href="index.html#pyramidtriangles.shows.Show">Show</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.bu"><code class="name flex">
+<span>def <span class="ident">bu</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def bu():
+    positions = (
+        (4, 0), (4, 1), (4, 2), (4, 3), (4, 4),
+        (5, 0), (5, 1), (5, 4), (5, 5),
+        (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5),
+        (7, 0), (7, 1), (7, 4), (7, 8), (7, 9), (7, 12), (7, 13),
+        (8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 8), (8, 9), (8, 12), (8, 13),
+        (9, 8), (9, 9), (9, 12), (9, 13),
+        (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (10, 13)
+    )
+    return [Position(row, col) for row, col in positions]</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.ck"><code class="name flex">
+<span>def <span class="ident">ck</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def ck():
+    positions = (
+        (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+        (5, 0), (5, 1),
+        (6, 0), (6, 1), (6, 8), (6, 9), (6, 12),
+        (7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 8), (7, 9), (7, 10), (7, 11), (7, 12), (7, 13),
+        (8, 8), (8, 9), (8, 11), (8, 12),
+        (9, 8), (9, 9), (9, 12), (9, 13)
+    )
+    return [Position(row, col) for row, col in positions]</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.fu"><code class="name flex">
+<span>def <span class="ident">fu</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def fu():
+    positions = (
+        (5, 2), (5, 3), (5, 4), (5, 5),
+        (6, 2), (6, 3),
+        (7, 2), (7, 3), (7, 4), (7, 5), (7, 8), (7, 9), (7, 12), (7, 13),
+        (8, 2), (8, 3), (8, 8), (8, 9), (8, 12), (8, 13),
+        (9, 2), (9, 3), (9, 8), (9, 9), (9, 12), (9, 13),
+        (10, 8), (10, 9), (10, 10), (10, 11), (10, 12), (10, 13)
+    )
+    return [Position(row, col) for row, col in positions]</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.rn"><code class="name flex">
+<span>def <span class="ident">rn</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def rn():
+    positions = (
+        (2, 0), (2, 1), (2, 2), (2, 3), (2, 4),
+        (3, 0), (3, 1), (3, 4), (3, 5),
+        (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5),
+        (5, 0), (5, 1), (5, 3), (5, 4),
+        (6, 0), (6, 1), (6, 5), (6, 6),
+        (7, 8), (7, 9), (7, 10), (7, 14),
+        (8, 8), (8, 9), (8, 11), (8, 12), (8, 14), (8, 15),
+        (9, 8), (9, 9), (9, 13), (9, 14), (9, 15)
+    )
+    return [Position(row, col) for row, col in positions]</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.ur"><code class="name flex">
+<span>def <span class="ident">ur</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def ur():
+    positions = (
+        (4, 0), (4, 1), (4, 4), (4, 5),
+        (5, 0), (5, 1), (5, 4), (5, 5),
+        (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 8), (6, 9), (6, 10), (6, 11), (6, 12),
+        (7, 8), (7, 9), (7, 12), (7, 13),
+        (8, 8), (8, 9), (8, 10), (8, 11), (8, 12), (8, 13),
+        (9, 8), (9, 9), (9, 11), (9, 12),
+        (10, 8), (10, 9), (10, 13), (10, 14)
+    )
+    return [Position(row, col) for row, col in positions]</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.yo"><code class="name flex">
+<span>def <span class="ident">yo</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def yo():
+    positions = (
+        (5, 2), (5, 3), (5, 6), (5, 7),
+        (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7),
+        (7, 4), (7, 5), (7, 8), (7, 9), (7, 10), (7, 11), (7, 12), (7, 13),
+        (8, 4), (8, 5), (8, 8), (8, 9), (8, 12), (8, 13),
+        (9, 8), (9, 9), (9, 10), (9, 11), (9, 12), (9, 13),
+    )
+    return [Position(row, col) for row, col in positions]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.background"><code class="name">var <span class="ident">background</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def background(self):
+    vals = self.knobs[&#39;Background Color&#39;].hsv
+    return Color.from_hsv(space.HSV(h=vals[0] * 360, s=vals[1], v=vals[2]))</code></pre>
+</details>
+</dd>
+<dt id="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.foreground"><code class="name">var <span class="ident">foreground</span></code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def foreground(self):
+    vals = self.knobs[&#39;Letter Color&#39;].hsv
+    return Color.from_hsv(space.HSV(h=vals[0] * 360, s=vals[1], v=vals[2]))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pyramidtriangles.shows.Show" href="index.html#pyramidtriangles.shows.Show">Show</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pyramidtriangles.shows.Show.description" href="index.html#pyramidtriangles.shows.Show.description">description</a></code></li>
+<li><code><a title="pyramidtriangles.shows.Show.knobs" href="index.html#pyramidtriangles.shows.Show.knobs">knobs</a></code></li>
+<li><code><a title="pyramidtriangles.shows.Show.name" href="index.html#pyramidtriangles.shows.Show.name">name</a></code></li>
+<li><code><a title="pyramidtriangles.shows.Show.next_frame" href="index.html#pyramidtriangles.shows.Show.next_frame">next_frame</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pyramidtriangles.shows" href="index.html">pyramidtriangles.shows</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn">FuckYourBurn</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.background" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.background">background</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.bu" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.bu">bu</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.ck" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.ck">ck</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.foreground" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.foreground">foreground</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.fu" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.fu">fu</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.rn" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.rn">rn</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.ur" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.ur">ur</a></code></li>
+<li><code><a title="pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.yo" href="#pyramidtriangles.shows.fuck_your_burn.FuckYourBurn.yo">yo</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

@@ -4,10 +4,9 @@ from itertools import repeat, chain
 
 from ..color import HSV
 from ..grid import Position, Pyramid
-from .knobs import ValueKnob, HSVKnob
 from ..ponzicolor import Color, space
 from ..randomcolor import random_color
-from .show import Show
+from . import Show, ValueKnob, HSVKnob
 
 
 class FuckYourBurn(Show):

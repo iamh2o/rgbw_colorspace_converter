@@ -2,7 +2,7 @@ from random import shuffle
 
 from ..color import RGB
 from ..grid import Grid, Pyramid
-from .show import Show
+from . import Show
 
 
 class OneByOne(Show, disable=True):

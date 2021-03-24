@@ -84,6 +84,12 @@ Debian / Ubuntu:
 
     sudo apt-get install ola ola-python ola-rdm-tests
 
+## Generate python documentation
+
+```sh
+poetry run pdoc --html --skip-errors --force -o docs/ pyramidtriangles
+```
+
 ## History
 
 Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was

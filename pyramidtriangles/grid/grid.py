@@ -1,12 +1,13 @@
 from __future__ import annotations
 from abc import abstractmethod
 from collections.abc import Callable, Iterator, Iterable, Mapping
+from itertools import chain
 from logging import getLogger
 from typing import NamedTuple, Optional, Union
 
 from ..color import HSV
 from ..model import DisplayColor, Model
-from .cell import Cell, Direction
+from .cell import Cell, Direction, Orientation
 from .geom import Address, Coordinate, Geometry, Position
 
 logger = getLogger(__name__)
@@ -18,6 +19,14 @@ Selector = Union[Location, Cell, Iterable[Cell], Query]
 
 
 class Pixel(NamedTuple):
+    """
+    Pixel represents a pixel within a mini-triangle (Cell).
+
+    The color of a Pixel can be set directly with `pixel(HSV(1,.5,.5))`.
+    However, most shows actually want to set the color of a cell. Pixels are diffused within cells,
+    so the effect of lighting individual pixels may not be visible.
+    """
+
     cell: Cell
     address: Address
     model: Model
@@ -32,9 +41,40 @@ class Pixel(NamedTuple):
 class Grid(Mapping[Location, Cell]):
     """
     Grid represents our triangular cells in a coordinate system.
+    It maps from a location, like Coordinate(x,y) to a mini-triangle Cell.
 
-    A Grid may correspond to a single panel, or an entire side of
-    the pyramid.
+    Grid is a super class and may be implemented by a single panel, or an entire side of the pyramid (a face).
+
+    As a mapping of locations to cells, here are some examples of how to use a grid.
+
+    # Get row count
+    grid.row_count == 11
+    # Get cell count
+    len(grid)
+
+    # Set all cells in the grid to a single color
+    grid.clear(HSV(1,.5,.5))
+    # Or set all cells to zero
+    grid.clear()
+
+    # Select a cell by location
+    grid[Coordinate(4,3)] or grid.select(Coordinate(4,3))
+    grid[Position(0,5)] or grid.select(Position(0,5))
+    grid[42] or grid.select(42)  # cell id 42
+
+    # Set a cell by location
+    grid.set(Coordinate(4,3), HSV(.5,.2,.5))
+    grid.set(Position(0,5), HSV(.5,.2,.5))
+    grid.set(42, HSV(.5,.2,.5))  # cell id 42
+
+    # Select multiple cells
+    grid.select([Coordinate(4,3), Position(0,5)])
+
+    # Set multiple cells
+    grid.set([Coordinate(4,3), Position(0,5)], HSV(.5,.2,.5))
+
+    # Flush the grid's color data to the underlying model
+    grid.go()
     """
 
     geom: Geometry
@@ -64,13 +104,12 @@ class Grid(Mapping[Location, Cell]):
             try:
                 cells = [self[sel]]
             except KeyError:
-                # FIXME(lyra): Face is sparse; coordinates not on a panel
-                # don't have a corresponding Cell
+                # FIXME(lyra): Face is sparse; coordinates not on a panel don't have a corresponding Cell
                 cells = []
         elif isinstance(sel, Cell):
             cells = [sel]
         elif isinstance(sel, Iterable) and not isinstance(self, str):
-            cells = list(sel)  # FIXME(lyra)
+            cells = chain.from_iterable([self.select(s) for s in sel])
         elif callable(sel):
             cells = list(sel(self))
         else:
@@ -116,8 +155,8 @@ class Grid(Mapping[Location, Cell]):
         if cell is None:
             if coordinate not in self.geom:
                 raise KeyError(f'{coordinate} is not within {self.geom}')
-
-            return Cell(coordinate, None, [], self.geom, real=False)
+            # imaginary cell, that is within the grid
+            return Cell(coordinate, Orientation.POINT_UP, [], self.geom, real=False)
 
         return cell
 
@@ -128,4 +167,4 @@ class Grid(Mapping[Location, Cell]):
         return len(self.cells)
 
     def __repr__(self):
-        return f'<{Grid.__name__} rows={self.row_count} {self.model}>'
+        return f'<{Grid.__name__} {self.row_count=} {self.model=}>'

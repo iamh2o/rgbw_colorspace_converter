@@ -6,7 +6,9 @@ import queue
 import sys
 import threading
 
-from pyramidtriangles.core import ShowRunner, PlaylistController, osc_serve
+from pyramidtriangles import osc_serve
+from pyramidtriangles.show_runner import ShowRunner
+from pyramidtriangles.playlist import Playlist
 from pyramidtriangles.grid import Pyramid
 from pyramidtriangles.model import Model
 from pyramidtriangles.model.sacn_model import sACN
@@ -40,7 +42,7 @@ class TriangleServer:
         # Event to synchronize shutting down
         self.shutdown = threading.Event()
         # Set up the database for playlist management
-        PlaylistController.setup_database()
+        Playlist.setup_database()
 
         self.runner = ShowRunner(
             pyramid=self.pyramid,

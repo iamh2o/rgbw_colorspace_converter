@@ -1,6 +1,6 @@
 import random as rnd
 
-from .show import Show
+from . import Show
 from ..color import HSV
 from ..grid import hexagon, pointed_up
 

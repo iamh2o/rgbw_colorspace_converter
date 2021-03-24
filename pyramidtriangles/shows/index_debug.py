@@ -2,7 +2,7 @@ from itertools import cycle
 
 from ..color import HSV
 from ..grid import Coordinate, Grid, Pyramid, every
-from .show import Show
+from . import Show
 
 
 class IndexDebug(Show, debug=True):

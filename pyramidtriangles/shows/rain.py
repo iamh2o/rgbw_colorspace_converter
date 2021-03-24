@@ -4,7 +4,7 @@ from ..color import HSV, RGB
 from ..dudek.HelperFunctions import randColorRange, oneIn, upORdown, gradient_wheel
 from ..dudek.triangle import tri_nextdoor, min_max_row, min_max_column, TRI_GEN
 from ..grid import Coordinate, Pyramid, every
-from .show import Show
+from . import Show
 
 
 class RainDrop:
