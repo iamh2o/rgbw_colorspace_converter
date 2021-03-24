@@ -1,5 +1,5 @@
 from __future__ import annotations
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable
 from typing import NamedTuple, Optional
 
 from .cell import Cell, Orientation
@@ -161,7 +161,7 @@ def hexagon(base_loc: Location) -> Query:
      666 1 222
       6 111 2
     """
-    def hexagon_query(grid: Grid) -> Sequence[Cell]:
+    def hexagon_query(grid: Grid) -> list[Cell]:
         # Helper function that returns edge neighbors (sharing a wall with) of a given cell.
         def neighbors(cell) -> Neighbors:
             return Neighbors(*query(grid, edge_neighbors(cell.coordinate)))
@@ -197,7 +197,6 @@ def hexagon(base_loc: Location) -> Query:
             e = neighbors(d).left
             f = neighbors(e).middle
 
-        hexa = list(filter(None, [a, b, c, d, e, f]))
-        return hexa
+        return list(filter(None, [a, b, c, d, e, f]))
 
     return hexagon_query

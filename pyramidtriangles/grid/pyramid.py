@@ -1,3 +1,21 @@
+"""
+Pyramid represents the whole pyramid.
+
+Each show is given the pyramid in its constructor. From there, the show selects
+what "grid" of cells it wants to operate on. That could a panel (copied), a face (copied),
+or each literal face or panel.
+
+# To access a side of the pyramid, which is mirrored on the other side
+grid = pyramid.face
+
+# To access a single panel, with is mirrored on every other panel
+grid = pyramid.panel
+
+# Or, it can access the literal first face, with no data mirrored
+first_face = pyramid.faces[0]
+# Then access the first actual triangle panel on the first face, again with no data mirrored
+first_panel = first_face.panels[0]
+"""
 from __future__ import annotations
 from collections.abc import Iterable, Iterator
 from typing import Optional
@@ -14,11 +32,21 @@ class Pyramid:
     """
     Pyramid represents the whole pyramid.
 
-    Shows can access whichever view of the pyramid they like:
-    - an individual panel, where the image will be replicated
-      on every panel of every face
-    - a face (side) of the pyramid, where the image will be
-      mirrored on the other side
+    Each show is given the pyramid in its constructor.
+    The show can access whichever view of the pyramid they like:
+    - an individual panel, where the image will be replicated on every panel of every face
+    - a face (side) of the pyramid, where the image will be mirrored on the other side
+
+    # To access a side of the pyramid, which is copied to the other side
+    grid = pyramid.face
+
+    # To access a single panel, with the data copied to every other panel
+    grid = pyramid.panel
+
+    # To access the first face, with no data copied
+    first_face = pyramid.faces[0]
+    # Then access the first actual triangle panel on the first face
+    first_panel = first_face.panels[0]
     """
 
     faces: list[Face]
@@ -104,8 +132,9 @@ class Pyramid:
 
 class PanelReplicator(Grid):
     """
-    Exposes a single panel as a grid, and replicates pixels on every
-    panel of every face.
+    Exposes a single panel as a grid, and replicates pixels on every panel of every face.
+
+    This is used in Pyramid and isn't expected to be used elsewhere.
     """
 
     faces: list[Face]
@@ -154,6 +183,8 @@ class PanelReplicator(Grid):
 class FaceReplicator(Grid):
     """
     Treats any number of identically-sized faces as one.
+
+    This is used in Pyramid and isn't expected to be used elsewhere.
     """
 
     primary: Face
@@ -187,8 +218,9 @@ class FaceReplicator(Grid):
 
 class FaceMirror(FaceReplicator):
     """
-    Flips the x-coordinate and pixel enumeration direction on all
-    mirror faces.
+    Flips the x-coordinate and pixel enumeration direction on all mirror faces.
+
+    This is used in Pyramid and isn't expected to be used elsewhere.
     """
 
     def pixels(self, sel: Selector, direction: Direction = Direction.NATURAL) -> Iterator[Pixel]:

@@ -38,8 +38,13 @@ class Direction(IntEnum):
 
 class Cell(NamedTuple):
     """
-    A Cell stores the properties of a "cell" (mini-triangle) within one of
-    the panels.
+    A Cell stores the properties of a "cell" (mini-triangle) within one of the panels.
+
+    A cell has many helpful orientation properties below, such as cell.row, cell.is_up, cell.coordinate, cell.above.
+
+    The color data at a cell cannot be retrieved or set from this class however. Cell has positional information but
+    is not connected to a model. A cell can be used to set/get color data with any type of Grid
+    (e.g. `grid.set(cellX, red)`).
     """
 
     coordinate: Coordinate

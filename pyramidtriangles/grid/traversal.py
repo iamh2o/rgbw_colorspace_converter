@@ -2,10 +2,10 @@ from __future__ import annotations
 from collections.abc import Iterator, Sequence
 
 from .cell import Direction, Position
-from .grid import Geometry
+from .grid import Geometry, Location
 
 
-def sweep(direction: Direction, geom: Geometry) -> Iterator[Sequence[Position]]:
+def sweep(direction: Direction, geom: Geometry) -> Iterator[Sequence[Location]]:
     """
     Generates a left-to-right or right-to-left vertical sequence of coordinates.
     """
