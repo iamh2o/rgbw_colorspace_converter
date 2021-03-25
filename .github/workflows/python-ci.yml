@@ -1,4 +1,4 @@
-name: Python package
+name: Python CI
 
 on: [push]
 
@@ -7,8 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: 3.9
     - name: Install poetry and dependencies
@@ -18,9 +17,3 @@ jobs:
     - name: Test with pytest
       run: |
         poetry run python -m pytest tests/
-    - name: Build docs
-      run: |
-        rm -r docs && \
-        poetry run pdoc --html --skip-errors --output-dir docs/ pyramidtriangles && \
-        mv docs/pyramidtriangles/* docs/ && \
-        rmdir docs/pyramidtriangles
