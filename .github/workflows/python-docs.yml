@@ -21,7 +21,7 @@ jobs:
           ./build.sh
       - name: Generate documentation
         run: |
-          rm -r docs/*
+          rm -r docs/pyramidtriangles
           poetry run pdoc --html --skip-errors -o docs/ pyramidtriangles
       - name: Commit changes
         run: |
