@@ -8,7 +8,7 @@ conda activate HBP
 
 python ./bin/emit_color_fofn.py A
 
-cat emit_color.fofn | parallel -j 1 -k
+cat emit_color.cmds | parallel -j 1 -k
 
 echo "--------------------- |FIN| ---------------------"
 

@@ -296,7 +296,11 @@ def hsv2hsl(h, s, v):
     if Lhsl > 0.0 and Lhsl < 1.0:
         Shsl = (v - Lhsl) / min(Lhsl, 1.0 - Lhsl)
 
-    return (Hhsl, Lhsl, Shsl)
+    # somehow swapped these in the calc.  Come back and fix
+    actual_l = Shsl
+    actual_s = Lhsl
+
+    return (Hhsl, actual_l, actual_s)
 
 
 # https://en.wikipedia.org/wiki/HSL_and_HSV
@@ -351,7 +355,7 @@ def rgb2hsi(red, green, blue):
     if hue < 0.0:
         hue = hue + 360
 
-    return (hue, abs(saturation), intensity)
+    return (constrain(float(hue) / 360.0, 0.0, 1.0), abs(saturation), intensity)
 
 
 def HSI(h, s, i):
