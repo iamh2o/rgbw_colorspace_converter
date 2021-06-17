@@ -34,7 +34,7 @@ import random
 
 from .color import HSV
 
-__all__ = ['random_color']
+__all__ = ["random_color"]
 
 logger = getLogger(__name__)
 
@@ -43,7 +43,11 @@ def random_within(_min, _max):
     "Return a random number within two values, inclusive of those values"
     return random.randrange(int(_min), int(_max) + 1)
 
-ColorDef = namedtuple('ColorDef', ['hue_range', 'lower_bounds', 'saturation_range', 'brightness_range'])
+
+ColorDef = namedtuple(
+    "ColorDef", ["hue_range", "lower_bounds", "saturation_range", "brightness_range"]
+)
+
 
 def define_color(hue_range, lower_bounds):
     s_min = lower_bounds[0][0]
@@ -52,22 +56,101 @@ def define_color(hue_range, lower_bounds):
     b_min = lower_bounds[-1][1]
     b_max = lower_bounds[0][1]
 
-    return ColorDef(hue_range=hue_range,
-                    lower_bounds=lower_bounds,
-                    saturation_range=(s_min, s_max),
-                    brightness_range=(b_min, b_max))
+    return ColorDef(
+        hue_range=hue_range,
+        lower_bounds=lower_bounds,
+        saturation_range=(s_min, s_max),
+        brightness_range=(b_min, b_max),
+    )
+
 
 def make_color_bounds():
     COLOR_BOUNDS = [
         # name,   hue_range, lower_bounds
-        ('monochrome', None, [[0, 0], [100, 0]]),
-        ('red',    [-26, 18], [[20, 100], [30, 92], [40, 89], [50, 85], [60, 78], [70, 70], [80, 60], [90, 55], [100, 50]]),
-        ('orange', [19, 46],  [[20, 100], [30, 93], [40, 88], [50, 86], [60, 85], [70, 70], [100, 70]]),
-        ('yellow', [47, 62],  [[25, 100], [40, 94], [50, 89], [60, 86], [70, 84], [80, 82], [90, 80], [100, 75]]),
-        ('green',  [63, 178], [[30, 100], [40, 90], [50, 85], [60, 81], [70, 74], [80, 64], [90, 50], [100, 40]]),
-        ('blue',   [179, 257], [[20, 100], [30, 86], [40, 80], [50, 74], [60, 60], [70, 52], [80, 44], [90, 39], [100, 35]]),
-        ('purple', [258, 282], [[20, 100], [30, 87], [40, 79], [50, 70], [60, 65], [70, 59], [80, 52], [90, 45], [100, 42]]),
-        ('pink',   [283, 334], [[20, 100], [30, 90], [40, 86], [60, 84], [80, 80], [90, 75], [100, 73]])
+        ("monochrome", None, [[0, 0], [100, 0]]),
+        (
+            "red",
+            [-26, 18],
+            [
+                [20, 100],
+                [30, 92],
+                [40, 89],
+                [50, 85],
+                [60, 78],
+                [70, 70],
+                [80, 60],
+                [90, 55],
+                [100, 50],
+            ],
+        ),
+        (
+            "orange",
+            [19, 46],
+            [[20, 100], [30, 93], [40, 88], [50, 86], [60, 85], [70, 70], [100, 70]],
+        ),
+        (
+            "yellow",
+            [47, 62],
+            [
+                [25, 100],
+                [40, 94],
+                [50, 89],
+                [60, 86],
+                [70, 84],
+                [80, 82],
+                [90, 80],
+                [100, 75],
+            ],
+        ),
+        (
+            "green",
+            [63, 178],
+            [
+                [30, 100],
+                [40, 90],
+                [50, 85],
+                [60, 81],
+                [70, 74],
+                [80, 64],
+                [90, 50],
+                [100, 40],
+            ],
+        ),
+        (
+            "blue",
+            [179, 257],
+            [
+                [20, 100],
+                [30, 86],
+                [40, 80],
+                [50, 74],
+                [60, 60],
+                [70, 52],
+                [80, 44],
+                [90, 39],
+                [100, 35],
+            ],
+        ),
+        (
+            "purple",
+            [258, 282],
+            [
+                [20, 100],
+                [30, 87],
+                [40, 79],
+                [50, 70],
+                [60, 65],
+                [70, 59],
+                [80, 52],
+                [90, 45],
+                [100, 42],
+            ],
+        ),
+        (
+            "pink",
+            [283, 334],
+            [[20, 100], [30, 90], [40, 86], [60, 84], [80, 80], [90, 75], [100, 73]],
+        ),
     ]
 
     dat = {}
@@ -75,7 +158,9 @@ def make_color_bounds():
         dat[name] = define_color(hue_range, lower_bounds)
     return dat
 
+
 COLOR_DICT = make_color_bounds()
+
 
 def get_color_info(hue):
     # XXX takes int 0-360
@@ -90,14 +175,16 @@ def get_color_info(hue):
 
     raise Exception("No color found for hue=%d" % hue)
 
+
 def get_saturation_range(hue):
     # takes a hue int[0-360]
     # XXX what's the valid range for saturation values?
     try:
-        return get_color_info(hue).saturation_range # XXX
+        return get_color_info(hue).saturation_range  # XXX
     except Exception:
-        logger.exception('exception in get_saturation_range for hue=%s', hue)
+        logger.exception("exception in get_saturation_range for hue=%s", hue)
         return (0, 100)
+
 
 def get_hue_range(cin):
     # XXX what format is this?
@@ -113,11 +200,13 @@ def get_hue_range(cin):
 
     return (0, 360)
 
-def pairwise(iterable): # from the itertools documentation
+
+def pairwise(iterable):  # from the itertools documentation
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = itertools.tee(iterable)
     next(b, None)
     return zip(a, b)
+
 
 def get_minimum_brightness(h, s):
     # h is int[0,360]
@@ -129,21 +218,22 @@ def get_minimum_brightness(h, s):
         s2, v2 = sv2
 
         if s1 <= s <= s2:
-            m = (v2-v1)/(s2-s1)
+            m = (v2 - v1) / (s2 - s1)
             b = v1 - (m * s1)
             return m * s + b
 
     return 0
 
+
 def pick_brightness(h, s, luminosity=None):
     b_min = get_minimum_brightness(h, s)
     b_max = 100
 
-    if luminosity == 'dark':
+    if luminosity == "dark":
         b_max = b_min + 20
-    elif luminosity == 'light':
+    elif luminosity == "light":
         b_min = (b_max + b_max) / 2
-    elif luminosity == 'random':
+    elif luminosity == "random":
         b_min = 0
         b_max = 100
 
@@ -151,32 +241,35 @@ def pick_brightness(h, s, luminosity=None):
 
     return random_within(b_min, b_max)
 
+
 def pick_saturation(h, hue=None, luminosity=None):
-    if luminosity == 'random':
+    if luminosity == "random":
         return random_within(0, 100)
 
-    if hue == 'monochrome':
+    if hue == "monochrome":
         return 0
 
     (s_min, s_max) = get_saturation_range(h)
 
-    if luminosity == 'bright':
+    if luminosity == "bright":
         s_min = 55
-    elif luminosity == 'dark':
+    elif luminosity == "dark":
         s_min = s_max - 10
-    elif luminosity == 'light':
+    elif luminosity == "light":
         s_max = 55
 
     return random_within(s_min, s_max)
+
 
 def pick_hue(hue):
     (hue_min, hue_max) = get_hue_range(hue)
     h = random_within(hue_min, hue_max)
 
-    if (h < 0):
+    if h < 0:
         h += 360
 
     return h
+
 
 def random_color(hue=None, luminosity=None):
     """

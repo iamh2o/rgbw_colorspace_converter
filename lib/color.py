@@ -63,7 +63,7 @@ For example: to gradually dim a color
     >>> while col.v > 0:
     ...   print col.rgb
     ...   col.v -= 0.1
-    ... 
+    ...
     (0, 255, 0)
     (0, 229, 0)
     (0, 204, 0)
@@ -86,7 +86,7 @@ from copy import deepcopy
 from math import fmod, cos, radians
 from typing import Union
 
-__all__ = ['Color', 'Hex', 'HSI', 'HSL', 'HSV', 'RGB', 'RGBW']
+__all__ = ["Color", "Hex", "HSI", "HSL", "HSV", "RGB", "RGBW"]
 
 # Generic type of int or float
 V = Union[int, float]
@@ -108,11 +108,15 @@ def hsv_to_rgb(hue: float, saturation: float, value: float) -> tuple[int, int, i
     """
     Converts a Hue Saturation Value triple to an RGB triple.
     """
-    (r, g, b) = (round(val * 255) for val in colorsys.hsv_to_rgb(hue, saturation, value))
+    (r, g, b) = (
+        round(val * 255) for val in colorsys.hsv_to_rgb(hue, saturation, value)
+    )
     return r, g, b
 
 
-def hsv_to_rgbw(hue: float, saturation: float, value: float) -> tuple[int, int, int, int]:
+def hsv_to_rgbw(
+    hue: float, saturation: float, value: float
+) -> tuple[int, int, int, int]:
     """
     Converts a Hue Saturation Value triple to an RGBW quadruple.
 
@@ -338,7 +342,9 @@ def hsv_to_hsl(hue: float, sat_hsv: float, value: float) -> tuple[float, float, 
     return hue, sat_hsl, lightness
 
 
-def hsl_to_hsv(hue: float, sat_hsl: float, lightness: float) -> tuple[float, float, float]:
+def hsl_to_hsv(
+    hue: float, sat_hsl: float, lightness: float
+) -> tuple[float, float, float]:
     """
     Converts HSL triple in [0, 1] to HSV triple in [0, 1].
 
@@ -382,7 +388,7 @@ def RGB(r, g, b) -> Color:
     """Create a new RGB color"""
     for val in [r, g, b]:
         if not 0 <= val < 256:
-            raise ValueError(f'argument {val} must be in [0, 255]')
+            raise ValueError(f"argument {val} must be in [0, 255]")
 
     return Color(rgb_to_hsv(r, g, b))
 
@@ -391,7 +397,7 @@ def RGBW(r, g, b, w) -> Color:
     """Create a new RGBW color"""
     for val in [r, g, b, w]:
         if not 0 <= val < 256:
-            raise ValueError(f'argument {val} must be in [0, 255]')
+            raise ValueError(f"argument {val} must be in [0, 255]")
 
     return Color(rgbw_to_hsv(r, g, b, w))
 
@@ -448,9 +454,9 @@ def HSL(hue: Union[int, float], saturation: float, lightness: float) -> Color:
 
 def Hex(value: str) -> Color:
     """Create a new Color from a hex string"""
-    value = value.lstrip('#')
+    value = value.lstrip("#")
     lv = len(value)
-    rgb_t = (int(value[i:i+int(lv/3)], 16) for i in range(0, lv, int(lv/3)))
+    rgb_t = (int(value[i : i + int(lv / 3)], 16) for i in range(0, lv, int(lv / 3)))
     return RGB(*rgb_t)
 
 
@@ -508,7 +514,7 @@ class Color:
     @property
     def hex(self) -> str:
         """returns a hexadecimal string"""
-        return '#%02x%02x%02x' % self.rgb
+        return "#%02x%02x%02x" % self.rgb
 
     @property
     def hsl(self) -> tuple[int, float, float]:
@@ -522,6 +528,7 @@ class Color:
     Adjusting 'S' adjusts the saturation of the color
     Adjusting 'V' adjusts the brightness/intensity of the color
     """
+
     @property
     def h(self) -> float:
         return self.hsv_t[0]
@@ -546,12 +553,13 @@ class Color:
 
     @v.setter
     def v(self, val: float):
-        v = clamp(val, 0.0, 1.0) 
+        v = clamp(val, 0.0, 1.0)
         self.hsv_t[2] = round(v, 8)
 
     """
     Properties representing individual RGB components
     """
+
     @property
     def rgb_r(self) -> int:
         return self.rgb[0]
@@ -585,9 +593,10 @@ class Color:
         """
         factor = clamp(factor, 0.0, 1.0)
         (h, s, v) = self.hsv
-        return Color((h, s, v*factor))
+        return Color((h, s, v * factor))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

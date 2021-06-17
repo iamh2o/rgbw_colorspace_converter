@@ -97,104 +97,123 @@ So, to set red:
 import colorsys
 from copy import deepcopy
 
-__all__=['RGB', 'HSV', 'Hex', 'Color', 'RGBW']
+__all__ = ["RGB", "HSV", "Hex", "Color", "RGBW"]
+
 
 def saturation(rgb):
     low = float(min(rgb.r, rgb.g, rgb.b))
     high = float(max(rgb.r, rgb.g, rgb.b))
     ret = 0
     if low > 0 and high > 0:
-        ret = round(100.0*((high-low)/high))
+        ret = round(100.0 * ((high - low) / high))
     return ret
+
 
 def getWhiteColor(rgb):
     ret = 0
     try:
-        ret = int(round((255.0-saturation(rgb)) / 255.0 * (float(rgb.r) + float(rgb.b) + float(rgb.g))/3.0))
+        ret = int(
+            round(
+                (255.0 - saturation(rgb))
+                / 255.0
+                * (float(rgb.r) + float(rgb.b) + float(rgb.g))
+                / 3.0
+            )
+        )
     except:
         print("Error", rgb)
     return ret
+
 
 def clamp(val, min_value, max_value):
     "Restrict a value between a minimum and a maximum value"
     return max(min(val, max_value), min_value)
 
+
 def is_hsv_tuple(hsv):
     "check that a tuple contains 3 values between 0.0 and 1.0"
     return len(hsv) == 4 and all([(0.0 <= t <= 1.0) for t in hsv[0:3]])
+
 
 def is_rgb_tuple(rgb):
     "check that a tuple contains 3 values between 0 and 255"
     return len(rgb) == 4 and all([(0 <= t <= 255) for t in rgb])
 
+
 def is_rgbw_tuple(rgbw):
     "check for valid RGBW tuple"
     return len(rgbw) == 4 and all([(0 <= t <= 255) for t in rgbw])
 
+
 def rgb_to_hsv(rgb):
     "convert a rgb[0-255] tuple to hsv[0.0-1.0]"
     f = float(255)
-    ret = list(colorsys.rgb_to_hsv(rgb[0]/f, rgb[1]/f, rgb[2]/f))
+    ret = list(colorsys.rgb_to_hsv(rgb[0] / f, rgb[1] / f, rgb[2] / f))
     ret.append(rgb[-1])
     return tuple(ret)
+
 
 def rgbw_to_hsv(rgbw):
     "convert a rgbw[0:3][0-255] tuple to hsv[0.0-1.0], plus w"
     f = float(255)
-    ret = colorsys.rgb_to_hsv(rgbw[0]/f, rgbw[1]/f, rgbw[2]/f)
+    ret = colorsys.rgb_to_hsv(rgbw[0] / f, rgbw[1] / f, rgbw[2] / f)
     ret.append(rgbw[-1])
     return tuple(ret)
+
 
 def hsv_to_rgbw(hsv):
     assert is_hsv_tuple(hsv), "malformed hsv tuple:" + str(hsv)
     _rgb = colorsys.hsv_to_rgb(*tuple(hsv[0:3]))
-    r = int(_rgb[0] * 0xff)
-    g = int(_rgb[1] * 0xff)
-    b = int(_rgb[2] * 0xff)
+    r = int(_rgb[0] * 0xFF)
+    g = int(_rgb[1] * 0xFF)
+    b = int(_rgb[2] * 0xFF)
     return (r, g, b, hsv[-1])
 
 
 def hsv_to_rgb(hsv):
     assert is_hsv_tuple(hsv), "malformed hsv tuple:" + str(hsv)
-#    from IPython import embed; embed() 
+    #    from IPython import embed; embed()
     _rgb = colorsys.hsv_to_rgb(*tuple(hsv[0:3]))
-    r = int(_rgb[0] * 0xff)
-    g = int(_rgb[1] * 0xff)
-    b = int(_rgb[2] * 0xff)
+    r = int(_rgb[0] * 0xFF)
+    g = int(_rgb[1] * 0xFF)
+    b = int(_rgb[2] * 0xFF)
     return (r, g, b, hsv[-1])
 
-def RGBW(r,g,b,w, recalculate_w=False):
+
+def RGBW(r, g, b, w, recalculate_w=False):
     "Create new RGBW Color"
     t = (r, g, b, w)
     assert is_rgbw_tuple(t)
-    return(Color(rgb_to_hsv(t), recalculate_w))
+    return Color(rgb_to_hsv(t), recalculate_w)
 
-def RGB(r,g,b,w=0, recalculate_w=False):
+
+def RGB(r, g, b, w=0, recalculate_w=False):
     "Create a new RGB color"
     t = (r, g, b, w)
     assert is_rgb_tuple(t)
     return Color(rgb_to_hsv(t), recalculate_w)
 
-def HSV(h,s,v, w=0.0, recalculate_w=False):
+
+def HSV(h, s, v, w=0.0, recalculate_w=False):
     "Create a new HSV color"
     return Color((h, s, v, w), recalculate_w)
 
+
 def Hex(value, recalculate_w=True):
     "Create a new Color from a hex string"
-    value = value.lstrip('#')
+    value = value.lstrip("#")
     lv = len(value)
-    rgb_t = (int(value[i:i+int(lv/3)], 16) for i in range(0, lv, int(lv/3)))
+    rgb_t = (int(value[i : i + int(lv / 3)], 16) for i in range(0, lv, int(lv / 3)))
     r = next(rgb_t)
     g = next(rgb_t)
     b = next(rgb_t)
-    return RGB(r, g, b, 0, recalculate_w=False)   #JEM -not sure what to do here
+    return RGB(r, g, b, 0, recalculate_w=False)  # JEM -not sure what to do here
+
 
 class Color(object):
-
     def __init__(self, hsv_tuple, recalculate_w=True):
         self.recalculate_w = recalculate_w
         self._set_hsv(hsv_tuple)
-        
 
     def copy(self):
         return deepcopy(self)
@@ -203,7 +222,7 @@ class Color(object):
         assert is_hsv_tuple(hsv_tuple)
         self.hsv_t = list(hsv_tuple)
 
-        #I'm trting to solve the problem of the c
+        # I'm trting to solve the problem of the c
         if preserve_w is True:
             pass
         elif self.recalculate_w is True:
@@ -213,13 +232,12 @@ class Color(object):
             hsv_tuple = tuple(l)
             self.hsv_t = list(hsv_tuple)
         else:
-            pass #all done
+            pass  # all done
 
     @property
     def rgbw(self):
         "returns a rgbw[0-255] tuple"
         return hsv_to_rgbw(self.hsv_t)
-
 
     @property
     def rgb(self):
@@ -234,7 +252,7 @@ class Color(object):
     @property
     def hex(self):
         "returns a hexadecimal string"
-        return '#%02x%02x%02x' % self.rgb
+        return "#%02x%02x%02x" % self.rgb
 
     """
     Properties representing individual HSV compnents
@@ -242,6 +260,7 @@ class Color(object):
     Adjusting 'S' adjusts the saturation of the color
     Adjusting 'V' adjusts the brightness/intensity of the color
     """
+
     @property
     def h(self):
         return self.hsv_t[0]
@@ -269,15 +288,15 @@ class Color(object):
     @v.setter
     def v(self, val):
         assert 0.0 <= val <= 1.0
-        v = clamp(val, 0.0, 1.0) 
+        v = clamp(val, 0.0, 1.0)
         new_hsv = self.hsv_t
         new_hsv[2] = round(v, 8)
         self._set_hsv(new_hsv)
 
-
     """
     Properties representing individual RGB components
     """
+
     @property
     def r(self):
         return self.rgb[0]
@@ -332,9 +351,9 @@ class Color(object):
     @recalculate_w.setter
     def recalculate_w(self, val=True):
         self._recalculate_w = val
-    
-         
-        
-if __name__=='__main__':
+
+
+if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

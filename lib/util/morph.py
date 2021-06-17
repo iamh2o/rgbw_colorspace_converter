@@ -30,17 +30,14 @@ import itertools
 
 from math import ceil
 
-<<<<<<< HEAD:morph.py
-from color1 import Color, HSV
-=======
-from ..color import Color, HSV
->>>>>>> fb2bab397b520bfbd679d04ca780b6f22979986a:pyramidtriangles/util/morph.py
 
-__all__ = ['color_transition', 'multistep_color_transition']
+from ..color import Color, HSV
+
+__all__ = ["color_transition", "multistep_color_transition"]
 
 # http://stackoverflow.com/questions/477486/python-decimal-range-step-value
-def frange(start, stop = None, step = 1):
-    """frange generates a set of floating point values over the 
+def frange(start, stop=None, step=1):
+    """frange generates a set of floating point values over the
     range [start, stop) with step size step
 
     frange([start,] stop [, step ])"""
@@ -49,16 +46,18 @@ def frange(start, stop = None, step = 1):
             yield x
     else:
         # create a generator expression for the index values
-        indices = (i for i in range(0, int((stop-start)/step)))
+        indices = (i for i in range(0, int((stop - start) / step)))
         # yield results
         for i in indices:
-            yield start + step*i
+            yield start + step * i
+
 
 def should_wrap(p1, p2):
     # is the distance going in a negative direction around the hsv circle shorter?
     if p1 > p2:
         p1, p2 = p2, p1
-    return abs(p2-p1) > abs((p1+1)-p2)
+    return abs(p2 - p1) > abs((p1 + 1) - p2)
+
 
 def hsv_transition(h1, h2, steps=20, wrap=False):
     """
@@ -70,7 +69,7 @@ def hsv_transition(h1, h2, steps=20, wrap=False):
     """
     # print "transition:", h1, h2, steps
     if h1 == h2:
-        return itertools.repeat(h1, steps+1) # XXX check number of steps!
+        return itertools.repeat(h1, steps + 1)  # XXX check number of steps!
     else:
         if wrap and should_wrap(h1, h2):
             if h1 < h2:
@@ -84,14 +83,16 @@ def hsv_transition(h1, h2, steps=20, wrap=False):
             step_size *= -1
         return frange(h1, h2, step_size)
 
-def pairwise(iterable): # from the itertools documentation
+
+def pairwise(iterable):  # from the itertools documentation
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = itertools.tee(iterable)
     next(b, None)
     return zip(a, b)
 
+
 def color_transition(start_color, end_color, steps=20):
-    """    
+    """
     Takes two Color objects and produce a sequence of colors that
     transition between them.  `steps` specifies the number of
     intermediate steps in the sequence.
@@ -107,7 +108,8 @@ def color_transition(start_color, end_color, steps=20):
     v_seq = hsv_transition(v1, v2, steps)
 
     for (h, s, v) in zip(h_seq, s_seq, v_seq):
-        yield HSV(h%1, s, v)
+        yield HSV(h % 1, s, v)
+
 
 def multistep_color_transition(color_list, steps=20, continuous=False):
     """
