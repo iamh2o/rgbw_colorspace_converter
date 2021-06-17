@@ -1,7 +1,7 @@
 # HBR (hex baaahs pyramid) RGBW Color Space Converter
 ## Easily and Quickly Transform Between RGB / HSL / HSI / HSV / HEX || And to (2) RGBW 
 ### With A Particular Emphasis on LED Projects
-![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 <pre>
  ___  ___      _______       ___    ___  ________      ________      ________       ________     ___    ___  ________            |\  \|\  \    |\  ___ \     |\  \  /  /||\   __  \    |\   __  \    |\   ____\     |\   __  \   |\  \  /  /||\   __  \           \ \  \\\  \   \ \   __/|    \ \  \/  / /\ \  \|\ /_   \ \  \|\  \   \ \  \___|_    \ \  \|\  \  \ \  \/  / /\ \  \|\  \           \ \   __  \   \ \  \_|/__   \ \    / /  \ \   __  \   \ \   __  \   \ \_____  \    \ \   ____\  \ \    / /  \ \   _  _\           \ \  \ \  \   \ \  \_|\ \   /     \/    \ \  \|\  \   \ \  \ \  \   \|____|\  \    \ \  \___|   \/  /  /    \ \  \\  \|           \ \__\ \__\   \ \_______\ /  /\   \     \ \_______\   \ \__\ \__\    ____\_\  \    \ \__\    __/  / /       \ \__\\ _\            \|__|\|__|    \|_______|/__/ /\ __\     \|_______|    \|__|\|__|   |\_________\    \|__|   |\___/ /         \|__|\|__|                                   |__|/ \|__|                                \|_________|            \|___|/                           </pre>
 
