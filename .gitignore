@@ -2,13 +2,20 @@
 __pycache__/
 *.py[cod]
 *$py.class
+<<<<<<< HEAD
+*.pyc
+=======
+>>>>>>> main
 
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
+<<<<<<< HEAD
+=======
 build/
+>>>>>>> main
 develop-eggs/
 dist/
 downloads/
@@ -47,7 +54,10 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
+<<<<<<< HEAD
+=======
 *.py,cover
+>>>>>>> main
 .hypothesis/
 .pytest_cache/
 
@@ -91,12 +101,17 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
+<<<<<<< HEAD
+# celery beat schedule file
+celerybeat-schedule
+=======
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
+>>>>>>> main
 
 # SageMath parsed files
 *.sage.py
@@ -109,6 +124,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+<<<<<<< HEAD
+.DS_Store
+=======
+>>>>>>> main
 
 # Spyder project settings
 .spyderproject
@@ -127,3 +146,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+<<<<<<< HEAD
+
+# PyCharm
+.idea/
+=======
+>>>>>>> main
