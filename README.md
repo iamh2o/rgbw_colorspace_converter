@@ -58,9 +58,11 @@ rgb.hex
 ->'#ff099b'
 ```
 
-### pip
+### Using pip
 
 * pip install hbp_color_space_converter
+
+
 ```
 from hbp_colorspace_converter import RGB
 
@@ -84,9 +86,17 @@ cd environment
 ./setup.sh #  Read the help text.  To proceed with install:
 ./setup.sh HBP ~/conda # or wherever your conda is installed or you want it installed
 ```
-* This will install a conda environment you can source with conda activate HBP. If you don't have conda, it is installed where you specify.  Mamba is also installed (read about it. tlds, lightning fast conda) to mane environment creation faster.
+* This will install a conda environment you can source with conda activate HBP. If you don't have conda, it is installed where you specify.  Mamba is also installed (read about it. tldr: lightning fast conda, will change your life). The codebase adheres to black style and mostly to flake8.
 
-* pre-commit checks will be installed to enforce black and flake 8 before any pushes.  Be aware.  Black will auto-fix problems. Flake8, you need to go manually address the issues.
+* Duering the running of setup above, pre-commit checks will be installed to enforce black and flake 8 compliance before any pushes are permitted. Full disclosure.  Black will auto-fix problems when it fails a commit, so you just run again and all is good.  RARELY, you'll have to run 'black' directly on the file. Flake8, you need to go manually address the issues is spits out.  If there are a ton, chip away at a few, then you can use the --skip-verify commit flag- but don't abuse it please.
+
+* Upon commit, flake 8 and black linter checks are run, as well as the pyunit tests for each commit and pull request.  The status of each can be seen in the actions tab and reflected in some of the badges.
+
+### Some Cool Stuff.
+
+* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python ./bin/color_cycle_test.py [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
+
+#### Perhaps a simple hardware how-to should be on the to-do list?
 
 
 ## More Examples

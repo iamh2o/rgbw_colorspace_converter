@@ -83,9 +83,11 @@ dependencies:
   - openjpeg=2.4.0=hb52868f_1
   - openssl=1.1.1k=h7f98852_0
   - packaging=20.9=pyh44b312d_0
+  - parallel=20210422=ha770c72_0
   - parso=0.8.2=pyhd8ed1ab_0
   - pathspec=0.8.1=pyhd3deb0d_0
   - pcre=8.45=h9c3ff4c_0
+  - perl=5.32.1=0_h7f98852_perl5
   - pexpect=4.8.0=py38h32f6830_1
   - pickleshare=0.7.5=py38h32f6830_1002
   - pillow=8.2.0=py38ha0e1e83_1
@@ -145,5 +147,9 @@ dependencies:
   - zstd=1.5.0=ha95c52a_0
   - pip:
     - build==0.4.0
+    - colr==0.9.1
+    - coverage==5.5
+    - docopt==0.6.2
     - pep517==0.10.0
+    - pytest-cov==2.12.1
 prefix: /locus/home/jmajor/conda/envs/HBP
