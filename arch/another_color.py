@@ -1,20 +1,22 @@
 """
 Color
 
-Color class that allows you to initialize a color in any of HSV, RGB, Hex, HSI color spaces.  Once initialized, the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting any component of HSV or RGB (ie, just resetting the R value) and all RGB/HSV/RGBW values will be recalculated.
+Color class that allows you to initialize a color in any of HSV, HSL, HSI, RGB, Hex color spaces.  Once initialized, the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting any component of HSV or RGB (ie, just resetting the R value) and all RGB/HSV/RGBW values will be recalculated.  As of now, you can not work in RGBW directly as we have not written the conversions from RGBW back to one of the standard color spaces. (annoying, but so it goes).
 
 
 The main goal of this class is to translate various color spaces into RGBW for use in RGBW pixels.
 NOTE! this package will not control 3 channel RGB LEDs properly.
 
-The color representation is maintained in HSV interanlly and translates to RGB (and RGBW, but not interactively).  
+The color representation is maintained in HSV interanlly and translated to RGB (and RGBW, but only for retrieval).
 Use whichever is more convenient at the time - RGB for familiarity, HSV to fade colors easily.
 
 RGB values range from 0 to 255
-HSV values range from 0.0 to 1.0
+HSV values range from 0.0 to 1.0 *Note the H value has been normalized to range between 0-1 in instead of 0-360 to allow for easier cycling of values.
+HSL/HSI values range from 0-360 for H, 0-1 for S/[L|I]
 
-    >>> red   = RGB(255, 0 ,0)  (RGBW = )
-    >>> green = HSV(0.33, 1.0, 1.0) (RGBW = )
+    >>> red   = RGB(255, 0 ,0)  (RGBW = 255,0,0,0)
+    >>> green = HSV(0.33, 1.0, 1.0) (RGBW = 5, 254, 0, 0)
+    >>> fuschia = RGB(180, 48, 229) (RGBW = 130, 0 , 182, 47)
 
 Colors may also be specified as hexadecimal string:
 
@@ -54,7 +56,7 @@ For example: to gradually dim a color
     >>> while col.v > 0:
     ...   print col.rgb
     ...   col.v -= 0.1
-    ... 
+    ...
     (0, 255, 0)
     (0, 229, 0)
     (0, 204, 0)
@@ -88,7 +90,7 @@ def is_hsv_tuple(hsv):
     return len(hsv) == 3 and all([(0.0 <= t <= 1.0) for t in hsv])
 
 
-def is_hsi_tuple(hsi):
+def is_hsi_hsl_tuple(hsi):
     ret = True
     if len(hsi) != 3:
         ret = False
@@ -137,7 +139,7 @@ def constrain(val, min, max):
 
 
 # https://www.neltnerlabs.com/saikoled/how-to-convert-from-hsi-to-rgb-white
-def hsi2rgb(H, S, I):
+def DELhsi2rgb(H, S, I):
     r = 0.0
     g = 0.0
     b = 0.0
@@ -308,15 +310,15 @@ def hsl2hsv(h, s, l):
 
 
 # https://en.wikipedia.org/wiki/HSL_and_HSV
-def rgb2hsi(red, green, blue):
-    r = constrain(float(red) / 255.0, 0.0, 1.0)
-    g = constrain(float(green) / 255.0, 0.0, 1.0)
-    b = constrain(float(blue) / 255.0, 0.0, 1.0)
+def rgb2hsi(r, g, b):
+    r = constrain(float(r) / 255.0, 0.0, 1.0)
+    g = constrain(float(g) / 255.0, 0.0, 1.0)
+    b = constrain(float(b) / 255.0, 0.0, 1.0)
     intensity = 0.33333 * (r + g + b)
 
     M = max(r, g, b)
     m = min(r, g, b)
-    C = M - m
+    C = M - m  # noqa
 
     saturation = 0.0
     if intensity == 0.0:
@@ -348,29 +350,39 @@ def rgb2hsi(red, green, blue):
     return (hue, abs(saturation), intensity)
 
 
+def RGBW(r, g, b, w):
+    "Create RGBW color"
+    raise Exception(
+        "Gotcha!  We can't yet reverse calculate RGBW back to any other color spaces.... work in one of the other spaces and get your RGBW values back from Color.rgbw.  Sorry."
+    )
+
+
 def HSI(h, s, i):
     "Create new HSI color"
     t = (h, s, i)
-    assert is_hsi_tuple(t)
+    assert is_hsi_hsl_tuple(t)
     return RGB(hsi2rgb(h, s, i))
 
 
-def RGB(r, g, b):
+def RGB(r, g, b, x=False):
     "Create a new RGB color"
     t = (r, g, b)
     assert is_rgb_tuple(t)
-    return Color(rgb_to_hsv(t))
+    return Color(rgb_to_hsv(t), x)
 
 
-def HSV(h, s, v):
+def HSV(h, s, v, x=False):
     "Create a new HSV color"
-    return Color((h, s, v))
+    return Color((h, s, v), x)
 
 
 def HSL(h, s, l):
     "Create new HSL color"
-    (h, s, v) = hsl2hsv(h, s, l)
-    return Color(h, s, v)
+    t = (h, s, l)
+    assert is_hsi_hsl_tuple(t)
+    (h, s, v) = hsl2hsv(t[0], t[1], t[2])
+    print(h, s, v)
+    return Color((constrain(h / 360.0, 0.0, 1.0), s, v))
 
 
 def Hex(value):
@@ -381,9 +393,15 @@ def Hex(value):
     return RGB(*rgb_t)
 
 
-class Color(object):
-    def __init__(self, hsv_tuple):
+class Color:
+    def __init__(self, hsv_tuple, only_rgb=False, brightness_scale=1.0):
         self._set_hsv(hsv_tuple)
+        self.only_rgb = only_rgb
+        try:
+            self.brightness_scale = float(constrain(brightness_scale, 0.0, 1.0))
+        except Exception as e:
+            print("NON-FLOAT sent to brightness_scale, setting to 1.0", e)
+            self.brightness_scale = constrain(1.0, 0.0, 1.0)
 
     def __repr__(self):
         return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
@@ -405,17 +423,26 @@ class Color(object):
     @property
     def rgb(self):
         "returns a rgb[0-255] tuple"
-        return hsv_to_rgb(self.hsv_t)
+        new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2] * self.brightness_scale)
+        return hsv_to_rgb(new_t)
 
     @property
     def hsv(self):
         "returns a hsv[0.0-1.0] tuple"
-        return tuple(self.hsv_t)
+        new_t = (self.hsv_t[0], self.hsv_t[1], self.hsv_t[2])
+        return tuple(new_t)
 
     @property
     def hex(self):
         "returns a hexadecimal string"
         return "#%02x%02x%02x" % self.rgb
+
+    @property
+    def hsl(self):
+        "returns HSL tuple"
+        (h, s, l) = hsv2hsl(self.hsv_t[0], self.hsv_t[1], self.hsv_t[2])
+        h = constrain(h * 360.0, 0.0, 360.0)
+        return (h, s, l)
 
     """
     Properties representing individual HSV compnents
@@ -451,8 +478,8 @@ class Color(object):
         v = clamp(val, 0.0, 1.0)
         self.hsv_t[2] = round(v, 8)
 
-    """                                                                                                                                                                      
-    Properties representing individual RGB components                                                                                                                        
+    """
+    Properties representing individual RGB components
     """
 
     @property
@@ -497,19 +524,31 @@ class Color(object):
 
     @property
     def r(self):
-        return self.rgbw[0]
+        if self.only_rgb:
+            return self.rgb[0]
+        else:
+            return self.rgbw[0]
 
     @property
     def g(self):
-        return self.rgbw[1]
+        if self.only_rgb:
+            return self.rgb[1]
+        else:
+            return self.rgbw[1]
 
     @property
     def b(self):
-        return self.rgbw[2]
+        if self.only_rgb:
+            return self.rgb[2]
+        else:
+            return self.rgbw[2]
 
     @property
     def w(self):
-        return self.rgbw[3]
+        if self.only_rgb:
+            return 0
+        else:
+            return self.rgbw[3]
 
 
 if __name__ == "__main__":
