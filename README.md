@@ -1,4 +1,4 @@
-# HBR (hex baaahs pyramid) Color Space Converter
+# HBR (hex baaahs pyramid) RGBW Color Space Converter
 ## Easily and Quickly Transform Between RGB / HSL / HSI / HEX || And to (2) RGBW 
 <pre>
  ___  ___      _______       ___    ___  ________      ________      ________       ________     ___    ___  ________                         
