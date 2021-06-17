@@ -99,4 +99,6 @@ echo "
 
 "
 
+cd ../
+./bin/run_color_test.sh
 exit 0;

@@ -370,7 +370,7 @@ def RGB(r, g, b):
 
 def HSV(h, s, v):
     "Create a new HSV color"
-    return Color(h, s, v)
+    return Color((h, s, v))
 
 
 def HSL(h, s, l):

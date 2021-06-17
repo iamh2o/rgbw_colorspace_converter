@@ -147,8 +147,7 @@ rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) hsl=(240,
 
 ```
 source ~/.bashrc
-conda activate HBP
-python ./bin/emit_hbp_color_tests.py [A|B|C|D|E|?] # where each give you a different test experienc
+python ./bin/run_color_test.sh
 
 # In The Works
 
