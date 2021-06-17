@@ -2,31 +2,32 @@
 
 Codebase to drive pyramid triangle art.
 
-![Build
-Status](https://travis-ci.com/pyramidscheme/pyramidtriangles.svg?branch=master)
+![Build Status](https://travis-ci.com/pyramidscheme/pyramidtriangles.svg?branch=master)
 
 ## Requirements
 
-* [Python 3](https://www.python.org), [poetry](https://poetry.eustace.io/)
-
-```sh
+* [Python 3](https://www.python.org)
 
 # Install Python 3 (any method will do)
-## Ideally, use a virtual env
-virtualenv --python=python3 ve
-...
-source ve/bin/activate
 
-.. or ..
+On Apple, with [Homebrew](https://brew.sh/)
 
+```sh
 brew install python
 export PATH="$(brew --prefix python)/libexec/bin:${PATH}"
+```
 
-# Install Poetry
-curl -fsSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+... or on Linux
 
-# Install dependencies
-poetry install
+```sh
+sudo apt install python3.9
+```
+
+# Install poetry and dependencies
+
+The build script will install Poetry if needed. Poetry will then download python dependencies. It will create a virtualenv if you're not already using one, which is great.
+```sh
+./build.sh
 ```
 
 * [Processing 2.2.1+](https://www.processing.org) (for simulator only)
@@ -42,11 +43,11 @@ Processing, and run it.
 
 To start the lighting software talking to the simulator:
 
-    poetry run python go_tri.py --simulator
+    poetry run python -X dev go_tri.py --simulator
 
 You can also specify which show to run by using the name of the show:
 
-    poetry run python go_tri.py --simulator UpDown
+    poetry run python -X dev go_tri.py --simulator UpDown
 
 You can also choose which show is running through the web interface:
 
@@ -83,6 +84,15 @@ Debian / Ubuntu:
 
     sudo apt-get install ola ola-python ola-rdm-tests
 
+## Generate python documentation
+
+```sh
+rm -r docs && \
+poetry run pdoc --html --skip-errors --output-dir docs/ pyramidtriangles && \
+mv docs/pyramidtriangles/* docs/ && \
+rmdir docs/pyramidtriangles
+```
+
 ## History
 
 Credit to Mostly Greg Brown, and a bit to JEM for writing the original codebase on which we are building.  That was
@@ -100,7 +110,7 @@ the [BAAAHS panel controlling s/w](https://bitbucket.org/grgbrn/baaahs2014/src/d
 5)Add the 'Device' ArtNet [IP] Artnet Universe 0:0:0 Direction  == OUTPUT
 6) Save
 7) from sourced ve, type python ./go_led.py
-8)Open DMX4pro condiguration tool.  You should be able to see the OLA artnet and the DMX4pro.
-9)From localhost:9090 (OMG! There is a much better 'new ola UI' which you can access by clicking the tiny link to it at the obttomo of this page that loads for localhost:9090), click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
-10) IF you have cherrypy installed, you can go to the simple web interface that should have started on localhost:9990. you can shoose shows, set cycle interval,etc.
+8)Open DMX4pro configuration tool.  You should be able to see the OLA artnet and the DMX4pro.
+9)From localhost:9090 (OMG! There is a much better 'new ola UI' which you can access by clicking the tiny link to it at the bottom of this page that loads for localhost:9090), click on your universe.  The DMX Monitor tab shows you IRT what DMX is being sent. DMX Console lets you manually send DMX to every channel.
+10) IF you have cherrypy installed, you can go to the simple web interface that should have started on localhost:9990. you can choose shows, set cycle interval,etc.
 11) simulator possibly coming!
