@@ -4,7 +4,9 @@ from ..color import HSV
 
 
 def choose_random_hsv():
-    return HSV(random.uniform(0.0, 1.0), random.uniform(0.0, 1.0), random.uniform(0.0, 1.0))
+    return HSV(
+        random.uniform(0.0, 1.0), random.uniform(0.0, 1.0), random.uniform(0.0, 1.0)
+    )
 
 
 # http://stackoverflow.com/questions/1969240/mapping-a-range-of-values-to-another

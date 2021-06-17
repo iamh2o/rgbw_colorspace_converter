@@ -32,7 +32,7 @@ from numbers import Number
 import itertools
 import random
 
-from .color import HSV
+from .hbp_colorspace_converter import HSV
 
 __all__ = ["random_color"]
 

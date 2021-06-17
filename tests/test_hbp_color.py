@@ -1,6 +1,6 @@
 from pytest import approx
 
-from pyramidtriangles import color
+import hbp_colorspace_converter.hbp_colorspace_converter as color
 
 
 def test_bidirectional_conversions():
