@@ -15,7 +15,7 @@
 
 ## Authors
 
-Too numerous to list.  This library was pulled out of pyramidscheme/pyramidtriagles, which was a fork of the original pyramid triagnles, which was a port of the bitbucket repo which controlled the original BAAAHS light systems, which itself was built from a doundation the original LED installation collective, HEX, wrote for controlling much of their early work.  Honorable mentions however go to Gbrn (for writing the majority of the bones) and Brian Nettler (for having worked out the transform to RGBW and publishing it openly-  see source for references).
+GrgB wrote the vast majority of the core. JM translated Brian Nettlers theoretical work into code to allow the HS* and RGBW translations, JC added a lot of robustness and filled a bunch of gaps. And going on 10 years of users for our art projects, we've had TL, JH, SD, ZB, MF, LN all add their own touches here and there.  This library was (most recently) pulled out of pyramidscheme/pyramidtriagles, which was a fork of the original pyramid triangles codebase (a collab w/Steve Dudek), which was itself a port of the bitbucket repo which controlled the original BAAAHS light systems, which was developed out of the HEX collective original s/w for controlling LED art installations circa 2010.  This library being largely untouched until the need to support RGBW LEDs (and boy are they pretty).  Honorable mentions really go to Gbrn (for writing the majority of the bones) and Brian Nettler (for having worked out the transform to RGBW and publishing it openly-  see source for references).
 
 ## Intention
 

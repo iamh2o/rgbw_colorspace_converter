@@ -470,7 +470,12 @@ class Color:
         self._set_hsv(hsv)
 
     def __repr__(self) -> str:
-        return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
+        return "rgb=%s hsv=%s rgbw=%s hsl=%s" % (
+            self.rgb,
+            self.hsv,
+            self.rgbw,
+            self.hsl,
+        )
 
     def copy(self) -> Color:
         return deepcopy(self)
