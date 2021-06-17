@@ -51,9 +51,9 @@ A trite example: to gradually dim a color
 (ranges from 0.0 to 1.0)
 
     >>> col = RGB(0,255,0)
-    >>> while col.v > 0:
+    >>> while col.hsv_v > 0:
     ...   print col.rgb
-    ...   col.v -= 0.1
+    ...   col.hsv_v -= 0.1
     ...
     (0, 255, 0)
     (0, 229, 0)
@@ -370,7 +370,7 @@ def RGB(r, g, b):
 
 def HSV(h, s, v):
     "Create a new HSV color"
-    return Color((h, s, v))
+    return Color(h, s, v)
 
 
 def HSL(h, s, l):
@@ -392,7 +392,13 @@ class Color(object):
         self._set_hsv(hsv_tuple)
 
     def __repr__(self):
-        return "rgb=%s hsv=%s" % (self.rgb, self.hsv)
+        return "rgb=%s hsv=%s rgbw=%s hsl=%s hsi=%s" % (
+            self.rgb,
+            self.hsv,
+            self.rgbw,
+            self.hsl,
+            self.hsi,
+        )
 
     def copy(self):
         return deepcopy(self)
@@ -415,7 +421,7 @@ class Color(object):
 
     @property
     def hsl(self):
-        return hsv2hsl(self.hsv_t)
+        return hsv2hsl(self.hsv_t[0], self.hsv_t[1], self.hsv_t[2])
 
     @property
     def rgb(self):
@@ -440,29 +446,29 @@ class Color(object):
     """
 
     @property
-    def h(self):
+    def hsv_h(self):
         return self.hsv_t[0]
 
-    @h.setter
-    def h(self, val):
+    @hsv_h.setter
+    def hsv_h(self, val):
         v = clamp(val, 0.0, 1.0)
         self.hsv_t[0] = round(v, 8)
 
     @property
-    def s(self):
+    def hsv_s(self):
         return self.hsv_t[1]
 
-    @s.setter
-    def s(self, val):
+    @hsv_s.setter
+    def hsv_s(self, val):
         v = clamp(val, 0.0, 1.0)
         self.hsv_t[1] = round(v, 8)
 
     @property
-    def v(self):
+    def hsv_v(self):
         return self.hsv_t[2]
 
-    @v.setter
-    def v(self, val):
+    @hsv_v.setter
+    def hsv_v(self, val):
         v = clamp(val, 0.0, 1.0)
         self.hsv_t[2] = round(v, 8)
 
@@ -498,6 +504,16 @@ class Color(object):
     def rgb_b(self):
         return self.rgb[2]
 
+    @property
+    def rgb_rgb(self):
+        return self.rgb
+
+    @rgb_rgb.setter
+    def rgb_rgb(self, t):
+        new = t
+        assert is_rgb_tuple(new)
+        self._set_hsv(rgb_to_hsv(new))
+
     @rgb_b.setter
     def rgb_b(self, val):
         assert 0 <= val <= 255
@@ -511,19 +527,19 @@ class Color(object):
     """
 
     @property
-    def r(self):
+    def rgbw_r(self):
         return self.rgbw[0]
 
     @property
-    def g(self):
+    def rgbw_g(self):
         return self.rgbw[1]
 
     @property
-    def b(self):
+    def rgbw_b(self):
         return self.rgbw[2]
 
     @property
-    def w(self):
+    def rgbw_w(self):
         return self.rgbw[3]
 
 

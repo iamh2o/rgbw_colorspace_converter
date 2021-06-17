@@ -108,26 +108,29 @@ Not only does the package allow translation of one color space to another, but i
 If you build the developemtn branch, there is a test script in ./bin/ called 'transversals.py', which gives you a crude terminal based idea of what I'm talking about (limited to 256 colors).
 
 What that might look like in code could be:
+
 ```
-from hbp_colorspace_converter.hbp_colorspace_converter import RGB
-rgb = RGB(0,0,255) # BLUE
+>>> from hbp_colorspace_converter.hbp_colorspace_converter import RGB
+>>> rgb = RGB(0,0,255) # BLUE
 
 # HSL value for blue
-In [32]: rgb.hsl
-Out[32]: (240, 1.0, 0.5)
+>>>rgb.hsl
+(240, 1.0, 0.5)
+
 #HSV value for Blue
-In [33]: rgb.hsv
-Out[33]: (0.6666666666666666, 1.0, 1.0)
-In [34]: rgb.rgbw
-Out[34]: (0, 0, 255, 0)
+>>> rgb.hsv
+(0.6666666666666666, 1.0, 1.0)
 
-from hbp_colorspace_converter.hbp_colorspace_converter import Color
+>>> rgb.rgbw
+(0, 0, 255, 0)
 
-color = Color(rgb.hsv)
 
-In [40]: color
-Out[40]: rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) hsl=(240, 1.0, 0.5)
+>>> from hbp_colorspace_converter.hbp_colorspace_converter import Color
 
+>>> color = Color(rgb.hsv)
+>>> color
+rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) hsl=(240, 1.0, 0.5)
+```
 
 # Tests
 
@@ -137,6 +140,15 @@ Out[40]: rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) 
 
 ## Github Actions
 * Flak8 and Python Black are both tested with github commiut action, as is the pytest above.
+
+## Fun & Kind Of Weird Tests
+
+* I was going to write a light web UI to output various color space codes and the RGB values, but that kind of defeats the purpose, which is to allow usage of the super awesome RGBW LEDs in projects.  And video screens just can't do real-life RGBW LEDs justice.  So, I wote more of a test toy script that just uses really crude terminal colors :-P.  If you've installed the dev environment, this should do the trick:
+
+```
+source ~/.bashrc
+conda activate HBP
+python ./bin/emit_hbp_color_tests.py [A|B|C|D|E|?] # where each give you a different test experienc
 
 # In The Works
 
@@ -156,7 +168,7 @@ Color
 
 Color class that allows you to initialize a color in any of HSV, HSL, HSI, RGB, Hex color spaces.  Once initialized,
 the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting
-any component of HSV or RGB (ie, just resetting the R value) and all RGB/HSV/RGBW values will be recalculated.
+any component of HSV(_h|_s|_v) or RGB(_r|_g|_b) (ie, just resetting the R value) and all RGB/HSV/RGBW/HSL/HSV/HSI/HEX values will be recalculated. note-  if not setting a value to, say, RGB_r, it will simply return the 0-255 code for 'r'.
 As of now, you can not work in RGBW directly as we have not written the conversions from RGBW back to one of the
 standard color spaces. (annoying, but so it goes).
 
@@ -172,11 +184,8 @@ for easier cycling of values.
 HSL/HSI values range from 0-360 for H, 0-1 for S/[L|I]
 
     >>> red = RGB(255, 0 ,0)
-    >>> red2 = RGBW(255, 0, 0, 0)
     >>> green = HSV(0.33, 1.0, 1.0)
-    >>> green2 = RGBW(5, 254, 0, 0)
     >>> fuchsia = RGB(180, 48, 229)
-    >>> fuchsia2 = RGBW(130, 0, 182, 47)
 
 Colors may also be specified as hexadecimal string:
 
@@ -185,6 +194,7 @@ Colors may also be specified as hexadecimal string:
 Both RGB and HSV components are available as attributes
 and may be set.
 
+    >>> red = RGB(255,0,0)
     >>> red.rgb_r
     255
 
@@ -194,6 +204,15 @@ and may be set.
 
     >>> red.hsv
     (0.08366013071895424, 1.0, 1.0)
+
+    >>> red.hsv_v = 0.5
+    >>> red.rgb
+    (127, 64, 0)
+    >>> red.hsv
+    (0.08366013071895424, 1.0, 0.5)
+    # Note how as you change the hsv_(h|s|v) or rgb_(r|g|b) properties, the other values are recalculated for the other color types
+    
+--->>>    # IMPORTANT -- This recalculation after instantiation *only* is allowed for hsv and rgb types.  The HSL/HSV/HSI/RGBW values are all calculated upone instantiation of the Color object **AND** the values for each are updated in real time as the hsv(h|s|v) and rgb(r|g|b) values are modified in the Color object.  But, you can not modify the individual elements of HSL/HSI/RGBW/HEX objects directly after instantiating each.  Put another way. If you create a HSI object, to get a new HSI color value you need to modify r/g/b or h/s/v (or create a new HSI object).
 
 These objects are mutable, so you may want to make a
 copy before changing a Color that may be shared
@@ -206,17 +225,16 @@ copy before changing a Color that may be shared
     >>> purple.rgb
     (255, 0, 255)
 
-Brightness can be adjusted by setting the 'v' property, even
+Brightness can be adjusted by setting the 'color.hsv_v' property, even
 when you're working in RGB because the native movel is maintained in HSV.
 
 For example: to gradually dim a color
 (ranges from 0.0 to 1.0)
 
     >>> col = RGB(0,255,0)
-    >>> while col.v > 0:
+    >>> while col.hsv_v > 0:
+    ...   col.hsv_v -= 0.1
     ...   print col.rgb
-    ...   col.v -= 0.1
-    ...
     (0, 255, 0)
     (0, 229, 0)
     (0, 204, 0)
@@ -227,7 +245,7 @@ For example: to gradually dim a color
     (0, 76, 0)
     (0, 51, 0)
     (0, 25, 0)
-
+		#  And you could mix and match if you're feeling crazy.  col.hsv_v -=10 ; col_rgb_g = 102; print(col);
 
 
                                                                                                               
