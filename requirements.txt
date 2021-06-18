@@ -60,7 +60,6 @@ requests==2.25.1
 requests-toolbelt==0.9.1
 rfc3986==1.5.0
 SecretStorage==3.3.1
-setuptools==52.0.0.post20210125
 six==1.16.0
 toml==0.10.2
 tqdm==4.61.1
