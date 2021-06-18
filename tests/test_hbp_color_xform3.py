@@ -1,6 +1,6 @@
 from pytest import approx
 
-import hbp_colorspace_converter.hbp_colorspace_converter as color
+import rgbw_colorspace_converter as color
 
 
 def test_round_3_transforms():

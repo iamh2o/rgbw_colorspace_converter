@@ -31,7 +31,7 @@ import itertools
 from math import ceil
 
 
-from ..hbp_colorspace_converter import Color, HSV
+from ..rgbw_colorspace_converter import Color, HSV
 
 __all__ = ["color_transition", "multistep_color_transition"]
 

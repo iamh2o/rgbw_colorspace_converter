@@ -1,7 +1,7 @@
 import os
 import sys
 import random
-from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
+from rgbw_colorspace_converter import RGB, Color, HSV
 
 
 print_color = sys.argv[1]

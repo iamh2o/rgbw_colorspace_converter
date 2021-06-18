@@ -58,12 +58,12 @@ To pull this useful library out into a shareable form so that more LED hackers /
 
 #### While We're Here, Super Fast Crash Cource
 ```
-from colorspace_converter.colorspace_converter import Color, RGB, HSV
+from rgbw_colorspace_converter import Color, RGB, HSV
 
 >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
 
 # Begin Like So:
-from colorspace_converter.colorspace_converter import RGB, Color, HSV
+from rgbw_colorspace_converter import RGB, Color, HSV
 
 rgb = RGB(255,125,22)
 rgb.(tab in an interactive shell) and you'll see:
@@ -90,7 +90,7 @@ These are the objects and functions available to the Color/HSV and RGB top level
 So, here is, I really promise, a micro example of how this might work
 
 ```
-from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
+from rgbw_colorspace_converter import RGB, Color, HSV
 
 rgb = RGB(126,11,230)
 
@@ -128,11 +128,11 @@ rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
 
 ### Using pip
 
-* pip install hcolor_space_converter
+* pip install rgbw_colorspace_converter
 
 
 ```
-from colorspace_converter import RGB
+from rgbw_colorspace_converter import RGB
 
 rgb = RGB(255,10,155)
 print(rgb.rgbw)
@@ -162,7 +162,7 @@ cd environment
 
 ### Some Cool Stuff.
 
-* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate CSC; python ./bin/run_color_funthing.sh [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
+* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python ./bin/run_color_funthing.sh [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
 
 #### Perhaps a simple hardware how-to should be on the to-do list?
 
@@ -178,7 +178,7 @@ If you build the developemtn branch, there is a test script in ./bin/ called 'tr
 What that might look like in code could be:
 
 ```
->>> from colorspace_converter.colorspace_converter import RGB
+>>> from rgbw_colorspace_converter import RGB
 >>> rgb = RGB(0,0,255) # BLUE
 
 # HSL value for blue
@@ -193,7 +193,7 @@ What that might look like in code could be:
 (0, 0, 255, 0)
 
 
->>> from colorspace_converter.colorspace_converter import Color
+>>> from rgbw_colorspace_converter import Color
 
 >>> color = Color(rgb.hsv)
 >>> color
@@ -317,7 +317,7 @@ For example: to gradually dim a color
 A more complex example is if you wished to move through HUE space in HSV and display that in RGB (or RGBW)              
 
 
-from colorspace_converter.colorspace_converter import RGB
+from rgbw_colorspace_converter import RGB
 magenta = RGB(255, 120, 255)
 # in HSV it looks like this
 
