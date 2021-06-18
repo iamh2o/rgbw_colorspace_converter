@@ -25,9 +25,6 @@ identify==2.2.10
 idna==2.10
 importlib-metadata==4.5.0
 iniconfig==1.1.1
-ipython==7.24.1
-ipython-genutils==0.2.0
-jedi==0.18.0
 jeepney==0.6.0
 keyring==23.0.1
 matplotlib-inline==0.1.2
@@ -63,17 +60,13 @@ requests==2.25.1
 requests-toolbelt==0.9.1
 rfc3986==1.5.0
 SecretStorage==3.3.1
-setuptools==52.0.0.post20210125
 six==1.16.0
 toml==0.10.2
 tqdm==4.61.1
-traitlets==5.0.5
-twine==3.4.1
 typed-ast==1.4.3
 typing-extensions==3.10.0.0
 urllib3==1.26.5
 virtualenv==20.4.7
 wcwidth==0.2.5
 webencodings==0.5.1
-wheel==0.36.2
 zipp==3.4.1
