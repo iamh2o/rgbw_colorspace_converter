@@ -6,6 +6,7 @@ Non-RGBW LEDs do a poor job of representing the observable color space, generall
 > We've become accostomed to the limited ability of RGB LEDs to produce truly diverse colors, but with the introduction of RGBW(white) LEDs, the ability of LEDs to replicate a more realistic spectrum of colors is dramatically increased.  The problem however, is decades of systems based on RGB, HEX, HSL do not offer easy transformations to RGBW from each system.  This package does just this, and only this.  If will return you RGBW for given tuples of other spaces, and do so fast enough for interactive LED projects.  There are a few helper functions and whatnot, but it's really as simple as (r,g,b,w) = Color.RGB(255,10,200).  Where 4 channel RGBW LEDs will translate the returned values to represent the richer color specified by the RGB tuple.
 
 ### 3 Main Projects Evolved This Library: HEX, BAAAHS and Pyramid Scheme.... hence.... HEXBASPYR ?
+<<<<<<< HEAD
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 <small>
 
@@ -19,9 +20,23 @@ Non-RGBW LEDs do a poor job of representing the observable color space, generall
     \|__|\|__|    \|_______|/__/ /\ __\     \|_______|    \|__|\|__|   |\_________\    \|__|   |\___/ /         \|__|\|__|       
                             |__|/ \|__|                                \|_________|            \|___|/        
 </pre></small>
+=======
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  [![Run Color Tests](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml) [![Lint](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml) ![LED ART](https://img.shields.io/badge/A--R--T-L.E.D.-white?style=plastic)
+>>>>>>> f97dc0b303436324466c4f28898cd5881a7afb19
 
+.
 
+<pre>
+ ___  ___    _______       ___    ___  ________     ________     ________     ________    ___    ___  ________            
+\ \  \\\  \ \ \   __/|    \ \  \/  / /\ \  \|\ /_  \ \  \|\  \  \ \  \___|_  \ \  \|\  \ \ \  \/  / /\ \  \|\  \          
+ \ \   __  \ \ \  \_|/__   \ \    / /  \ \   __  \  \ \   __  \  \ \_____  \  \ \   ____\ \ \    / /  \ \   _  _\         
+  \ \  \ \  \ \ \  \_|\ \   /     \/    \ \  \|\  \  \ \  \ \  \  \|____|\  \  \ \  \___|  \/  /  /    \ \  \\  \|        
+   \ \__\ \__\ \ \_______\ /  /\   \     \ \_______\  \ \__\ \__\   ____\_\  \  \ \__\   __/  / /       \ \__\\ _\        
+    \|__|\|__|  \|_______|/__/ /\ __\     \|_______|   \|__|\|__|  |\_________\  \|__|  |\___/ /         \|__|\|__|       
+                          |__|/ \|__|                             \|_________|        \|___|/                                                  
+</pre>
 
+.
 # Right!
 
 ## Authors
@@ -59,13 +74,15 @@ from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
 
 rgb = RGB(255,125,22)
 rgb.(tab in an interactive shell) and you'll see:
- ```
- <pre>
- In [44]: rgb.copy
-              copy()  hsl     hsv_s   rgb     rgb_r   rgbw_b  rgbw_w 
-              hex     hsv     hsv_t   rgb_b   rgb_rgb rgbw_g         
-              hsi     hsv_h   hsv_v   rgb_g   rgbw    rgbw_r         
-              function() 
+```
+
+>``````
+> 
+>        rgb...
+>               copy()     hsl     hsv_s   rgb     rgb_r    rgbw_b  gbw_w 	      
+>               hex        hsv     hsv_t   rgb_b   rgbw_w   rgbw_g         
+>               hsi        hsv_h   hsv_v   rgb_g   rgbw     rgbw_r         
+>``````
 
 These are the objects and functions available to the Color/HSV and RGB top level objects alike.  There are 3 main classes here.
 1) Objects, which when called will give you that color schemes encoding for whatever is currently set by RGB/HSV.  
@@ -78,23 +95,37 @@ These are the objects and functions available to the Color/HSV and RGB top level
 7) OH!  for the wackadoodle color spaces that like to use one member of the tuple being 0-356degreesm we converted those to 0-1 scales (dividing values by360)
 </pre>
 So, here is, I really promise, a micro example of how this might work
+
 ```
 from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
+
 rgb = RGB(126,11,230)
+
 print(rgb)
-->rgb=(126, 10, 230) hsv=(0.754185692541857, 0.9521739130434783, 0.9019607843137255) rgbw=(255, 4, 0, 9) hsl=(0.754185692541857, 0.9087136929460582, 0.4725490196078431) hsi=(0.7545454545454545, 0.918031967204918, 0.47842658823529416)
-#note- printing the rgb or hsv object will display all the color setting presently active for all obects.
+->rgb=(126, 10, 230) 
+->hsv=(0.754185692541857, 0.9521739130434783, 0.9019607843137255) 
+->rgbw=(255, 4, 0, 9) hsl=(0.754185692541857, 0.9087136929460582, 0.4725490196078431) 
+->hsi=(0.7545454545454545, 0.918031967204918, 0.47842658823529416)  # note- printing the rgb or hsv object will display all the color setting presently active for all obects.
+
 print(rgb.hsi)
 (0.7545454545454545, 0.918031967204918, 0.47842658823529416) #returns just the HSI tuple
+
 print(rgb.hsv)
 (0.754185692541857, 0.9521739130434783, 0.9019607843137255) #returns the current state of the HSV object which reflects (nearly) the same color as the hsv values)
-#But lets change a value, and do it via the hsv object, but reaching through the rgb object!
+
+# But lets change a value, and do it via the hsv object, but reaching through the rgb object!
 rgb.hsv_s = 0.0
-##Note how all the other objects values have not changed to reflect the new color
+
+# Note how all the other objects values have not changed to reflect the new color
+
 print(rgb.hsv) -->(0.754185692541857, 0.0, 0.9019607843137255)
+
 print(rgb.rgb) --> (230, 230, 230)
+
 rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
+
 ```
+
 <b> Putting it all together</a>
 * You can set you favorite RGB color (or HSV/HSI/whatever), then use the 0-1 scaled hue/saturation/value(brightness) to more gracefully move through color spaces. A simple example being decrementing just the 'V' part of HSV to dim or brighten the color of choice w/out changing it.  This is non-trivial to do with RGB.</b>
 * OK, so many words here. I hope something helps someone save some time :-)
