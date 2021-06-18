@@ -46,17 +46,59 @@ To pull this useful library out into a shareable form so that more LED hackers /
 
 *  Put HBP_color_spacs_converter/lib in your PYTHONPATH.  Then
 
+#### While We're Here, Super Fast Crash Cource
 ```
-from hpb.colorspace_converter.hbp_colorspace_converter import RGB
+from hbp_colorspace_converter.hbp_colorspace_converter import Color, RGB, HSV
 
-rgb = RGB(255,10,155)
-print(rgb.rgbw)
-->(247, 0, 144, 8)
-rgb.hsv
--> (0.9013605442176871, 0.9607843137254902, 1.0)
-rgb.hex
-->'#ff099b'
+>  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
+
+# Begin Like So:
+from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
+
+rgb = RGB(255,125,22)
+rgb.(tab in an interactive shell) and you'll see:
+ ```
+ <pre>
+ In [44]: rgb.copy
+              copy()  hsl     hsv_s   rgb     rgb_r   rgbw_b  rgbw_w 
+              hex     hsv     hsv_t   rgb_b   rgb_rgb rgbw_g         
+              hsi     hsv_h   hsv_v   rgb_g   rgbw    rgbw_r         
+              function() 
+
+These are the objects and functions available to the Color/HSV and RGB top level objects alike.  There are 3 main classes here.
+1) Objects, which when called will give you that color schemes encoding for whatever is currently set by RGB/HSV.  
+1b) Note, the core color space used in this module is actually HSV.  The HSV and RGB mappings are tightly coupled.  If you change the RGB.RED value, the HSV values immediately recalculate (as do the values for all of the second order color space objects.
+2) The second order color space objects will generallty let you instantiate an object with their values, but you will get back  Color object which will not accept modifications of the second order object properties (again- to make changes you'll need to modify RGB or HSV values. Then there are third order objects which it is not yet possible to instantiate them directly from their native parameters, but we can calculate their values given any first or second order object- this mostly applies to RGBW-- but the problem is small in our exper4ience, nearly all of the use cases for RGBW is getting a realistic transofrmation to RGBW space from these others. We're here to help!
+3)Recap:  First order objects: Color, RGB, HSV. Second order (HSL, HSi, HEX. Third order object, but still loved, RGBW.
+4) all obect used by name (ie: rgb.hsi ) return a tuple of their values refkectiung the color represented by the RGB and HSV internal values.    The same is tru for .hsv, .hsi, .rgbw....
+5) First order objects have the special features of getters and setters.  HSV objects have hsv_v, hsv_s, hsv_h.  Used w/out assignment they reuturn the single value.  Used with assignment, the valiue is updated, and all of the other objects have their values recalculated immediately.  The same goes for RGB, there is rgb_r, rgb_g, rgb_b.  The setters are the encourated way to update the global color of the color objexts.  No save is required.  The hsv_t property is a special internal use tuple of the HSV representation of the current color. Do not muck around with please.  Lastly, there is a function 'copy'.  If you with to spin off a safe Color object to play with, in say, multithreaded envirionments, use copy to deepcopy the Color object you are using.
+6) That was longer than I thought, but covers a large part of the basiscs. We are translating between spaces, and allowing programatic use of the obbject to acheive smooth/natural/more intuative control of RGb/RGBW LED hardware ( Ask be about runing huge installations over DMX Sometime )
+7) OH!  for the wackadoodle color spaces that like to use one member of the tuple being 0-356degreesm we converted those to 0-1 scales (dividing values by360)
+</pre>
+So, here is, I really promise, a micro example of how this might work
 ```
+from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
+rgb = RGB(126,11,230)
+print(rgb)
+->rgb=(126, 10, 230) hsv=(0.754185692541857, 0.9521739130434783, 0.9019607843137255) rgbw=(255, 4, 0, 9) hsl=(0.754185692541857, 0.9087136929460582, 0.4725490196078431) hsi=(0.7545454545454545, 0.918031967204918, 0.47842658823529416)
+#note- printing the rgb or hsv object will display all the color setting presently active for all obects.
+print(rgb.hsi)
+(0.7545454545454545, 0.918031967204918, 0.47842658823529416) #returns just the HSI tuple
+print(rgb.hsv)
+(0.754185692541857, 0.9521739130434783, 0.9019607843137255) #returns the current state of the HSV object which reflects (nearly) the same color as the hsv values)
+#But lets change a value, and do it via the hsv object, but reaching through the rgb object!
+rgb.hsv_s = 0.0
+##Note how all the other objects values have not changed to reflect the new color
+print(rgb.hsv) -->(0.754185692541857, 0.0, 0.9019607843137255)
+print(rgb.rgb) --> (230, 230, 230)
+rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
+```
+<b> Putting it all together</a>
+* You can set you favorite RGB color (or HSV/HSI/whatever), then use the 0-1 scaled hue/saturation/value(brightness) to more gracefully move through color spaces. A simple example being decrementing just the 'V' part of HSV to dim or brighten the color of choice w/out changing it.  This is non-trivial to do with RGB.</b>
+* OK, so many words here. I hope something helps someone save some time :-)
+
+
+## More On Installation
 
 ### Using pip
 
