@@ -38,6 +38,8 @@ To pull this useful library out into a shareable form so that more LED hackers /
 
 # Let's Do It: INSTALL
 
+
+
 ## Requirements
 
 * [Python 3](https://www.python.org)
@@ -348,3 +350,13 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
                                                           ╩ ╩╚═╝╩
 
 </pre>
+
+
+
+hello
+
+```
+
+
+
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
