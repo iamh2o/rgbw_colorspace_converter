@@ -94,7 +94,7 @@ cd environment
 
 ### Some Cool Stuff.
 
-* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python ./bin/color_cycle_test.py [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
+* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python ./bin/run_color_funthing.sh [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
 
 #### Perhaps a simple hardware how-to should be on the to-do list?
 
@@ -155,13 +155,7 @@ python ./bin/run_color_test.sh
     * Example mini project to see for yourself the difference in vividness and saturation of RGBW vs RGB LEDs. You'll need hardware for this fwiw.
 
 
-# Detailed Docs
-
-<pre>
-
-╦ ╦╔╗ ╔═╗
-╠═╣╠╩╗╠═╝
-╩ ╩╚═╝╩  
+# Detailed Docs // Examples
 
 Color
 
@@ -282,5 +276,14 @@ In [12]: while ctr < 8:
 RGBW
 
 To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and you will return the (r,g,b,w) tuple.
+
+</pre>
+
+
+<pre>
+-----------------------------------|         |-----------------------------------
+                                    ╦ ╦╔╗ ╔═╗                                  
+                                    ╠═╣╠╩╗╠═╝                                  
+                                    ╩ ╩╚═╝╩
 
 </pre>
