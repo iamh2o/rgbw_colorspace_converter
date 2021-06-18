@@ -1,4 +1,4 @@
-# HBR (hex baaahs pyramid) RGBW Color Space Converter From HSL / RGB / HSI / HSV / HEX
+# HBR (hex baaahs pyramid) RGBW Color Space Converter From HSL / RGB / HSi / HSV / HEX
 ## Specifically For LED Based Projects
 
 Non-RGBW LEDs do a poor job of representing the observable color space, generally leaving gaps or complete gradients of pallates missing. This library will convert color space codes to RGBW for use in most new RGBW LEDs.
