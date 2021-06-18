@@ -350,20 +350,12 @@ RGBW
 
 To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and you will return the (r,g,b,w) tuple.
 
-</pre>
 
 
-<pre>
                 -----------------------------------|          |-----------------------------------
                                                      ╦ ╦╔╗ ╔═╗                                  
                                                      ╠═╣╠╩╗╠═╝                                  
                                                      ╩ ╩╚═╝╩
-
-</pre>
-
-
-
-hello
 
 ```
 
