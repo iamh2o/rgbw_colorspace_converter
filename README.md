@@ -341,13 +341,12 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
 
 </pre>
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
 <pre>
-                      -----------------------------------|         |-----------------------------------
-                                                          ╦ ╦╔╗ ╔═╗                                  
-                                                          ╠═╣╠╩╗╠═╝                                  
-                                                          ╩ ╩╚═╝╩
+                -----------------------------------|          |-----------------------------------
+                                                     ╦ ╦╔╗ ╔═╗                                  
+                                                     ╠═╣╠╩╗╠═╝                                  
+                                                     ╩ ╩╚═╝╩
 
 </pre>
 
@@ -359,4 +358,4 @@ hello
 
 
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Farewell](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/Screen%20Shot%202021-06-17%20at%205.12.35%20PM.png)
