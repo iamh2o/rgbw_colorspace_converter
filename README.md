@@ -1,5 +1,6 @@
 # HBR (hex baaahs pyramid) RGBW Color Space Converter From HSL / RGB / HSi / HSV / HEX
 ## Specifically For LED Based Projects
+![Farewell]( https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bar21.png )
 
 Non-RGBW LEDs do a poor job of representing the observable color space, generally leaving gaps or complete gradients of pallates missing. This library will convert color space codes to RGBW for use in most new RGBW LEDs.
 
@@ -21,7 +22,9 @@ Non-RGBW LEDs do a poor job of representing the observable color space, generall
                           |__|/ \|__|                             \|_________|        \|___|/                                                  
 </pre>
 
-.
+
+![Farewell](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bars5.png)
+
 # Right!
 
 ## Authors
@@ -35,6 +38,10 @@ It would be remiss of us not to  thank Steve Dudek for his Buffalo soothsaying a
 ## So, How About Briefly-  What is Your Goal Again?
 
 To pull this useful library out into a shareable form so that more LED hackers / artists might have a reduced barrier to entry in choosing RGBW chipsets to work with.
+
+
+
+![Farewell]( https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bar20.png)
 
 # Let's Do It: INSTALL
 
