@@ -3,7 +3,7 @@ from pytest import approx
 import hbp_colorspace_converter.hbp_colorspace_converter as color
 
 
-def round_3_tests():
+def test_round_3_transforms():
     # ############
     # ##########
     # TEST 3
