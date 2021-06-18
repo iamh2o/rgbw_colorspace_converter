@@ -19,10 +19,7 @@ Non-RGBW LEDs do a poor job of representing the observable color space, generall
   \ \  \ \  \ \ \  \_|\ \   /     \/    \ \  \|\  \  \ \  \ \  \  \|____|\  \  \ \  \___|  \/  /  /    \ \  \\  \|        
    \ \__\ \__\ \ \_______\ /  /\   \     \ \_______\  \ \__\ \__\   ____\_\  \  \ \__\   __/  / /       \ \__\\ _\        
     \|__|\|__|  \|_______|/__/ /\ __\     \|_______|   \|__|\|__|  |\_________\  \|__|  |\___/ /         \|__|\|__|       
-                          |__|/ \|__|                             \|_________|        \|___|/                                                  
-</pre>
-
-
+                          |__|/ \|__|                             \|_________|        \|___|/                                                  </pre>
 ![Farewell](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bars5.png)
 
 # Right!
