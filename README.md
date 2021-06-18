@@ -1,10 +1,12 @@
-# HBR (hex baaahs pyramid) RGBW Color Space Converter From HSL / RGB / HSi / HSV / HEX
+# HBP: RGBW Color Space Converter From HSL / RGB / HSi / HSV / HEX
 ## Specifically For LED Based Projects
 ![Farewell]( https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bar21.png )
 
 Non-RGBW LEDs do a poor job of representing the observable color space, generally leaving gaps or complete gradients of pallates missing. This library will convert color space codes to RGBW for use in most new RGBW LEDs.
 
 > We've become accostomed to the limited ability of RGB LEDs to produce truly diverse colors, but with the introduction of RGBW(white) LEDs, the ability of LEDs to replicate a more realistic spectrum of colors is dramatically increased.  The problem however, is decades of systems based on RGB, HEX, HSL do not offer easy transformations to RGBW from each system.  This package does just this, and only this.  If will return you RGBW for given tuples of other spaces, and do so fast enough for interactive LED projects.  There are a few helper functions and whatnot, but it's really as simple as (r,g,b,w) = Color.RGB(255,10,200).  Where 4 channel RGBW LEDs will translate the returned values to represent the richer color specified by the RGB tuple.
+
+> Or! Go ahead and use this for non LED projects where you need to convert between color spaces.  Say for controlling old skool DMX lighting rigs.
 
 ### 3 Main Projects Evolved This Library: HEX, BAAAHS and Pyramid Scheme.... hence.... HEXBASPYR ?
 
@@ -52,16 +54,16 @@ To pull this useful library out into a shareable form so that more LED hackers /
 
 ### BASIC: Add to PYTHONPATH
 
-*  Put HBP_color_spacs_converter/lib in your PYTHONPATH.  Then
+*  Put color_spacs_converter in your PYTHONPATH.  Then
 
 #### While We're Here, Super Fast Crash Cource
 ```
-from hbp_colorspace_converter.hbp_colorspace_converter import Color, RGB, HSV
+from colorspace_converter.colorspace_converter import Color, RGB, HSV
 
 >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
 
 # Begin Like So:
-from hbp_colorspace_converter.hbp_colorspace_converter import RGB, Color, HSV
+from colorspace_converter.colorspace_converter import RGB, Color, HSV
 
 rgb = RGB(255,125,22)
 rgb.(tab in an interactive shell) and you'll see:
@@ -126,11 +128,11 @@ rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
 
 ### Using pip
 
-* pip install hbp_color_space_converter
+* pip install hcolor_space_converter
 
 
 ```
-from hbp_colorspace_converter import RGB
+from colorspace_converter import RGB
 
 rgb = RGB(255,10,155)
 print(rgb.rgbw)
@@ -160,7 +162,7 @@ cd environment
 
 ### Some Cool Stuff.
 
-* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python ./bin/run_color_funthing.sh [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
+* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate CSC; python ./bin/run_color_funthing.sh [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
 
 #### Perhaps a simple hardware how-to should be on the to-do list?
 
@@ -176,7 +178,7 @@ If you build the developemtn branch, there is a test script in ./bin/ called 'tr
 What that might look like in code could be:
 
 ```
->>> from hbp_colorspace_converter.hbp_colorspace_converter import RGB
+>>> from colorspace_converter.colorspace_converter import RGB
 >>> rgb = RGB(0,0,255) # BLUE
 
 # HSL value for blue
@@ -191,7 +193,7 @@ What that might look like in code could be:
 (0, 0, 255, 0)
 
 
->>> from hbp_colorspace_converter.hbp_colorspace_converter import Color
+>>> from colorspace_converter.colorspace_converter import Color
 
 >>> color = Color(rgb.hsv)
 >>> color
@@ -315,7 +317,7 @@ For example: to gradually dim a color
 A more complex example is if you wished to move through HUE space in HSV and display that in RGB (or RGBW)              
 
 
-from hbp_colorspace_converter.hbp_colorspace_converter import RGB
+from colorspace_converter.colorspace_converter import RGB
 magenta = RGB(255, 120, 255)
 # in HSV it looks like this
 
