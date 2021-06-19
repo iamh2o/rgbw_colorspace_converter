@@ -35,8 +35,8 @@ idna==2.10
 imagesize==1.2.0
 importlib-metadata==4.5.0
 iniconfig==1.1.1
-ipython==7.24.1
-ipython-genutils==0.2.0
+ipython
+ipython-genutils
 isort==5.8.0
 jaraco.classes==3.2.1
 jaraco.collections==3.3.0
