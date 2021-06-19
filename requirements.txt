@@ -65,6 +65,7 @@ pycodestyle==2.7.0
 pycparser==2.20
 pyfiglet==0.8.post1
 pyflakes==2.3.1
+pygame==2.0.1
 Pygments==2.9.0
 pyOpenSSL==20.0.1
 pyparsing==2.4.7
@@ -80,7 +81,7 @@ repoze.lru==0.7
 requests==2.25.1
 requests-toolbelt==0.9.1
 rfc3986==1.5.0
-rgbw-colorspace-converter
+rgbw-colorspace-converter==0.0.1
 Routes==2.5.1
 SecretStorage==3.3.1
 setuptools==52.0.0.post20210125
