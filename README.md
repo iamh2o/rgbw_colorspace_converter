@@ -176,7 +176,7 @@ cd environment
 
 Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the showe were more natural to design in non-RGB.
 
-If you build the developemtn branch, there is a test script in ./bin/ called 'run_color_module_RGB_HSV_HEX_demo.py', which gives you a crude terminal based idea of what I'm talking about (limited to 256 colors).
+If you build the developemtn branch, there is a test script in ./bin called 'run_color_module_RGB_HSV_HEX_demo.py', which gives you a simple terminal based idea of what I'm talking about (limited to 256 colors).
 
 What that might look like in code could be:
 
@@ -357,7 +357,9 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
                                                      ╩ ╩╚═╝╩
 
 ```
-
+```
+</pre>
+<b>run_color_module_RGB_HSV_HEX_demo.py</b> generates scrolling patterns by cycling through the various color spaces, this is a screenshot
 
 
 ![HBP](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/Screen%20Shot%202021-06-17%20at%205.12.35%20PM.png)
