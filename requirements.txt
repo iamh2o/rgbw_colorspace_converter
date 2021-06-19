@@ -92,8 +92,8 @@ requests-toolbelt==0.9.1
 rfc3986==1.5.0
 Routes==2.5.1
 SecretStorage==3.3.1
-setuptools==52.0.0.post20210125
-setuptools-lint==0.6.0
+setuptools
+setuptools-lint
 simplejson==3.17.2
 six==1.16.0
 snowballstemmer==2.1.0
