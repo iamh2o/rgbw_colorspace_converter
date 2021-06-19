@@ -226,7 +226,7 @@ python ./bin/run_color_module_RGB_HSV_HEX_demo.py
 
 # Detailed Docs // Examples
 
-```
+<pre>
 Color
                                                                                                   
 Color class that allows you to ** initialize ** a color in any of HSL, HSV, RGB, Hex and HSI color spaces.  Once initialized,with one of these specific types, you get a Color object back (or possibly a subclass of the Color objext- RGB or HSV- all the same ).  This object will automatically report the color space values for all color spaces based on what you entered.  Notably, it will also translate to RGBW!        
@@ -357,8 +357,8 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
                                                      ╩ ╩╚═╝╩
 
 ```
-```
 </pre>
+
 <b>run_color_module_RGB_HSV_HEX_demo.py</b> generates scrolling patterns by cycling through the various color spaces, this is a screenshot
 
 
