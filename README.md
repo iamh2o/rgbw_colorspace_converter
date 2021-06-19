@@ -162,12 +162,13 @@ cd environment
 
 * Upon commit, flake 8 and black linter checks are run, as well as the pyunit tests for each commit and pull request.  The status of each can be seen in the actions tab and reflected in some of the badges.
 
-### Some Cool Stuff.
+## A Fun Thing.
 
-* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python ./bin/run_color_funthing.sh [rgb-r, rgb-g, rgb-b, hsv-h, hsv-s, hsv-v].   you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
+* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you've run setup.sh, this should run for you.  Try running ``conda activate HBP; python bin/run_color_module_RGB_HSV_HEX_demo.py.  you get a taste for how the spaces cycle differently and what the encoding for each looks like. but really, this is meant to really be helpful in extractin the RGBW signal for use with RGBW LEDs..... something I can't demonstrate withouth hardware.
 
-#### Perhaps a simple hardware how-to should be on the to-do list?
+## Perhaps a simple hardware how-to should be on the to-do list?
 
+* We used OLA + DMXkings to run LEDs via DMX for many BIG projects controlling thousands of LEDS. And this library controlling and mapping colors.  I'll write that up at some point.  Still figuring out the vagaries of getting into pypi.
 
 ## More Examples
 
@@ -175,7 +176,7 @@ cd environment
 
 Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the showe were more natural to design in non-RGB.
 
-If you build the developemtn branch, there is a test script in ./bin/ called 'transversals.py', which gives you a crude terminal based idea of what I'm talking about (limited to 256 colors).
+If you build the developemtn branch, there is a test script in ./bin/ called 'run_color_module_RGB_HSV_HEX_demo.py', which gives you a crude terminal based idea of what I'm talking about (limited to 256 colors).
 
 What that might look like in code could be:
 
@@ -213,8 +214,7 @@ What that might look like in code could be:
 
 ```
 
-source ~/.bashrc
-python ./bin/run_color_test.sh
+python ./bin/run_color_module_RGB_HSV_HEX_demo.py
 
 ```
 

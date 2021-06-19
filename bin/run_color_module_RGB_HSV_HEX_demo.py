@@ -31,24 +31,10 @@ os.system(intro_cmd)
 
 print_codes = "no"
 
-try:
-    # Set presets if none specified (wow am I going out of the way to not use argparse)
-    if len(sys.argv) == 1:
-        os.system(
-            """echo '
-
-        SETTING PRESETS 'no' 70 and ''.  Type -h if you wish slightly confusing instructions.
-
-'
-"""
-        )
-        sys.argv.append("no")
-        sys.argv.append(80)
-        sys.argv.append(" ")
-
-    # First argument. -h prints help. Otherwise yes or no to print color codes
+if len(sys.argv) == 2:
     print_codes = sys.argv[1].lower()
-    if print_codes in ["-h", "help", "h", "--h", "--help", "-help"]:
+
+    if sys.argv[1] in ["-h", "help", "h", "--h", "--help", "-help"]:
         os.system(
             """echo "
 
@@ -58,31 +44,39 @@ try:
     (3)EMPTY or '-n'.  Empty means new lines will be printed after every N characters printed as set above. -n means no newlines are printed.
              OH!  And idf you specify 'yes' for printing the color codes- options 2 and 3 are disabled.
 
-"
-"""
+            "
+            """
         )
-        raise ("please set command line args")
+        os.system("stty echo; stty +echo ;")
+        raise Exception("please set command line args")
 
-    if print_codes not in ["yes", "no"]:
-        raise Exception("the first argumnet must be 'yes' or 'no'")
-except Exception as e:
-    del e
+if len(sys.argv) == 1:
     os.system(
-        f"""echo "
+        """echo '
 
- Arg 1 must be 'yes' or 'no' only.  No will only print colors. 'yes' will also print the various color codes
+        SETTING PRESETS 'no' w and ' '.  Type -h if you wish slightly confusing instructions.
 
-"
+        '
 """
     )
+    sys.argv.append("no")
+    sys.argv.append("w")
+    sys.argv.append(" ")
+
+    # First argument. -h prints help. Otherwise yes or no to print color codes
+    print_codes = sys.argv[1].lower()
+
 
 # Col width, or num characters to print
 col_width = os.get_terminal_size().columns
 try:
-    if len(sys.argv) == 2:
+    if len(sys.argv) < 3:
         sys.argv.append(col_width)
-    else:
-        col_width = int(sys.argv[2])
+    elif len(sys.argv) == 4:
+        if sys.argv[2] == "w":
+            pass
+        else:
+            col_width = int(sys.argv[2])
 except Exception as e:
     os.system(
         """echo '''
@@ -93,11 +87,13 @@ you must specify an integer >0 for argument 2.
 """
     )
     del e
+    os.system("stty echo; stty +echo ;")
     raise
 
 # Only applies to color only mode.  Will not break for newlines after #cols printed. aka, the blocks append
 no_newlines = " "
 j = "-r 0"
+
 try:
     if len(sys.argv) == 3:
         no_newlines = " "
@@ -113,6 +109,7 @@ except Exception as e:
 """
     )
     del e
+    os.system("stty echo; stty +echo ;")
     raise
 
 ri = False
@@ -131,7 +128,7 @@ def _write_color(color):
         # just print colors
         r = 1
         if ri:
-            r = random.randint(2, 1270)
+            r = random.randint(2, 270)
         l = "X" * (col_width * r)
         cmd = f"""colr {j}  {no_newlines} "{l}" "{color.hex}" "{color.hex}"  2>/dev/null;"""
         ret_code = os.system(cmd)
@@ -242,6 +239,7 @@ try:
 
         ctr = ctr + 0.005
         if ret_code != 0:
+            os.system("stty echo; stty +echo ;")
             raise
 
     _write_msg(
