@@ -1,20 +1,27 @@
 """
 Color
 
-Color class that allows you to initialize a color in any of HSV, RGB, Hex, HSI color spaces.  Once initialized, the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting any component of HSV or RGB (ie, just resetting the R value) and all RGB/HSV/RGBW values will be recalculated.
+Color class that allows you to ** initialize ** a color in any of HSL, HSV, RGB, Hex and HSI color spaces.  Once initialized,with one of these specific types, you get a Color object back (or possibly a subclass of the Color objext- RGB or HSV- all the same ).  This object will automatically report the color space values for all color spaces based on what you entered.  Notably, it will also translate to RGBW!
+
+Further, from the returned object, you may modify it in 2 ways-  via the r/g/b properties of the RGB Color object, or via the h/s/v properties of the HSV color object. Any changes in any of the r/g/b or h/s/v properties (even if mixed and matched) will automatically re-calculate the correct values for the other color space represnetations, which can then be accessed.  You can not modify the other color space object properties and get the same effect (yet).
 
 
-The main goal of this class is to translate various color spaces into RGBW for use in RGBW pixels.
-NOTE! this package will not control 3 channel RGB LEDs properly.
 
-The color representation is maintained in HSV interanlly and translates to RGB (and RGBW, but not interactively).
-Use whichever is more convenient at the time - RGB for familiarity, HSV to fade colors easily.
+The main goal of this package is to translate various color spaces into RGBW for use in RGBW LED or DMX/RGB accepting hardware.  There is a strange dearth of translators from ANY color space to RGBW.
+
+
+The color representation is maintained in HSV interanlly and translates to RGB (and RGBW and the other spaces).
+Use whichever is more convenient at the time - RGB for familiarity, HSV to fade and move more naturally through the color space.  We have found, once used to it, HSV is the far superiour space to work in.
 
 RGB values range from 0 to 255
-HSV values range from 0.0 to 1.0
+HSV values range from 0.0 to 1.0  # Note- any of the HS* color spaces which used 360degree represntations for H, we normalize to 0-1 to be easier to use in loops and be consistent with the S/[L|V|I] values.
 
-    >>> red   = RGB(255, 0 ,0)  (RGBW = )
-    >>> green = HSV(0.33, 1.0, 1.0) (RGBW = )
+# INITIALIZING COLOR OBJECTS -- it is not advised to init Color directly. These below all basically return a valid Color obj
+# RGBW can not be initialized directly-  it is calculate from the initialized, or modified values of the color objs below
+from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
+
+    >>> red   = RGB(255, 0 ,0)
+    >>> green = HSV(0.33, 1.0, 1.0)
 
 Colors may also be specified as hexadecimal string:
 
@@ -44,8 +51,9 @@ copy before changing a Color that may be shared
     >>> purple.rgb
     (255, 0, 255)
 
-Brightness can be adjusted by setting the 'v' property, even
-when you're working in RGB.
+Brightness can be adjusted by setting the 'v' property in the HSV object, even
+when you're working in RGB, b/c again, the specific color spaces are all simply reporting the values for
+the spaces they represent for the color being defined.  An RGB code has a HSV translation, if you then modify that HSV code, the RGB translation will change too.   This is a good use case if you work in RGB. It is hard to dim a color evenly in RGB, but if you create an RGB color you like, you can simply cycle down the color.hsv_v value and the color.rgb values will change to represent even dimming.
 
 A trite example: to gradually dim a color
 (ranges from 0.0 to 1.0)
@@ -67,9 +75,6 @@ A trite example: to gradually dim a color
     (0, 25, 0)
 
 A more complex example is if you wished to move through HUE space in HSV and display that in RGB (or RGBW)
-
-
-
 
 RGBW
 
@@ -362,7 +367,8 @@ def HSI(h, s, i):
     "Create new HSI color"
     t = (h, s, i)
     assert is_hsi_tuple(t)
-    return RGB(hsi2rgb(h, s, i))
+    rgb_t = hsi2rgb(h, s, i)
+    return RGB(rgb_t[0], rgb_t[1], rgb_t[2])
 
 
 def RGB(r, g, b):
@@ -380,7 +386,7 @@ def HSV(h, s, v):
 def HSL(h, s, l):
     "Create new HSL color"
     (h, s, v) = hsl2hsv(h, s, l)
-    return Color(h, s, v)
+    return Color((h, s, v))
 
 
 def Hex(value):
@@ -392,17 +398,13 @@ def Hex(value):
 
 
 class Color(object):
+    "You should not really call the Color object directly, you get one in return from instantiating a specific color objext and interact with it that way"
+
     def __init__(self, hsv_tuple):
         self._set_hsv(hsv_tuple)
 
     def __repr__(self):
-        return "rgb=%s hsv=%s rgbw=%s hsl=%s hsi=%s" % (
-            self.rgb,
-            self.hsv,
-            self.rgbw,
-            self.hsl,
-            self.hsi,
-        )
+        return f"rgb={self.rgb} rgbw={self.rgbw} hsv={self.hsv} hsl={self.hsl} hsi={self.hsi} hex={self.hex} ||"
 
     def copy(self):
         return deepcopy(self)
@@ -512,11 +514,13 @@ class Color(object):
     def rgb_rgb(self):
         return self.rgb
 
-    @rgb_rgb.setter
-    def rgb_rgb(self, t):
-        new = t
-        assert is_rgb_tuple(new)
-        self._set_hsv(rgb_to_hsv(new))
+    # @rgb_rgb.setter
+    # def rgb_rgb(self, t):
+    # print('experimental- not functioning')
+    # pass
+    # new = t
+    # assert is_rgb_tuple(new)
+    # self._set_hsv(rgb_to_hsv(new))
 
     @rgb_b.setter
     def rgb_b(self, val):

@@ -15,13 +15,14 @@ Non-RGBW LEDs do a poor job of representing the observable color space, generall
 .
 
 <pre>
- ___  ___    _______       ___    ___  ________     ________     ________     ________    ___    ___  ________            
-\ \  \\\  \ \ \   __/|    \ \  \/  / /\ \  \|\ /_  \ \  \|\  \  \ \  \___|_  \ \  \|\  \ \ \  \/  / /\ \  \|\  \          
- \ \   __  \ \ \  \_|/__   \ \    / /  \ \   __  \  \ \   __  \  \ \_____  \  \ \   ____\ \ \    / /  \ \   _  _\         
-  \ \  \ \  \ \ \  \_|\ \   /     \/    \ \  \|\  \  \ \  \ \  \  \|____|\  \  \ \  \___|  \/  /  /    \ \  \\  \|        
-   \ \__\ \__\ \ \_______\ /  /\   \     \ \_______\  \ \__\ \__\   ____\_\  \  \ \__\   __/  / /       \ \__\\ _\        
-    \|__|\|__|  \|_______|/__/ /\ __\     \|_______|   \|__|\|__|  |\_________\  \|__|  |\___/ /         \|__|\|__|       
-                          |__|/ \|__|                             \|_________|        \|___|/                                                  </pre>
+ ___  ___    _______       ___    ___  ________     ________     ________     ________    ___    ___  ________       
+\ \  \\\  \ \ \   __/|    \ \  \/  / /\ \  \|\ /_  \ \  \|\  \  \ \  \___|_  \ \  \|\  \ \ \  \/  / /\ \  \|\  \     
+ \ \   __  \ \ \  \_|/__   \ \    / /  \ \   __  \  \ \   __  \  \ \_____  \  \ \   ____\ \ \    / /  \ \   _  _\    
+  \ \  \ \  \ \ \  \_|\ \   /     \/    \ \  \|\  \  \ \  \ \  \  \|____|\  \  \ \  \___|  \/  /  /    \ \  \\  \|   
+   \ \__\ \__\ \ \_______\ /  /\   \     \ \_______\  \ \__\ \__\   ____\_\  \  \ \__\   __/  / /       \ \__\\ _\   
+    \|__|\|__|  \|_______|/__/ /\ __\     \|_______|   \|__|\|__|  |\_________\  \|__|  |\___/ /         \|__|\|__|  
+                          |__|/ \|__|                               \|_________|        \|___|/                      
+</pre>
 ![HBP](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bars5.png)
 
 # Right!
@@ -52,18 +53,24 @@ To pull this useful library out into a shareable form so that more LED hackers /
 
 ## Install Options
 
-### BASIC: Add to PYTHONPATH
+### PIP
 
-*  Put color_spacs_converter in your PYTHONPATH.  Then
+* ```pip install rgbw_colorspace_converter```
+
+###  Add to PYTHONPATH
+
+*  Put rgbw_colorspace_converter in your PYTHONPATH.  Then
 
 #### While We're Here, Super Fast Crash Cource
 ```
-from rgbw_colorspace_converter import Color, RGB, HSV
+
+
+from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
 
 >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
 
 # Begin Like So:
-from rgbw_colorspace_converter import RGB, Color, HSV
+from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex 
 
 rgb = RGB(255,125,22)
 rgb.(tab in an interactive shell) and you'll see:
@@ -90,7 +97,7 @@ These are the objects and functions available to the Color/HSV and RGB top level
 So, here is, I really promise, a micro example of how this might work
 
 ```
-from rgbw_colorspace_converter import RGB, Color, HSV
+from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
 rgb = RGB(126,11,230)
 
@@ -124,15 +131,10 @@ rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
 * OK, so many words here. I hope something helps someone save some time :-)
 
 
-## More On Installation
-
-### Using pip
-
-* pip install rgbw_colorspace_converter
 
 
 ```
-from rgbw_colorspace_converter import RGB
+from rgbw_colorspace_converter.colors.converters import  RGB, HSV
 
 rgb = RGB(255,10,155)
 print(rgb.rgbw)
@@ -193,16 +195,8 @@ What that might look like in code could be:
 (0, 0, 255, 0)
 
 
->>> from rgbw_colorspace_converter import Color
-
->>> color = Color(rgb.hsv)
->>> color
-rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) hsl=(240, 1.0, 0.5)
-```
-
 
 ![qq](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar33.png)
-
 
 # Tests
 
@@ -211,15 +205,18 @@ rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) hsl=(240,
     * ```pytest --exitfirst --verbose --failed-first --cov=. --cov-report html```
 
 ## Github Actions
-* Flak8 and Python Black are both tested with github commiut action, as is the pytest above.
+* Flake8 and Python Black are both tested with github commiut action, as is the pytest above.
 
 ## Fun & Kind Of Weird Tests
 
 * I was going to write a light web UI to output various color space codes and the RGB values, but that kind of defeats the purpose, which is to allow usage of the super awesome RGBW LEDs in projects.  And video screens just can't do real-life RGBW LEDs justice.  So, I wote more of a test toy script that just uses really crude terminal colors :-P.  If you've installed the dev environment, this should do the trick:
 
 ```
+
 source ~/.bashrc
 python ./bin/run_color_test.sh
+
+```
 
 # In The Works
 
@@ -229,24 +226,27 @@ python ./bin/run_color_test.sh
 
 # Detailed Docs // Examples
 
+```
 Color
-
-Color class that allows you to initialize a color in any of HSV, HSL, HSI, RGB, Hex color spaces.  Once initialized,
-the corresponding RGBW values are calculated and you may modify the object in RGB or HSV color spaces( ie: by re-setting
-any component of HSV(_h|_s|_v) or RGB(_r|_g|_b) (ie, just resetting the R value) and all RGB/HSV/RGBW/HSL/HSV/HSI/HEX values will be recalculated. note-  if not setting a value to, say, RGB_r, it will simply return the 0-255 code for 'r'.
-As of now, you can not work in RGBW directly as we have not written the conversions from RGBW back to one of the
-standard color spaces. (annoying, but so it goes).
+                                                                                                  
+Color class that allows you to ** initialize ** a color in any of HSL, HSV, RGB, Hex and HSI color spaces.  Once initialized,with one of these specific types, you get a Color object back (or possibly a subclass of the Color objext- RGB or HSV- all the same ).  This object will automatically report the color space values for all color spaces based on what you entered.  Notably, it will also translate to RGBW!        
 
 
-The main goal of this class is to translate various color spaces into RGBW for use in RGBW pixels.
-
-The color representation is maintained in HSV internally and translated to RGB and RGBW.
+Further, from the returned object, you may modify it in 2 ways-  via the r/g/b properties of the RGB Color object, or via the h/s/v properties of the HSV color object. Any changes in any of the r/g/b or h/s/v properties (even if mixed and matched) will automatically re-calculate the correct values for the other color space represnetations, which can then be accessed.  You can not modify the other color space object properties and get the same effect (yet).                                                                                                                           
+The color representation is maintained in HSV internally and translated to RGB and RGBW and all the others.
 Use whichever is more convenient at the time - RGB for familiarity, HSV to fade colors easily.
+
+The main goal of this package is to translate various color spaces into RGBW for use in RGBW LED or DMX/RGB accepting hardware.  There is a strange dearth of translators from ANY color space to RGBW.                                                                                
 
 RGB values range from 0 to 255
 HSV values range from 0.0 to 1.0 *Note the H value has been normalized to range between 0-1 in instead of 0-360 to allow
 for easier cycling of values.
 HSL/HSI values range from 0-360 for H, 0-1 for S/[L|I]
+Hex is hex...
+
+                                                                                                                        
+# INITIALIZING COLOR OBJECTS -- it is not advised to init Color directly. These below all basically return a valid Color obj # RGBW can not be initialized directly-  it is calculate from the initialized, or modified values of the color objs below    from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex   
+
 
     >>> red = RGB(255, 0 ,0)
     >>> green = HSV(0.33, 1.0, 1.0)
@@ -361,3 +361,4 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
 
 
 ![HBP](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/Screen%20Shot%202021-06-17%20at%205.12.35%20PM.png)
+

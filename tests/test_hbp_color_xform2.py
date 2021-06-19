@@ -1,6 +1,6 @@
 from pytest import approx
 
-import rgbw_colorspace_converter as color
+import rgbw_colorspace_converter.colors.converters as color
 
 
 def test_round_2_conversions():
