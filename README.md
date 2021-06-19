@@ -1,6 +1,6 @@
 # HBP: RGBW Color Space Converter Between HSL / RGB / HSi / HSV / HEX
 ## Specifically For LED Based Projects
-![Farewell]( https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bar21.png )
+![HBP]( https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar21.png )
 
 Non-RGBW LEDs do a poor job of representing the observable color space, generally leaving gaps or complete gradients of pallates missing. This library will convert color space codes to RGBW for use in most new RGBW LEDs.
 
@@ -22,7 +22,7 @@ Non-RGBW LEDs do a poor job of representing the observable color space, generall
    \ \__\ \__\ \ \_______\ /  /\   \     \ \_______\  \ \__\ \__\   ____\_\  \  \ \__\   __/  / /       \ \__\\ _\        
     \|__|\|__|  \|_______|/__/ /\ __\     \|_______|   \|__|\|__|  |\_________\  \|__|  |\___/ /         \|__|\|__|       
                           |__|/ \|__|                             \|_________|        \|___|/                                                  </pre>
-![Farewell](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bars5.png)
+![HBP](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bars5.png)
 
 # Right!
 
@@ -40,7 +40,7 @@ To pull this useful library out into a shareable form so that more LED hackers /
 
 
 
-![Farewell]( https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bar20.png)
+![HPB]( https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
 
 # Let's Do It: INSTALL
 
@@ -201,7 +201,7 @@ rgb=(0, 0, 255) hsv=(0.6666666666666666, 1.0, 1.0) rgbw=(0, 0, 255, 0) hsl=(240,
 ```
 
 
-![qq](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/bar33.png)
+![qq](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar33.png)
 
 
 # Tests
@@ -360,4 +360,4 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
 
 
 
-![Farewell](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/blob/main/images/Screen%20Shot%202021-06-17%20at%205.12.35%20PM.png)
+![HBP](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/Screen%20Shot%202021-06-17%20at%205.12.35%20PM.png)
