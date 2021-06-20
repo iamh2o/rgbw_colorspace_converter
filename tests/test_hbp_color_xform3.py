@@ -1,6 +1,6 @@
 from pytest import approx
 
-import rgbw_colorspace_converter.colors.converters as color
+from rgbw_colorspace_converter.colors.converters import RGB
 
 
 def test_round_3_transforms():
@@ -8,7 +8,7 @@ def test_round_3_transforms():
     # ##########
     # TEST 3
 
-    c3 = color.RGB(234, 56, 137)
+    c3 = RGB(234, 56, 137)
 
     # HSV
     hsv3 = c3.hsv
@@ -19,7 +19,7 @@ def test_round_3_transforms():
 
     # HSL
     hsl3 = c3.hsl
-    hsl3_truth = (0.9242, 0.8091, 0.5686)
+    hsl3_truth = (332.697, 0.8091, 0.5686)
     assert str(hsl3[0])[:5] == str(hsl3_truth[0])[:5]
     assert str(hsl3[1])[:5] == str(hsl3_truth[1])[:5]
     assert str(hsl3[2])[:5] == str(hsl3_truth[2])[:5]
@@ -30,12 +30,12 @@ def test_round_3_transforms():
     assert hex3_truth[:6] == c3.hex[:6]
 
     # RGBW
-    rgbw3_truth = (253, 4, 0, 56)
+    rgbw3_truth = (177, 0, 80, 56)
     assert c3.rgbw == rgbw3_truth
 
     # HSi
     hsi3 = c3.hsi
-    hsi3_truth = (0.925, 0.6065, 0.557)
+    hsi3_truth = (333, 0.6065, 0.557)
     assert str(hsi3[0])[:5] == str(hsi3_truth[0])[:5]
     assert (
         str(hsi3[1])[:4] == str(hsi3_truth[1])[:4]

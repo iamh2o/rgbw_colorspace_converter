@@ -1,6 +1,6 @@
 from pytest import approx
 
-import rgbw_colorspace_converter.colors.converters as color
+from rgbw_colorspace_converter.colors.converters import RGB
 
 
 def test_round_2_conversions():
@@ -8,7 +8,7 @@ def test_round_2_conversions():
     # ####################
     # TESTS 2  RGB / RGBW / HEX / HSV / HSL
 
-    c2 = color.RGB(69, 13, 152)
+    c2 = RGB(69, 13, 152)
 
     # HSV
     hsv2 = c2.hsv
@@ -19,7 +19,7 @@ def test_round_2_conversions():
 
     # HSL
     hsl2 = c2.hsl
-    hsl2_truth = (0.7338, 0.8424, 0.3235)
+    hsl2_truth = (264.173, 0.8424, 0.3235)
     assert str(hsl2[0])[:5] == str(hsl2_truth[0])[:5]
     assert str(hsl2[1])[:5] == str(hsl2_truth[1])[:5]
     assert str(hsl2[2])[:5] == str(hsl2_truth[2])[:5]
@@ -30,12 +30,12 @@ def test_round_2_conversions():
 
     # RGBW
 
-    rgbw2_truth = (192, 2, 0, 12)
+    rgbw2_truth = (56, 0, 138, 12)
     assert c2.rgbw == rgbw2_truth
 
     # HSi
     hsi2 = c2.hsi
-    hsi2_truth = (0.7333, 0.833, 0.3055)
+    hsi2_truth = (264.173, 0.833, 0.3059)
     assert str(hsi2[0])[:5] == str(hsi2_truth[0])[:5]
     assert str(hsi2[1])[:5] == str(hsi2_truth[1])[:5]
     assert str(hsi2[2])[:5] == str(hsi2_truth[2])[:5]

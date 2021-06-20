@@ -1,16 +1,17 @@
 from pytest import approx
 
-import rgbw_colorspace_converter.colors.converters as color
+from rgbw_colorspace_converter.colors.converters import RGB
 
 
 def test_known_conversions_set1():
-    # Values from http://colorizer.org/
+    # http://www.workwithcolor.com/color-converter-01.htm
 
     # ######################
     # ####################
     # TESTS 1 RGB / RGBW / HEX / HSV / HSL (HSI if I could find anyone with a converter)
     # the sig digits diverge, so will only compare w/in reasonable matches
-    c1 = color.RGB(176, 205, 230)
+    # http://www.workwithcolor.com/color-converter-01.htm?cp=B0CDE6&ch=208-52-80&cb=B0CDE6,FFFFFF,FFFFFF,FFFFFF,FFFFFF,FFFFFF,FFFFFF,FFFFFF,FFFFFF,FFFFFF
+    c1 = RGB(176, 205, 230)
 
     def HSV1():
         # HSV
@@ -27,7 +28,7 @@ def test_known_conversions_set1():
     def HSL1():
         # HSL
         hsl1 = c1.hsl
-        hsl1_truth = (0.5771, 0.5192, 0.7961)
+        hsl1_truth = (207.777, 0.5192, 0.7961)
         assert (
             str(hsl1[0])[:5] == str(hsl1_truth[0])[:5]
         )  # rounging delta- passes as is
@@ -46,9 +47,9 @@ def test_known_conversions_set1():
         # RGBW
         rgbw1 = c1.rgbw
         rgbw1_truth = (
-            82,
             0,
-            0,
+            28,
+            54,
             176,
         )  # Have to trust our well tested impelentation as there are still no other otrhogonal checks to be found
         assert rgbw1 == rgbw1_truth
