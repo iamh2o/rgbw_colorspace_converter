@@ -46,13 +46,13 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 #### Quick Start Crash Cource
 
-```
-
-from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
-
+> from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
+> 
 >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
 
 # Begin Like So:
+
+```
 from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex 
 
 rgb = RGB(255,125,22)
@@ -70,42 +70,37 @@ rgb.(tab in an interactive shell) and you'll see:
 
 These are the objects and functions available to the Color/HSV and RGB top level objects alike.  There are a handful of important types.
 
-```
-1)  Objects, which when called will give you that color schemes encoding for whatever is currently set by RGB/HSV.  
-1b) Note, the core color space used in this module is actually HSV.  The HSV and RGB mappings are tightly coupled.  If you change the RGB.RED 
-      value, the HSV values immediately recalculate (as do the values for all of the second order color space objects.
-2)  The second order color space objects will generallty let you instantiate an object with their values, but you will get back  Color object 
-      which will not accept modifications of the second order object properties (again- to make changes you'll need to modify RGB or HSV values.
-      Then there are third order objects which it is not yet possible to instantiate them directly from their native parameters, but we can 
-      calculate their values given any first or second order object- this mostly applies to RGBW-- but the problem is small in our exper4ience, 
-      nearly all of the use cases for RGBW is getting a realistic transofrmation to RGBW space from these others. We're here to help!
-3)  Recap:  First order objects: Color, RGB, HSV. Second order (HSL, HSi, HEX. Third order object, but still loved, RGBW.
-4)  Sll obect used by name (ie: rgb.hsi ) return a tuple of their values refkectiung the color represented by the RGB and HSV internal values.    
-      The same is tru for .hsv, .hsi, .rgbw....
-5) First order objects have the special features of getters and setters.  HSV objects have hsv_v, hsv_s, hsv_h.  Used w/out assignment they 
-      reuturn the single value.  Used with assignment, the valiue is updated, and all of the other objects have their values recalculated 
-      immediately.  The same goes for RGB, there is rgb_r, rgb_g, rgb_b.  The setters are the encourated way to update the global color of 
-      the color objexts.  No save is required.  The hsv_t property is a special internal use tuple of the HSV representation of the current 
-      color. Do not muck around with please.  Lastly, there is a function 'copy'.  If you with to spin off a safe Color object to play with, in 
-      say, multithreaded envirionments, use copy to deepcopy the Color object you are using.
-6) oh!  for colorspaces which typically have values that span 0-360 degrees, those have been normalized to a 0-1 scale for easier programatic use.
-```
+> 1)  Objects, which when called will give you that color schemes encoding for whatever is currently set by RGB/HSV.  
+> 1b) Note, the core color space used in this module is actually HSV.  The HSV and RGB mappings are tightly coupled.  If you change the RGB.RED value, the HSV values immediately recalculate (as do the values for all of the second order color space objects.
+> 2)  The second order color space objects will generallty let you instantiate an object with their values, but you will get back  Color object which will not accept modifications of the second order object properties (again- to make changes you'll need to modify RGB or HSV values. Then there are third order objects which it is not yet possible to instantiate them directly from their native parameters, but we can calculate their values given any first or second order object- this mostly applies to RGBW-- but the problem is small in our exper4ience, nearly all of the use cases for RGBW is getting a realistic transofrmation to RGBW space from these others. We're here to help!
+> 3)  Recap:  First order objects: Color, RGB, HSV. Second order (HSL, HSi, HEX. Third order object, but still loved, RGBW.
+> 4)  Sll obect used by name (ie: rgb.hsi ) return a tuple of their values refkectiung the color represented by the RGB and HSV internal values. The same is tru for .hsv, .hsi, .rgbw....
+> 5) First order objects have the special features of getters and setters.  HSV objects have hsv_v, hsv_s, hsv_h.  Used w/out assignment they reuturn the single value.  Used with assignment, the valiue is updated, and all of the other objects have their values recalculated immediately.  The same goes for RGB, there is rgb_r, rgb_g, rgb_b.  The setters are the encourated way to update the global color of the color objexts.  No save is required.  The hsv_t property is a special internal use tuple of the HSV representation of the current color. Do not muck around with please.  Lastly, there is a function 'copy'.  If you with to spin off a safe Color object to play with, in say, multithreaded envirionments, use copy to deepcopy the Color object you are using.
+> 6) oh!  for colorspaces which typically have values that span 0-360 degrees, those have been normalized to a 0-1 scale for easier programatic use.
 
-A micro example of how this can work
 
-```
+#### A micro example of how this can work
+
+<pre>
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
-# Instantiate a color object from RGB (you can instantiate from RGB/HSV/HSL/HSi/Hex, and get translations to all the others plus rgbw immediately. Further, the RGB and HSV objects are special in that they can be manipulated in real time and all the other conversions happen along with the RGB/HSV changes.  Meaning you can write programs that operate in RGB/HSV space and control lighting in RGBW space.  Technically you can do the same with the HSL/HSI/Hex objects, but way more clunkly.   
-# Something to note, is how weird the RGBW translations are.
+# Instantiate a color object from RGB (you can instantiate from RGB/HSV/HSL/HSi/Hex, and get translations 
+# to all the others plus rgbw immediately. Further, the RGB and HSV objects are special in that they can
+# be manipulated in real time and all the other conversions happen along with the RGB/HSV changes.  Meaning
+# you can write programs that operate in RGB/HSV space and control lighting in RGBW space.  Technically 
+# you can do the same with the HSL/HSI/Hex objects, but way more clunkly.   
+
+# Something to mention... is how counter intuitive many RGBW transforms are.
+
 # Here is Red initialized and the translations available.
-In [32]: color = RGB(255,0,0)
-```
-```In [33]: color.rgb``` [![RED](https://img.shields.io/badge/RGB-255,0,0-ff0000?style=plastic&labelColor=silver)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000) 
-```
+
+In [32]: color = RGB(255,0,0) 
+<p valign="middle">[33]: color.rgb<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/43x20/ff0000/000000?text=+" valign="bottom" ></a></p> 
+
 Out[33]: (255, 0, 0)
 
 In [34]: color.hsv
+
 Out[34]: (0.0, 1.0, 1.0)
 
 In [35]: color.hsl
@@ -121,23 +116,18 @@ In [38]: color.rgbw
 Out[38]: (254, 0, 0, 0)
 
 # We can change the red by adding some blue 
-```
-```color.rgb_b = 99``` making
 
+color.rgb_b = 99
+	
+making
 
-
-
-
-
-
-```
 color.rgb
 (255, 0, 99)
-```
+	
 
    - [![DeepPink](http://www.workwithcolor.com/color-converter-01.htm?cp=FE0063)](https://via.placeholder.com/45x15/ff0058/000000/?text=rgb:::::255,0,99)
 
-```
+
 In [16]: color.hsv
 Out[16]: (0.9352941176470588, 1.0, 1.0)
 
@@ -145,10 +135,7 @@ In [17]: color.rgbw
 Out[17]: (253, 0, 100, 0)
 
 # Note how all the other objects values have changed to reflect the new color settings via the changes to the rgb representation.
-
-
-
-```
+</pre>
 
 ##### Putting it all together
 
