@@ -119,4 +119,4 @@ wheel==0.36.2
 wrapt==1.11.2
 zc.lockfile==2.0
 zipp==3.4.1
-rgbw_colorspace_converter
+rgbw_colorspace_converter==0.0.8
