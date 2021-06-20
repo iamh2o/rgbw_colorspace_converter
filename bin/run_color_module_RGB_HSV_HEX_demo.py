@@ -70,9 +70,7 @@ if len(sys.argv) == 1:
 # Col width, or num characters to print
 col_width = os.get_terminal_size().columns
 try:
-    if len(sys.argv) < 3:
-        sys.argv.append(col_width)
-    elif len(sys.argv) == 4:
+    if len(sys.argv) > 2:
         if sys.argv[2] == "w":
             pass
         else:
@@ -95,7 +93,7 @@ no_newlines = " "
 j = "-r 0"
 
 try:
-    if len(sys.argv) == 3:
+    if len(sys.argv) < 4:
         no_newlines = " "
     else:
         no_newlines = sys.argv[3] + " "
@@ -128,7 +126,7 @@ def _write_color(color):
         # just print colors
         r = 1
         if ri:
-            r = random.randint(2, 270)
+            r = random.randint(1, 54)
         l = "X" * (col_width * r)
         cmd = f"""colr {j}  {no_newlines} "{l}" "{color.hex}" "{color.hex}"  2>/dev/null;"""
         ret_code = os.system(cmd)
