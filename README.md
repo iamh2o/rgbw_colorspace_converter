@@ -142,7 +142,7 @@ rgb.hex
 ->'#ff99b'
 ```
 
-[go](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
+![go](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
 
 ## Contribute
 
