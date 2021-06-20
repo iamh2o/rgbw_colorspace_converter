@@ -119,18 +119,22 @@ Out[37]: '#ff0000'
 In [38]: color.rgbw
 Out[38]: (254, 0, 0, 0)
 
-# We can change the red to magenta by adding some blue
-color.rgb_b = 
+# We can change the red by adding some blue
 
-rgb.hsv_s = 0.0
+In [14]: color.rgb_b = 99
 
-# Note how all the other objects values have not changed to reflect the new color
+In [15]: color.rgb
+Out[15]: (255, 0, 99)
 
-print(rgb.hsv) -->(0.754185692541857, 0.0, 0.9019607843137255)
+In [16]: color.hsv
+Out[16]: (0.9352941176470588, 1.0, 1.0)
 
-print(rgb.rgb) --> (230, 230, 230)
+In [17]: color.rgbw
+Out[17]: (253, 0, 100, 0)
 
-rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
+# Note how all the other objects values have changed to reflect the new color settings via the changes to the rgb representation.
+
+
 
 ```
 
@@ -138,19 +142,34 @@ rgb.hsv --> (0.754185692541857, 0.0, 0.9019607843137255)
 
 * You can set you favorite RGB color (or HSV/HSI/whatever), then use the 0-1 scaled hue/saturation/value(brightness) to more gracefully move through color spaces. A simple example being decrementing just the 'V' part of HSV to dim or brighten the color of choice w/out changing it.  This is non-trivial to do with RGB.</b>
 
-* OK, so many words here. I hope something helps someone save some time :-)
-
-
 ```
 from rgbw_colorspace_converter.colors.converters import  RGB, HSV
+In [21]: color = RGB(205,10,155)
+In [22]: # We've created a color, now can return it's translations  
 
-rgb = RGB(255,10,155)
-print(rgb.rgbw)
-->(247, 0, 144, 8)
-print(rgb.hsv)
-->(0.9013605442176871, 0.9607843137254902, 1.0)
-rgb.hex
-->'#ff99b'
+In [23]: color.rgb
+Out[23]: (205, 9, 155)
+
+In [24]: color.rgbw
+Out[24]: (198, 0, 143, 9)
+
+In [25]:  color.hsv
+Out[25]: (0.8760683760683761, 0.951219512195122, 0.803921568627451)
+
+In [26]: color.hex
+Out[26]: '#cd099b'
+
+# If we wanted to simply dim the RGB color to 25%, we can manipulate one value using the 'v' value of hsv_v (currently at 80.3% brightness to 25%(0.25).  The RGB changes would require 3 values to change, and RGBW 4 values to change, some changes being non-intuitive.
+In [30]: color.rgb
+Out[30]: (63, 3, 48)
+
+In [31]: color.rgbw
+Out[31]: (60, 0, 44, 3)
+
+#And all of the others will have changed as well, ie: hex:
+In [32]: color.hex
+Out[32]: '#3f0330'
+
 ```
 
 ![go](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
@@ -192,19 +211,92 @@ Not only does the package allow translation of one color space to another, but i
 What that might look like in code could be:
 
 ```
->>> from rgbw_colorspace_converter import RGB
->>> rgb = RGB(0,0,255) # BLUE
+>>> from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
-# HSL value for blue
->>>rgb.hsl
-(240, 1.0, 0.5)
+# Moving through the HSV color wheel is simply cycling 0->1.0->0->and so on
+# Moving through the color wheel in RGB, is a lot more of a pain in the add.  Here are 4 points from 0-1 repesenting 3 colors (b/c 1 and 0 are synonymous for 'h')
+#firebrickred http://www.workwithcolor.com/color-converter-01.htm?cp=7F1F1F
 
-#HSV value for Blue
->>> rgb.hsv
-(0.6666666666666666, 1.0, 1.0)
+color_a = HSV(0.0,0.75,0.5)
+color_a.rgb
+(127, 31, 31)
+color_a.rgbw
+(95, 0, 0, 31)
 
->>> rgb.rgbw
-(0, 0, 255, 0)
+<div data="Background=background-color" style="padding: 50px; background-color: rgb(79, 127, 31);">
+# DarkOliveGreen: http://www.workwithcolor.com/color-converter-01.htm?cp=4F7F1F
+
+color_b = HSV(0.25,0.75,0.5)                                                                                                      color_b.rgb  
+(79, 127, 31)
+color_b.rgbw
+(47, 95, 0, 31)
+</div>
+
+# Indigo: http://www.workwithcolor.com/color-converter-01.htm?cp=4F1F7F
+
+color_c = HSV(0.75,0.75,0.5)
+color_c.rgb
+(79, 31, 127)
+color_c.rgbw
+(47, 0, 95, 31)
+
+#firebrickred http://www.workwithcolor.com/color-converter-01.htm?cp=7F1F1F
+
+color_d = HSV(1.0,0.75,0.5)                                                                                                       
+color_d.rgb
+(127, 31, 31)
+color_d.rgbw
+(95, 0, 0, 31)
+
+# Note how HSV(1.0, 0.75, 0.5) and HSV(0.0,0.75,0.5) are both firebrick red, its a circular space. Also note how the RGB values don't change very intuitively, and the RGBW colors actually seem wrong (we've tested with our own eyes, they're not!)
+
+# Lets start with a more complicated color, crimson: http://www.workwithcolor.com/color-converter-01.htm?cp=D92008
+color = RGB(217,32,8)
+
+color.rgbw
+(217,32,8)
+color.rgbw
+(207, 27, 0, 6)
+color.hsv
+(0.01913875598086125, 0.9631336405529954, 0.8509803921568627)
+
+# As we swing through the color wheel again, we change just the h value, note the changes in RGB/W values are not easily predictable considering it's a pretty simple operation.                                                                                                                    
+# Gold: http://www.workwithcolor.com/color-converter-01.htm?cp=D9C709
+# Moving the HSV colorwheel value 'h' only yields these changes
+color.hsv_h = 0.16                                                                              (0.16, 0.9631336405529954, 0.8509803921568627)                                                  color.rgb                                                                                       (217, 208, 7)                                                                                   color.rgbw                                                                                      (210, 200, 0, 7)    
+
+# LawnGreen: http://www.workwithcolor.com/color-converter-01.htm?cp=70D907
+# Moving the HSV colorwheel value 'h' only yields these changes                                 
+color.hsv_h = 0.25
+(0.25, 0.9631336405529954, 0.8509803921568627)                                                  color.rgb
+(112, 217, 7)
+color.rgbw
+(104, 209, 0, 7)
+
+# DeepTurquoise: http://www.workwithcolor.com/color-converter-01.htm?cp=079AD9
+# Moving the HSV colorwheel value 'h' only yields these changes    
+color.hsv_h = 0.55
+color.hsv
+(0.55, 0.9631336405529954, 0.8509803921568627)
+color.rgb
+(7, 154, 217)
+color.rgbw
+(0, 145, 211, 6)
+
+# DarkViolet: http://www.workwithcolor.com/color-converter-01.htm?cp=5707D9
+# Moving the HSV colorwheel value 'h' only yields these changes    
+color.hsv_h = 0.73
+color.hsv
+(0.73, 0.9631336405529954, 0.8509803921568627)
+color.rgb
+(87, 7, 217)
+color.rgbw
+(81, 0, 208, 7)
+
+# And if we set color.hsv_h = 0.0191, we'd be back to crimson.
+
+# The same exercise could be repeated with the hsv_s or hsv_v properties (singly, or together)... and if you wished to modify in RGB space, the same setters are available as rgb_r, rgb_g, rgb_b
+
 ```
 
 ![qq](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar33.png)
