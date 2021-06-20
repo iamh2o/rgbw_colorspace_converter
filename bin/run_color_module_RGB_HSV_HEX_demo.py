@@ -40,7 +40,7 @@ if len(sys.argv) == 2:
 
  This toy takes 3 positional arguments:
     (1)'yes' or 'no' to indicate if you want color codes printed in adddition to colors.
-    (2)An integer > 0 (and probably ideally like 80, and huge is a bad idea).  To indicate how many cols/characters of color to print before newline.
+            (2)An integer > 0 (and probably ideally like 80, and huge is a bad idea).  To indicate how many cols/characters of color to print before newline.  If you enter 'w', the width of your screen will be detected.
     (3)EMPTY or '-n'.  Empty means new lines will be printed after every N characters printed as set above. -n means no newlines are printed.
              OH!  And idf you specify 'yes' for printing the color codes- options 2 and 3 are disabled.
 
@@ -79,7 +79,7 @@ except Exception as e:
     os.system(
         """echo '''
 
-you must specify an integer >0 for argument 2.
+you must specify an integer >0 for argument 2.  Or specify 'w' for auto detection of your screen width.
 
 '
 """
