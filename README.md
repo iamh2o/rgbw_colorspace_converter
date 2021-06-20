@@ -95,9 +95,8 @@ from rgbw_colorspace_converter.colors.converters import RGB, HSV
 # Here is Red initialized and the translations available.
 
 In [32]: color = RGB(255,0,0) 
-<p valign="middle">[33]: color.rgb<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/43x20/ff0000/000000?text=+" valign="bottom" ></a></p> 
-
-Out[33]: (255, 0, 0)
+[33]: color.rgb
+<p valign="middle">Out[33]: (255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
 In [34]: color.hsv
 
