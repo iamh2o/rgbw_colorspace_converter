@@ -35,7 +35,7 @@ def test_round_3_transforms():
 
     # HSi
     hsi3 = c3.hsi
-    hsi3_truth = (333, 0.6065, 0.557)
+    hsi3_truth = (333.0, 0.6065, 0.557)
     assert str(hsi3[0])[:5] == str(hsi3_truth[0])[:5]
     assert (
         str(hsi3[1])[:4] == str(hsi3_truth[1])[:4]
