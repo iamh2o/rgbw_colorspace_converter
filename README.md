@@ -96,21 +96,32 @@ A micro example of how this can work
 ```
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
-rgb = RGB(126,11,230)
+# Instantiate a color object from RGB (you can instantiate from RGB/HSV/HSL/HSi/Hex, and get translations to all the others plus rgbw immediately. Further, the RGB and HSV objects are special in that they can be manipulated in real time and all the other conversions happen along with the RGB/HSV changes.  Meaning you can write programs that operate in RGB/HSV space and control lighting in RGBW space.  Technically you can do the same with the HSL/HSI/Hex objects, but way more clunkly.   
+# Something to note, is how weird the RGBW translations are.
+# Here is Red initialized and the translations available.
+In [32]: color = RGB(255,0,0)
 
-print(rgb)
-->rgb=(126, 10, 230) 
-->hsv=(0.754185692541857, 0.9521739130434783, 0.9019607843137255) 
-->rgbw=(255, 4, 0, 9) hsl=(0.754185692541857, 0.9087136929460582, 0.4725490196078431) 
-->hsi=(0.7545454545454545, 0.918031967204918, 0.47842658823529416)  # note- printing the rgb or hsv object will display all the color setting presently active for all obects.
+In [33]: color.rgb
+Out[33]: (255, 0, 0)
 
-print(rgb.hsi)
-(0.7545454545454545, 0.918031967204918, 0.47842658823529416) #returns just the HSI tuple
+In [34]: color.hsv
+Out[34]: (0.0, 1.0, 1.0)
 
-print(rgb.hsv)
-(0.754185692541857, 0.9521739130434783, 0.9019607843137255) #returns the current state of the HSV object which reflects (nearly) the same color as the hsv values)
+In [35]: color.hsl
+Out[35]: (0.0, 1.0, 0.5)
 
-# But lets change a value, and do it via the hsv object, but reaching through the rgb object!
+In [36]: color.hsi
+Out[36]: (0.0, 1.0, 0.33333)
+
+In [37]: color.hex
+Out[37]: '#ff0000'
+
+In [38]: color.rgbw
+Out[38]: (254, 0, 0, 0)
+
+# We can change the red to magenta by adding some blue
+color.rgb_b = 
+
 rgb.hsv_s = 0.0
 
 # Note how all the other objects values have not changed to reflect the new color
