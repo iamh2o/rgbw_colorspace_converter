@@ -12,7 +12,7 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 ### 3 Main Projects Shaped This Module: HEX, BAAAHS and Pyramid Scheme.... hence.... HEXBASPYR ?
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  [![Run Color Tests](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml) [![Lint](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml) ![LED ART](https://img.shields.io/badge/A--R--T-L.E.D.-white?style=plastic) ![ver]()
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  [![Run Color Tests](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml) [![Lint](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml) ![LED ART](https://img.shields.io/badge/A--R--T-L.E.D.-white?style=plastic) ![ver]() [![PLACEHOLDER](https://img.shields.io/badge/color-~placeholder~-orange?style=plastic)](http://placeholder.com)
 .
 
 <pre>
@@ -222,15 +222,30 @@ color_a.rgb
 (127, 31, 31)
 color_a.rgbw
 (95, 0, 0, 31)
+```
 
-<div data="Background=background-color" style="padding: 50px; background-color: rgb(79, 127, 31);">
-# DarkOliveGreen: http://www.workwithcolor.com/color-converter-01.htm?cp=4F7F1F
 
-color_b = HSV(0.25,0.75,0.5)                                                                                                      color_b.rgb  
+![DarkOliveGreen:](http://www.workwithcolor.com/color-converter-01.htm?cp=4F7F1F) 
+
+`#4f7f1f`  
+
+`4f7f1f`
+
+- ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
+
+- ![#4f7f1f](https://via.placeholder.com/15/4f7f1f/000000?text=+) `#4f7f1f`
+
+	
+```
+color_b = HSV(0.25,0.75,0.5)                                                                                                      
+color_b.rgb  
 (79, 127, 31)
 color_b.rgbw
 (47, 95, 0, 31)
 </div>
+
+- ![#4f7f1f](https://via.placeholder.com/15/4f7f1f/000000?text=+) `#4f7f1f`
+
 
 # Indigo: http://www.workwithcolor.com/color-converter-01.htm?cp=4F1F7F
 
@@ -469,3 +484,7 @@ To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and
 ### Roar
 
 It would be remiss of us not to  thank Steve Dudek for his Buffalo soothsaying and accurate measuring of 3 inch increments.
+
+# Credits // References
+
+- [Placeholder](https://placeholder.com/) for allowing there to be color images in this readme!
