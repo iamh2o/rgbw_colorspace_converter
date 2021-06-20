@@ -100,8 +100,9 @@ from rgbw_colorspace_converter.colors.converters import RGB, HSV
 # Something to note, is how weird the RGBW translations are.
 # Here is Red initialized and the translations available.
 In [32]: color = RGB(255,0,0)
-
-In [33]: color.rgb
+```
+```In [33]: color.rgb``` [![RED](https://img.shields.io/badge/RGB-255,0,0-ff0000?style=plastic&labelColor=silver)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000) 
+```
 Out[33]: (255, 0, 0)
 
 In [34]: color.hsv
@@ -119,13 +120,24 @@ Out[37]: '#ff0000'
 In [38]: color.rgbw
 Out[38]: (254, 0, 0, 0)
 
-# We can change the red by adding some blue
+# We can change the red by adding some blue 
+```
+```color.rgb_b = 99``` making
 
-In [14]: color.rgb_b = 99
 
-In [15]: color.rgb
-Out[15]: (255, 0, 99)
 
+
+
+
+
+```
+color.rgb
+(255, 0, 99)
+```
+
+   - [![DeepPink](http://www.workwithcolor.com/color-converter-01.htm?cp=FE0063)](https://via.placeholder.com/45x15/ff0058/000000/?text=rgb:::::255,0,99)
+
+```
 In [16]: color.hsv
 Out[16]: (0.9352941176470588, 1.0, 1.0)
 
@@ -227,13 +239,8 @@ color_a.rgbw
 
 ![DarkOliveGreen:](http://www.workwithcolor.com/color-converter-01.htm?cp=4F7F1F) 
 
-`#4f7f1f`  
 
-`4f7f1f`
 
-- ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
-
-- ![#4f7f1f](https://via.placeholder.com/15/4f7f1f/000000?text=+) `#4f7f1f`
 
 	
 ```
@@ -487,4 +494,47 @@ It would be remiss of us not to  thank Steve Dudek for his Buffalo soothsaying a
 
 # Credits // References
 
+- [Shield.io](https://shields.io)
 - [Placeholder](https://placeholder.com/) for allowing there to be color images in this readme!
+
+
+## Placeholder.com -  Aligned imaged with text!
+
+
+Normal 43x20
+
+<p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p> 
+
+- <p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p> 
+
+> <p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p> 
+
+
+
+## Color Badge Styles / Shield.io / Layouts
+
+    
+Long B/B
+
+<p valign="bottom"> <img valign="bottom" src="https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=plastic&labelColor=ff00bb" > <code>AAAAA</code>   <img valign="bottom" src="https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=flat&labelColor=ff00bb" > <code>TTTTT</code>  <img valign="bottom"src="https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=for-the-badge&labelColor=ff00bb" > <code>XXXXXX</code></p>
+
+
+
+## These are all 'web color' Deep Pink....
+  
+* plastic style
+
+- [![ff1493](https://img.shields.io/badge/hsl(328,1.0,0.54)-rgb(255,20,147)-ff1493?style=plastic&labelColor=ff1493)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff1493) 
+
+* flat style
+
+- [![ff1493](https://img.shields.io/badge/hsl(328,1.0,0.54)-rgb(255,0,99)-ff1493?style=flat&labelColor=ff1493)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff1493) 
+
+* flat square
+
+- [![ff0058](https://img.shields.io/badge/hsl(339,1.0,0.5)-rgb(255,0,88)-ff0058?style=flat-square&labelColor=ff0058)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff0058) ....  ![#ff0058](https://via.placeholder.com/25/ff0058/000000?text=+) `#ff0058`
+
+* for-the-badge
+
+- [![ff00bb](https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=for-the-badge&labelColor=ff00bb)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff00bb) ..... ![#ff00bb](https://via.placeholder.com/25/ff00bb/000000?text=+) `#ff00bb`
+
