@@ -2,5 +2,7 @@
 requires = [
     "setuptools>=42",
     "wheel",
+    "colr",
+    "docopt"
 ]
 build-backend = "setuptools.build_meta"
