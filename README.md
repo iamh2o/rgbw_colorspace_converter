@@ -12,7 +12,7 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 ### 3 Main Projects Shaped This Module: HEX, BAAAHS and Pyramid Scheme.... hence.... HEXBASPYR ?
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  [![Run Color Tests](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml) [![Lint](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml) ![LED ART](https://img.shields.io/badge/A--R--T-L.E.D.-white?style=plastic) ![ver](https://badge.fury.io/gh/iamh2o%2Frgbw_colorspace_converter.svg)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  [![Run Color Tests](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/ci.yml) [![Lint](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml/badge.svg)](https://github.com/iamh2o/HBP-RGBW-Color-Space-Converter/actions/workflows/black.yaml) ![LED ART](https://img.shields.io/badge/A--R--T-L.E.D.-white?style=plastic) ![ver]()
 .
 
 <pre>
