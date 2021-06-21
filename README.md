@@ -35,14 +35,21 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 ## Install Options
 
-### PIP
+### PIP From PyPi
 
 * ```pip install rgbw_colorspace_converter ```
 * ```run_color_module_RGB_HSV_HEX_demo.py #just for fun, does not actually show off the rgbw functionality.```
 
+### Pip Github
+
+* Clone repo
+* cd into clone dir
+* type ```pip install -e .```
+* This should instal the main branch active in git (no promises it's stable!)
+
 ###  Add to PYTHONPATH
 
-*  Put rgbw_colorspace_converter in your PYTHONPATH.
+*  Put rgbw_colorspace_converter in your PYTHONPATH. You won't have the bin scripts auto in your path however.
 
 #### Quick Start Crash Cource
 
@@ -136,37 +143,16 @@ color.hex
 
 </pre>
 
-##### An example use case
+##### An worked use case
 
-* Lets say you wanted to write s/w to control LEDs, or even other s/w that displays color. The s/w or LEDs or other hardware will probably only accept 1 colorspace coding system.  Generally RGB (more RGBW) sometimes hex.... etc. [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used.  I'll write code which cycles around the spectrum and while doing so, dims the saturation of the colors to 50%, then back to 100%
+* Lets say you wanted to write s/w to control something that emits light- probably using colors. This could be LEDs or other lighting hardware, or even sofware or APIs/services.  Each have their own interfaces with what color codes they accept.  LEDs are primarily RGB or RGBW, but working directly in RGB is a pain. So this module can let you work in the space you grok, and spit out the translations to the thing you are controlling in the protocol it expects (I guyess we suopport DMX too if you want to ask me about that.
+ 
+* I wrote two simple scripts that acheive all of the above.  I instantiate objects using RGB color codes, I work with the objects in HSV space to move through the color space in various ways (and to show how straight forward it is.  And in a supremely awesome way :-)  I found a way to use a terminal tool called colr to act as my display I'm controlling...... and it only accepted Hex codes.  So I was using 3 spaces actively just for one simeple project.  The colored output I produce with these tools also emits the color codes for all of the color spaces represented with each line of color so you can take a peek at how all the differnt ones represnet different things.  RGB and RGBW get really strange when complex mixtures of colors happen.
+* So, generally RGB / RGBW and Hex are not the most pleasant to work directly in.... this is a good read if you're curious why [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used. There are functional scripts you can run (if you install!), [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_color_module_RGB_HSV_HEX_demo.py) and [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_spectrum_saturation_cycler.py). The code has a but of cruft and bookkeeping junk in it, I'll take a stab at distilling out what cycling through the color wheel would look like.
 
 ```
 from rgbw_colorspace_converter.colors.converters import  RGB, HSV
-In [21]: color = RGB(205,10,155)
-In [22]: # We've created a color, now can return it's translations  
-
-In [23]: color.rgb
-Out[23]: (205, 9, 155)
-
-In [24]: color.rgbw
-Out[24]: (198, 0, 143, 9)
-
-In [25]:  color.hsv
-Out[25]: (0.8760683760683761, 0.951219512195122, 0.803921568627451)
-
-In [26]: color.hex
-Out[26]: '#cd099b'
-
-# If we wanted to simply dim the RGB color to 25%, we can manipulate one value using the 'v' value of hsv_v (currently at 80.3% brightness to 25%(0.25).  The RGB changes would require 3 values to change, and RGBW 4 values to change, some changes being non-intuitive.
-In [30]: color.rgb
-Out[30]: (63, 3, 48)
-
-In [31]: color.rgbw
-Out[31]: (60, 0, 44, 3)
-
-#And all of the others will have changed as well, ie: hex:
-In [32]: color.hex
-Out[32]: '#3f0330'
+------- TO DO ----------
 
 ```
 
@@ -202,14 +188,16 @@ cd environment
 
 ## More Examples
 
-### A Bit More Advanced
+### A Bit More 
 
-Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the showe were more natural to design in non-RGB.
+Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the show were more natural to design in non-RGB.
 
 What that might look like in code could be:
 
 ```
 >>> from rgbw_colorspace_converter.colors.converters import RGB, HSV
+
+---- SECTION INCOMPLETE ------
 
 # Moving through the HSV color wheel is simply cycling 0->1.0->0->and so on
 # Moving through the color wheel in RGB, is a lot more of a pain in the add.  Here are 4 points from 0-1 repesenting 3 colors (b/c 1 and 0 are synonymous for 'h')
@@ -222,13 +210,6 @@ color_a.rgbw
 (95, 0, 0, 31)
 ```
 
-
-![DarkOliveGreen:](http://www.workwithcolor.com/color-converter-01.htm?cp=4F7F1F) 
-
-
-
-
-	
 ```
 color_b = HSV(0.25,0.75,0.5)                                                                                                      
 color_b.rgb  
@@ -320,7 +301,9 @@ color.rgbw
 
 ## Fun & Kind Of Weird Tests
 
-```python ./bin/run_color_module_RGB_HSV_HEX_demo.py```
+```python ./bin/run_color_module_RGB_HSV_HEX_demo.py``` and ```./bin/run_spectrum_saturation_cycler.py```
+
+* Needs to run on a unix-like terminal. Max and putty? should run it.  No promises, it's not required to use the pkg, just deomstrates some things and is pretty.
 
 # In The Works
 
@@ -484,6 +467,9 @@ It would be remiss of us not to  thank Steve Dudek for his Buffalo soothsaying a
 - [Placeholder](https://placeholder.com/) for allowing there to be color images in this readme!
 - [Colorblind Aware Design[(https://davidmathlogic.com/colorblind/)
 
+
+
+# Working Resources I'll Be Deleting When the Readme Is More Complete
 
 ## Placeholder.com -  Aligned imaged with text!
 
