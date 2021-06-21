@@ -52,13 +52,13 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 # Begin Like So:
 
-```
+<pre>
 from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex 
 
-rgb = RGB(255,125,22)
-rgb.(tab in an interactive shell) and you'll see:
+<p valign="middle">rgb = RGB(255,125,22)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff7d16><img src="https://via.placeholder.com/47x20/ff7d16/000000?text=+" valign="bottom" ></a></p>
 
-```
+rgb.(press tab in an interactive shell) and you'll see:
+</pre>
 
 >``````
 > 
@@ -82,63 +82,63 @@ These are the objects and functions available to the Color/HSV and RGB top level
 #### A micro example of how this can work
 
 <pre>
-from rgbw_colorspace_converter.colors.converters import RGB, HSV
-
 # Instantiate a color object from RGB (you can instantiate from RGB/HSV/HSL/HSi/Hex, and get translations 
 # to all the others plus rgbw immediately. Further, the RGB and HSV objects are special in that they can
 # be manipulated in real time and all the other conversions happen along with the RGB/HSV changes.  Meaning
 # you can write programs that operate in RGB/HSV space and control lighting in RGBW space.  Technically 
 # you can do the same with the HSL/HSI/Hex objects, but way more clunkly.   
 
-# Something to mention... is how counter intuitive many RGBW transforms are.
+# Something to note... is how counter intuitive many RGBW transforms are once you get away from primary colors.
 
-# Here is Red initialized and the translations available.
+# To start simple- here a color object representing Red as defined by RGB is initialized-- and the translations to all 
+# the other spaces immediately available.
 
-In [32]: color = RGB(255,0,0) 
-[33]: color.rgb
-<p valign="middle">Out[33]: (255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+from rgbw_colorspace_converter.colors.converters import RGB, HSV
+
+color = RGB(255,0,0) 
+color.rgb
+<p valign="middle">(255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
 In [34]: color.hsv
+<p valign="middle">(0.0, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
-Out[34]: (0.0, 1.0, 1.0)
+color.hsl
+<p valign="middle">(0.0, 1.0, 0.5)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
-In [35]: color.hsl
-Out[35]: (0.0, 1.0, 0.5)
+color.hsi
+<p valign="middle">(0.0, 1.0, 0.33333)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
-In [36]: color.hsi
-Out[36]: (0.0, 1.0, 0.33333)
+color.hex
+<p valign="middle">'#ff0000'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
-In [37]: color.hex
-Out[37]: '#ff0000'
+color.rgbw
+<p valign="middle">(254, 0, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
-In [38]: color.rgbw
-Out[38]: (254, 0, 0, 0)
+# We can change the red color object to yellow by adding green by directly changing the <code>rgb_g</code> property 
+# of the color object (which maps all RGB and HSV changes to all other color spaces in real time.
 
-# We can change the red by adding some blue 
-
-color.rgb_b = 99
+# We add max green
+color.rgb_g = 255
 	
-making
-
 color.rgb
-(255, 0, 99)
-	
-
-   - [![DeepPink](http://www.workwithcolor.com/color-converter-01.htm?cp=FE0063)](https://via.placeholder.com/45x15/ff0058/000000/?text=rgb:::::255,0,99)
+<p valign="middle">rgb(255, 255, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
 
 
-In [16]: color.hsv
-Out[16]: (0.9352941176470588, 1.0, 1.0)
-
+color.hsv
+<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
 In [17]: color.rgbw
-Out[17]: (253, 0, 100, 0)
+Out[17]: (254, 254, 0, 0)
 
-# Note how all the other objects values have changed to reflect the new color settings via the changes to the rgb representation.
+color.hex
+<p valign="middle">'ffff00'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
+
+# and the rest were all translated to represent yellow as well
+
 </pre>
 
-##### Putting it all together
+##### An example use case
 
-* You can set you favorite RGB color (or HSV/HSI/whatever), then use the 0-1 scaled hue/saturation/value(brightness) to more gracefully move through color spaces. A simple example being decrementing just the 'V' part of HSV to dim or brighten the color of choice w/out changing it.  This is non-trivial to do with RGB.</b>
+* Lets say you wanted to write s/w to control LEDs, or even other s/w that displays color. The s/w or LEDs or other hardware will probably only accept 1 colorspace coding system.  Generally RGB (more RGBW) sometimes hex.... etc. [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used.  I'll write code which cycles around the spectrum and while doing so, dims the saturation of the colors to 50%, then back to 100%
 
 ```
 from rgbw_colorspace_converter.colors.converters import  RGB, HSV
