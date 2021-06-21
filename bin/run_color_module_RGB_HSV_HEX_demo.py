@@ -24,7 +24,7 @@ echo "This is a testing / utility script, and kind of a little fun too.  It's no
 echo "
 
 "
-sleep .5
+sleep 5
 """
 
 os.system(intro_cmd)
@@ -117,6 +117,7 @@ if len(sys.argv) == 5:
 
 # Write colors module using colr!
 def _write_color(color):
+    col_width = os.get_terminal_size().columns - 2
 
     ret_code = 0
 
@@ -151,7 +152,7 @@ _write_msg(
 
 while color.hsv_h < 1.0:
     _write_color(color)
-    color.hsv_h = color.hsv_h + 0.1
+    color.hsv_h = color.hsv_h + 0.02
 
     if color.hsv_h > 0.99:
         if color.hsv_s == 0.0:
@@ -159,14 +160,14 @@ while color.hsv_h < 1.0:
 
             while color.hsv_s < 1.0:
                 _write_color(color)
-                color.hsv_s = color.hsv_s + 0.1
+                color.hsv_s = color.hsv_s + 0.02
 
                 if color.hsv_s > 0.99:
                     if color.hsv_v == 1.0:
                         _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
                     while color.hsv_v > 0.0:
                         _write_color(color)
-                        color.hsv_v -= 0.1
+                        color.hsv_v -= 0.02
 
 _write_msg("And that is cycling through each of the H/S/V properties  independently")
 _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
@@ -174,20 +175,21 @@ _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
 color = HSV(h=1.0, s=0.0, v=1.0)
 while color.hsv_h < 1.0:
     _write_color(color)
-    color.hsv_h = color.hsv_h + 0.05
-    color.hsv_s = color.hsv_s - 0.05
-    color.hsv_v = color.hsv_v + 0.05
+    color.hsv_h = color.hsv_h + 0.025
+    color.hsv_s = color.hsv_s - 0.025
+    color.hsv_v = color.hsv_v + 0.025
 
 _write_msg("WHAT THE HELL... Slightly Random Fading!!!")
 
 color = HSV(0.5, 0.75, 0.232)
 ctr = 0.0
-_write_msg(
-    f"--"  # ---|| THIS WILL GO ON FOR LONGER THAN YOU WILL LIKE - CTRL+c or Pressing 'q' May Set You Free. Good Luck. ||----"
-)
+
+_write_msg(f"--")
+
 os.system("sleep 2;")
 xctr = 90
 try:
+    # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
     while ctr < 20.0:
 
         # from IPython import embed; embed();
@@ -251,7 +253,9 @@ except Exception as e:
     _write_msg(" Thank You For Watching.")
     xctr = 100
 
-while xctr < 90:
+while xctr < 100:
+    # and this is truly printing random colors 100 times.  Random can sometimes be the most dissapointing b/c,
+    # with no patterns to lure you in, they are often boring.
     ret_code = _write_color(
         RGB(random.randint(0, 254), random.randint(0, 254), random.randint(0, 254))
     )
@@ -259,8 +263,6 @@ while xctr < 90:
     if ret_code != 0:
         cxtr = 100
 
-r = RGB(255, 0, 0)
-b = RGB(10, 10, 10)
 
 exit_cmd = f"""
 echo "
