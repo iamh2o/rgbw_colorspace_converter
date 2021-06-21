@@ -68,7 +68,7 @@ if len(sys.argv) == 1:
 
 
 # Col width, or num characters to print
-col_width = os.get_terminal_size().columns
+col_width = os.get_terminal_size().columns - 2
 try:
     if len(sys.argv) > 2:
         if sys.argv[2] == "w":
@@ -119,7 +119,7 @@ if len(sys.argv) == 5:
 def _write_color(color):
 
     ret_code = 0
-    black_hex = RGB(0, 0, 0).hex
+
     l = ""
     cmd = ""
     if print_codes == "no":
@@ -128,12 +128,12 @@ def _write_color(color):
         if ri:
             r = random.randint(1, 54)
         l = "X" * (col_width * r)
-        cmd = f"""colr {j}  {no_newlines} "{l}" "{color.hex}" "{color.hex}"  2>/dev/null;"""
+        cmd = f"""colr {j}  {no_newlines} " {l} " "{color.hex}" "{color.hex}"  2>/dev/null;"""
         ret_code = os.system(cmd)
     else:
         # Prtint color codes with color blocks
         l = "                    " + str(color)
-        cmd = f"""colr  "{l}" "{black_hex}" "{color.hex}" 2>/dev/null;"""
+        cmd = f"""colr  " {l} " "000000" "{color.hex}" 2>/dev/null;"""
         ret_code = os.system(cmd)
 
     return int(ret_code)
