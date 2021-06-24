@@ -1,7 +1,7 @@
 remote:
-  host: "HOST_NICKNAME"
-  user: "USER"
-  path: "TARGET_ROOT"
+  host: "kahlo"
+  user: "jmajor"
+  path: "/locus/home/jmajor/projects/git/rgbw_colorspace_coverter/"
 behaviour:
   uploadOnSave: true
   syncDownOnOpen: false
