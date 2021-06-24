@@ -26,6 +26,8 @@ echo "
 "
 sleep 5
 """
+# rhiwaia asidhadsfasdf asdfiasd
+"hard"
 
 os.system(intro_cmd)
 
@@ -242,9 +244,7 @@ try:
             os.system("stty echo; stty +echo ;")
             raise
 
-    _write_msg(
-        f"-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
-    )
+    _write_msg(f"-------------|| Note how often the RGB and RGBW codes differ ||-----------------")
     os.system("sleep 2;")
     _write_msg(" Finally, 90 lines of random RGB. ")
 
