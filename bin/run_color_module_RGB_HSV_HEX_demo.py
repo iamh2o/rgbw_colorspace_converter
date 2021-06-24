@@ -26,8 +26,6 @@ echo "
 "
 sleep 5
 """
-# rhiwaia asidhadsfasdf asdfiasd
-"hard"
 
 os.system(intro_cmd)
 
