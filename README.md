@@ -54,13 +54,13 @@ Instantiate a color object from any of the supported types.  Use this object to 
 #### Quick Start Crash Cource
 
 > from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
-> 
+>
 >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
 
 # Begin Like So:
 
 <pre>
-from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex 
+from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
 
 <p valign="middle">rgb = RGB(255,125,22)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff7d16><img src="https://via.placeholder.com/47x20/ff7d16/000000?text=+" valign="bottom" ></a></p>
 
@@ -68,7 +68,7 @@ rgb.(press tab in an interactive shell) and you'll see:
 </pre>
 
 >``````
-> 
+>
 >        rgb...
 >               copy()     hsl     hsv_s   rgb     rgb_r    rgbw_b  gbw_w 	      
 >               hex        hsv     hsv_t   rgb_b   rgbw_w   rgbw_g         
@@ -89,20 +89,20 @@ These are the objects and functions available to the Color/HSV and RGB top level
 #### A micro example of how this can work
 
 <pre>
-# Instantiate a color object from RGB (you can instantiate from RGB/HSV/HSL/HSi/Hex, and get translations 
+# Instantiate a color object from RGB (you can instantiate from RGB/HSV/HSL/HSi/Hex, and get translations
 # to all the others plus rgbw immediately. Further, the RGB and HSV objects are special in that they can
 # be manipulated in real time and all the other conversions happen along with the RGB/HSV changes.  Meaning
-# you can write programs that operate in RGB/HSV space and control lighting in RGBW space.  Technically 
+# you can write programs that operate in RGB/HSV space and control lighting in RGBW space.  Technically
 # you can do the same with the HSL/HSI/Hex objects, but way more clunkly.   
 
 # Something to note... is how counter intuitive many RGBW transforms are once you get away from primary colors.
 
-# To start simple- here a color object representing Red as defined by RGB is initialized-- and the translations to all 
+# To start simple- here a color object representing Red as defined by RGB is initialized-- and the translations to all
 # the other spaces immediately available.
 
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
-color = RGB(255,0,0) 
+color = RGB(255,0,0)
 color.rgb
 <p valign="middle">(255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
@@ -121,12 +121,12 @@ color.hex
 color.rgbw
 <p valign="middle">(254, 0, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
 
-# We can change the red color object to yellow by adding green by directly changing the <code>rgb_g</code> property 
+# We can change the red color object to yellow by adding green by directly changing the <code>rgb_g</code> property
 # of the color object (which maps all RGB and HSV changes to all other color spaces in real time.
 
 # We add max green
 color.rgb_g = 255
-	
+
 color.rgb
 <p valign="middle">rgb(255, 255, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
 
@@ -146,15 +146,15 @@ color.hex
 ##### An worked use case
 
 * Lets say you wanted to write s/w to control something that emits light- probably using colors. This could be LEDs or other lighting hardware, or even sofware or APIs/services.  Each have their own interfaces with what color codes they accept.  LEDs are primarily RGB or RGBW, but working directly in RGB is a pain. So this module can let you work in the space you grok, and spit out the translations to the thing you are controlling in the protocol it expects (I guyess we suopport DMX too if you want to ask me about that.
- 
+
 * I wrote two simple scripts that acheive all of the above.  I instantiate objects using RGB color codes, I work with the objects in HSV space to move through the color space in various ways (and to show how straight forward it is.  And in a supremely awesome way :-)  I found a way to use a terminal tool called colr to act as my display I'm controlling...... and it only accepted Hex codes.  So I was using 3 spaces actively just for one simeple project.  The colored output I produce with these tools also emits the color codes for all of the color spaces represented with each line of color so you can take a peek at how all the differnt ones represnet different things.  RGB and RGBW get really strange when complex mixtures of colors happen.
 * So, generally RGB / RGBW and Hex are not the most pleasant to work directly in.... this is a good read if you're curious why [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used. There are functional scripts you can run (if you install!), [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_color_module_RGB_HSV_HEX_demo.py) and [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_spectrum_saturation_cycler.py). The code has a but of cruft and bookkeeping junk in it, I'll take a stab at distilling out what cycling through the color wheel would look like.
 
 ```
 from rgbw_colorspace_converter.colors.converters import  RGB, HSV
-------- TO DO ----------
-
 ```
+
+
 
 ![go](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
 
@@ -178,17 +178,17 @@ cd environment
 
 ## A Fun Thing.
 
-* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you have pip installed or run setup.sh, this should work.  Try running (in dev)```conda activate HBP; python bin/run_color_module_RGB_HSV_HEX_demo.py``` (after pip)```run_color_module_RGB_HSV_HEX_demo.py```.  You get a taste for how the spaces cycle differently and what the encoding for each looks like. 
+* I've worked up a lowtech way to demonstrating cycling through various color spaces programatically using the terminal.  If you have pip installed or run setup.sh, this should work.  Try running (in dev)```conda activate HBP; python bin/run_color_module_RGB_HSV_HEX_demo.py``` (after pip)```run_color_module_RGB_HSV_HEX_demo.py```.  You get a taste for how the spaces cycle differently and what the encoding for each looks like.
 
 ## Quick Note on Our Hardware Setup
 
-* We used OLA + DMXkings to run LEDs via DMX for many BIG projects controlling thousands of LEDS. And this library controlling and mapping colors. 
+* We used OLA + DMXkings to run LEDs via DMX for many BIG projects controlling thousands of LEDS. And this library controlling and mapping colors.
 
 * Other projects used processing as intermediate, among other things.
 
 ## More Examples
 
-### A Bit More 
+### A Bit More
 
 Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the show were more natural to design in non-RGB.
 
@@ -293,7 +293,7 @@ color.rgbw
 # Tests
 
 ## Command Line
-* Simple at the moment, but you may run: 
+* Simple at the moment, but you may run:
     * ```pytest --exitfirst --verbose --failed-first --cov=. --cov-report html```
 
 ## Github Actions
@@ -315,7 +315,7 @@ color.rgbw
 
 <pre>
 Color
-                                                                                                  
+
 Color class that allows you to ** initialize ** a color in any of HSL, HSV, RGB, Hex and HSI color spaces.  Once initialized,with one of these specific types, you get a Color object back (or possibly a subclass of the Color objext- RGB or HSV- all the same ).  This object will automatically report the color space values for all color spaces based on what you entered.  Notably, it will also translate to RGBW!        
 
 
@@ -331,7 +331,7 @@ for easier cycling of values.
 HSL/HSI values range from 0-360 for H, 0-1 for S/[L|I]
 Hex is hex...
 
-                                                                                                                        
+
 # INITIALIZING COLOR OBJECTS -- it is not advised to init Color directly. These below all basically return a valid Color obj # RGBW can not be initialized directly-  it is calculate from the initialized, or modified values of the color objs below    from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex   
 
 
@@ -363,7 +363,7 @@ and may be set.
     >>> red.hsv
     (0.08366013071895424, 1.0, 0.5)
     # Note how as you change the hsv_(h|s|v) or rgb_(r|g|b) properties, the other values are recalculated for the other color types
-    
+
 --->>>    # IMPORTANT -- This recalculation after instantiation *only* is allowed for hsv and rgb types.  The HSL/HSV/HSI/RGBW values are all calculated upone instantiation of the Color object **AND** the values for each are updated in real time as the hsv(h|s|v) and rgb(r|g|b) values are modified in the Color object.  But, you can not modify the individual elements of HSL/HSI/RGBW/HEX objects directly after instantiating each.  Put another way. If you create a HSI object, to get a new HSI color value you need to modify r/g/b or h/s/v (or create a new HSI object).
 
 These objects are mutable, so you may want to make a
@@ -400,7 +400,7 @@ For example: to gradually dim a color
 		#  And you could mix and match if you're feeling crazy.  col.hsv_v -=10 ; col_rgb_g = 102; print(col);
 
 
-                                                                                                              
+
 A more complex example is if you wished to move through HUE space in HSV and display that in RGB (or RGBW)              
 
 
@@ -418,8 +418,8 @@ In [12]: while ctr < 8:
     ...:     magenta.h = magenta.h - .1
     ...:     print(magenta.hsv, magenta.rgb)
     ...:     ctr = ctr + 1
-    ...: 
-    ...: 
+    ...:
+    ...:
 (0.73333333, 0.5294117647058824, 1.0) (173, 120, 255)
 (0.63333333, 0.5294117647058824, 1.0) (120, 147, 255)
 (0.53333333, 0.5294117647058824, 1.0) (120, 228, 255)
@@ -431,7 +431,7 @@ In [12]: while ctr < 8:
 (0.0, 0.5294117647058824, 1.0) (255, 120, 120)
 
 ! Note how clear the movement through HSV space is, and how unintuituve the RGB transitions are.  This module helps make this usability gap between the more intuitive color spaces and RGB smaller (AND GIVES US RGBW!)
-
+<p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p>
 RGBW
 
 To get the (r,g,b,w) tuples back from a Color object, simply call Color.rgbw and you will return the (r,g,b,w) tuple.
@@ -476,17 +476,17 @@ It would be remiss of us not to  thank Steve Dudek for his Buffalo soothsaying a
 
 Normal 43x20
 
-<p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p> 
+<p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p>
 
-- <p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p> 
+- <p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p>
 
-> <p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p> 
+> <p valign="middle"> <img src="https://via.placeholder.com/43x20/ff0058/000000?text=+" valign="bottom" > <code>#ff0058</code> ... and some more stuff</p>
 
 
 
 ## Color Badge Styles / Shield.io / Layouts
 
-    
+
 Long B/B
 
 <p valign="bottom"> <img valign="bottom" src="https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=plastic&labelColor=ff00bb" > <code>AAAAA</code>   <img valign="bottom" src="https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=flat&labelColor=ff00bb" > <code>TTTTT</code>  <img valign="bottom"src="https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=for-the-badge&labelColor=ff00bb" > <code>XXXXXX</code></p>
@@ -494,14 +494,14 @@ Long B/B
 
 
 ## These are all 'web color' Deep Pink....
-  
+
 * plastic style
 
-- [![ff1493](https://img.shields.io/badge/hsl(328,1.0,0.54)-rgb(255,20,147)-ff1493?style=plastic&labelColor=ff1493)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff1493) 
+- [![ff1493](https://img.shields.io/badge/hsl(328,1.0,0.54)-rgb(255,20,147)-ff1493?style=plastic&labelColor=ff1493)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff1493)
 
 * flat style
 
-- [![ff1493](https://img.shields.io/badge/hsl(328,1.0,0.54)-rgb(255,0,99)-ff1493?style=flat&labelColor=ff1493)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff1493) 
+- [![ff1493](https://img.shields.io/badge/hsl(328,1.0,0.54)-rgb(255,0,99)-ff1493?style=flat&labelColor=ff1493)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff1493)
 
 * flat square
 
@@ -510,4 +510,3 @@ Long B/B
 * for-the-badge
 
 - [![ff00bb](https://img.shields.io/badge/hsl(316,1.0,0.0)-rgb(255,0,187)-ff00bb?style=for-the-badge&labelColor=ff00bb)](http://www.workwithcolor.com/color-converter-01.htm?cp=ff00bb) ..... ![#ff00bb](https://via.placeholder.com/25/ff00bb/000000?text=+) `#ff00bb`
-
