@@ -18,6 +18,7 @@ colr -c 0 "                                    ╦ ╦╔╗ ╔═╗          
 colr -c 0 "                                    ╠═╣╠╩╗╠═╝                                  " "ff3100" "#6400ff";
 colr -c 0 "                                    ╩ ╩╚═╝╩                                    " "ff3100" "#6400ff";
 
+
 sleep 1;
 
 echo "This is a testing / utility script, and kind of a little fun too.  It's not needed to use the library, but it does make some minimal use of the library, and is kind of pretty to watch for a while.  I'm mostly setting initial RGB colors, then using the HSV representation of that initial RGB to manipulate the HSV color object and use the resulting HEX tranlation to do some basic terminal color messing around.  Of course the real magic this module was made for is using the RGBW code translations with the proper hardware.  In anycase, this script will give you more info if you run with just '-h'. ";
