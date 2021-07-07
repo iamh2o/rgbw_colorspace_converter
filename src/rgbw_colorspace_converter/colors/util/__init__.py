@@ -1,6 +1,6 @@
 import random
 
-from ..color import HSV
+from rgbw_colorspace_converter.colors.converters import HSV
 
 
 def choose_random_hsv():
