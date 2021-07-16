@@ -1,4 +1,4 @@
-# HBP: RGBW Color Space Converter Between HSL / RGB / HSi / HSV / HEX
+# HBP: RGBW Color Space Converter Between HSL / RGB / HSi / HSV / HEX 
 ## Specifically For LED Based Projects
 ![HBP]( https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar21.png )
 
