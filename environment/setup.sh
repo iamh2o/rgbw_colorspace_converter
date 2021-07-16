@@ -65,7 +65,9 @@ if [[ ! -d $CONDA_DIR ]]; then
 fi
 $CONDA_DIR/bin/conda create -n base -c conda-forge mamba
 $CONDA_DIR/bin/conda install -y mamba  -n base -c conda-forge
-$CONDA_DIR/bin/conda activate base
+source $CONDA_DIR/etc/profile.d/conda.sh
+$CONDA_DIR/bin/conda init shell
+$CONDA_DIR/bin/conda deactivate
 $CONDA_DIR/bin/conda deactivate
 $CONDA_DIR/bin/conda init bash
 source ~/.bashrc
@@ -91,12 +93,9 @@ echo "
 	    - run a test with python ./tests/color.py
 	    - run the UI with python go.py
 
-echo "
-
                                                ╦ ╦╔╗ ╔═╗
                                                ╠═╣╠╩╗╠═╝
                                                ╩ ╩╚═╝╩
-
 "
 
 cd ../
