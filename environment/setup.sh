@@ -63,14 +63,14 @@ if [[ ! -d $CONDA_DIR ]]; then
     bash Miniconda3-latest-Linux-x86_64.sh -b -p $CONDA_DIR
     rm Miniconda3-latest-Linux-x86_64.sh
 fi
-$CONDA_DIR/bin/conda create -n base -c conda-forge mamba
-$CONDA_DIR/bin/conda install -y mamba  -n base -c conda-forge
-$CONDA_DIR/bin/conda activate base
-$CONDA_DIR/bin/conda deactivate
-$CONDA_DIR/bin/conda init bash
+source $CONDA_DIR/etc/profile.d/conda.sh
+conda init
+conda deactivate
+#source $CONDA_DIR/etc/profile.d/conda.sh
 source ~/.bashrc
-$CONDA_DIR/bin/conda activate base
-
+source ~/.zshrc
+source $CONDA_DIR/etc/profile.d/conda.sh
+conda install -n base -c conda-forge mamba
 
 # Create conda environment
 echo "CREATING $e"
@@ -80,25 +80,22 @@ conda activate $repo
 
 cd ..
 pre-commit install
-cd environment
-
+sleep 1
+conda activate $repo
+pip install -e .
 sleep 1
 
 echo "
 
        It would appear things installed!  Great Success. The evironments should be accessible via:
             - conda activate $repo
-	    - run a test with python ./tests/color.py
-	    - run the UI with python go.py
-
-echo "
+	    - run a test with pytest
+	    - run the UI with ./bin/run_color_test.sh
 
                                                ╦ ╦╔╗ ╔═╗
                                                ╠═╣╠╩╗╠═╝
                                                ╩ ╩╚═╝╩
-
 "
 
-cd ../
-./bin/run_color_test.sh
+bin/run_spectrum_saturation_cycler.py 2
 exit 0;
