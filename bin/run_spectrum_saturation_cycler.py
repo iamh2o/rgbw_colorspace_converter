@@ -6,13 +6,13 @@ import random
 
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
+sleep = 0.7  # sleep = sys.argv[1]  ## Not sure what I was intending with this.
+
 # Do what I can to get the terminal to maybe show colors, hopefullyt more than 8....
 os.environ["TERM"] = "xterm-256color"  # screen
 os.system("reset; tput clear; tput init; tput civis;stty -echo; ")
 
 col_width = os.get_terminal_size().columns
-
-sleep = sys.argv[1]
 
 os.system("tput clear; ")
 
@@ -58,24 +58,6 @@ if nc < num_colors:
 
 # fractional_360 = float(num_colors)/360.0
 b = 1.0 / num_colors
-
-
-# 1/176
-# 0.005681818181818
-# 176/360 = 0.488888888
-# 184/360 = .5222222
-# 360/176 = 2.04545
-# 2.04545/176 = 0.0116219
-# b=(176/360) = 0.488888888888889/175 = 0.002777777777778 ////  .48/.00277 = 181.06 //// .48/176 = 0.002727272 // th
-# .48/.52 = .9* / 176 = .00534 * (184*176) = 0.04272
-#                /360 = .0026 * (184-176) = =.0208
-# 360-176=184
-# frac left / frac colorspace represents = tyhid neg num.
-# /48/.52 - 1 = -.07692307
-# 1/184 = 0.011904
-# fix_factor= (float(num_colors)/360.0)
-## b=0.04272
-# b=0.02078/2
 
 
 def display_color(color, show_values=None):
