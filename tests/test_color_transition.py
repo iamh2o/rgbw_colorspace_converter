@@ -1,6 +1,7 @@
 from rgbw_colorspace_converter.colors.converters import RGB
 from rgbw_colorspace_converter.colors.util.morph import color_transition
 
+
 def test_color_transition():
     start = RGB(255, 0, 0)
     end = RGB(0, 255, 0)
