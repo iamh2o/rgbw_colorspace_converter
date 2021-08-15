@@ -37,8 +37,8 @@ Instantiate a color object from any of the supported types.  Use this object to 
 ### PIP From PyPi
 
 ```
-pip install rgbw_colorspace_converter ```
-run_color_module_RGB_HSV_HEX_demo.py #just for fun, does not actually show off the rgbw functionality. ctrl-c to exit.
+pip install rgbw_colorspace_converter ;
+run_color_module_RGB_HSV_HEX_demo.py ; #just for fun, does not actually show off the rgbw functionality. ctrl-c to exit.
 
 ```
 
