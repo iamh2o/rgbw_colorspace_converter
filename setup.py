@@ -22,7 +22,10 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    scripts=["bin/run_color_module_RGB_HSV_HEX_demo.py"],
+    scripts=[
+        "bin/run_color_module_RGB_HSV_HEX_demo.py",
+        "bin/run_spectrum_saturation_cycler.py",
+    ],
     python_requires=">=3.6",
     install_requires=["colr", "docopt"],
 )

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -164,7 +164,7 @@ try:
 
     display_color(
         color,
-        f"Ok!  last demo.  This time, I'm going to move around the color wheel using the 'h' value again, and at the same time move through the saturation value too 's'.  I'm not going to cover V b/c it represents 'brightness', which is not conveyed well in this format.  Again, 2 rounds, the second with color codes, with the changes in RGB and RGBW particularly non-intuitive.",
+        "Ok!  last demo.  This time, I'm going to move around the color wheel using the 'h' value again, and at the same time move through the saturation value too 's'.  I'm not going to cover V b/c it represents 'brightness', which is not conveyed well in this format.  Again, 2 rounds, the second with color codes, with the changes in RGB and RGBW particularly non-intuitive.",
     )
 
     os.system(f"sleep {sleep}")
@@ -186,7 +186,7 @@ except Exception as e:
     del e
 
 
-exit_cmd = f"""
+exit_cmd = """
 echo "
 
 "
