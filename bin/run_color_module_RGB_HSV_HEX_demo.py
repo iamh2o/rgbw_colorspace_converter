@@ -130,14 +130,15 @@ def _write_color(color):
         if ri:
             r = random.randint(1, 54)
         l = "X" * (col_width * r)
-        cmd = f"""colr {j}  {no_newlines} " {l} " "{color.hex}" "{color.hex}"  2>/dev/null;"""
+        cmd = f"""colr {j}  {no_newlines} " {l} " "{color.hex}" "{color.hex}" >> runbuff.dat 2>/dev/null;"""
         ret_code = os.system(cmd)
     else:
         # Prtint color codes with color blocks
         l = "                    " + str(color)
-        cmd = f"""colr  " {l} " "000000" "{color.hex}" 2>/dev/null;"""
+        cmd = f"""colr  " {l} " "000000" "{color.hex}" >> runbuff.dat 2>/dev/null;"""
         ret_code = os.system(cmd)
 
+    os.system("tail -n 1 runbuff.dat")
     return int(ret_code)
 
 
