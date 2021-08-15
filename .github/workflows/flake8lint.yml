@@ -1,0 +1,15 @@
+name: flake8-CI
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:  
+    - uses: actions/checkout@v1
+    - name: Flake8 Code Linter
+      uses: jonasrk/flake8-action@master
+      with: 
+        args: "--max-line-length=101 --exclude .ipython --ignore E203,E266,E501,W503,F403,F401,W605,E741,E711,E731"
