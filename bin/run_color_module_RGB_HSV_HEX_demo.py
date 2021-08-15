@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 
 import os
-import random
-from rgbw_colorspace_converter.colors.converters import RGB, HSV
 import sys
+import random
+
+from rgbw_colorspace_converter.colors.converters import RGB, HSV
+from rgbw_colorspace_converter.tools import color_printer
+
 
 os.environ["TERM"] = "xterm-256color"  # screen
 os.system("tput clear; tput init; tput civis;stty -echo; ")
 
+capture_output = True
 ansi_bat_f = "./rgbw_csc.asc"
 ansi_html_f = "./rgbw_csc.html"
 os.system(f"rm {ansi_bat_f} {ansi_html_f}")
 os.system(
-    f"""echo '<html><head></head><body style="line-height: 0.5;padding: 0; border: 0; margin: 0;"> ' > {ansi_html_f} """
+    f"""echo '<html><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=FiraCode"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=FiraCode" type="text/css"><head></head><body style="line-height: 0.5;padding: 0; border: 0; margin: 0;"> ' > {ansi_html_f} """
 )
 
 ## The following code is basically a mess as it grew from a small testing example to somethign that made pretty patterns.
 # But until is needs more features, or stops working, here it is :-)
 
 intro_cmd = """
-
+echo ""
 colr -c 0 "                               ╦ ╦╔╗ ╔═╗                             " "ff3100" "#6400ff";
 colr -c 0 "                               ╠═╣╠╩╗╠═╝                             " "ff3100" "#6400ff";
 colr -c 0 "                               ╩ ╩╚═╝╩                               " "ff3100" "#6400ff";
@@ -36,16 +40,17 @@ To Exit: hit ctrl-c  (after the white test pattern passes)
 *IF* you find your cursor has gone missing, try typing 'reset' and hit enter <-----
 
 "
-sleep 5
+sleep 0
 """
 
 os.system(intro_cmd)
 
 print_codes = "no"
-
+global col_width
+col_width = 79
 if len(sys.argv) == 2:
     print_codes = sys.argv[1].lower()
-
+    c = None
     if sys.argv[1] in ["-h", "help", "h", "--h", "--help", "-help"]:
         os.system(
             """echo "
@@ -80,13 +85,21 @@ if len(sys.argv) == 1:
 
 
 # Col width, or num characters to print
-col_width = os.get_terminal_size().columns - 2
+attempt_discovery_of_term_size = True
+try:
+    col_width = os.get_terminal_size().columns - 2
+except Exception as e:
+    del e
+    attempt_discovery_of_term_size = False
+
 try:
     if len(sys.argv) > 2:
         if sys.argv[2] == "w":
             pass
         else:
-            col_width = int(sys.argv[2])
+            if attempt_discovery_of_term_size:
+                col_width = int(sys.argv[2])
+
 except Exception as e:
     os.system(
         """echo '''
@@ -96,20 +109,21 @@ you must specify an integer >0 for argument 2.  Or specify 'w' for auto detectio
 '
 """
     )
+    col_width = 80
     del e
     os.system("stty echo; stty +echo ;")
-    raise
+    # raise
 
 # Only applies to color only mode.  Will not break for newlines after #cols printed. aka, the blocks append
 no_newlines = " "
-j = "-r 0"
+right_just_term_width = "-r 0"
 
 try:
     if len(sys.argv) < 4:
         no_newlines = " "
     else:
         no_newlines = sys.argv[3] + " "
-        j = ""
+        right_just_term_width = ""
 except Exception as e:
     os.system(
         """echo '''
@@ -129,9 +143,14 @@ if len(sys.argv) == 5:
 
 # Write colors module using colr!
 def _write_color(color):
-    col_width = os.get_terminal_size().columns - 2
-
+    if attempt_discovery_of_term_size:
+        # col_width = os.get_terminal_size().columns - 2
+        pass
     ret_code = 0
+
+    cap_o = ""
+    if capture_output is True:
+        cap_o = f" >> {ansi_bat_f} "
 
     l = ""
     cmd = ""
@@ -140,17 +159,20 @@ def _write_color(color):
         r = 1
         if ri:
             r = random.randint(1, 54)
-        l = "_" * (col_width * r)
-        cmd = f"""colr {j}  {no_newlines} " {l} " "{color.hex}" "{color.hex}" >> {ansi_bat_f} 2>/dev/null;"""
+        print_char_str = "===>||><||<==="
+        len_pcs = len(print_char_str)
+        l = print_char_str * (int(col_width / len_pcs) * r)
+        cmd = f"""colr {right_just_term_width}  {no_newlines} " {l} " "{color.hex}" "{color.hex}" >> {ansi_bat_f} 2>/dev/null;"""
         ret_code = os.system(cmd)
     else:
         # Prtint color codes with color blocks
         l = "                    " + str(color)
-        cmd = f"""colr  " {l} " "000000" "{color.hex}" >> {ansi_bat_f} 2>/dev/null;"""
+        cmd = f"""colr  " {l} " "000000" "{color.hex}" {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)
 
-    os.system(f"tail -n 1 {ansi_bat_f}")
-    os.system(f"tail -n 1 {ansi_bat_f} | ansi2html -i >> {ansi_html_f}")
+        # if capture_output is True:
+        os.system(f"tail -n 1 {ansi_bat_f}")
+        # os.system(f"tail -n 1 {ansi_bat_f} | ansi2html -i >> {ansi_html_f}")
     return int(ret_code)
 
 
@@ -180,14 +202,13 @@ try:
 
                     if color.hsv_s > 0.99:
                         if color.hsv_v == 1.0:
-                            _write_msg(
-                                "DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)"
-                            )
+                            _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
                         while color.hsv_v > 0.0:
                             _write_color(color)
                             color.hsv_v -= 0.013
 except Exception as e:
-    del e
+    print(e)
+    raise
 
 _write_msg("And that is cycling through each of the H/S/V properties  independently")
 _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
@@ -262,9 +283,7 @@ try:
             os.system("stty echo; stty +echo ;")
             raise
 
-    _write_msg(
-        "-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
-    )
+    _write_msg("-------------|| Note how often the RGB and RGBW codes differ ||-----------------")
     os.system("sleep 1;")
     _write_msg(" Finally, 90 lines of random RGB. ")
 
