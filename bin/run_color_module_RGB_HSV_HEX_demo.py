@@ -1,28 +1,39 @@
 #!/usr/bin/env python3
 
 import os
-import sys
 import random
-
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
+import sys
 
 os.environ["TERM"] = "xterm-256color"  # screen
 os.system("tput clear; tput init; tput civis;stty -echo; ")
+
+ansi_bat_f = "./rgbw_csc.asc"
+ansi_html_f = "./rgbw_csc.html"
+os.system(f"rm {ansi_bat_f} {ansi_html_f}")
+os.system(
+    f"""echo '<html><head></head><body style="line-height: 0.5;padding: 0; border: 0; margin: 0;"> ' > {ansi_html_f} """
+)
 
 ## The following code is basically a mess as it grew from a small testing example to somethign that made pretty patterns.
 # But until is needs more features, or stops working, here it is :-)
 
 intro_cmd = """
 
-colr -c 0 "                                    ╦ ╦╔╗ ╔═╗                                  " "ff3100" "#6400ff";
-colr -c 0 "                                    ╠═╣╠╩╗╠═╝                                  " "ff3100" "#6400ff";
-colr -c 0 "                                    ╩ ╩╚═╝╩                                    " "ff3100" "#6400ff";
+colr -c 0 "                               ╦ ╦╔╗ ╔═╗                             " "ff3100" "#6400ff";
+colr -c 0 "                               ╠═╣╠╩╗╠═╝                             " "ff3100" "#6400ff";
+colr -c 0 "                               ╩ ╩╚═╝╩                               " "ff3100" "#6400ff";
 
 
 sleep 1;
 
 echo "This is a testing / utility script, and kind of a little fun too.  It's not needed to use the library, but it does make some minimal use of the library, and is kind of pretty to watch for a while.  I'm mostly setting initial RGB colors, then using the HSV representation of that initial RGB to manipulate the HSV color object and use the resulting HEX tranlation to do some basic terminal color messing around.  Of course the real magic this module was made for is using the RGBW code translations with the proper hardware.  In anycase, this script will give you more info if you run with just '-h'. ";
 echo "
+
+
+To Exit: hit ctrl-c  (after the white test pattern passes)
+
+*IF* you find your cursor has gone missing, try typing 'reset' and hit enter <-----
 
 "
 sleep 5
@@ -129,20 +140,23 @@ def _write_color(color):
         r = 1
         if ri:
             r = random.randint(1, 54)
-        l = "X" * (col_width * r)
-        cmd = f"""colr {j}  {no_newlines} " {l} " "{color.hex}" "{color.hex}" >> runbuff.dat 2>/dev/null;"""
+        l = "_" * (col_width * r)
+        cmd = f"""colr {j}  {no_newlines} " {l} " "{color.hex}" "{color.hex}" >> {ansi_bat_f} 2>/dev/null;"""
         ret_code = os.system(cmd)
     else:
         # Prtint color codes with color blocks
         l = "                    " + str(color)
-        cmd = f"""colr  " {l} " "000000" "{color.hex}" >> runbuff.dat 2>/dev/null;"""
+        cmd = f"""colr  " {l} " "000000" "{color.hex}" >> {ansi_bat_f} 2>/dev/null;"""
         ret_code = os.system(cmd)
 
-    os.system("tail -n 1 runbuff.dat")
+    os.system(f"tail -n 1 {ansi_bat_f}")
+    os.system(f"tail -n 1 {ansi_bat_f} | ansi2html -i >> {ansi_html_f}")
     return int(ret_code)
 
 
 # Write any messages
+
+
 def _write_msg(msg):
     os.system(f"""echo '''{msg}'''""")
 
@@ -151,25 +165,29 @@ color = RGB(255, 255, 255)
 _write_msg(
     f"""EXAMPLE OF RGB WHITE: {color.rgb}. Then cycling through each of h,s,v-- white for HSV is {color.hsv} -- Note, the RGB values do not change as hsv.h changes ---- THIS    WILL    REMAIN    WHITE ----   """
 )
+try:
+    while color.hsv_h < 1.0:
+        _write_color(color)
+        color.hsv_h = color.hsv_h + 0.2
 
-while color.hsv_h < 1.0:
-    _write_color(color)
-    color.hsv_h = color.hsv_h + 0.02
+        if color.hsv_h > 0.99:
+            if color.hsv_s == 0.0:
+                _write_msg("DONE CYCLING THROUGH (H)sv, NOW CYCLING THROUGH h(S)v")
 
-    if color.hsv_h > 0.99:
-        if color.hsv_s == 0.0:
-            _write_msg("DONE CYCLING THROUGH (H)sv, NOW CYCLING THROUGH h(S)v")
+                while color.hsv_s < 1.0:
+                    _write_color(color)
+                    color.hsv_s = color.hsv_s + 0.03
 
-            while color.hsv_s < 1.0:
-                _write_color(color)
-                color.hsv_s = color.hsv_s + 0.02
-
-                if color.hsv_s > 0.99:
-                    if color.hsv_v == 1.0:
-                        _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
-                    while color.hsv_v > 0.0:
-                        _write_color(color)
-                        color.hsv_v -= 0.02
+                    if color.hsv_s > 0.99:
+                        if color.hsv_v == 1.0:
+                            _write_msg(
+                                "DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)"
+                            )
+                        while color.hsv_v > 0.0:
+                            _write_color(color)
+                            color.hsv_v -= 0.013
+except Exception as e:
+    del e
 
 _write_msg("And that is cycling through each of the H/S/V properties  independently")
 _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
@@ -181,14 +199,14 @@ while color.hsv_h < 1.0:
     color.hsv_s = color.hsv_s - 0.025
     color.hsv_v = color.hsv_v + 0.025
 
-_write_msg("WHAT THE HELL... Slightly Random Fading!!!")
+_write_msg("WHAT THE HELL... Slightly Random Fading!")
 
 color = HSV(0.5, 0.75, 0.232)
 ctr = 0.0
 
 _write_msg("--")
 
-os.system("sleep 2;")
+os.system("sleep 1;")
 xctr = 90
 try:
     # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
@@ -247,7 +265,7 @@ try:
     _write_msg(
         "-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
     )
-    os.system("sleep 2;")
+    os.system("sleep 1;")
     _write_msg(" Finally, 90 lines of random RGB. ")
 
 except Exception as e:
@@ -270,9 +288,9 @@ exit_cmd = """
 echo "
 
 "
-colr -c 0 "                                    ╦ ╦╔╗ ╔═╗                                  " "#ff0000" "#0000ff";
-colr -c 0 "                                    ╠═╣╠╩╗╠═╝                                  " "#ff0000" "#0000ff";
-colr -c 0 "                                    ╩ ╩╚═╝╩                                    " "#ff0000" "#0000ff";
+colr -c 0 "                               ╦ ╦╔╗ ╔═╗                            " "#ff0000" "#0000ff";
+colr -c 0 "                               ╠═╣╠╩╗╠═╝                            " "#ff0000" "#0000ff";
+colr -c 0 "                               ╩ ╩╚═╝╩                              " "#ff0000" "#0000ff";
 
 echo "
 
@@ -280,6 +298,10 @@ echo "
 tput cnorm
 stty echo
 stty +echo
-"""
 
+
+
+
+"""
+os.system(f"hti -H {ansi_html_f} -o ./zzz -s 800,6500")
 os.system(exit_cmd)

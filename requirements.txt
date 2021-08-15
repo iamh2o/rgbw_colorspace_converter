@@ -1,4 +1,6 @@
 alabaster==0.7.12
+html2image==2.0.1
+ansi2html==1.6.0
 appdirs==1.4.4
 asciimatics==1.13.0
 astroid==2.5.6
