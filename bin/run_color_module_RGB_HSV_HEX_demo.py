@@ -185,7 +185,7 @@ _write_msg("WHAT THE HELL... Slightly Random Fading!!!")
 color = HSV(0.5, 0.75, 0.232)
 ctr = 0.0
 
-_write_msg(f"--")
+_write_msg("--")
 
 os.system("sleep 2;")
 xctr = 90
@@ -244,7 +244,7 @@ try:
             raise
 
     _write_msg(
-        f"-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
+        "-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
     )
     os.system("sleep 2;")
     _write_msg(" Finally, 90 lines of random RGB. ")
@@ -265,7 +265,7 @@ while xctr < 100:
         cxtr = 100
 
 
-exit_cmd = f"""
+exit_cmd = """
 echo "
 
 "

@@ -63,14 +63,14 @@ if [[ ! -d $CONDA_DIR ]]; then
     bash Miniconda3-latest-Linux-x86_64.sh -b -p $CONDA_DIR
     rm Miniconda3-latest-Linux-x86_64.sh
 fi
+
 source $CONDA_DIR/etc/profile.d/conda.sh
 conda init
 conda deactivate
-#source $CONDA_DIR/etc/profile.d/conda.sh
 source ~/.bashrc
-source ~/.zshrc
+
 source $CONDA_DIR/etc/profile.d/conda.sh
-conda install -n base -c conda-forge mamba
+conda install -y -n base -c conda-forge mamba
 
 # Create conda environment
 echo "CREATING $e"
