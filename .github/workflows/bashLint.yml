@@ -12,7 +12,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SHELLCHECK_OPTS: -e SC1004 # exclude some shellcheck warnings.
-          SHFMT_OPTS: -s # arguments to shfmt.
+          SHFMT_OPTS: -s -w -i 2 # arguments to shfmt.
         with:
           sh_checker_shfmt_disable: false
           sh_checker_shellcheck_disable: true
