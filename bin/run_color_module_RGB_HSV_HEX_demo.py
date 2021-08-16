@@ -97,7 +97,7 @@ my_parser.add_argument(
     "-t",
     "--no_detect_terminal_width",
     action="store_true",
-    help="If set the terminal width will NOT be detected and used as the column width per printed row.",
+    help="*not working yet* If set the terminal width will NOT be detected and used as the column width per printed row.",
     default=False,
 )
 
@@ -115,9 +115,9 @@ my_parser.add_argument(
     "-w",
     "--col_width",
     action="store",
-    default=250,
+    default=80,
     type=int,
-    help="Specify the number of columns of color to print on each row before moving to the next line, or appending to the prior if -n is used.",
+    help="*not working yet* Specify the number of columns of color to print on each row before moving to the next line, or appending to the prior if -n is used.",
 )
 
 my_parser.add_argument(
@@ -189,7 +189,7 @@ random_block_len = False
 
 global MAX_COL_WIDTH
 MAX_COL_WIDTH = 0
-global N_ROWS
+
 N_ROWS = 0
 
 print_bars = True
@@ -221,7 +221,7 @@ def main(**kwargs):
         capture_output=kwargs["capture_output"],
         random_block_len=kwargs["random_block_len"],
     ):
-
+        global N_ROWS
         (ret_code, col_width) = print_colors(
             color,
             print_chars=print_chars,
@@ -236,8 +236,8 @@ def main(**kwargs):
             print_bars=print_bars,
             capture_output=capture_output,
             random_block_len=random_block_len,
+            n_row=N_ROWS,
         )
-
         global COL_WIDTH
         COL_WIDTH = col_width
         # Track the widest the window became
@@ -246,14 +246,12 @@ def main(**kwargs):
             MAX_COL_WIDTH = COL_WIDTH
 
         # track number of rows
-        global N_ROWS
-        N_ROWS = N_ROWS + 1
-
-        print("CW:", COL_WIDTH, "MCW", MAX_COL_WIDTH)
+        N_ROWS += 1
         return (ret_code, COL_WIDTH)
 
     def _write_msg(msg):
-        os.system(f"""echo '''{msg}'''""")
+        if args.debug:
+            os.system(f"""echo '''{msg}'''""")
 
     color = RGB(255, 255, 255)
     _write_msg(
@@ -311,7 +309,7 @@ def main(**kwargs):
         # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
         while ctr < 20.0:
             # from IPython import embed; embed();
-            ret_code = _write_color(color)
+            (ret_code, col_w) = _write_color(color)
             if color.hsv_h >= 1.0:
                 color.hsv_h = 0.0
             else:
@@ -357,6 +355,9 @@ def main(**kwargs):
 
             ctr = ctr + 0.005
             if ret_code != 0:
+                from IPythom import embed
+
+                embed()
                 raise
         _write_msg(
             "-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
@@ -435,4 +436,4 @@ except Exception as e:
         print(e)
     else:
         del e
-    os.system("tput cnorm; stty echo; stty sane; reset;")
+    os.system("tput cnorm; stty echo; stty sane; ")
