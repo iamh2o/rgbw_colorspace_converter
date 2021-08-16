@@ -4,7 +4,9 @@
 [![wakatime](https://wakatime.com/badge/github/iamh2o/rgbw_colorspace_converter.svg)](https://wakatime.com/badge/github/iamh2o/rgbw_colorspace_converter) [![Run Color Tests 2](https://github.com/iamh2o/rgbw_colorspace_converter/actions/workflows/pytest.yml/badge.svg)](https://github.com/iamh2o/rgbw_colorspace_converter/actions/workflows/pytest.yml)  [![Lint](https://github.com/iamh2o/rgbw_colorspace_converter/actions/workflows/black.yaml/badge.svg)](https://github.com/iamh2o/rgbw_colorspace_converter/actions/workflows/black.yaml) [![bashLint](https://github.com/iamh2o/rgbw_colorspace_converter/actions/workflows/bashLint.yml/badge.svg)](https://github.com/iamh2o/rgbw_colorspace_converter/actions/workflows/bashLint.yml)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  ![LED ART](https://img.shields.io/badge/A--R--T-L.E.D.-white?style=plastic)  [![PLACEHOLDER](https://img.shields.io/badge/color-~colorspace~-orange?style=plastic)](http://placeholder.com) [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&r=r&type=6e&v=0.0.11&x2=0)](https://badge.fury.io/gh/iamh2o%2Frgbw_colorspace_converter)
 ### Briefly:  What is the utility of this module?
 
-Instantiate a color object from any of the supported types.  Use this object to emit values for all types(including RGBW). Modify the RGB or HSV objects by thier r/g/b or h/s/v properties, and the values for all ojects update to reflect the change. This is mostly of use for translating the multiple spaces to RGBW for use in LED or other lighting fixtures which support RGBW, but can be used also as a general color manipulator and translator.
+tldr:  The `color` module in this package will translate various color systems into RGBW, which is primarily of interest to people playing around with LEDs.   RGBW does not have much utility beyond physical lighting really. The color module is also just generally useful for creating generative art in several color spaces, it's got the ability to on the fly translate between 6 schemes, plus has a nice interface and a few neat bells and whistles.  To see is in action, there are 3 example scripts in the bin dir of varying complexity.
+
+More or less the process is: Instantiate a color object from any of the supported types.  Use this object to emit values for all types(including RGBW). Modify the RGB or HSV objects by thier r/g/b or h/s/v properties, and the values for all ojects update to reflect the change. This is mostly of use for translating the multiple spaces to RGBW for use in LED or other lighting fixtures which support RGBW, but can be used also as a general color manipulator and translator.
 
 
 > We've become accostomed to the limited ability of RGB LEDs to produce truly diverse colors, but with the introduction of RGBW(white) LEDs, the ability of LEDs to replicate a more realistic spectrum of colors is dramatically increased.  The problem however, is decades of systems based on RGB, HEX, HSL do not offer easy transformations to RGBW from each system.  This package does just this, and only this.  If will return you RGBW for given tuples of other spaces, and do so fast enough for interactive LED projects.  There are a few helper functions and whatnot, but it's really as simple as (r,g,b,w) = Color.RGB(255,10,200).  Where 4 channel RGBW LEDs will translate the returned values to represent the richer color specified by the RGB tuple.
@@ -12,7 +14,6 @@ Instantiate a color object from any of the supported types.  Use this object to 
 > Or! Go ahead and use this for non LED projects where you need to convert between color spaces.  Say for controlling old skool DMX lighting rigs.
 
 ### 3 Main Projects Shaped This Module: HEX, BAAAHS and Pyramid Scheme.... hence.... HEXBASPYR ?
-
 
 <pre>
  ___  ___    _______       ___    ___  ________     ________     ________     ________    ___    ___  ________       
@@ -30,7 +31,7 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 ## Requirements
 
-* [Python >= 3.6](https://www.python.org)
+* [Python >= 3.7](https://www.python.org)
 
 ## Install Options
 
@@ -38,9 +39,10 @@ Instantiate a color object from any of the supported types.  Use this object to 
 
 ```
 pip install rgbw_colorspace_converter ;
-run_color_module_RGB_HSV_HEX_demo.py ; #just for fun, does not actually show off the rgbw functionality. ctrl-c to exit.
+Test it out: run_spectrum_saturation_cycler.py or run_color_module_RGB_HSV_HEX_demo.py ; #just for fun, does not actually show off the rgbw functionality. ctrl-c to exit. 
 
 ```
+* The three scripts in the bin dir will work in most any terminal. You may only have 16 colors, but may have more.  I took it as a challenge to write some debugging and teaching tools that would not require a whole pile of LED gear to get going. you can get started in a very simple way with the command line color_printer, which accepts this packages color objects (among other things).  It even manages to make some reasonably interesting art!
 
 ### Pip Github
 
@@ -150,12 +152,12 @@ color.hex
 * Lets say you wanted to write s/w to control something that emits light- probably using colors. This could be LEDs or other lighting hardware, or even sofware or APIs/services.  Each have their own interfaces with what color codes they accept.  LEDs are primarily RGB or RGBW, but working directly in RGB is a pain. So this module can let you work in the space you grok, and spit out the translations to the thing you are controlling in the protocol it expects (I guyess we suopport DMX too if you want to ask me about that.
 
 * I wrote two simple scripts that acheive all of the above.  I instantiate objects using RGB color codes, I work with the objects in HSV space to move through the color space in various ways (and to show how straight forward it is.  And in a supremely awesome way :-)  I found a way to use a terminal tool called colr to act as my display I'm controlling...... and it only accepted Hex codes.  So I was using 3 spaces actively just for one simeple project.  The colored output I produce with these tools also emits the color codes for all of the color spaces represented with each line of color so you can take a peek at how all the differnt ones represnet different things.  RGB and RGBW get really strange when complex mixtures of colors happen.
-* So, generally RGB / RGBW and Hex are not the most pleasant to work directly in.... this is a good read if you're curious why [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used. There are functional scripts you can run (if you install!), [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_color_module_RGB_HSV_HEX_demo.py) and [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_spectrum_saturation_cycler.py). The code has a but of cruft and bookkeeping junk in it, I'll take a stab at distilling out what cycling through the color wheel would look like.
+* So, generally RGB / RGBW and Hex are not the most pleasant to work directly in.... this is a good read if you're curious why [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used. There are functional scripts you can run (if you install!)  [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_spectrum_saturation_cycler.py)  and another named `path_between_2_colors.py`. 
 
 ```
-from rgbw_colorspace_converter.colors.converters import  RGB, HSV
+The second looks like this when executed:
 ```
-
+** LINK TO SS **
 
 
 ![go](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
@@ -194,10 +196,10 @@ cd environment
 
 Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the show were more natural to design in non-RGB.
 
-What that might look like in code could be:
 
 ```
->>> from rgbw_colorspace_converter.colors.converters import RGB, HSV
+see examples in the ./bin and ./tests directories.
+
 
 ---- SECTION INCOMPLETE ------
 
@@ -305,7 +307,7 @@ color.rgbw
 
 ```python ./bin/run_color_module_RGB_HSV_HEX_demo.py``` and ```./bin/run_spectrum_saturation_cycler.py```
 
-* Needs to run on a unix-like terminal. Max and putty? should run it.  No promises, it's not required to use the pkg, just deomstrates some things and is pretty.
+* Needs to run on a unix-like terminal. OSX, seems fine. Windows.... I'm not sure.  
 
 # In The Works
 
@@ -313,7 +315,7 @@ color.rgbw
     * Example mini project to see for yourself the difference in vividness and saturation of RGBW vs RGB LEDs. You'll need hardware for this fwiw.
 
 
-# Detailed Docs // Examples
+# Detailed Docs
 
 <pre>
 Color
