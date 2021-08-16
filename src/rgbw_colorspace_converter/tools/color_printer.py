@@ -5,7 +5,7 @@ import random
 # Write colors module using colr!
 def print_colors(
     color,
-    print_char="_",
+    print_chars="_",
     ansi_bat_f=None,
     ansi_html_f=None,
     col_width=78,
@@ -13,35 +13,39 @@ def print_colors(
     random_col_len=False,
     no_newlines=False,
     right_just_term_width="",
+    check_term_size=True,
+    print_bars=False,
+    capture_output=True,
+    random_block_len=False,
 ):
 
-    global std_out_only
-    global cmd_suffix
-    cmd_suffix = ""
-    std_out_only = True
-    if ansi_bat_f not in [None]:
-        std_out_only = False
-        cmd_suffix = " >> {ansi_bat_f} "
+    if check_term_size:
+        col_width = os.get_terminal_size().columns - 2
 
-    ret_code = 0
-    cmd = ""
+    ret_code = None
+    bgcolor = "111111"
+    if print_bars is True:
+        bgcolor = color.hex
 
+    cap_o = ""
+    if capture_output is True:
+        cap_o = f" | tee -a {ansi_bat_f} "
+
+    l = ""
     if print_codes == "no":
         # just print colors
         r = 1
-        if random_col_len:
-            r = random.randint(1, 54)
-        print_chars = print_char * (col_width * r)
-        cmd = f"""colr {right_just_term_width}  {no_newlines} " {print_chars} " "{color.hex}" "{color.hex}"  {cmd_suffix} 2>/dev/null;"""
+        if random_block_len:
+            r = random.randint(1, col_width)
+
+        len_pcs = len(print_chars)
+        l = print_chars * (int(col_width / len_pcs) * r)
+        cmd = f"""colr {right_just_term_width}  {no_newlines} " {l} " "{color.hex}" "{bgcolor}"  {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)
     else:
         # Prtint color codes with color blocks
-        print_chars = "                    " + str(color)
-        cmd = f"""colr  " {print_chars} " "000000" "{color.hex}" {cmd_suffix} 2>/dev/null;"""
+        l = "                    " + str(color)
+        cmd = f"""colr  " {l} " "000000" "{color.hex}" {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)
 
-    if std_out_only is False:
-        os.system(f"tail -n 1 {ansi_bat_f} &")
-        os.system(f"tail -n 1 {ansi_bat_f} | ansi2html -i >> {ansi_html_f} &")
-
-    return int(ret_code)
+    return (int(ret_code), int(col_width))

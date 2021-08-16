@@ -5,13 +5,13 @@ import sys
 import random
 
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
-from rgbw_colorspace_converter.tools import color_printer
+from rgbw_colorspace_converter.tools.color_printer import print_colors
 
 
 os.environ["TERM"] = "xterm-256color"  # screen
 os.system("tput clear; tput init; tput civis;stty -echo; ")
 
-capture_output = True
+capture_output = False
 ansi_bat_f = "./rgbw_csc.asc"
 ansi_html_f = "./rgbw_csc.html"
 os.system(f"rm {ansi_bat_f} {ansi_html_f}")
@@ -40,14 +40,14 @@ To Exit: hit ctrl-c  (after the white test pattern passes)
 *IF* you find your cursor has gone missing, try typing 'reset' and hit enter <-----
 
 "
-sleep 0
+sleep 2
 """
 
 os.system(intro_cmd)
-
+print_bars = False
 print_codes = "no"
-global col_width
 col_width = 79
+
 if len(sys.argv) == 2:
     print_codes = sys.argv[1].lower()
     c = None
@@ -85,19 +85,20 @@ if len(sys.argv) == 1:
 
 
 # Col width, or num characters to print
-attempt_discovery_of_term_size = True
+check_term_size = True
 try:
     col_width = os.get_terminal_size().columns - 2
 except Exception as e:
     del e
-    attempt_discovery_of_term_size = False
+    check_term_size = False
+    col_width = 78
 
 try:
     if len(sys.argv) > 2:
         if sys.argv[2] == "w":
             pass
         else:
-            if attempt_discovery_of_term_size:
+            if check_term_size:
                 col_width = int(sys.argv[2])
 
 except Exception as e:
@@ -109,10 +110,9 @@ you must specify an integer >0 for argument 2.  Or specify 'w' for auto detectio
 '
 """
     )
-    col_width = 80
     del e
-    os.system("stty echo; stty +echo ;")
-    # raise
+    os.system("stty echo; stty +echo ; reset;")
+    raise
 
 # Only applies to color only mode.  Will not break for newlines after #cols printed. aka, the blocks append
 no_newlines = " "
@@ -136,191 +136,211 @@ except Exception as e:
     os.system("stty echo; stty +echo ;")
     raise
 
-ri = False
+random_block_len = False
 if len(sys.argv) == 5:
-    ri = True
+    random_block_len = True
+global MAX_COL_WIDTH
+MAX_COL_WIDTH = 0
+global N_ROWS
+N_ROWS = 0
 
 
-# Write colors module using colr!
-def _write_color(color):
-    if attempt_discovery_of_term_size:
-        # col_width = os.get_terminal_size().columns - 2
-        pass
-    ret_code = 0
+def main(**kwargs):
 
-    cap_o = ""
-    if capture_output is True:
-        cap_o = f" >> {ansi_bat_f} "
+    # Write colors module using colr!
+    def _write_color(
+        color,
+        print_chars="_",
+        ansi_bat_f=ansi_bat_f,
+        ansi_html_f=ansi_html_f,
+        col_width=78,
+        print_codes=print_codes,
+        random_col_len=random_block_len,
+        no_newlines=no_newlines,
+        right_just_term_width=right_just_term_width,
+        check_term_size=check_term_size,
+        print_bars=print_bars,
+        capture_output=capture_output,
+        random_block_len=random_block_len,
+    ):
 
-    l = ""
-    cmd = ""
-    if print_codes == "no":
-        # just print colors
-        r = 1
-        if ri:
-            r = random.randint(1, 54)
-        print_char_str = "===>||><||<==="
-        len_pcs = len(print_char_str)
-        l = print_char_str * (int(col_width / len_pcs) * r)
-        cmd = f"""colr {right_just_term_width}  {no_newlines} " {l} " "{color.hex}" "{color.hex}" >> {ansi_bat_f} 2>/dev/null;"""
-        ret_code = os.system(cmd)
-    else:
-        # Prtint color codes with color blocks
-        l = "                    " + str(color)
-        cmd = f"""colr  " {l} " "000000" "{color.hex}" {cap_o} 2>/dev/null;"""
-        ret_code = os.system(cmd)
+        (ret_code, col_width) = print_colors(
+            color,
+            print_chars=print_chars,
+            ansi_bat_f=ansi_bat_f,
+            ansi_html_f=ansi_html_f,
+            col_width=col_width,
+            print_codes=print_codes,
+            random_col_len=random_col_len,
+            no_newlines=no_newlines,
+            right_just_term_width=right_just_term_width,
+            check_term_size=check_term_size,
+            print_bars=print_bars,
+            capture_output=capture_output,
+            random_block_len=random_block_len,
+        )
 
-        # if capture_output is True:
-        os.system(f"tail -n 1 {ansi_bat_f}")
-        # os.system(f"tail -n 1 {ansi_bat_f} | ansi2html -i >> {ansi_html_f}")
-    return int(ret_code)
+        # Track the widest the window became
+        global MAX_COL_WIDTH
+        if MAX_COL_WIDTH < int(col_width):
+            MAX_COL_WIDTH = col_width
 
+        # track number of rows
+        global N_ROWS
+        N_ROWS = N_ROWS + 1
 
-# Write any messages
+    def _write_msg(msg):
+        os.system(f"""echo '''{msg}'''""")
 
+    color = RGB(255, 255, 255)
+    _write_msg(
+        f"""EXAMPLE OF RGB WHITE: {color.rgb}. Then cycling through each of h,s,v-- white for HSV is {color.hsv} -- Note, the RGB values do not change as hsv.h changes ---- THIS    WILL    REMAIN    WHITE ----   """
+    )
+    try:
+        while color.hsv_h < 1.0:
+            _write_color(color)
 
-def _write_msg(msg):
-    os.system(f"""echo '''{msg}'''""")
+            color.hsv_h = color.hsv_h + 0.2
 
+            if color.hsv_h > 0.99:
+                if color.hsv_s == 0.0:
+                    _write_msg("DONE CYCLING THROUGH (H)sv, NOW CYCLING THROUGH h(S)v")
 
-color = RGB(255, 255, 255)
-_write_msg(
-    f"""EXAMPLE OF RGB WHITE: {color.rgb}. Then cycling through each of h,s,v-- white for HSV is {color.hsv} -- Note, the RGB values do not change as hsv.h changes ---- THIS    WILL    REMAIN    WHITE ----   """
-)
-try:
+                    while color.hsv_s < 1.0:
+                        _write_color(color)
+                        color.hsv_s = color.hsv_s + 0.03
+
+                        if color.hsv_s > 0.99:
+                            if color.hsv_v == 1.0:
+                                _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
+                            while color.hsv_v > 0.0:
+                                _write_color(color)
+                                color.hsv_v -= 0.013
+    except Exception as e:
+        print(e)
+        raise
+
+    _write_msg("And that is cycling through each of the H/S/V properties  independently")
+    _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
+
+    color = HSV(h=1.0, s=0.0, v=1.0)
     while color.hsv_h < 1.0:
         _write_color(color)
-        color.hsv_h = color.hsv_h + 0.2
+        color.hsv_h = color.hsv_h + 0.025
+        color.hsv_s = color.hsv_s - 0.025
+        color.hsv_v = color.hsv_v + 0.025
 
-        if color.hsv_h > 0.99:
-            if color.hsv_s == 0.0:
-                _write_msg("DONE CYCLING THROUGH (H)sv, NOW CYCLING THROUGH h(S)v")
+    _write_msg("WHAT THE HELL... Slightly Random Fading!")
 
-                while color.hsv_s < 1.0:
-                    _write_color(color)
-                    color.hsv_s = color.hsv_s + 0.03
+    color = HSV(0.5, 0.75, 0.232)
+    ctr = 0.0
 
-                    if color.hsv_s > 0.99:
-                        if color.hsv_v == 1.0:
-                            _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
-                        while color.hsv_v > 0.0:
-                            _write_color(color)
-                            color.hsv_v -= 0.013
-except Exception as e:
-    print(e)
-    raise
+    _write_msg("--")
 
-_write_msg("And that is cycling through each of the H/S/V properties  independently")
-_write_msg("We are starting with H and V at 0 and S at 1 and cycling")
-
-color = HSV(h=1.0, s=0.0, v=1.0)
-while color.hsv_h < 1.0:
-    _write_color(color)
-    color.hsv_h = color.hsv_h + 0.025
-    color.hsv_s = color.hsv_s - 0.025
-    color.hsv_v = color.hsv_v + 0.025
-
-_write_msg("WHAT THE HELL... Slightly Random Fading!")
-
-color = HSV(0.5, 0.75, 0.232)
-ctr = 0.0
-
-_write_msg("--")
-
-os.system("sleep 1;")
-xctr = 90
-try:
-    # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
-    while ctr < 20.0:
-
-        # from IPython import embed; embed();
-        ret_code = _write_color(color)
-        if color.hsv_h >= 1.0:
-            color.hsv_h = 0.0
-        else:
-            color.hsv_h = color.hsv_h + 0.007
-        if color.hsv_s <= 0.00:
-            color.hsv_s = [0.0, 0.0, 0.25, 0.4, 0.5][random.randint(0, 4)]
-        else:
-            color.hsv_s = color.hsv_s + 0.0006
-
-        if color.hsv_v >= 1.0:
-            color.hsv_v = [0.0, 0.0, 0.0, 0.9, 0.5][random.randint(0, 4)]
-        else:
-            r = [
-                1.0,
-                122.0,
-                322.0,
-                155.0,
-                177.0,
-                200.0,
-                100.0,
-                300.0,
-                400.0,
-                222.0,
-                331.0,
-                55.0,
-                1.0,
-                122.0,
-                322.0,
-                155.0,
-                177.0,
-                220.0,
-                130.0,
-                300.0,
-                400.0,
-                222.0,
-                331.0,
-                355.0,
-            ]
-            rr = r[random.randint(0, len(r) - 1)] / 400.0
-
-            color.hsv_v = rr
-            # color.hsv_v = color.hsv_v + 0.01
-
-        ctr = ctr + 0.005
-        if ret_code != 0:
-            os.system("stty echo; stty +echo ;")
-            raise
-
-    _write_msg("-------------|| Note how often the RGB and RGBW codes differ ||-----------------")
     os.system("sleep 1;")
-    _write_msg(" Finally, 90 lines of random RGB. ")
+    xctr = 90
+    try:
+        # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
+        while ctr < 20.0:
 
-except Exception as e:
-    del e
-    _write_msg(" Thank You For Watching.")
-    xctr = 100
+            # from IPython import embed; embed();
+            ret_code = _write_color(color)
+            if color.hsv_h >= 1.0:
+                color.hsv_h = 0.0
+            else:
+                color.hsv_h = color.hsv_h + 0.007
+            if color.hsv_s <= 0.00:
+                color.hsv_s = [0.0, 0.0, 0.25, 0.4, 0.5][random.randint(0, 4)]
+            else:
+                color.hsv_s = color.hsv_s + 0.0006
 
-while xctr < 100:
-    # and this is truly printing random colors 100 times.  Random can sometimes be the most dissapointing b/c,
-    # with no patterns to lure you in, they are often boring.
-    ret_code = _write_color(
-        RGB(random.randint(0, 254), random.randint(0, 254), random.randint(0, 254))
+            if color.hsv_v >= 1.0:
+                color.hsv_v = [0.0, 0.0, 0.0, 0.9, 0.5][random.randint(0, 4)]
+            else:
+                r = [
+                    1.0,
+                    122.0,
+                    322.0,
+                    155.0,
+                    177.0,
+                    200.0,
+                    100.0,
+                    300.0,
+                    400.0,
+                    222.0,
+                    331.0,
+                    55.0,
+                    1.0,
+                    122.0,
+                    322.0,
+                    155.0,
+                    177.0,
+                    220.0,
+                    130.0,
+                    300.0,
+                    400.0,
+                    222.0,
+                    331.0,
+                    355.0,
+                ]
+                rr = r[random.randint(0, len(r) - 1)] / 400.0
+
+                color.hsv_v = rr
+                # color.hsv_v = color.hsv_v + 0.01
+
+            ctr = ctr + 0.005
+            if ret_code != 0:
+                os.system("stty echo; stty +echo ;")
+                raise
+
+        _write_msg(
+            "-------------|| Note how often the RGB and RGBW codes differ ||-----------------"
+        )
+        os.system("sleep 1;")
+        _write_msg(" Finally, 90 lines of random RGB. ")
+
+    except Exception as e:
+        del e
+        _write_msg(" Thank You For Watching.")
+        xctr = 100
+
+    while xctr < 100:
+        # and this is truly printing random colors 100 times.  Random can sometimes be the most dissapointing b/c,
+        # with no patterns to lure you in, they are often boring.
+        ret_code = _write_color(
+            RGB(random.randint(0, 254), random.randint(0, 254), random.randint(0, 254))
+        )
+        xctr = xctr + 1
+        if ret_code != 0:
+            cxtr = 100  # noqa
+
+    exit_cmd = """
+    echo "
+
+    "
+    colr -c 0 "                               ╦ ╦╔╗ ╔═╗                            " "#ff0000" "#0000ff";
+    colr -c 0 "                               ╠═╣╠╩╗╠═╝                            " "#ff0000" "#0000ff";
+    colr -c 0 "                               ╩ ╩╚═╝╩                              " "#ff0000" "#0000ff";
+
+    echo "
+
+    "
+    tput cnorm
+    stty echo
+    stty +echo
+
+
+
+    """
+    os.system(
+        f"cat {ansi_bat_f} | ansi2html -i  | perl -pe 's/\/span/\/span\>\<br/g;' >> {ansi_html_f} "
     )
-    xctr = xctr + 1
-    if ret_code != 0:
-        cxtr = 100
+
+    iwidth = int((MAX_COL_WIDTH * 8))
+    ilength = int((N_ROWS * 16))
+
+    os.system(f"hti -H {ansi_html_f} -o ./zzz -s {iwidth},{ilength}")
+    os.system(exit_cmd)
 
 
-exit_cmd = """
-echo "
-
-"
-colr -c 0 "                               ╦ ╦╔╗ ╔═╗                            " "#ff0000" "#0000ff";
-colr -c 0 "                               ╠═╣╠╩╗╠═╝                            " "#ff0000" "#0000ff";
-colr -c 0 "                               ╩ ╩╚═╝╩                              " "#ff0000" "#0000ff";
-
-echo "
-
-"
-tput cnorm
-stty echo
-stty +echo
-
-
-
-
-"""
-os.system(f"hti -H {ansi_html_f} -o ./zzz -s 800,6500")
-os.system(exit_cmd)
+main()
