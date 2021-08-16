@@ -25,7 +25,7 @@ def print_colors(
         no_newlines_flag = " -n "
 
     if check_term_size:
-        col_width = os.get_terminal_size().columns
+        col_width = os.get_terminal_size().columns - 2
     ret_code = None
     bgcolor = "111111"
     if print_bars is True:
@@ -54,7 +54,7 @@ def print_colors(
             r = random.randint(1, int(col_width * 1.85))
             r = float(r) / float(col_width)
 
-        cw = int(col_width * r) - 1
+        cw = int(col_width * r)
         l = str(print_chars * cw)[0:cw]
         cmd = f"""colr  {right_just_term_width}  {no_newlines_flag} " {l} " "{color.hex}" "{bgcolor}"  {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)

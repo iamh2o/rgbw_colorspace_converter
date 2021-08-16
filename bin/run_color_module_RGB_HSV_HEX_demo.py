@@ -101,9 +101,7 @@ my_parser.add_argument(
     default=False,
 )
 
-my_parser.add_argument(
-    "-m", "--meep", action="store_true", default=False, help="opposite of -f."
-)
+my_parser.add_argument("-m", "--meep", action="store_true", default=False, help="opposite of -f.")
 
 my_parser.add_argument(
     "-f",
@@ -155,15 +153,10 @@ if args.full_experience and args.meep:
     raise
 
 if args.full_experience:
-    os.system(
-        "printf '\e[2t' && sleep 2 && printf '\e[1t' && sleep 1 && printf '\e[9;1t'"
-    )
+    os.system("printf '\e[2t' && sleep 2 && printf '\e[1t' && sleep 1 && printf '\e[9;1t'")
 
 if args.meep:
     os.system("printf '\e[8;18;50t' & sleep 1")
-
-if len(args.print_chars) > 7 or len(args.print_chars) == 0:
-    raise Exception("you must specify 1-7 characters only.")
 
 ansi_bat_f = f"./{args.outfiles_prefix}.asc"
 ansi_html_f = f"./{args.outfiles_prefix}.html"
@@ -278,9 +271,7 @@ def main(**kwargs):
                             raise
                         if color.hsv_s > 0.99:
                             if color.hsv_v == 1.0:
-                                _write_msg(
-                                    "DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)"
-                                )
+                                _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
                             while color.hsv_v > 0.0:
                                 (ret_code, col_w) = _write_color(color)
                                 color.hsv_v -= 0.013
@@ -292,9 +283,7 @@ def main(**kwargs):
         print(e)
         raise
 
-    _write_msg(
-        "And that is cycling through each of the H/S/V properties  independently"
-    )
+    _write_msg("And that is cycling through each of the H/S/V properties  independently")
     _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
 
     color = HSV(h=1.0, s=0.0, v=1.0)
@@ -440,9 +429,7 @@ try:
 
 except Exception as e:
     if args.debug:
-        os.system(
-            "echo '                          Something has gone awry....................'"
-        )
+        os.system("echo '                          Something has gone awry....................'")
         print(e)
     else:
         del e
