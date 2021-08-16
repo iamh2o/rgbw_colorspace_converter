@@ -10,7 +10,9 @@ blue_color_obj = RGB(0, 0, 255)
 # Using a utility function to find a path betwwn the 2 colors
 path_between = clrmorph.color_transition(yellow_color_obj, blue_color_obj, steps=12)
 
-print('Note how clear the HSV system changes are, only requiring one value to change, where RGB is pretty counterintuitive in the transition')
+print(
+    "Note how clear the HSV system changes are, only requiring one value to change, where RGB is pretty counterintuitive in the transition"
+)
 for color_step in path_between:
     print_colors(color_step, check_term_size=False)
     print(
