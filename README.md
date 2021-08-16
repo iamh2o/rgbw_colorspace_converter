@@ -207,9 +207,9 @@ see examples in the ./bin and ./tests directories.
 # Moving through the color wheel in RGB, is a lot more of a pain in the add.  Here is an example.
 
 
+
 # Lets start with a complicated color, crimson: http://www.workwithcolor.com/color-converter-01.htm?cp=D92008
 color = RGB(217,32,8) <p valign="middle">rgb 217,32,8<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000?text=+" valign="bottom" ></a></p>
-
 color.rgbw
 (217,32,8)
 color.rgbw
@@ -217,7 +217,10 @@ color.rgbw
 color.hsv
 (0.01913875598086125, 0.9631336405529954, 0.8509803921568627)
 
+
 # As we swing through the color wheel, we change just the h value, note the changes in RGB/W values are not easily predictable considering it's a pretty simple operation.                                                                                                                    
+
+
 
 # Gold:  <p valign="middle">rgb 217,208,7<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D9C709><img src="https://via.placeholder.com/47x20/D9C709/000000?text=+" valign="bottom" ></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes
@@ -229,6 +232,8 @@ color.rgbw
 (210, 200, 0, 7)    
 
 
+
+
 # LawnGreen: <p valign="middle">rgb 112,217,7<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=70D907><img src="https://via.placeholder.com/47x20/70D907/000000?text=+" valign="bottom" ></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes                                 
 color.hsv_h = 0.25
@@ -237,6 +242,8 @@ color.rgb
 (112, 217, 7)
 color.rgbw
 (104, 209, 0, 7)
+
+
 
 # DeepTurquoise:<p valign="middle">rgb7,154,217<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=079AD9 ><img src="https://via.placeholder.com/47x20/709AD9/000000?text=+" valign="bottom" ></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes    
@@ -248,6 +255,8 @@ color.rgb
 color.rgbw
 (0, 145, 211, 6)
 
+
+
 # DarkViolet: <p valign="middle">rgb 87,7,217<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=5707D9 ><img src="https://via.placeholder.com/47x20/5707D9/000000?text=+" valign="bottom" ></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes    
 color.hsv_h = 0.73
@@ -258,7 +267,11 @@ color.rgb
 color.rgbw
 (81, 0, 208, 7)
 
-# And if we set color.hsv_h = 0.0191, we'd be back to crimson.
+
+
+# And if we set color.hsv_h = 0.0191, we'd be back to <p valign="middle">crimson<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000?text=+" valign="bottom" ></a></p>.
+
+
 
 # The same exercise could be repeated with the hsv_s or hsv_v properties (singly, or together)... and if you wished to modify in RGB space, the same setters are available as rgb_r, rgb_g, rgb_b
 
