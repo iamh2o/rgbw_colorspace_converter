@@ -61,7 +61,7 @@ def print_colors(
     else:
         # Prtint color codes with color blocks
         l = "                    " + str(color)
-        cmd = f"""colr  " {l} " "000000" "{color.hex}" {cap_o} 2>/dev/null;"""
+        cmd = f"""colr  " {l} " "111111" "{color.hex}" {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)
 
     # from IPython import embed
