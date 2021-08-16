@@ -6,7 +6,7 @@ import random
 
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
-sleep = 0.7  # sleep = sys.argv[1]  ## Not sure what I was intending with this.
+sleep = 0.3  # sleep = sys.argv[1]  ## Not sure what I was intending with this.
 
 # Do what I can to get the terminal to maybe show colors, hopefullyt more than 8....
 os.environ["TERM"] = "xterm-256color"  # screen
@@ -105,9 +105,7 @@ def color_whirler(color, codes=False):
         os.system(f"sleep {sleep_time}")
         if color.hsv_s >= 1.0:
             color.hsv_s = 0.00
-        if (
-            color.hsv_h >= 1.0
-        ):  # It is not allowed to go above 1.0, so test for equality
+        if color.hsv_h >= 1.0:  # It is not allowed to go above 1.0, so test for equality
             cctr = cctr + 1
             if cctr == 18:
                 rolling = False
@@ -151,9 +149,7 @@ color = RGB(255, 0, 0)
 try:
     # Loop through and just change color hue
     for i in [1, 2]:
-        display_color(
-            color, f"Starting Cycle {i} with no codes, cycle 2 will have codes."
-        )
+        display_color(color, f"Starting Cycle {i} with no codes, cycle 2 will have codes.")
         os.system("sleep 1")
         codes = False
         if i == 2:
@@ -172,9 +168,7 @@ try:
     # This one I'm changing H, S, V with each iteration, semi-randomply.  You gat much more diverse colors than the first example.
     color = RGB(255, 0, 0)
     for i in [2]:
-        display_color(
-            color, f"Starting Cycle {i} with no codes, cycle 2 will have codes."
-        )
+        display_color(color, f"Starting Cycle {i} with no codes, cycle 2 will have codes.")
         os.system(f"sleep {sleep}")
         codes = False
         if i == 2:
