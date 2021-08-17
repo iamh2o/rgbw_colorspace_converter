@@ -39,7 +39,11 @@ More or less the process is: Instantiate a color object from any of the supporte
 
 ```
 pip install rgbw_colorspace_converter ;
-Test it out: run_spectrum_saturation_cycler.py or run_color_module_RGB_HSV_HEX_demo.py ; #just for fun, does not actually show off the rgbw functionality. ctrl-c to exit. 
+Try a few of the three test scripts which use the color library for some ansi escape color art :-)
+
+./bin/path_between_2_colors.py
+./bin/run_color_module_RGB_HSV_HEX_demo.py -z -g -u 20
+./bin/run_spectrum_saturation_cycler.py
 
 ```
 * The three scripts in the bin dir will work in most any terminal. You may only have 16 colors, but may have more.  I took it as a challenge to write some debugging and teaching tools that would not require a whole pile of LED gear to get going. you can get started in a very simple way with the command line color_printer, which accepts this packages color objects (among other things).  It even manages to make some reasonably interesting art!
@@ -173,6 +177,11 @@ Development (less stable)
 cd environment
 ./setup.sh #  Read the help text.  To proceed with install:
 ./setup.sh HBP ~/conda # or wherever your conda is installed or you want it installed
+source env.sh # which you need to do anytime you wish to run things.
+# To Test
+./bin/path_between_2_colors.py
+./bin/run_spectrum_saturation_cycler.py
+./bin/run_color_module_RGB_HSV_HEX_demo.py -z
 ```
 * This will install a conda environment you can source with conda activate HBP. If you don't have conda, it is installed where you specify.  Mamba is also installed (read about it. tldr: lightning fast conda, will change your life). The codebase adheres to black style and mostly to flake8.
 
@@ -199,9 +208,6 @@ Not only does the package allow translation of one color space to another, but i
 
 <pre>
 see examples in the ./bin and ./tests directories.
-
-
----- SECTION INCOMPLETE ------
 
 # Moving through the HSV color wheel is simply cycling 0->1.0->0->and so on
 # Moving through the color wheel in RGB, is a lot more of a pain in the add.  Here is an example.
