@@ -36,7 +36,7 @@ colr -c 0 " --- $COL SUPPORTED  COLORS (( $COL )) COLORS SUPPORTED $COL --- " "f
 
 echo "
 
-This module will not amaze with it's color handling capabilities via terminal colors :-)  It's really meant as a demonstration of a simple use of the module, and leveraging an easy and pretty UNIxVERSALLY available display to give you the gist of what is going on.  It's still kind of neat.  And give Colr some love, I'm using them as my 'display hardware'.
+This is doing as much as it can with the weird array of color options that are terminal colors :-)  It's meant as a demonstration of a simple use of the color transformation module, and leveraging an easy and pretty UNIxVERSALLY available display to give you the gist of what is going on.  It's still kind of neat.  And give Colr some love, I'm using them as my 'display hardware' here.
 "
 
 echo "
