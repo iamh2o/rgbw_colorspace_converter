@@ -77,6 +77,7 @@ echo "CREATING $e"
 mamba env create -n $repo -f $repo.yaml
 
 conda activate $repo
+source ./env.sh
 
 cd ..
 pre-commit install

@@ -8,6 +8,8 @@ import argparse
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 from rgbw_colorspace_converter.tools.color_printer import print_colors
 
+from chromedriver_py import binary_path # this will get you the path variable
+
 # This is all meant to work in even basic teminal sessions that do not
 # have X11 running.  So, I loose a lot of flexibility in color range
 # but, it is a fun challenege.  Below, I'm doing some terminal prep.
@@ -452,7 +454,7 @@ def main(**kwargs):
     ilength = int((N_ROWS * 16))
 
     os.system(
-        f"hti -H {ansi_html_f} -o ./rgbw_pnggen/ -s {iwidth},{ilength}; mv ./rgbw_pnggen/screenshot.png {ansi_png_f}; rm -rf ./rbgw_pnggen/"
+        f"hti -H {ansi_html_f} --chrome_path ./ -o ./rgbw_pnggen/ -s {iwidth},{ilength}; mv ./rgbw_pnggen/screenshot.png {ansi_png_f}; rm -rf ./rbgw_pnggen/"
     )
     os.system(exit_cmd)
 

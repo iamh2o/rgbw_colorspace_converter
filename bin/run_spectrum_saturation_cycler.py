@@ -41,6 +41,8 @@ This is doing as much as it can with the weird array of color options that are t
 
 echo "
 
+NOTE NOTE NOTE--- if you exit before the end of the script, you will need to enter the commands: reset; echo; to reset your terminal. This happens automatically at the end, but can fail to happen if you hit ctrl-c.
+
 "
 sleep 1
 """
@@ -199,6 +201,7 @@ echo "
 "
 tput cnorm
 stty echo
+reset
 """
 
 os.system(exit_cmd)

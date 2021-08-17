@@ -12,3 +12,5 @@ conda activate HBP
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export RGBW_CC_ROOT=$THIS_DIR/../
 export PYTHONPATH=$RGBW_CC_ROOT/src/:$PYTHONPATH
+
+export PATH=RGBW_CC_ROOT/bin/:$PATH
