@@ -28,5 +28,5 @@ setuptools.setup(
         "bin/path_between_2_colors.py",
     ],
     python_requires=">=3.7",
-    install_requires=["colr", "docopt","html2image","ansi2html"],
+    install_requires=["colr", "docopt", "html2image", "ansi2html"],
 )
