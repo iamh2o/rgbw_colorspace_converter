@@ -50,6 +50,9 @@ Try a few of the three test scripts which use the color library for some ansi es
 ./bin/run_spectrum_saturation_cycler.py
 
 ```
+
+* Staring from conda [Example](https://asciinema.org/a/UvOQ4Nvb6ux0id6Ie0E8EelRH)
+
 * The three scripts in the bin dir will work in most any terminal. You may only have 16 colors, but may have more.  I took it as a challenge to write some debugging and teaching tools that would not require a whole pile of LED gear to get going. you can get started in a very simple way with the command line color_printer, which accepts this packages color objects (among other things).  It even manages to make some reasonably interesting art!
 
 ### Pip Github
