@@ -13,8 +13,6 @@ from rgbw_colorspace_converter.tools.color_printer import print_colors
 # but, it is a fun challenege.  Below, I'm doing some terminal prep.
 os.environ["TERM"] = "xterm-256color"  # screen
 os.system("tput clear; tput init; tput civis;stty -echo; stty 100000; ")
-# os.system("stty echo; stty +echo ;")
-
 
 # First a hello
 intro_cmd = """
@@ -40,7 +38,7 @@ echo "
 
 ====>  Once the program ends, or if you end with ctrl-c, the ansi, html and png files will be saved to your running directory if you'd like to use them for anything. <====
 "
-sleep 5;
+sleep 3;
 tput cnorm;
 stty echo;
 stty sane;
@@ -69,6 +67,14 @@ my_parser.add_argument(
 )
 
 my_parser.add_argument(
+    "-j",
+    "--random_color_start",
+    action="store_false",
+    default=True,
+    help="Turn off random seed for when entering color phase."
+    )
+
+my_parser.add_argument(
     "-b",
     "--print_chars",
     action="store",
@@ -84,6 +90,9 @@ my_parser.add_argument(
     default="14",
     help="Font size to set rows in the HTML copy of the display.",
 )
+
+my_parser.add_argument(
+    "-si", "--skip_intro",default=False, action="store_true",help="Skip white to red hue/saturation test")
 
 my_parser.add_argument(
     "-d", "--debug", action="store_true", default=False, help="Turn on debugging."
@@ -244,6 +253,7 @@ def main(**kwargs):
     # reset terminal for printing.
 
     os.system("tput clear; tput init; tput civis;stty -echo; ")
+    random_color_start = kwargs['random_color_start']
 
     # Write colors module using colr!
     def _write_color(
@@ -263,6 +273,7 @@ def main(**kwargs):
         cycle_chars=kwargs["cycle_chars"],
         zigzag=kwargs["zigzag"],
         zag_max=kwargs["zag_max"],
+        random_color_start=kwargs["random_color_start"],
     ):
         global N_ROWS
         (ret_code, col_width) = print_colors(
@@ -304,6 +315,9 @@ def main(**kwargs):
         f"""EXAMPLE OF RGB WHITE: {color.rgb}. Then cycling through each of h,s,v-- white for HSV is {color.hsv} -- Note, the RGB values do not change as hsv.h changes ---- THIS    WILL    REMAIN    WHITE ----   """
     )
     try:
+        if args.skip_intro:
+            color.hsv_h = 2.0
+
         while color.hsv_h < 1.0:
             (ret_code, col_w) = _write_color(color)
 
@@ -350,60 +364,65 @@ def main(**kwargs):
 
     _write_msg("WHAT THE HELL... Slightly Random Fading!")
 
-    color = HSV(0.5, 0.75, 0.232)
-    ctr = 0.0
-
-    _write_msg("--")
-
-    os.system("sleep 1;")
-    xctr = 90
     try:
         # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
+
+
+        (h,s,v) = (0.5, 0.75, 0.232)
+        if random_color_start:
+            (h,s,v) = (float(random.randint(1,1000))/float(1000),float(random.randint(1,1000))/float(1000),float(random.randint(1,1000))/float(1000))
+
+        color = HSV(h, s, v)
+        ctr = 0.0
+        xctr = 90
+
         while ctr < 20.0:
             # from IPython import embed; embed();
             (ret_code, col_w) = _write_color(color)
             if color.hsv_h >= 1.0:
                 color.hsv_h = 0.0
             else:
-                color.hsv_h = color.hsv_h + 0.007
-            if color.hsv_s <= 0.00:
-                color.hsv_s = [0.0, 0.0, 0.25, 0.4, 0.5][random.randint(0, 4)]
-            else:
-                color.hsv_s = color.hsv_s + 0.0006
+                color.hsv_h = color.hsv_h + 0.006
 
-            if color.hsv_v >= 1.0:
-                color.hsv_v = [0.0, 0.0, 0.0, 0.9, 0.5][random.randint(0, 4)]
-            else:
-                r = [
-                    1.0,
-                    122.0,
-                    322.0,
-                    155.0,
-                    177.0,
-                    200.0,
-                    100.0,
-                    300.0,
-                    400.0,
-                    222.0,
-                    331.0,
-                    55.0,
-                    1.0,
-                    122.0,
-                    322.0,
-                    155.0,
-                    177.0,
-                    220.0,
-                    130.0,
-                    300.0,
-                    400.0,
-                    222.0,
-                    331.0,
-                    355.0,
-                ]
-                rr = r[random.randint(0, len(r) - 1)] / 400.0
+            if random.randint(0,14) == 7:
+                color.hsv_s = [0.0, 0.8666, 0.99999, .95, 0.99999, 0.9999, 0.9, 0.78, 0.9][random.randint(0, 8)]
+            #color.hsv_s = 1.0
 
-                color.hsv_v = rr
-                # color.hsv_v = color.hsv_v + 0.01
+            color.hsv_v = color.hsv_v + [0.5,0.03,0.7,.3][random.randint(0,3)]
+            r = [
+                1.0,
+                122.0,
+                322.0,
+                155.0,
+                177.0,
+                200.0,
+                100.0,
+                300.0,
+                400.0,
+                222.0,
+                331.0,
+                55.0,
+                1.0,
+                122.0,
+                322.0,
+                155.0,
+                177.0,
+                220.0,
+                130.0,
+                300.0,
+                400.0,
+                222.0,
+                331.0,
+                355.0,
+                70.0
+                80.0
+                385.0
+            ]
+            rr = r[random.randint(0, len(r) - 1)] / 400.0
+            if random.randint(0,15) == 7:
+                rr =  0.0
+            color.hsv_v = rr
+
 
             ctr = ctr + 0.005
             if ret_code != 0:
@@ -462,6 +481,7 @@ def main(**kwargs):
     os.system(
         f"hti -H {ansi_html_f} --chrome_path ./ -o ./rgbw_pnggen/ -s {iwidth},{ilength}; mv ./rgbw_pnggen/screenshot.png {ansi_png_f}; rm -rf ./rbgw_pnggen/"
     )
+    print(e)
     os.system(exit_cmd)
 
 
@@ -486,6 +506,7 @@ try:
         cycle_chars=args.cycle_chars,
         zigzag=args.zigzag,
         zag_max=args.zag_max,
+        random_color_start=args.random_color_start
     )
 
 except Exception as e:

@@ -1,12 +1,12 @@
 import os
 import random
 
-from rgbw_colorspace_converter.colors.converters import RGB, HSV
+from rgbw_colorspace_converter.colors.converters import RGB
 
 
 # Write colors module using colr!
 def print_colors(
-    color,
+    color=RGB(255,255,9),
     print_chars="_",
     ansi_bat_f=None,
     ansi_html_f=None,
@@ -25,6 +25,7 @@ def print_colors(
     cycle_chars=False,
     zigzag=False,
     zag_max=100,
+    multiply_txt=True
 ):
 
     if color is None and foreground_color is None and background_color is None:
@@ -32,9 +33,10 @@ def print_colors(
             "\t\t\t\n\n\t\t\tYou must specify color UNLESS you specify both background_color and foreground_color independently."
         )
     if background_color is None:
-        background_color = color.hex
+        background_color = color
     if foreground_color is None:
-        foreground_color = color.hex
+        foreground_color = color
+
 
     no_newlines_flag = ""
     if no_newlines:
@@ -43,9 +45,10 @@ def print_colors(
     if check_term_size:
         col_width = os.get_terminal_size().columns - 2
     ret_code = None
+    blk = RGB(1,1,1)
 
-    if print_bars is False:
-        background_color = RGB(1, 1, 1).hex
+    if print_bars is False and background_color is None:
+        background_color = RGB(1, 1, 1)
 
     cap_o = ""
     if capture_output is True:
@@ -60,10 +63,10 @@ def print_colors(
         while n_row < 13:
             ph = str("pleaseholddlohesaelp" * 40)[0 : col_width - 1]
             os.system(
-                f"colr {right_just_term_width} {no_newlines_flag}  ' {ph} ' '111111' 'ff00ff'; "
+                f"colr {right_just_term_width} {no_newlines_flag}  ' {ph} ' '{blk.hex}' 'ff00ff'; "
             )
             ll = "O" * (col_width - 2)
-            cmd = f"""colr {right_just_term_width}  " {ll} " "111111" "111111"  2>/dev/null;"""
+            cmd = f"""colr {right_just_term_width}  " {ll} " "{blk.hex}" "{blk.hex}"  2>/dev/null;"""
             ret_code = os.system(cmd)
             n_row = n_row + 1
 
@@ -76,7 +79,10 @@ def print_colors(
             r = float(r) / float(col_width)
 
         cw = int(col_width * r)
-        l = str(str(os.environ["char_string"]) * cw)[0:cw]
+        if multiply_txt:
+            l = str(str(os.environ["char_string"]) * cw)[0:cw]
+        else:
+            l=print_chars
         if cycle_chars:
             if zigzag:
                 os.environ["zag_ctr"] = str(int(os.environ["zag_ctr"]) + 1)
@@ -96,14 +102,12 @@ def print_colors(
                     os.environ["char_string"][1:] + os.environ["char_string"][0]
                 )
 
-        cmd = f"""colr  {right_just_term_width}  {no_newlines_flag} " {l} " "{foreground_color}" "{background_color}" {cap_o} 2>/dev/null;"""
+        cmd = f"""colr  {right_just_term_width}  {no_newlines_flag} " {l} " "{foreground_color.hex}" "{background_color.hex}" {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)
     else:
         # Prtint color codes with color blocks
         l = "                    " + str(color)
-        cmd = f"""colr  " {l} " "{foreground_color}" "{background_color}" {cap_o} 2>/dev/null;"""
+        cmd = f"""colr  " {l} " "{foreground_color.hex}" "{background_color.hex}" {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)
 
-    # from IPython import embed
-    # embed()
     return (int(ret_code), int(col_width))
