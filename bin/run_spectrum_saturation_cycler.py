@@ -199,7 +199,6 @@ echo "
 "
 tput cnorm
 stty echo
-stty +echo
 """
 
 os.system(exit_cmd)

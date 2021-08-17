@@ -19,7 +19,7 @@ def print_colors(
     print_bars=False,
     capture_output=True,
     random_block_len=False,
-    n_row=10,
+    n_row=-1,
     foreground_color=None,
     background_color=None,
     cycle_chars=False,
@@ -50,6 +50,9 @@ def print_colors(
     cap_o = ""
     if capture_output is True:
         cap_o = f" | tee -a {ansi_bat_f} "
+
+    if n_row == -1:
+        os.environ["char_string"] = print_chars * int(col_width * 2)
 
     if n_row == 0:
         # Set the env var holding the char string to be used
