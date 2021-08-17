@@ -1,7 +1,6 @@
 html2image
 ansi2html
 black
-chromedriver_py
 Colr
 ipython
 ipython-genutils
