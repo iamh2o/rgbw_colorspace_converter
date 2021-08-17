@@ -42,7 +42,7 @@ pip install rgbw_colorspace_converter ;
 Try a few of the three test scripts which use the color library for some ansi escape color art :-)
 
 ./bin/path_between_2_colors.py
-./bin/run_color_module_RGB_HSV_HEX_demo.py -z -g -u 20
+./bin/run_color_module_RGB_HSV_HEX_demo.py -z -y -g -u 33 
 ./bin/run_spectrum_saturation_cycler.py
 
 ```
@@ -181,7 +181,7 @@ source env.sh # which you need to do anytime you wish to run things.
 # To Test
 ./bin/path_between_2_colors.py
 ./bin/run_spectrum_saturation_cycler.py
-./bin/run_color_module_RGB_HSV_HEX_demo.py -z
+./bin/run_color_module_RGB_HSV_HEX_demo.py  -b "___|||))--WWWW________///====\__" -z -y -g -u 33 -f
 ```
 * This will install a conda environment you can source with conda activate HBP. If you don't have conda, it is installed where you specify.  Mamba is also installed (read about it. tldr: lightning fast conda, will change your life). The codebase adheres to black style and mostly to flake8.
 
