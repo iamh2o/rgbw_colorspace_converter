@@ -71,8 +71,8 @@ my_parser.add_argument(
     "--random_color_start",
     action="store_false",
     default=True,
-    help="Turn off random seed for when entering color phase."
-    )
+    help="Turn off random seed for when entering color phase.",
+)
 
 my_parser.add_argument(
     "-b",
@@ -92,7 +92,12 @@ my_parser.add_argument(
 )
 
 my_parser.add_argument(
-    "-si", "--skip_intro",default=False, action="store_true",help="Skip white to red hue/saturation test")
+    "-si",
+    "--skip_intro",
+    default=False,
+    action="store_true",
+    help="Skip white to red hue/saturation test",
+)
 
 my_parser.add_argument(
     "-d", "--debug", action="store_true", default=False, help="Turn on debugging."
@@ -253,7 +258,7 @@ def main(**kwargs):
     # reset terminal for printing.
 
     os.system("tput clear; tput init; tput civis;stty -echo; ")
-    random_color_start = kwargs['random_color_start']
+    random_color_start = kwargs["random_color_start"]
 
     # Write colors module using colr!
     def _write_color(
@@ -367,10 +372,13 @@ def main(**kwargs):
     try:
         # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
 
-
-        (h,s,v) = (0.5, 0.75, 0.232)
+        (h, s, v) = (0.5, 0.75, 0.232)
         if random_color_start:
-            (h,s,v) = (float(random.randint(1,1000))/float(1000),float(random.randint(1,1000))/float(1000),float(random.randint(1,1000))/float(1000))
+            (h, s, v) = (
+                float(random.randint(1, 1000)) / float(1000),
+                float(random.randint(1, 1000)) / float(1000),
+                float(random.randint(1, 1000)) / float(1000),
+            )
 
         color = HSV(h, s, v)
         ctr = 0.0
@@ -384,11 +392,21 @@ def main(**kwargs):
             else:
                 color.hsv_h = color.hsv_h + 0.006
 
-            if random.randint(0,14) == 7:
-                color.hsv_s = [0.0, 0.8666, 0.99999, .95, 0.99999, 0.9999, 0.9, 0.78, 0.9][random.randint(0, 8)]
-            #color.hsv_s = 1.0
+            if random.randint(0, 14) == 7:
+                color.hsv_s = [
+                    0.0,
+                    0.8666,
+                    0.99999,
+                    0.95,
+                    0.99999,
+                    0.9999,
+                    0.9,
+                    0.78,
+                    0.9,
+                ][random.randint(0, 8)]
+            # color.hsv_s = 1.0
 
-            color.hsv_v = color.hsv_v + [0.5,0.03,0.7,.3][random.randint(0,3)]
+            color.hsv_v = color.hsv_v + [0.5, 0.03, 0.7, 0.3][random.randint(0, 3)]
             r = [
                 1.0,
                 122.0,
@@ -414,15 +432,14 @@ def main(**kwargs):
                 222.0,
                 331.0,
                 355.0,
-                70.0
-                80.0
-                385.0
+                70.0,
+                80.0,
+                385.0,
             ]
             rr = r[random.randint(0, len(r) - 1)] / 400.0
-            if random.randint(0,15) == 7:
-                rr =  0.0
+            if random.randint(0, 15) == 7:
+                rr = 0.0
             color.hsv_v = rr
-
 
             ctr = ctr + 0.005
             if ret_code != 0:
@@ -506,7 +523,7 @@ try:
         cycle_chars=args.cycle_chars,
         zigzag=args.zigzag,
         zag_max=args.zag_max,
-        random_color_start=args.random_color_start
+        random_color_start=args.random_color_start,
     )
 
 except Exception as e:

@@ -6,7 +6,7 @@ from rgbw_colorspace_converter.colors.converters import RGB
 
 # Write colors module using colr!
 def print_colors(
-    color=RGB(255,255,9),
+    color=RGB(255, 255, 9),
     print_chars="_",
     ansi_bat_f=None,
     ansi_html_f=None,
@@ -25,7 +25,7 @@ def print_colors(
     cycle_chars=False,
     zigzag=False,
     zag_max=100,
-    multiply_txt=True
+    multiply_txt=True,
 ):
 
     if color is None and foreground_color is None and background_color is None:
@@ -37,7 +37,6 @@ def print_colors(
     if foreground_color is None:
         foreground_color = color
 
-
     no_newlines_flag = ""
     if no_newlines:
         no_newlines_flag = " -n "
@@ -45,7 +44,7 @@ def print_colors(
     if check_term_size:
         col_width = os.get_terminal_size().columns - 2
     ret_code = None
-    blk = RGB(1,1,1)
+    blk = RGB(1, 1, 1)
 
     if print_bars is False and background_color is None:
         background_color = RGB(1, 1, 1)
@@ -82,7 +81,7 @@ def print_colors(
         if multiply_txt:
             l = str(str(os.environ["char_string"]) * cw)[0:cw]
         else:
-            l=print_chars
+            l = print_chars
         if cycle_chars:
             if zigzag:
                 os.environ["zag_ctr"] = str(int(os.environ["zag_ctr"]) + 1)
