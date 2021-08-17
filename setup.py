@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="rgbw_colorspace_converter",
-    version="0.1.0",
+    version="0.1.2",
     author="John Major",
     author_email="iamh2o@gmail.com",
     description="Convert between RGB / HSV / HSL / HSI / HEX Color Spaces. And, emit the RGBW code for each.",
@@ -28,5 +28,5 @@ setuptools.setup(
         "bin/path_between_2_colors.py",
     ],
     python_requires=">=3.7",
-    install_requires=["colr", "docopt"],
+    install_requires=["colr", "docopt","html2image","ansi2html"],
 )
