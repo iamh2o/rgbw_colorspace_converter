@@ -8,7 +8,15 @@ import argparse
 from rgbw_colorspace_converter.colors.converters import RGB, HSV
 from rgbw_colorspace_converter.tools.color_printer import print_colors
 
-from chromedriver_py import binary_path # this will get you the path variable
+from chromedriver_py import binary_path  # this will get you the path variable
+
+# This is required to make an image of the session out of the html recording
+os.environ["PATH"] = ".:" + os.environ["PATH"]
+os.system(f"chmod a+x {binary_path}")
+os.system(
+    f"ln -s {binary_path} ./chrome; ln -s {binary_path} ./chromium;"
+)  # Might need another for windows. This should cover linux and mac
+
 
 # This is all meant to work in even basic teminal sessions that do not
 # have X11 running.  So, I loose a lot of flexibility in color range
@@ -132,7 +140,9 @@ my_parser.add_argument(
     default=False,
 )
 
-my_parser.add_argument("-m", "--meep", action="store_true", default=False, help="opposite of -f.")
+my_parser.add_argument(
+    "-m", "--meep", action="store_true", default=False, help="opposite of -f."
+)
 
 my_parser.add_argument(
     "-f",
@@ -194,7 +204,9 @@ if args.full_experience and args.meep:
     raise
 
 if args.full_experience:
-    os.system("printf '\e[2t' && sleep 2 && printf '\e[1t' && sleep 1 && printf '\e[9;1t'")
+    os.system(
+        "printf '\e[2t' && sleep 2 && printf '\e[1t' && sleep 1 && printf '\e[9;1t'"
+    )
 
 if args.meep:
     os.system("printf '\e[8;18;50t' & sleep 1")
@@ -318,7 +330,9 @@ def main(**kwargs):
                             raise
                         if color.hsv_s > 0.99:
                             if color.hsv_v == 1.0:
-                                _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
+                                _write_msg(
+                                    "DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)"
+                                )
                             while color.hsv_v > 0.0:
                                 (ret_code, col_w) = _write_color(color)
                                 if color.hsv_v < 0.1:
@@ -332,7 +346,9 @@ def main(**kwargs):
     except Exception as e:
         print(e)
 
-    _write_msg("And that is cycling through each of the H/S/V properties  independently")
+    _write_msg(
+        "And that is cycling through each of the H/S/V properties  independently"
+    )
     _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
 
     color = HSV(h=1.0, s=0.0, v=1.0)
@@ -454,7 +470,7 @@ def main(**kwargs):
     ilength = int((N_ROWS * 16))
 
     os.system(
-        f"hti -H {ansi_html_f} --chrome_path ./ -o ./rgbw_pnggen/ -s {iwidth},{ilength}; mv ./rgbw_pnggen/screenshot.png {ansi_png_f}; rm -rf ./rbgw_pnggen/"
+        f"hti --chrome_path ./ -H {ansi_html_f} --chrome_path ./ -o ./rgbw_pnggen/ -s {iwidth},{ilength}; mv ./rgbw_pnggen/screenshot.png {ansi_png_f}; rm -rf ./rbgw_pnggen/"
     )
     os.system(exit_cmd)
 
@@ -484,7 +500,9 @@ try:
 
 except Exception as e:
     if args.debug:
-        os.system("echo '                          Something has gone awry....................'")
+        os.system(
+            "echo '                          Something has gone awry....................'"
+        )
         print(e)
     else:
         del e
