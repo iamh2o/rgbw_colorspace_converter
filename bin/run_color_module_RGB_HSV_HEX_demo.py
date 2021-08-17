@@ -35,8 +35,12 @@ echo "
 
 ==| There is the option to save the display setting as an HTML page and a png. Both will be saved in the directory you are running from.
 
+
+----|  Suggestion::: Try running it with no arguments first.
+
+====>  Once the program ends, or if you end with ctrl-c, the ansi, html and png files will be saved to your running directory if you'd like to use them for anything. <====
 "
-sleep 1;
+sleep 5;
 tput cnorm;
 stty echo;
 stty sane;
@@ -71,6 +75,14 @@ my_parser.add_argument(
     type=str,
     help="Do not print solid bars of color that span the terminal row. Instead print characters of color against a black background.(string length limit is 7chars for now)) ",
     default="____===",
+)
+
+my_parser.add_argument(
+    "-i",
+    "--font-size",
+    type=str,
+    default="14",
+    help="Font size to set rows in the HTML copy of the display.",
 )
 
 my_parser.add_argument(
@@ -109,6 +121,14 @@ my_parser.add_argument(
     action="store_true",
     default=False,
     help="If you like more in general.",
+)
+
+my_parser.add_argument(
+    "-y",
+    "--cycle_chars",
+    action="store_true",
+    default=False,
+    help="If not printing the bar colors, you can cycle the character string (may work).",
 )
 
 my_parser.add_argument(
@@ -164,7 +184,7 @@ ansi_png_f = f"./{args.outfiles_prefix}.png"
 
 os.system(f"rm {ansi_bat_f} {ansi_html_f}")
 os.system(
-    f"""echo '<html><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=FiraCode"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=FiraCode" type="text/css"><head></head><body style="line-height: 0.5;padding: 0; border: 0; margin: 0;"> ' > {ansi_html_f} """
+    f"""echo '<html><head><link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=FiraCode"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=FiraCode" type="text/css"></head><body style="font-size: {args.font_size}; line-height: 0.4;padding: 0; border: 0; margin: 0;"> ' > {ansi_html_f} """
 )
 
 
@@ -217,6 +237,7 @@ def main(**kwargs):
         print_bars=kwargs["print_bars"],
         capture_output=kwargs["capture_output"],
         random_block_len=kwargs["random_block_len"],
+        cycle_chars=kwargs["cycle_chars"],
     ):
         global N_ROWS
         (ret_code, col_width) = print_colors(
@@ -234,6 +255,7 @@ def main(**kwargs):
             capture_output=capture_output,
             random_block_len=random_block_len,
             n_row=N_ROWS,
+            cycle_chars=cycle_chars,
         )
         global COL_WIDTH
         COL_WIDTH = col_width
@@ -274,7 +296,10 @@ def main(**kwargs):
                                 _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
                             while color.hsv_v > 0.0:
                                 (ret_code, col_w) = _write_color(color)
-                                color.hsv_v -= 0.013
+                                if color.hsv_v < 0.1:
+                                    color.hsv_v -= 0.004
+                                else:
+                                    color.hsv_v -= 0.008
                                 if ret_code != 0:
                                     raise
             if ret_code != 0:
@@ -377,7 +402,7 @@ def main(**kwargs):
         if ret_code != 0:
             cxtr = 100  # noqa
 
-    exit_cmd = """
+    exit_cmd = f"""
     echo "
 
     "
@@ -392,6 +417,12 @@ def main(**kwargs):
     stty echo
 
 
+    echo 'Your session files may be found:
+                ~ {ansi_bat_f}
+                ~ {ansi_html_f}
+                ~ {ansi_png_f} <-- this one you may need to zoom in on to see
+
+                '
 
     """
     os.system(
@@ -425,6 +456,7 @@ try:
         print_bars=print_bars,
         capture_output=capture_output,
         random_block_len=args.random_block_len,
+        cycle_chars=args.cycle_chars,
     )
 
 except Exception as e:
