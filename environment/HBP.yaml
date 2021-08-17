@@ -168,4 +168,4 @@ dependencies:
     - selenium==3.141.0
     - wakatime==13.1.0
     - xhtml2pdf==0.2.5
-prefix: /Users/jmajor/conda/envs/HBP
+prefix: ~/conda/envs/HBP
