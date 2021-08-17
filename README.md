@@ -33,6 +33,10 @@ More or less the process is: Instantiate a color object from any of the supporte
 
 * [Python >= 3.7](https://www.python.org)
 
+### Nice to have requirements....
+
+* For the tests scripts // generative ansi art code.  One of the scripts will record an HTML version of what is displayed on the screen, and when exited, render the page as a png.  This rendering step is not required to run the script, watch it, get the html copy (and ansi output too!)... but if you don't have chrome installled (or safari as an alternate), the image creation won't work. You can install it before or after you install this code, it will be autodetected when available and you'll start getting png's.  But again, only required for one script, not for the core library.
+
 ## Install Options
 
 ### PIP From PyPi
