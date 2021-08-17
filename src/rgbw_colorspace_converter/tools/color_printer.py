@@ -23,6 +23,8 @@ def print_colors(
     foreground_color=None,
     background_color=None,
     cycle_chars=False,
+    zigzag=False,
+    zag_max=100,
 ):
 
     if color is None and foreground_color is None and background_color is None:
@@ -73,7 +75,23 @@ def print_colors(
         cw = int(col_width * r)
         l = str(str(os.environ["char_string"]) * cw)[0:cw]
         if cycle_chars:
-            os.environ["char_string"] = os.environ["char_string"][1:] + os.environ["char_string"][0]
+            if zigzag:
+                os.environ["zag_ctr"] = str(int(os.environ["zag_ctr"]) + 1)
+                if int(os.environ["zag_ctr"]) > int(zag_max):
+                    os.environ["zag_ctr"] = "0"
+                    if os.environ["rgbw_char_dir"] == "L":
+                        os.environ["rgbw_char_dir"] = "R"
+                    else:
+                        os.environ["rgbw_char_dir"] = "L"
+
+            if os.environ["rgbw_char_dir"] in ["R"]:
+                os.environ["char_string"] = (
+                    os.environ["char_string"][-1] + os.environ["char_string"][0:-1]
+                )
+            else:
+                os.environ["char_string"] = (
+                    os.environ["char_string"][1:] + os.environ["char_string"][0]
+                )
 
         cmd = f"""colr  {right_just_term_width}  {no_newlines_flag} " {l} " "{foreground_color}" "{background_color}" {cap_o} 2>/dev/null;"""
         ret_code = os.system(cmd)

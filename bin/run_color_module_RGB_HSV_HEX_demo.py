@@ -73,7 +73,7 @@ my_parser.add_argument(
     "--print_chars",
     action="store",
     type=str,
-    help="Do not print solid bars of color that span the terminal row. Instead print characters of color against a black background.(string length limit is 7chars for now)) ",
+    help="Do not print solid bars of color that span the terminal row. Instead print characters of color against a black background.(string length limit is 7chars for now)). ",
     default="____===",
 )
 
@@ -93,8 +93,25 @@ my_parser.add_argument(
     "-c",
     "--no_capture_output",
     action="store_true",
-    help="If set a html file and png of the display will be saved to files in this directory named ./rgbw_csc.(asc,html,png) ",
+    help="If set a html file and png of the display will be saved to files in this directory named ./rgbw_csc.(asc,html,png). ",
     default=False,
+)
+
+my_parser.add_argument(
+    "-g",
+    "--zigzag",
+    action="store_true",
+    default=False,
+    help="Reverse the direction of characters cycling every 100 lines.",
+)
+os.environ["rgbw_char_dir"] = "R"
+
+my_parser.add_argument(
+    "-u",
+    "--zag_max",
+    action="store",
+    default="100",
+    help="The number of rows to go before reversing the zigzag.",
 )
 
 my_parser.add_argument(
@@ -158,6 +175,8 @@ my_parser.add_argument(
 
 # Execute parse_args()
 args = my_parser.parse_args()
+
+os.environ["zag_ctr"] = "0"
 
 if args.full_experience and args.meep:
     ec = """echo '
@@ -238,6 +257,8 @@ def main(**kwargs):
         capture_output=kwargs["capture_output"],
         random_block_len=kwargs["random_block_len"],
         cycle_chars=kwargs["cycle_chars"],
+        zigzag=kwargs["zigzag"],
+        zag_max=kwargs["zag_max"],
     ):
         global N_ROWS
         (ret_code, col_width) = print_colors(
@@ -256,6 +277,8 @@ def main(**kwargs):
             random_block_len=random_block_len,
             n_row=N_ROWS,
             cycle_chars=cycle_chars,
+            zigzag=zigzag,
+            zag_max=zag_max,
         )
         global COL_WIDTH
         COL_WIDTH = col_width
@@ -297,9 +320,9 @@ def main(**kwargs):
                             while color.hsv_v > 0.0:
                                 (ret_code, col_w) = _write_color(color)
                                 if color.hsv_v < 0.1:
-                                    color.hsv_v -= 0.004
+                                    color.hsv_v -= 0.005
                                 else:
-                                    color.hsv_v -= 0.008
+                                    color.hsv_v -= 0.01
                                 if ret_code != 0:
                                     raise
             if ret_code != 0:
@@ -457,6 +480,8 @@ try:
         capture_output=capture_output,
         random_block_len=args.random_block_len,
         cycle_chars=args.cycle_chars,
+        zigzag=args.zigzag,
+        zag_max=args.zag_max,
     )
 
 except Exception as e:
