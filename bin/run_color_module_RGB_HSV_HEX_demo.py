@@ -124,7 +124,7 @@ my_parser.add_argument(
     "-u",
     "--zag_max",
     action="store",
-    default="100",
+    default="27",
     help="The number of rows to go before reversing the zigzag.",
 )
 
@@ -360,7 +360,7 @@ def main(**kwargs):
         color.hsv_v = color.hsv_v + 0.025
 
     _write_msg("WHAT THE HELL... Slightly Random Fading!")
-
+    oper2 = "+"
     try:
         # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
 
@@ -383,24 +383,38 @@ def main(**kwargs):
                 color.hsv_h = 0.0  # random.uniform(0, 1)
             else:
                 if oper == "+":
-                    color.hsv_h = color.hsv_h + 0.008
+                    color.hsv_h = color.hsv_h + 0.007
                 else:
-                    color.hsv_h = color.hsv_h - 0.024
-            if random.randint(0, 6) == 4:
+
+                    color.hsv_h = color.hsv_h - 0.003  # random.uniform(0.002, 0.008)
+            if random.randint(0, 30) == 7:
                 oper = "-"
-            else:
+            if random.randint(0, 30) == 7:
                 oper = "+"
 
-            if random.randint(0, 100) == 7 or color.hsv_s > 1.0:
-                color.hsv_s = [
-                    0.8,
-                    0.6,
-                    0.9,
-                    0.7,
-                ][random.randint(0, 3)]
-            else:
-                color.hsv_s = color.hsv_s + 0.08
-
+            color.hsv_s = [
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                0.95,
+                0.9,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                0.85,
+                0.79,
+                0.8,
+                0.77,
+                1.0,
+                0.41,
+                0.47,
+                0.55,
+            ][random.randint(0, 18)]
+            if random.randint(0, 200) == 7:
+                color.hsv_s = 0.0
             # color.hsv_v = color.hsv_v + [0.5, 0.03, 0.7, 0.3][random.randint(0, 3)]
             r = [
                 130,
@@ -434,12 +448,18 @@ def main(**kwargs):
                 420.0,
                 490.0,
                 455.0,
+                444,
+                380,
                 92,
                 440,
+                380.0,
+                200.0,
+                152.0,
             ]
             rr = r[random.randint(0, len(r) - 1)] / 500.0
             if random.randint(0, 175) == 7:
                 rr = 0.0
+
             color.hsv_v = rr
 
             ctr = ctr + 0.005
