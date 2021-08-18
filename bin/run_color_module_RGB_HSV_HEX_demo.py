@@ -384,7 +384,7 @@ def main(**kwargs):
         ctr = 0.0
         xctr = 90
         oper = "+"
-        while ctr < 25.0:
+        while ctr < 10.0:
             # from IPython import embed; embed();
             (ret_code, col_w) = _write_color(color)
             if color.hsv_h >= 1.0:
