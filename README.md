@@ -20,6 +20,8 @@ More or less the process is: Instantiate a color object from any of the supporte
 
 > Or! Go ahead and use this for non LED projects where you need to convert between color spaces.  Say for controlling old skool DMX lighting rigs.
 
+#### Show Me The Math
+* We started from first principles, all of the converters mathmatical formulas for converting between color spaces are laid out in the converter module. [This is the formula to move from HSI to RGBW, for example. Much of the math is drawn from other sources, references noted where applicable.](https://github.com/iamh2o/rgbw_colorspace_converter/blob/5dfbf9fd3d519939191d7e7d3213eb173dcce828/src/rgbw_colorspace_converter/colors/converters.py#L242)
 ### 3 Main Projects Shaped This Module: HEX, BAAAHS and Pyramid Scheme.... hence.... HEXBASPYR ?
 
 <pre>
