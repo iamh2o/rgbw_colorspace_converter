@@ -84,7 +84,6 @@ else:
 
 
 print_colors(
-    RGB(222, 222, 222),
     print_chars=args.text,
     foreground_color=color_t,
     background_color=color_b,

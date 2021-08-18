@@ -6,7 +6,7 @@ from rgbw_colorspace_converter.colors.converters import RGB
 
 # Write colors module using colr!
 def print_colors(
-    color=RGB(255, 255, 9),
+    color=None,
     print_chars="_",
     ansi_bat_f=None,
     ansi_html_f=None,
@@ -32,10 +32,14 @@ def print_colors(
         raise Exception(
             "\t\t\t\n\n\t\t\tYou must specify color UNLESS you specify both background_color and foreground_color independently."
         )
-    if background_color is None:
-        background_color = color
+
     if foreground_color is None:
         foreground_color = color
+    if background_color is None:
+        if print_bars:
+            background_color = color
+        else:
+            background_color = RGB(1, 1, 1)
 
     no_newlines_flag = ""
     if no_newlines:
@@ -43,11 +47,9 @@ def print_colors(
 
     if check_term_size:
         col_width = os.get_terminal_size().columns - 2
+
     ret_code = None
     blk = RGB(1, 1, 1)
-
-    if print_bars is False:
-        background_color = RGB(1, 1, 1)
 
     cap_o = ""
     if capture_output is True:
