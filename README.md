@@ -51,20 +51,18 @@ Try a few of the three test scripts which use the color library for some ansi es
 
 ```
 
-* Staring from conda [Example](https://asciinema.org/a/UvOQ4Nvb6ux0id6Ie0E8EelRH)
+* pip install and run test script::: [Example](https://asciinema.org/a/430968)
 
 * The three scripts in the bin dir will work in most any terminal. You may only have 16 colors, but may have more.  I took it as a challenge to write some debugging and teaching tools that would not require a whole pile of LED gear to get going. you can get started in a very simple way with the command line color_printer, which accepts this packages color objects (among other things).  It even manages to make some reasonably interesting art!
 
-### Pip Github
+### From Github
 
 * Clone repo
 * cd into clone dir
 * type ```pip install -e .```
 * This should instal the main branch active in git (no promises it's stable!)
+* `source environment/env.sh`
 
-###  Add to PYTHONPATH
-
-*  Put rgbw_colorspace_converter in your PYTHONPATH. You won't have the bin scripts auto in your path however.
 
 #### Quick Start Crash Cource
 
@@ -158,25 +156,23 @@ color.hex
 
 </pre>
 
-##### An worked use case
+##### A worked use case
 
 * Lets say you wanted to write s/w to control something that emits light- probably using colors. This could be LEDs or other lighting hardware, or even sofware or APIs/services.  Each have their own interfaces with what color codes they accept.  LEDs are primarily RGB or RGBW, but working directly in RGB is a pain. So this module can let you work in the space you grok, and spit out the translations to the thing you are controlling in the protocol it expects (I guyess we suopport DMX too if you want to ask me about that.
 
 * I wrote two simple scripts that acheive all of the above.  I instantiate objects using RGB color codes, I work with the objects in HSV space to move through the color space in various ways (and to show how straight forward it is.  And in a supremely awesome way :-)  I found a way to use a terminal tool called colr to act as my display I'm controlling...... and it only accepted Hex codes.  So I was using 3 spaces actively just for one simeple project.  The colored output I produce with these tools also emits the color codes for all of the color spaces represented with each line of color so you can take a peek at how all the differnt ones represnet different things.  RGB and RGBW get really strange when complex mixtures of colors happen.
 * So, generally RGB / RGBW and Hex are not the most pleasant to work directly in.... this is a good read if you're curious why [RGB/RGBW/Hex are not the most intuitive ways to think about color](https://www.maketecheasier.com/difference-between-hex-rgb-hsl/). To perform simple organic operations, like fading through saturations of a color, or cycling smoothly through various colors, the manipulation of HSV/HSL/HSI are far more intuitive (and far more amenable to programatic manipulation) than the others.  So, I'll write a toy script (which you can run here using a very low tech display), which I think will demonstrate how this package was intended to be used. There are functional scripts you can run (if you install!)  [here ---](https://github.com/iamh2o/rgbw_colorspace_converter/blob/main/bin/run_spectrum_saturation_cycler.py)  and another named `path_between_2_colors.py`. 
 
-```
-The second looks like this when executed:
-```
-** LINK TO SS **
 
 
 ![go](https://raw.githubusercontent.com/iamh2o/rgbw_colorspace_converter/main/images/bar20.png)
 
 ## Contribute
 
+<ul>
 Please do ask questions, discuss new feature requests, file bugs, etc.  You are empowered to add new features, but try to talk it through with the repo admins first-  though if youre really burning to code, we can talk with the code in front of us.  PRs are the way to propose changes.  No commits to main are allowed.  Actions/Tests must all pass as well as review by 2 folks equiped to eval the proposed changes.
 Development (less stable)
+</ul>
 
 ### Install Dev Env
 
@@ -209,9 +205,9 @@ source env.sh # which you need to do anytime you wish to run things.
 ## More Examples
 
 ### A Bit More
-
+<ul>
 Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the show were more natural to design in non-RGB.
-
+</ul>
 
 <pre>
 see examples in the ./bin and ./tests directories.
@@ -286,7 +282,48 @@ color.rgbw
 
 
 
-# The same exercise could be repeated with the hsv_s or hsv_v properties (singly, or together)... and if you wished to modify in RGB space, the same setters are available as rgb_r, rgb_g, rgb_b
+#### This final example demonstrates the counter-intuitive RGB<->RGBW settings when not dealing with fully saturated colors.
+
+from rgbw_colorspace_converter.colors.converters import RGB
+
+color = RGB(20,200,123) # dark orange
+print(color.hsv, color.hex)
+-> (0.42870370370370364, 0.8999999999999999, 0.7843137254901961), '#14c87a'
+
+ctr = 0
+while ctr < 9:
+    color.hsv_s -= .1
+    color.hsv_h += 0.02
+     print(color.hsv, color.rgb, color.rgbw, color.hex)
+     ctr += 1
+
+# Outputs
+HSV(0.4487037, 0.8, 0.7843137254901961) RGB(39, 200, 150 ) RGBW(0, 162, 109, 39) HEX 27c896
+<p valign="middle">--| Light Sea Green<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=27c896><img src="https://via.placeholder.com/47x20/27c896/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.4687037, 0.7, 0.7843137254901961) RGB(60, 200, 173 ) RGBW(0, 141, 111, 59) HEX 3cc8ad
+<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=3cc8ad><img src="https://via.placeholder.com/47x20/3cc8ad/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.4887037, 0.6, 0.7843137254901961) RGB(80, 200, 191 ) RGBW(0, 120, 110, 80) HEX 50c8bf
+<p valign="middle">--| Medium Turquoise<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=50c8bf><img src="https://via.placeholder.com/47x20/50c8bf/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5087037, 0.5, 0.7843137254901961) RGB(100, 194, 200) RGBW(0, 93, 100, 99 ) HEX 64c2c8
+<p valign="middle">--| Light Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=64c2c8><img src="https://via.placeholder.com/47x20/64c2c8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5287037, 0.4, 0.7843137254901961) RGB(120, 186, 200) RGBW(0, 65, 80, 120 ) HEX 78bac8
+<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=78bac8><img src="https://via.placeholder.com/47x20/78bac8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5487037, 0.3, 0.7843137254901961) RGB(139, 182, 200) RGBW(0, 42, 61, 138 ) HEX 8bb6c8
+<p valign="middle">--| skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5687037, 0.2, 0.7843137254901961) RGB(160, 183, 200) RGBW(0, 22, 40, 160 ) HEX a0b7c8
+<p valign="middle">--| light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5887037, 0.1, 0.7843137254901961) RGB(180, 189, 200) RGBW(0, 9, 19, 180  ) HEX b4bdc8
+<p valign="middle">--| silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.6087037, 0.0, 0.7843137254901961) RGB(200, 200, 200) RGBW(0, 0, 0, 199   ) HEX c8c8c8
+<p valign="middle">--| dark silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=c8c8c8><img src="https://via.placeholder.com/47x20/c8c8c8/000000?text=+" valign="bottom" ></a></p>
 
 </pre>
 
