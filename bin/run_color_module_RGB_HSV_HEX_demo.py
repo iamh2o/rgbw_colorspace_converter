@@ -360,7 +360,7 @@ def main(**kwargs):
         color.hsv_v = color.hsv_v + 0.025
 
     _write_msg("WHAT THE HELL... Slightly Random Fading!")
-    oper2 = "+"
+    oper2 = "+"  # noqa
     try:
         # I'm cycling through colors in order, but chosing the steps to move forward for H/S/V semi-randomly so some nice patterns emerge. Also, generally a good idea to throw in some negative space here and there.
 
