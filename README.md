@@ -55,16 +55,14 @@ Try a few of the three test scripts which use the color library for some ansi es
 
 * The three scripts in the bin dir will work in most any terminal. You may only have 16 colors, but may have more.  I took it as a challenge to write some debugging and teaching tools that would not require a whole pile of LED gear to get going. you can get started in a very simple way with the command line color_printer, which accepts this packages color objects (among other things).  It even manages to make some reasonably interesting art!
 
-### Pip Github
+### From Github
 
 * Clone repo
 * cd into clone dir
 * type ```pip install -e .```
 * This should instal the main branch active in git (no promises it's stable!)
+* `source environment/env.sh`
 
-###  Add to PYTHONPATH
-
-*  Put rgbw_colorspace_converter in your PYTHONPATH. You won't have the bin scripts auto in your path however.
 
 #### Quick Start Crash Cource
 
@@ -299,31 +297,31 @@ while ctr < 9:
 
 # Outputs
 HSV(0.4487037, 0.8, 0.7843137254901961) RGB(39, 200, 150 ) RGBW(0, 162, 109, 39) HEX 27c896
---| <p valign="middle">Light Sea Green<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=27c896><img src="https://via.placeholder.com/47x20/27c896/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Light Sea Green<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=27c896><img src="https://via.placeholder.com/47x20/27c896/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.4687037, 0.7, 0.7843137254901961) RGB(60, 200, 173 ) RGBW(0, 141, 111, 59) HEX 3cc8ad
---| <p valign="middle">Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=3cc8ad><img src="https://via.placeholder.com/47x20/3cc8ad/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=3cc8ad><img src="https://via.placeholder.com/47x20/3cc8ad/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.4887037, 0.6, 0.7843137254901961) RGB(80, 200, 191 ) RGBW(0, 120, 110, 80) HEX 50c8bf
---| <p valign="middle">Medium Turquoise<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=50c8bf><img src="https://via.placeholder.com/47x20/50c8bf/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Medium Turquoise<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=50c8bf><img src="https://via.placeholder.com/47x20/50c8bf/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.5087037, 0.5, 0.7843137254901961) RGB(100, 194, 200) RGBW(0, 93, 100, 99 ) HEX 64c2c8
---| <p valign="middle">Light Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=64c2c8><img src="https://via.placeholder.com/47x20/64c2c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Light Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=64c2c8><img src="https://via.placeholder.com/47x20/64c2c8/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.5287037, 0.4, 0.7843137254901961) RGB(120, 186, 200) RGBW(0, 65, 80, 120 ) HEX 78bac8
---| <p valign="middle">Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=78bac8><img src="https://via.placeholder.com/47x20/78bac8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=78bac8><img src="https://via.placeholder.com/47x20/78bac8/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.5487037, 0.3, 0.7843137254901961) RGB(139, 182, 200) RGBW(0, 42, 61, 138 ) HEX 8bb6c8
---| <p valign="middle">skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.5687037, 0.2, 0.7843137254901961) RGB(160, 183, 200) RGBW(0, 22, 40, 160 ) HEX a0b7c8
---| <p valign="middle">light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.5887037, 0.1, 0.7843137254901961) RGB(180, 189, 200) RGBW(0, 9, 19, 180  ) HEX b4bdc8
---| <p valign="middle">silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000?text=+" valign="bottom" ></a></p>
 
 HSV(0.6087037, 0.0, 0.7843137254901961) RGB(200, 200, 200) RGBW(0, 0, 0, 199   ) HEX c8c8c8
---| <p valign="middle">dark silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=c8c8c8><img src="https://via.placeholder.com/47x20/c8c8c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| dark silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=c8c8c8><img src="https://via.placeholder.com/47x20/c8c8c8/000000?text=+" valign="bottom" ></a></p>
 
 </pre>
 
