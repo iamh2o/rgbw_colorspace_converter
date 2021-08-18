@@ -144,9 +144,7 @@ my_parser.add_argument(
     default=False,
 )
 
-my_parser.add_argument(
-    "-m", "--meep", action="store_true", default=False, help="opposite of -f."
-)
+my_parser.add_argument("-m", "--meep", action="store_true", default=False, help="opposite of -f.")
 
 my_parser.add_argument(
     "-f",
@@ -208,9 +206,7 @@ if args.full_experience and args.meep:
     raise
 
 if args.full_experience:
-    os.system(
-        "printf '\e[2t' && sleep 2 && printf '\e[1t' && sleep 1 && printf '\e[9;1t'"
-    )
+    os.system("printf '\e[2t' && sleep 2 && printf '\e[1t' && sleep 1 && printf '\e[9;1t'")
 
 if args.meep:
     os.system("printf '\e[8;18;50t' & sleep 1")
@@ -339,9 +335,7 @@ def main(**kwargs):
                             raise
                         if color.hsv_s > 0.99:
                             if color.hsv_v == 1.0:
-                                _write_msg(
-                                    "DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)"
-                                )
+                                _write_msg("DONE CYCLING THROUGH S, NOW CYCLING THROUGH hs(V)")
                             while color.hsv_v > 0.0:
                                 (ret_code, col_w) = _write_color(color)
                                 if color.hsv_v < 0.1:
@@ -355,9 +349,7 @@ def main(**kwargs):
     except Exception as e:
         print(e)
 
-    _write_msg(
-        "And that is cycling through each of the H/S/V properties  independently"
-    )
+    _write_msg("And that is cycling through each of the H/S/V properties  independently")
     _write_msg("We are starting with H and V at 0 and S at 1 and cycling")
 
     color = HSV(h=1.0, s=0.0, v=1.0)
@@ -383,61 +375,70 @@ def main(**kwargs):
         color = HSV(h, s, v)
         ctr = 0.0
         xctr = 90
-
-        while ctr < 20.0:
+        oper = "+"
+        while ctr < 25.0:
             # from IPython import embed; embed();
             (ret_code, col_w) = _write_color(color)
             if color.hsv_h >= 1.0:
-                color.hsv_h = 0.0
+                color.hsv_h = 0.0  # random.uniform(0, 1)
             else:
-                color.hsv_h = color.hsv_h + 0.006
+                if oper == "+":
+                    color.hsv_h = color.hsv_h + 0.008
+                else:
+                    color.hsv_h = color.hsv_h - 0.024
+            if random.randint(0, 6) == 4:
+                oper = "-"
+            else:
+                oper = "+"
 
-            if random.randint(0, 14) == 7:
+            if random.randint(0, 100) == 7 or color.hsv_s > 1.0:
                 color.hsv_s = [
-                    0.0,
-                    0.8666,
-                    0.99999,
-                    0.95,
-                    0.99999,
-                    0.9999,
+                    0.8,
+                    0.6,
                     0.9,
-                    0.78,
-                    0.9,
-                ][random.randint(0, 8)]
-            # color.hsv_s = 1.0
+                    0.7,
+                ][random.randint(0, 3)]
+            else:
+                color.hsv_s = color.hsv_s + 0.08
 
-            color.hsv_v = color.hsv_v + [0.5, 0.03, 0.7, 0.3][random.randint(0, 3)]
+            # color.hsv_v = color.hsv_v + [0.5, 0.03, 0.7, 0.3][random.randint(0, 3)]
             r = [
-                1.0,
-                122.0,
-                322.0,
-                155.0,
-                177.0,
-                200.0,
-                100.0,
-                300.0,
+                130,
+                120,
+                377.0,
+                500.0,
+                500,
+                490.0,
+                390.0,
+                500.0,
+                422.0,
+                401.0,
+                455.0,
+                470.0,
+                480.0,
+                500,
+                500,
+                500,
+                500,
+                485.0,
+                420,
+                170,
+                500.0,
+                500,
+                490.0,
                 400.0,
-                222.0,
-                331.0,
-                55.0,
-                1.0,
-                122.0,
-                322.0,
-                155.0,
-                177.0,
-                220.0,
-                130.0,
-                300.0,
-                400.0,
-                222.0,
-                331.0,
-                355.0,
-                70.0,
-                80.0,
-                385.0,
+                500.0,
+                352.0,
+                451.0,
+                475.0,
+                420.0,
+                490.0,
+                455.0,
+                92,
+                440,
             ]
-            rr = r[random.randint(0, len(r) - 1)] / 400.0
-            if random.randint(0, 15) == 7:
+            rr = r[random.randint(0, len(r) - 1)] / 500.0
+            if random.randint(0, 175) == 7:
                 rr = 0.0
             color.hsv_v = rr
 
@@ -498,7 +499,6 @@ def main(**kwargs):
     os.system(
         f"hti -H {ansi_html_f} --chrome_path ./ -o ./rgbw_pnggen/ -s {iwidth},{ilength}; mv ./rgbw_pnggen/screenshot.png {ansi_png_f}; rm -rf ./rbgw_pnggen/"
     )
-    print(e)
     os.system(exit_cmd)
 
 
@@ -528,9 +528,7 @@ try:
 
 except Exception as e:
     if args.debug:
-        os.system(
-            "echo '                          Something has gone awry....................'"
-        )
+        os.system("echo '                          Something has gone awry....................'")
         print(e)
     else:
         del e
