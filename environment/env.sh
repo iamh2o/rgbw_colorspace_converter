@@ -9,7 +9,7 @@ conda activate
 conda activate HBP
 
 ## Dir of this script
-THIS_DIR=$(dirname `realpath $0`)
+THIS_DIR=$(dirname $(realpath $0))
 export RGBW_CC_ROOT=$THIS_DIR/../
 export PYTHONPATH=$RGBW_CC_ROOT/src/:$PYTHONPATH
 
