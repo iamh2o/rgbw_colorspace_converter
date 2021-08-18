@@ -421,7 +421,7 @@ def main(**kwargs):
                 0.47,
                 0.55,
             ][random.randint(0, 18)]
-            if random.randint(0, 200) == 7:
+            if random.randint(0, 180) == 7:
                 color.hsv_s = 0.0
             # color.hsv_v = color.hsv_v + [0.5, 0.03, 0.7, 0.3][random.randint(0, 3)]
             r = [
@@ -458,14 +458,13 @@ def main(**kwargs):
                 455.0,
                 444,
                 380,
-                92,
                 440,
                 380.0,
                 200.0,
                 152.0,
             ]
-            rr = r[random.randint(0, len(r) - 1)] / 500.0
-            if random.randint(0, 175) == 7:
+            rr = r[random.randint(0, len(r) - 1)] / 600.0
+            if random.randint(0, 275) == 7:
                 rr = 0.0
 
             color.hsv_v = rr
