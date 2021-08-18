@@ -16,12 +16,14 @@ tldr:  The `color` module within this package will translate various color syste
 #### Conceptually, How It Works
 
 <ul>
+	
 More or less the process is: Instantiate a color object from any of the supported types.  Use the returned object to emit values for all types(including RGBW). Modify the RGB or HSV objects by their r/g/b or h/s/v properties (even interchangibly!  This is killer because, if you want to simply dim a non-saturated color, the rgb path is pretty complicated.  But in HSV you can simply decrement the 'V' in the color.hsv object to dim the color and simultaneously emit the RGB values for the dimmed color (which can be sent to hardware). I tend to operate in HSV space, but send signals in RGB or RGBW space to hardware. But can be used also as a general color manipulator and translator.
-</ul>
 
 > We've become accustomed to the limited ability of RGB LEDs to produce truly diverse colors, but with the introduction of RGBW(white) LEDs, the ability of LEDs to replicate a more realistic spectrum of colors is dramatically increased.  The problem however, is decades of systems based on RGB, HEX, HSL do not offer easy transformations to RGBW from each system.  This package does  this for you.  And further, we believe it makes programatic manipulation of colors for LED/art projects more natural/intuitive.  If will return you RGBW for given tuples of other spaces, and do so fast enough for interactive LED projects.  There are a few helper functions and whatnot, but it's really as simple as (r,g,b,w) = Color.RGB(255,10,200).  Where 4 channel RGBW LEDs will translate the returned values to represent the richer color specified by the RGB tuple.
 
 > Or! Go ahead and use this for non LED projects where you need to convert between color spaces.  Say for controlling old skool DMX lighting rigs.
+
+</ul>
 
 #### Show Me The Math
 * We started from first principles, all of the converters mathmatical formulas for converting between color spaces are laid out in the converter module. [This is the formula to move from HSI to RGBW, for example. Much of the math is drawn from other sources, references noted where applicable.](https://github.com/iamh2o/rgbw_colorspace_converter/blob/5dfbf9fd3d519939191d7e7d3213eb173dcce828/src/rgbw_colorspace_converter/colors/converters.py#L242)
@@ -79,12 +81,14 @@ Try a few of the three test scripts which use the color library for some ansi es
 
 #### Quick Start Crash Cource
 
+<ul>
 > from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
 >
 >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
-
+</ul>
+	
 # Begin Like So:
-
+<ul>
 <pre>
 from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
 
@@ -92,6 +96,7 @@ from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
 
 rgb.(press tab in an interactive shell) and you'll see:
 </pre>
+</ul>
 
 >``````
 >
