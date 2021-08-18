@@ -169,8 +169,10 @@ color.hex
 
 ## Contribute
 
+<ul>
 Please do ask questions, discuss new feature requests, file bugs, etc.  You are empowered to add new features, but try to talk it through with the repo admins first-  though if youre really burning to code, we can talk with the code in front of us.  PRs are the way to propose changes.  No commits to main are allowed.  Actions/Tests must all pass as well as review by 2 folks equiped to eval the proposed changes.
 Development (less stable)
+</ul>
 
 ### Install Dev Env
 
@@ -203,9 +205,9 @@ source env.sh # which you need to do anytime you wish to run things.
 ## More Examples
 
 ### A Bit More
-
+<ul>
 Not only does the package allow translation of one color space to another, but it also allows modifications of the color object in real time that re-calculates all of the other color space values at the same time.  This is *EXCEEDINGLY* helpful if you wish to do things like slice through HSV space, and only change the saturation, or the hue. This is simply decrementing the H or S value incremntally, but in RGB space, is a complex juggling of changing all 3 RGB values in non intuitive ways.  The same applies for transversals of HSI or HSL space to RGB.  We often found ourselves writing our shows in HSV/HSL and trnanslating to RGBW for the LED hardware to display b/c the show were more natural to design in non-RGB.
-
+</ul>
 
 <pre>
 see examples in the ./bin and ./tests directories.
