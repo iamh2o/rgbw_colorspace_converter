@@ -282,7 +282,48 @@ color.rgbw
 
 
 
-# The same exercise could be repeated with the hsv_s or hsv_v properties (singly, or together)... and if you wished to modify in RGB space, the same setters are available as rgb_r, rgb_g, rgb_b
+#### This final example demonstrates the counter-intuitive RGB<->RGBW settings when not dealing with fully saturated colors.
+
+from rgbw_colorspace_converter.colors.converters import RGB
+
+color = RGB(20,200,123) # dark orange
+print(color.hsv, color.hex)
+-> (0.42870370370370364, 0.8999999999999999, 0.7843137254901961), '#14c87a'
+
+ctr = 0
+while ctr < 9:
+    color.hsv_s -= .1
+    color.hsv_h += 0.02
+     print(color.hsv, color.rgb, color.rgbw, color.hex)
+     ctr += 1
+
+# Outputs
+HSV(0.4487037, 0.8, 0.7843137254901961) RGB(39, 200, 150 ) RGBW(0, 162, 109, 39) HEX 27c896
+--| <p valign="middle">Light Sea Green<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=27c896><img src="https://via.placeholder.com/47x20/27c896/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.4687037, 0.7, 0.7843137254901961) RGB(60, 200, 173 ) RGBW(0, 141, 111, 59) HEX 3cc8ad
+--| <p valign="middle">Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=3cc8ad><img src="https://via.placeholder.com/47x20/3cc8ad/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.4887037, 0.6, 0.7843137254901961) RGB(80, 200, 191 ) RGBW(0, 120, 110, 80) HEX 50c8bf
+--| <p valign="middle">Medium Turquoise<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=50c8bf><img src="https://via.placeholder.com/47x20/50c8bf/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5087037, 0.5, 0.7843137254901961) RGB(100, 194, 200) RGBW(0, 93, 100, 99 ) HEX 64c2c8
+--| <p valign="middle">Light Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=64c2c8><img src="https://via.placeholder.com/47x20/64c2c8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5287037, 0.4, 0.7843137254901961) RGB(120, 186, 200) RGBW(0, 65, 80, 120 ) HEX 78bac8
+--| <p valign="middle">Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=78bac8><img src="https://via.placeholder.com/47x20/78bac8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5487037, 0.3, 0.7843137254901961) RGB(139, 182, 200) RGBW(0, 42, 61, 138 ) HEX 8bb6c8
+--| <p valign="middle">skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5687037, 0.2, 0.7843137254901961) RGB(160, 183, 200) RGBW(0, 22, 40, 160 ) HEX a0b7c8
+--| <p valign="middle">light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.5887037, 0.1, 0.7843137254901961) RGB(180, 189, 200) RGBW(0, 9, 19, 180  ) HEX b4bdc8
+--| <p valign="middle">silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000?text=+" valign="bottom" ></a></p>
+
+HSV(0.6087037, 0.0, 0.7843137254901961) RGB(200, 200, 200) RGBW(0, 0, 0, 199   ) HEX c8c8c8
+--| <p valign="middle">dark silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=c8c8c8><img src="https://via.placeholder.com/47x20/c8c8c8/000000?text=+" valign="bottom" ></a></p>
 
 </pre>
 
