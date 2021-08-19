@@ -218,6 +218,9 @@ source env.sh # which you need to do anytime you wish to run things.
 
 * I've worked up a lowtech way to demonstrating cycling through various color spaces programmatically using the terminal.  If you have pip installed or run setup.sh, this should work.  Try running (in dev)```conda activate HBP; python bin/run_color_module_RGB_HSV_HEX_demo.py``` (after pip)```run_color_module_RGB_HSV_HEX_demo.py```.  You get a taste for how the spaces cycle differently and what the encoding for each looks like.
 
+* It the main bin script has a lot of parametyers now.   
+** You can easily genrate things like with the test bin files: <a href="https://asciinema.org/a/430968" target="_blank"><img src="https://asciinema.org/a/430968.svg" height=150 wigth=220/></a>
+
 ## Quick Note on Our Hardware Setup
 
 * We used OLA + DMXkings to run LEDs via DMX for many BIG projects controlling thousands of LEDS. And this library controlling and mapping colors.
