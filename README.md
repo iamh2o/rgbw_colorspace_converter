@@ -6,9 +6,11 @@
 ## RGBW ! Why?
 * RGBW LEDs allow direct production of much more of the colorspace people are able to observe, as opposed to RGB, which relies on perceptual effects to trick you into seeing a color.  A good example are pastel colors, almost impossible with RGB, very beautiful in RGBW. And just generaly, the experience in real life feel richer with RGBW, probably b/c there is one more layer of data input.
 * No more RGB shadows when using white light!!!  Since RGB replicates white light by RGB all on, there is always an offset in the emitters physical location, which ends up leaving RGB shadows on the edges of the white light illuminated area.  This is not a problem with a true W channel.
-* And... [we were building this](pyramid_scheme/README.md): <A hrref=pyramid_scheme/README.md ><img src=https://github.com/iamh2o/rgbw_colorspace_converter/blob/27be89226851c1cea834542750ebb4201116b47b/pyramid_scheme/Pyr_ctrim.gif height=150 width=220 > </img></a>.
+* And... [we were building this // better res pics and videos here](pyramid_scheme/README.md): <A hrref=pyramid_scheme/README.md ><img src=https://github.com/iamh2o/rgbw_colorspace_converter/blob/27be89226851c1cea834542750ebb4201116b47b/pyramid_scheme/Pyr_ctrim.gif height=150 width=220 ></img>  <img src=pyramid_scheme/pyramid_moody.JPG height=150 width=220></img>
 
+* `if there is a stutter, it's due to the animated gif :-)`
 
+	
 ### What is the utility of this module?
 
 <ul>
