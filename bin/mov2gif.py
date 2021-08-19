@@ -17,7 +17,9 @@ import subprocess
 
 print("aaaa")
 if len(sys.argv) <= 2:
-    print("usage: ", sys.argv[0], "[INPUT_MOV_FILENAME]", "[OUTPUT_GIF_FILENAME]", "[FPS]")
+    print(
+        "usage: ", sys.argv[0], "[INPUT_MOV_FILENAME]", "[OUTPUT_GIF_FILENAME]", "[FPS]"
+    )
 
     sys.exit(-1)
 
