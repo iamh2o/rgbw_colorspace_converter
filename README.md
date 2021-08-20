@@ -10,7 +10,6 @@
 
 * `if there is a stutter, it's due to the animated gif :-)`
 
-	
 ### What is the utility of this module?
 
 <ul>
