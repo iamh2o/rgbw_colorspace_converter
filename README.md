@@ -531,3 +531,7 @@ It would be remiss of us not to  thank Steve Dudek for his Buffalo soothsaying a
 - [Shield.io](https://shields.io)
 - [Placeholder](https://placeholder.com/) for allowing there to be color images in this readme!
 - [Colorblind Aware Design[(https://davidmathlogic.com/colorblind/)
+
+Dependency Checker
+
+<https://app.fossa.com/reports/b52a06f9-01ec-4e71-b973-05ecc024441f>
