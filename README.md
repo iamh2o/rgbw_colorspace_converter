@@ -167,12 +167,12 @@ color.rgb
 
 
 color.hsv
-<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></img></a></p>
+<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000.pmg?text=+" valign="bottom" ></img></a></p>
 In [17]: color.rgbw
 Out[17]: (254, 254, 0, 0)
 
 color.hex
-<p valign="middle">'ffff00'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></img></p>
+<p valign="middle">'ffff00'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000.png?text=+" valign="bottom" ></a></img></p>
 
 # and the rest were all translated to represent yellow as well
 
@@ -243,7 +243,7 @@ see examples in the ./bin and ./tests directories.
 
 
 # Lets start with a complicated color, crimson: http://www.workwithcolor.com/color-converter-01.htm?cp=D92008
-color = RGB(217,32,8) <p valign="middle">rgb 217,32,8<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000?text=+" valign="bottom" ></img></a></p>
+color = RGB(217,32,8) <p valign="middle">rgb 217,32,8<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000.png?text=+" valign="bottom" ></img></a></p>
 color.rgbw
 (217,32,8)
 color.rgbw
