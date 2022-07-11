@@ -344,7 +344,7 @@ HSV(0.5487037, 0.3, 0.7843137254901961) RGB(139, 182, 200) RGBW(0, 42, 61, 138 )
 <p valign="middle">--| skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.5687037, 0.2, 0.7843137254901961) RGB(160, 183, 200) RGBW(0, 22, 40, 160 ) HEX a0b7c8
-<p valign="middle">--| light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?.pngtext=+" valign="bottom" ></img></a></p>
+<p valign="middle">--| light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.5887037, 0.1, 0.7843137254901961) RGB(180, 189, 200) RGBW(0, 9, 19, 180  ) HEX b4bdc8
 <p valign="middle">--| silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000.png?text=+" valign="bottom" ></img></a></p>
