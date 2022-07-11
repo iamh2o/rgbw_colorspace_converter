@@ -85,11 +85,13 @@ Try a few of the three test scripts which use the color library for some ansi es
 
 #### Quick Start Crash Cource
 
-<ul>
-> from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
->
->  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
-</ul>
+
+	
+  > from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
+  >
+  >  The Color class is the top level class, but the RGB and HSV classes inherit from it and do all of the same work. Its intended to be expanded upon at   > some point, but for now, you can honesly choose any of them.  You can instantiate 'Color(RGB/HSL)' objext only.  Once instantiated, they calculate     > and maintain the state of the 5 other color spaces these objects manage (HSL, HSi, HEX, RGBW, i guess just 4 others, 6 total.
+
+
 	
 # Begin Like So:
 <ul>
