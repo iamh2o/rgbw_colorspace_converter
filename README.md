@@ -98,7 +98,7 @@ Try a few of the three test scripts which use the color library for some ansi es
 <pre>
 from rgbw_colorspace_converter.colors.converters import RGB, HSV, HSL, HSI, Hex
 
-<p valign="middle">rgb = RGB(255,125,22)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff7d16><img src="https://via.placeholder.com/47x20/ff7d16/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">rgb = RGB(255,125,22)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff7d16><img src="https://via.placeholder.com/47x20/ff7d16/000000.png?text=+" valign="bottom" ></img></a></p>
 
 rgb.(press tab in an interactive shell) and you'll see:
 </pre>
