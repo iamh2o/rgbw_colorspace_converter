@@ -16,6 +16,7 @@
 tldr:  The `color` module within this package will translate various color systems into each other, but most useful is the conversion to RGBW as well. This is a niche use case,. mostly applicable to lighting and LEDs specifically. It is object based, so operating on the object to change properties of the color will automatically translate to all th other color spaces-  this makes it supremely useful in programatic LED applications where you might want to have algorithmic generative art. To see a couple of test examples of using the object, see the ansi art generating scripts, or my novel below.  
 </ul>
 
+
 #### Conceptually, How It Works
 
 <ul>
@@ -138,22 +139,22 @@ from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
 color = RGB(255,0,0)
 color.rgb
-<p valign="middle">(255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">(255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png" valign="bottom" ></img></a></p>
 
 In [34]: color.hsv
-<p valign="middle">(0.0, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">(0.0, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
 
 color.hsl
-<p valign="middle">(0.0, 1.0, 0.5)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">(0.0, 1.0, 0.5)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
 
 color.hsi
-<p valign="middle">(0.0, 1.0, 0.33333)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">(0.0, 1.0, 0.33333)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></img></a></p>
 
 color.hex
-<p valign="middle">'#ff0000'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">'#ff0000'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></img></a></p>
 
 color.rgbw
-<p valign="middle">(254, 0, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">(254, 0, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></img></a></p>
 
 # We can change the red color object to yellow by adding green by directly changing the <code>rgb_g</code> property
 # of the color object (which maps all RGB and HSV changes to all other color spaces in real time.
@@ -162,16 +163,16 @@ color.rgbw
 color.rgb_g = 255
 
 color.rgb
-<p valign="middle">rgb(255, 255, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">rgb(255, 255, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></img></a></p>
 
 
 color.hsv
-<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></img></a></p>
 In [17]: color.rgbw
 Out[17]: (254, 254, 0, 0)
 
 color.hex
-<p valign="middle">'ffff00'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">'ffff00'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></a></img></p>
 
 # and the rest were all translated to represent yellow as well
 
@@ -242,7 +243,7 @@ see examples in the ./bin and ./tests directories.
 
 
 # Lets start with a complicated color, crimson: http://www.workwithcolor.com/color-converter-01.htm?cp=D92008
-color = RGB(217,32,8) <p valign="middle">rgb 217,32,8<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000?text=+" valign="bottom" ></a></p>
+color = RGB(217,32,8) <p valign="middle">rgb 217,32,8<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000?text=+" valign="bottom" ></img></a></p>
 color.rgbw
 (217,32,8)
 color.rgbw
@@ -255,7 +256,7 @@ color.hsv
 
 
 
-# Gold:  <p valign="middle">rgb 217,208,7<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D9C709><img src="https://via.placeholder.com/47x20/D9C709/000000?text=+" valign="bottom" ></a></p>
+# Gold:  <p valign="middle">rgb 217,208,7<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D9C709><img src="https://via.placeholder.com/47x20/D9C709/000000.png?text=+" valign="bottom" ></img></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes
 color.hsv_h = 0.16                                                                              
 (0.16, 0.9631336405529954, 0.8509803921568627)                                                  
@@ -267,7 +268,7 @@ color.rgbw
 
 
 
-# LawnGreen: <p valign="middle">rgb 112,217,7<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=70D907><img src="https://via.placeholder.com/47x20/70D907/000000?text=+" valign="bottom" ></a></p>
+# LawnGreen: <p valign="middle">rgb 112,217,7<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=70D907><img src="https://via.placeholder.com/47x20/70D907/000000.png?text=+" valign="bottom" ></img></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes                                 
 color.hsv_h = 0.25
 (0.25, 0.9631336405529954, 0.8509803921568627)                                                  
@@ -278,7 +279,7 @@ color.rgbw
 
 
 
-# DeepTurquoise:<p valign="middle">rgb7,154,217<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=079AD9 ><img src="https://via.placeholder.com/47x20/709AD9/000000?text=+" valign="bottom" ></a></p>
+# DeepTurquoise:<p valign="middle">rgb7,154,217<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=079AD9 ><img src="https://via.placeholder.com/47x20/709AD9/000000.png?text=+" valign="bottom" ></img></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes    
 color.hsv_h = 0.55
 color.hsv
@@ -290,7 +291,7 @@ color.rgbw
 
 
 
-# DarkViolet: <p valign="middle">rgb 87,7,217<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=5707D9 ><img src="https://via.placeholder.com/47x20/5707D9/000000?text=+" valign="bottom" ></a></p>
+# DarkViolet: <p valign="middle">rgb 87,7,217<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=5707D9 ><img src="https://via.placeholder.com/47x20/5707D9/000000.png?text=+" valign="bottom" ></img></a></p>
 # Moving the HSV colorwheel value 'h' only yields these changes    
 color.hsv_h = 0.73
 color.hsv
@@ -302,7 +303,7 @@ color.rgbw
 
 
 
-# And if we set color.hsv_h = 0.0191, we'd be back to <p valign="middle">crimson<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000?text=+" valign="bottom" ></a></p>.
+# And if we set color.hsv_h = 0.0191, we'd be back to <p valign="middle">crimson<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=D92008><img src="https://via.placeholder.com/47x20/D92008/000000.png?text=+" valign="bottom" ></img></a></p>.
 
 
 
@@ -323,31 +324,31 @@ while ctr < 9:
 
 # Outputs
 HSV(0.4487037, 0.8, 0.7843137254901961) RGB(39, 200, 150 ) RGBW(0, 162, 109, 39) HEX 27c896
-<p valign="middle">--| Light Sea Green<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=27c896><img src="https://via.placeholder.com/47x20/27c896/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Light Sea Green<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=27c896><img src="https://via.placeholder.com/47x20/27c896/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.4687037, 0.7, 0.7843137254901961) RGB(60, 200, 173 ) RGBW(0, 141, 111, 59) HEX 3cc8ad
-<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=3cc8ad><img src="https://via.placeholder.com/47x20/3cc8ad/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=3cc8ad><img src="https://via.placeholder.com/47x20/3cc8ad/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.4887037, 0.6, 0.7843137254901961) RGB(80, 200, 191 ) RGBW(0, 120, 110, 80) HEX 50c8bf
-<p valign="middle">--| Medium Turquoise<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=50c8bf><img src="https://via.placeholder.com/47x20/50c8bf/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Medium Turquoise<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=50c8bf><img src="https://via.placeholder.com/47x20/50c8bf/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.5087037, 0.5, 0.7843137254901961) RGB(100, 194, 200) RGBW(0, 93, 100, 99 ) HEX 64c2c8
-<p valign="middle">--| Light Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=64c2c8><img src="https://via.placeholder.com/47x20/64c2c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Light Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=64c2c8><img src="https://via.placeholder.com/47x20/64c2c8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.5287037, 0.4, 0.7843137254901961) RGB(120, 186, 200) RGBW(0, 65, 80, 120 ) HEX 78bac8
-<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=78bac8><img src="https://via.placeholder.com/47x20/78bac8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| Medium Aquamarine<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=78bac8><img src="https://via.placeholder.com/47x20/78bac8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.5487037, 0.3, 0.7843137254901961) RGB(139, 182, 200) RGBW(0, 42, 61, 138 ) HEX 8bb6c8
-<p valign="middle">--| skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| skyblue<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=8bb6c8><img src="https://via.placeholder.com/47x20/8bb6c8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.5687037, 0.2, 0.7843137254901961) RGB(160, 183, 200) RGBW(0, 22, 40, 160 ) HEX a0b7c8
-<p valign="middle">--| light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| light<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=a0b7c8><img src="https://via.placeholder.com/47x20/a0b7c8/000000?.pngtext=+" valign="bottom" ></img></a></p>
 
 HSV(0.5887037, 0.1, 0.7843137254901961) RGB(180, 189, 200) RGBW(0, 9, 19, 180  ) HEX b4bdc8
-<p valign="middle">--| silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=b4bdc8><img src="https://via.placeholder.com/47x20/b4bdc8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 HSV(0.6087037, 0.0, 0.7843137254901961) RGB(200, 200, 200) RGBW(0, 0, 0, 199   ) HEX c8c8c8
-<p valign="middle">--| dark silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=c8c8c8><img src="https://via.placeholder.com/47x20/c8c8c8/000000?text=+" valign="bottom" ></a></p>
+<p valign="middle">--| dark silver<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=c8c8c8><img src="https://via.placeholder.com/47x20/c8c8c8/000000.png?text=+" valign="bottom" ></img></a></p>
 
 </pre>
 
