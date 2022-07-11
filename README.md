@@ -141,7 +141,7 @@ from rgbw_colorspace_converter.colors.converters import RGB, HSV
 
 color = RGB(255,0,0)
 color.rgb
-<p valign="middle">(255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png" valign="bottom" ></img></a></p>
+<p valign="middle">(255, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/ff0000.png" valign="bottom" ></img></a></p>
 
 In [34]: color.hsv
 <p valign="middle">(0.0, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
@@ -150,13 +150,13 @@ color.hsl
 <p valign="middle">(0.0, 1.0, 0.5)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
 
 color.hsi
-<p valign="middle">(0.0, 1.0, 0.33333)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></img></a></p>
+<p valign="middle">(0.0, 1.0, 0.33333)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
 
 color.hex
-<p valign="middle">'#ff0000'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></img></a></p>
+<p valign="middle">'#ff0000'<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
 
 color.rgbw
-<p valign="middle">(254, 0, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000?text=+" valign="bottom" ></img></a></p>
+<p valign="middle">(254, 0, 0, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ff0000><img src="https://via.placeholder.com/47x20/ff0000/000000.png?text=+" valign="bottom" ></img></a></p>
 
 # We can change the red color object to yellow by adding green by directly changing the <code>rgb_g</code> property
 # of the color object (which maps all RGB and HSV changes to all other color spaces in real time.
@@ -165,11 +165,11 @@ color.rgbw
 color.rgb_g = 255
 
 color.rgb
-<p valign="middle">rgb(255, 255, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000?text=+" valign="bottom" ></img></a></p>
+<p valign="middle">rgb(255, 255, 0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000.png?text=+" valign="bottom" ></img></a></p>
 
 
 color.hsv
-<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000.pmg?text=+" valign="bottom" ></img></a></p>
+<p valign="middle">(0.16666666666666666, 1.0, 1.0)<a href=http://www.workwithcolor.com/color-converter-01.htm?cp=ffff00><img src="https://via.placeholder.com/47x20/ffff00/000000.png?text=+" valign="bottom" ></img></a></p>
 In [17]: color.rgbw
 Out[17]: (254, 254, 0, 0)
 
