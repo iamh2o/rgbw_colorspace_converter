@@ -71,9 +71,9 @@ Try a few of the three test scripts which use the color library for some ansi es
 path_between_2_colors.py. #will work with manually installed v0.4.1
 
 run_color_module_RGB_HSV_HEX_demo.py -z -y -g -u 33  
-#for more excitement
-  run_color_module_RGB_HSV_HEX_demo.py  -b "___|||))--WWWW________///====\__" -z -y -g -u 33 -f`  )
-
+# for more excitement
+  run_color_module_RGB_HSV_HEX_demo.py  -b "___|||))--WWWW________///====\__" -z -y -g -u 33 -f
+  
 run_spectrum_saturation_cycler.py # will work with manually installed v0.4.1
 
 ```
