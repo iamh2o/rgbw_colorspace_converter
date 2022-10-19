@@ -50,7 +50,8 @@ More or less the process is: Instantiate a color object from any of the supporte
 
 ## Requirements
 
-* [Python >= 3.7](https://www.python.org)
+* [Python >= 3.7](https://www.python.org) on ubuntu 16?
+* Modern MACs seem to require python >= 3.10.8
 
 ### Nice to have requirements....
 
@@ -62,6 +63,8 @@ More or less the process is: Instantiate a color object from any of the supporte
 
 ```
 pip install rgbw_colorspace_converter ;
+
+___ MAC Air M2 requires python >= 3.10.8 ___
 Try a few of the three test scripts which use the color library for some ansi escape color art :-)
 
 ./bin/path_between_2_colors.py
