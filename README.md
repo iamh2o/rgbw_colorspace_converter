@@ -63,18 +63,18 @@ More or less the process is: Instantiate a color object from any of the supporte
 ### PIP From PyPi
 
 ```
-pip install rgbw_colorspace_converter ;
+pip install rgbw_colorspace_converter ;  # v0.4.1 is available in the releases, but not yet pypy
 
 ___ MAC Air M2 requires python >= 3.10.8 ___
 Try a few of the three test scripts which use the color library for some ansi escape color art :-)  You will need to ctrl-c to exit, and in some cases may need to run the command "reset".
 
-path_between_2_colors.py
+path_between_2_colors.py. #will work with manually installed v0.4.1
 
 run_color_module_RGB_HSV_HEX_demo.py -z -y -g -u 33  
 #for more excitement
   run_color_module_RGB_HSV_HEX_demo.py  -b "___|||))--WWWW________///====\__" -z -y -g -u 33 -f`  )
 
-run_spectrum_saturation_cycler.py
+run_spectrum_saturation_cycler.py # will work with manually installed v0.4.1
 
 ```
 
