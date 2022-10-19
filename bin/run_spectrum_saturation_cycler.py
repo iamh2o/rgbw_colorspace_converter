@@ -20,7 +20,11 @@ os.system("tput clear; ")
 # But until is needs more features, or stops working, here it is :-)
 
 intro_cmd = """
-export COL=`tput color`
+export COL=`tput colors` || echo COLORSfail                                                                                        
+if [[ "$COL" == "" ]]; then                                                                                                        
+    export COL=16                                                                                                                  
+fi;                                                                                                                                
+     
 echo $COL > num_cols
 
 colr -c 0 "                                    ╦ ╦╔╗ ╔═╗                                  " "ff3100" "#6400ff";
