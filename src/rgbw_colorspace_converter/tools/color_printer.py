@@ -61,7 +61,7 @@ def print_colors(
     if n_row == 0:
         # Set the env var holding the char string to be used
         os.environ["char_string"] = print_chars * int(col_width * 2)
-        while n_row < 13:
+        while n_row < 1:
             ph = str("pleaseholddlohesaelp" * 40)[0 : col_width - 1]
             os.system(
                 f"colr {right_just_term_width} {no_newlines_flag}  ' {ph} ' '{blk.hex}' 'ff00ff'; "

@@ -44,7 +44,7 @@ stty echo;
 stty sane;
 """
 
-os.system(intro_cmd)
+# os.system(intro_cmd)
 
 # parse command line args
 my_parser = argparse.ArgumentParser(description="RGBW Color Space Converter Playground")
@@ -191,6 +191,9 @@ my_parser.add_argument(
 
 # Execute parse_args()
 args = my_parser.parse_args()
+
+if not args.skip_intro:
+    os.system(intro_cmd)
 
 os.environ["zag_ctr"] = "0"
 
