@@ -1,0 +1,26 @@
+
+timeout $TOUT run_spectrum_saturation_cycler.py # will work with manually installed v0.4.1
+
+timeout $TOUT path_between_2_colors.py. #will work with manually installed v0.4.1
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -z -y -g -u 33  
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "~^." -z -y -u 30 -f;
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "===" -z -r -g -u 40 -f
+
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "#####" -z -n -r -u 20 -f
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "||--==" -z -g -y -u 60 -f
+
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "XOxo." -z -r -y -u 25 -f
+
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "-|" -z -g -u 15 -f
+
+timeout $TOUT run_color_module_RGB_HSV_HEX_demo.py -b "|/\\*-o" -z -y -g -u 30 -f
+
+
+
